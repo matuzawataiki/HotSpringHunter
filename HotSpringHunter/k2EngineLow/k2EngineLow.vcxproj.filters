@@ -225,10 +225,10 @@
     <ClCompile Include="graphics\FrameBuffer.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ModelRender.cpp">
+    <ClCompile Include="TMEnginePreCompile.cpp" />
+    <ClCompile Include="TMEngine\ModelRender.cpp">
       <Filter>TMEngine</Filter>
     </ClCompile>
-    <ClCompile Include="TMEnginePreCompile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -503,11 +503,11 @@
     <ClInclude Include="graphics\FrameBuffer.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ModelRender.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
+    <ClInclude Include="TMEngine\ModelRender.h">
+      <Filter>TMEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

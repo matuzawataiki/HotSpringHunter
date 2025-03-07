@@ -311,7 +311,6 @@
     <ClCompile Include="level3D\TklFile.cpp" />
     <ClCompile Include="math\Matrix.cpp" />
     <ClCompile Include="math\Vector.cpp" />
-    <ClCompile Include="ModelRender.cpp" />
     <ClCompile Include="online\SyncOnlineTwoPlayerMatchEngine.cpp" />
     <ClCompile Include="physics\BoxCollider.cpp" />
     <ClCompile Include="physics\CapsuleCollider.cpp" />
@@ -332,6 +331,7 @@
     <ClCompile Include="tkFile\TknFile.cpp" />
     <ClCompile Include="tkFile\TksFile.cpp" />
     <ClCompile Include="TMEnginePreCompile.cpp" />
+    <ClCompile Include="TMEngine\ModelRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\PathFinding\Cell.h" />
@@ -401,7 +401,6 @@
     <ClInclude Include="math\Math.h" />
     <ClInclude Include="math\Matrix.h" />
     <ClInclude Include="math\Vector.h" />
-    <ClInclude Include="ModelRender.h" />
     <ClInclude Include="online\SyncOnlineTwoPlayerMatchEngine.h" />
     <ClInclude Include="physics\BoxCollider.h" />
     <ClInclude Include="physics\CapsuleCollider.h" />
@@ -428,6 +427,7 @@
     <ClInclude Include="tkFile\TknFile.h" />
     <ClInclude Include="tkFile\TksFile.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
+    <ClInclude Include="TMEngine\ModelRender.h" />
     <ClInclude Include="util\TResourceBank.h" />
   </ItemGroup>
   <ItemGroup>
