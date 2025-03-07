@@ -225,7 +225,9 @@
     <ClCompile Include="graphics\FrameBuffer.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ModelRender.cpp" />
+    <ClCompile Include="ModelRender.cpp">
+      <Filter>TMEngine</Filter>
+    </ClCompile>
     <ClCompile Include="TMEnginePreCompile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -501,7 +503,10 @@
     <ClInclude Include="graphics\FrameBuffer.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ModelRender.h" />
+    <ClInclude Include="ModelRender.h">
+      <Filter>TMEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
   </ItemGroup>
   <ItemGroup>
@@ -562,5 +567,14 @@
     <Filter Include="AI\PathFinding">
       <UniqueIdentifier>{72d94fe6-e599-4523-8e54-81df808c96fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TMEngine">
+      <UniqueIdentifier>{ffdf4052-c62d-4251-98af-d212aed9d0ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="k2EngineLow.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="k2EngineLow.aps" />
   </ItemGroup>
 </Project>

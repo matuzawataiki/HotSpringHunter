@@ -415,6 +415,7 @@
     <ClInclude Include="physics\PhysicsStaticObject.h" />
     <ClInclude Include="physics\RigidBody.h" />
     <ClInclude Include="physics\SphereCollider.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="sound\SoundEngine.h" />
     <ClInclude Include="sound\SoundSource.h" />
     <ClInclude Include="sound\WaveFile.h" />
@@ -428,6 +429,12 @@
     <ClInclude Include="tkFile\TksFile.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
     <ClInclude Include="util\TResourceBank.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="k2EngineLow.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="k2EngineLow.aps" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
