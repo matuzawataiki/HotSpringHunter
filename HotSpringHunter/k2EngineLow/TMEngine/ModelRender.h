@@ -86,6 +86,11 @@ namespace nsTMEngine {
 			m_sca = Vector3(x, y, z);
 		}
 
+		/// <summary>
+		/// 更新処理。
+		/// </summary>
+		void Update();
+
 	private:
 		/// <summary>
 		/// スケルトンの初期化用関数
@@ -107,10 +112,6 @@ namespace nsTMEngine {
 		/// 各種モデルのワールド行列の更新
 		/// </summary>
 		void UpdateWorldMatrixInModes() ;
-		/// <summary>
-		/// 更新処理。
-		/// </summary>
-		void Update() ;
 
 	private:
 

@@ -1,4 +1,4 @@
-#include "k2EngineLowPreCompile.h"
+#include "TMEnginePreCompile.h"
 #include "ModelRender.h"
 
 namespace nsTMEngine {
@@ -20,18 +20,24 @@ namespace nsTMEngine {
 		//アニメーションの初期化
 		InitAnimation(animationeClips, numAnimationClips, enModelUpAxiz);
 		
-		ModelInitData modelData;
+		ModelInitData modelData;			//モデルのデータ
+		//tkmのファイルパスの指定
 		modelData.m_tkmFilePath = filePath;
+		//シェーダーのファイルパスの指定
 		modelData.m_fxFilePath = "Assets/shader/model.fx";
+
 		m_model.Init(modelData);
 
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
 	{
-		std::string skeletonFilePath = filePath;
+		std::string skeletonFilePath = filePath;		//ストリング型の変数
+		//tkmの中身をコピー
 		int pos = (int)skeletonFilePath.find(".tkm");
+		//スケルトンの情報を書き込み
 		skeletonFilePath.replace(pos, 4, ".tks");
+		//charがたに変換してInit
 		m_skeleton.Init(skeletonFilePath.c_str());
 	}
 

@@ -332,6 +332,8 @@
     <ClCompile Include="tkFile\TksFile.cpp" />
     <ClCompile Include="TMEnginePreCompile.cpp" />
     <ClCompile Include="TMEngine\ModelRender.cpp" />
+    <ClCompile Include="TMEngine\RenderingEngine.cpp" />
+    <ClCompile Include="TMEngine\SpriteRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\PathFinding\Cell.h" />
@@ -427,7 +429,11 @@
     <ClInclude Include="tkFile\TknFile.h" />
     <ClInclude Include="tkFile\TksFile.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
+    <ClInclude Include="TMEngine\IRenderer.h" />
     <ClInclude Include="TMEngine\ModelRender.h" />
+    <ClInclude Include="TMEngine\MyRenderer.h" />
+    <ClInclude Include="TMEngine\RenderingEngine.h" />
+    <ClInclude Include="TMEngine\SpriteRender.h" />
     <ClInclude Include="util\TResourceBank.h" />
   </ItemGroup>
   <ItemGroup>

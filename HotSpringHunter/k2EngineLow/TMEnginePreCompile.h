@@ -5,3 +5,6 @@
 using namespace nsK2EngineLow;
 
 #include "TMEngine/ModelRender.h"
+#include "TMEngine/SpriteRender.h"
+#include "TMEngine/IRenderer.h"
+#include "TMEngine/RenderingEngine.h"

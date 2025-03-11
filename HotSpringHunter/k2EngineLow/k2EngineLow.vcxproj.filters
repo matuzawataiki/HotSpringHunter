@@ -229,6 +229,12 @@
     <ClCompile Include="TMEngine\ModelRender.cpp">
       <Filter>TMEngine</Filter>
     </ClCompile>
+    <ClCompile Include="TMEngine\SpriteRender.cpp">
+      <Filter>TMEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="TMEngine\RenderingEngine.cpp">
+      <Filter>TMEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -506,6 +512,18 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
     <ClInclude Include="TMEngine\ModelRender.h">
+      <Filter>TMEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TMEngine\SpriteRender.h">
+      <Filter>TMEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TMEngine\MyRenderer.h">
+      <Filter>TMEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TMEngine\IRenderer.h">
+      <Filter>TMEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TMEngine\RenderingEngine.h">
       <Filter>TMEngine</Filter>
     </ClInclude>
   </ItemGroup>
