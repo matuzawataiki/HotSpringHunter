@@ -333,7 +333,6 @@
     <ClCompile Include="TMEnginePreCompile.cpp" />
     <ClCompile Include="TMEngine\FontRender.cpp" />
     <ClCompile Include="TMEngine\ModelRender.cpp" />
-    <ClCompile Include="TMEngine\RenderingEngine.cpp" />
     <ClCompile Include="TMEngine\SpriteRender.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -434,7 +433,6 @@
     <ClInclude Include="TMEngine\IRenderer.h" />
     <ClInclude Include="TMEngine\ModelRender.h" />
     <ClInclude Include="TMEngine\MyRenderer.h" />
-    <ClInclude Include="TMEngine\RenderingEngine.h" />
     <ClInclude Include="TMEngine\SpriteRender.h" />
     <ClInclude Include="util\TResourceBank.h" />
   </ItemGroup>

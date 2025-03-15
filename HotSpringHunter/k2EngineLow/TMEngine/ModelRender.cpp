@@ -1,7 +1,7 @@
-#include "TMEnginePreCompile.h"
+#include "k2EngineLowPreCompile.h"
 #include "ModelRender.h"
 
-namespace nsTMEngine {
+namespace nsK2EngineLow {
 
 	ModelRender::ModelRender() {
 	}

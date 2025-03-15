@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsTMEngine {
+namespace nsK2EngineLow {
 	class SpriteRender
 	{
 	public:

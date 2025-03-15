@@ -1,16 +1,16 @@
 #pragma once
 #include "TMEngine/IRenderer.h"
 
-namespace nsTMEngine
+namespace nsK2EngineLow
 {
 	class FontRender : public IRenderer
 	{
 	public:
-		FontRender(){}
-		~FontRender(){}
-
 		static const int MAX_TEXT_SIZE = 256;
+		~FontRender()
+		{
 
+		}
 		/// <summary>
 		/// 文字の設定
 		/// </summary>
@@ -90,12 +90,12 @@ namespace nsTMEngine
 		}
 
 	private:
-		Vector3		m_pos = Vector3::Zero;		//位置
-		float		m_sca = 1.0f;				//大きさ
-		Vector4		m_color = g_vec4White;		//色
-		float		m_rot = 0.0f;				//回転
+		Vector3		m_pos = Vector3::Zero;			//位置
+		float		m_sca = 1.0f;					//大きさ
+		Vector4		m_color = g_vec4White;			//色
+		float		m_rot = 0.0f;					//回転
 		Vector2		m_piv = Sprite::DEFAULT_PIVOT;	//ピボット
-		wchar_t		m_text[MAX_TEXT_SIZE];		//文字
-		Font		m_font;						//フォント
+		wchar_t		m_text[MAX_TEXT_SIZE];			//文字
+		Font		m_font;							//フォント
 	};
 }

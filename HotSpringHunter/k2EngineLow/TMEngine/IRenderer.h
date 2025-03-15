@@ -1,6 +1,6 @@
 #pragma once
-#include "TMEnginePreCompile.h"
-namespace nsTMEngine {
+
+namespace nsK2EngineLow {
 	class IRenderer : public Noncopyable
 	{
 	};

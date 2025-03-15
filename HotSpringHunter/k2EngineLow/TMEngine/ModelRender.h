@@ -1,7 +1,6 @@
 #pragma once
-#include "TMEnginePreCompile.h"
 
-namespace nsTMEngine {
+namespace nsK2EngineLow {
 	/// <summary>
 	/// スキンモデルレンダー
 	/// </summary>

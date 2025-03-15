@@ -232,9 +232,6 @@
     <ClCompile Include="TMEngine\SpriteRender.cpp">
       <Filter>TMEngine</Filter>
     </ClCompile>
-    <ClCompile Include="TMEngine\RenderingEngine.cpp">
-      <Filter>TMEngine</Filter>
-    </ClCompile>
     <ClCompile Include="TMEngine\FontRender.cpp">
       <Filter>TMEngine</Filter>
     </ClCompile>
@@ -524,9 +521,6 @@
       <Filter>TMEngine</Filter>
     </ClInclude>
     <ClInclude Include="TMEngine\IRenderer.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\RenderingEngine.h">
       <Filter>TMEngine</Filter>
     </ClInclude>
     <ClInclude Include="TMEngine\FontRender.h">
