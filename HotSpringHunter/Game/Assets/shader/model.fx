@@ -2,6 +2,19 @@
  * @brief	シンプルなモデルシェーダー。
  */
 
+////////////////////////////////////////////////
+// 定数
+////////////////////////////////////////////////
+//int MAX_DIRECTION_LIGHT = 4;	//ディレクションライトの最大数
+
+////////////////////////////////////////////////
+// ライト構造体
+////////////////////////////////////////////////
+struct DirectionLig
+{
+    float3 direction;	//方向
+    float3 color;		//色
+};
 
 ////////////////////////////////////////////////
 // 定数バッファ。
@@ -12,6 +25,13 @@ cbuffer ModelCb : register(b0){
 	float4x4 mView;
 	float4x4 mProj;
 };
+
+//追加
+//ライト用の定数バッファ
+cbuffer LightCb : register(b1)
+{
+    DirectionLig m_directionLig;	//ディレクションライト
+}
 
 ////////////////////////////////////////////////
 // 構造体
@@ -25,12 +45,14 @@ struct SSkinVSIn{
 struct SVSIn{
 	float4 pos 		: POSITION;		//モデルの頂点座標。
 	float2 uv 		: TEXCOORD0;	//UV座標。
+    float3 normal	: NORMAL;		//法線ベクトル
 	SSkinVSIn skinVert;				//スキン用のデータ。
 };
 //ピクセルシェーダーへの入力。
 struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float2 uv 			: TEXCOORD0;	//uv座標。
+    float3 normal		: NORMAL;		//法線ベクトル
 };
 
 ////////////////////////////////////////////////
@@ -41,9 +63,28 @@ StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
 ////////////////////////////////////////////////
+//関数宣言
+////////////////////////////////////////////////
+//ディレクションライトの計算
+float3 DirectionLightCalculation(SPSIn psIn, DirectionLig directionLig);
+
+////////////////////////////////////////////////
 // 関数定義。
 ////////////////////////////////////////////////
 
+float3 DirectionLightCalculation(SPSIn psIn)
+{
+    float t = dot(psIn.normal, m_directionLig.direction);
+    t *= -1.0;
+    if (t < 0.0f)
+    {
+        t = 0;
+    }
+	
+    float3 diffuseLig = m_directionLig.color * t;
+	
+    return diffuseLig;
+}
 /// <summary>
 //スキン行列を計算する。
 /// </summary>
@@ -80,6 +121,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.pos = mul(mProj, psIn.pos);
 
 	psIn.uv = vsIn.uv;
+	
+	//追加
+    psIn.normal = mul(mWorld, vsIn.normal);//法線を回転させる
 
 	return psIn;
 }
@@ -101,8 +145,14 @@ SPSIn VSSkinMain( SVSIn vsIn )
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
 /// </summary>
-float4 PSMain( SPSIn psIn ) : SV_Target0
+float4 PSMain( SPSIn psIn) : SV_Target0
 {
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
-	return albedoColor;
+	
+	//追加
+    float4 finalColor = albedoColor;
+	
+    finalColor.xyz *= DirectionLightCalculation(psIn);
+
+	return finalColor;
 }

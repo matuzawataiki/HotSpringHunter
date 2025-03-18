@@ -26,6 +26,9 @@ namespace nsK2EngineLow {
 		//シェーダーのファイルパスの指定
 		modelData.m_fxFilePath = "Assets/shader/model.fx";
 
+		modelData.m_expandConstantBuffer = g_sceneLight->GetLightData();
+		modelData.m_expandConstantBufferSize = sizeof(Light);
+
 		m_model.Init(modelData);
 
 	}
@@ -37,7 +40,7 @@ namespace nsK2EngineLow {
 		int pos = (int)skeletonFilePath.find(".tkm");
 		//スケルトンの情報を書き込み
 		skeletonFilePath.replace(pos, 4, ".tks");
-		//charがたに変換してInit
+		//char型に変換してInit
 		m_skeleton.Init(skeletonFilePath.c_str());
 	}
 

@@ -123,6 +123,5 @@ namespace nsK2EngineLow {
 		Animation		m_animation;
 		AnimationClip*	m_animationClips = nullptr;	//アニメーションクリップ
 		int				m_numAnimationClips = 0;	//アニメーションクリップの数
-
 	};
 }

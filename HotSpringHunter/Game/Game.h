@@ -8,6 +8,9 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	ModelRender m_model;
+	ModelRender m_playerModel;
+	ModelRender m_mapModel;
+	SpriteRender m_testImage;
+	FontRender	m_testText;
 };
 
