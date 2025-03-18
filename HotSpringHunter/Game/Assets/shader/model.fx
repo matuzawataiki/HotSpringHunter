@@ -14,6 +14,7 @@ struct DirectionLig
 {
     float3 direction;	//方向
     float3 color;		//色
+    float3 eyePos;		//視点の位置
 };
 
 ////////////////////////////////////////////////
@@ -53,6 +54,8 @@ struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float2 uv 			: TEXCOORD0;	//uv座標。
     float3 normal		: NORMAL;		//法線ベクトル
+    float3 worldPos : TEXCOORD1; // ワールド空間でのピクセルの座標
+
 };
 
 ////////////////////////////////////////////////
@@ -74,16 +77,37 @@ float3 DirectionLightCalculation(SPSIn psIn, DirectionLig directionLig);
 
 float3 DirectionLightCalculation(SPSIn psIn)
 {
-    float t = dot(psIn.normal, m_directionLig.direction);
+    float t;	//割合
+	//法線とディレクションライトの向きの内積を求める
+	t= dot(psIn.normal, m_directionLig.direction);	
+	//向きを反転させる
     t *= -1.0;
     if (t < 0.0f)
     {
         t = 0;
     }
-	
+	//陰をつける
     float3 diffuseLig = m_directionLig.color * t;
 	
-    return diffuseLig;
+	//ディレクションライトの向きの反射ベクトルを求める
+    float3 refVec = reflect(m_directionLig.direction, psIn.normal);
+	//サーフェイスから視点に向かうベクトルを作る
+    float3 toEye = m_directionLig.eyePos - psIn.worldPos;
+    toEye = normalize(toEye);
+	//鏡面反射の強さを求める
+    t = dot(refVec, toEye);
+    if (t < 0.0f)
+    {
+        t = 0.0f;
+    }
+    t = pow(t, 5.0f);	//鏡面反射の強さを絞る
+	//鏡面反射をつける
+    float3 specularLig = m_directionLig.color * t;
+	
+	//拡散反射と鏡面反射を足して最終的な光を決める
+    float3 finalLig = diffuseLig + specularLig;	
+	
+    return finalLig;
 }
 /// <summary>
 //スキン行列を計算する。
@@ -117,6 +141,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 	psIn.pos = mul(m, vsIn.pos);
+    psIn.worldPos = psIn.pos;
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 

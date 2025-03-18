@@ -1,12 +1,13 @@
 #pragma once
-#include "DirectionLight.h"
 namespace nsK2EngineLow {
 
 	struct SDirectionLight
 	{
 		Vector3 m_direction;	//方向
-		float pad;
+		float pad0;
 		Vector3 m_color;		//色
+		float pad1;
+		const Vector3* m_cameraPos = nullptr;	//カメラの向いている方向
 
 		/// <summary>
 		/// ディレクションライトの方向を設定
@@ -25,12 +26,22 @@ namespace nsK2EngineLow {
 		/// 色の設定
 		/// </summary>
 		/// <param name="color"></param>
-		void SetColor(const Vector3& color) {
+		void SetColor(const Vector3& color)
+		{
 			m_color = color;
 			m_color.Normalize();
 		}
-		void SetColor(float x, float y, float z) {
+		void SetColor(float x, float y, float z)
+		{
 			SetColor({ x,y,z });
+		}
+		/// <summary>
+		/// カメラの視点の位置の設定
+		/// </summary>
+		/// <param name="cameraPos"></param>
+		void SetCameraPos()
+		{
+			m_cameraPos = g_camera3D->GetPositionPinta();
 		}
 	public:
 

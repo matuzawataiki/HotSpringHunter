@@ -234,9 +234,6 @@
     <ClCompile Include="TMEngine\FontRender.cpp">
       <Filter>TMEngine</Filter>
     </ClCompile>
-    <ClCompile Include="TMEngine\ligth\DirectionLight.cpp">
-      <Filter>TMEngine\light</Filter>
-    </ClCompile>
     <ClCompile Include="TMEngine\ligth\SceneLight.cpp">
       <Filter>TMEngine\light</Filter>
     </ClCompile>
@@ -529,9 +526,6 @@
     </ClInclude>
     <ClInclude Include="TMEngine\FontRender.h">
       <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\ligth\DirectionLight.h">
-      <Filter>TMEngine\light</Filter>
     </ClInclude>
     <ClInclude Include="TMEngine\ligth\SceneLight.h">
       <Filter>TMEngine\light</Filter>
