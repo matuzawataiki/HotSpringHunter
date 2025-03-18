@@ -54,7 +54,7 @@ struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float2 uv 			: TEXCOORD0;	//uv座標。
     float3 normal		: NORMAL;		//法線ベクトル
-    float3 worldPos : TEXCOORD1; // ワールド空間でのピクセルの座標
+    float3 worldPos : TEXCOORD1;		// ワールド空間でのピクセルの座標
 
 };
 
@@ -141,7 +141,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 	psIn.pos = mul(m, vsIn.pos);
-    psIn.worldPos = psIn.pos;
+    psIn.worldPos = mul(mWorld, vsIn.pos);
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 
