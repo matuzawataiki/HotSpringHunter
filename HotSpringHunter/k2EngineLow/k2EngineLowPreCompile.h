@@ -100,6 +100,7 @@ static const int MAX_BONE = 512;	// ボーンの最大数。
 #include "gameObject/GameObjectManager.h"
 #include "gameObject/IGameObject.h"
 
+
 #include <windows.h>
 #include <xaudio2.h>
 #include <x3daudio.h>
@@ -109,3 +110,8 @@ static const int MAX_BONE = 512;	// ボーンの最大数。
 #include "graphics/effect/EffectEngine.h"
 #include "sound/SoundSource.h"
 #include "graphics/effect/EffectEmitter.h"
+
+#include "TMEngine/ModelRender.h"
+#include "TMEngine/SpriteRender.h"
+#include "TMEngine/FontRender.h"
+#include "TMEngine/IRenderer.h"
