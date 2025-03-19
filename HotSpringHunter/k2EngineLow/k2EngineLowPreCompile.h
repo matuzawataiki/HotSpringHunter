@@ -116,4 +116,5 @@ static const int MAX_BONE = 512;	// ƒ{[ƒ“‚ÌÅ‘å”B
 #include "TMEngine/SpriteRender.h"
 #include "TMEngine/FontRender.h"
 #include "TMEngine/IRenderer.h"
-#include "TMEngine/ligth/SceneLight.h"
+#include "TMEngine/light/SceneLight.h"
+#include "TMEngine/light/PointLight.h"

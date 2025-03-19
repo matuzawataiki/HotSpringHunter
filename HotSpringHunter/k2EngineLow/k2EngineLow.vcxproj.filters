@@ -234,9 +234,10 @@
     <ClCompile Include="TMEngine\FontRender.cpp">
       <Filter>TMEngine</Filter>
     </ClCompile>
-    <ClCompile Include="TMEngine\ligth\SceneLight.cpp">
+    <ClCompile Include="TMEngine\light\SceneLight.cpp">
       <Filter>TMEngine\light</Filter>
     </ClCompile>
+    <ClCompile Include="TMEngine\light\PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -527,9 +528,10 @@
     <ClInclude Include="TMEngine\FontRender.h">
       <Filter>TMEngine</Filter>
     </ClInclude>
-    <ClInclude Include="TMEngine\ligth\SceneLight.h">
+    <ClInclude Include="TMEngine\light\SceneLight.h">
       <Filter>TMEngine\light</Filter>
     </ClInclude>
+    <ClInclude Include="TMEngine\light\PointLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
