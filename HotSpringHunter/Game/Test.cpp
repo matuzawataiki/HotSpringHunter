@@ -54,7 +54,7 @@ void Test::Update()
 
 void Test::Render(RenderContext& rc)
 {
-	m_playerModel.Draw(rc);
+	//m_playerModel.Draw(rc);
 	m_mapModel.Draw(rc);
 	//m_testImage.Drow(rc);
 	//m_testText.Draw(rc);
