@@ -84,7 +84,14 @@ namespace nsK2EngineLow {
 		{
 			m_sca = Vector3(x, y, z);
 		}
-
+		/// <summary>
+		/// モデルを取得。
+		/// </summary>
+		/// <returns>モデル</returns>
+		Model& GetModel()
+		{
+			return m_model;
+		}
 		/// <summary>
 		/// 更新処理。
 		/// </summary>
