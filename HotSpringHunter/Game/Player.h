@@ -28,7 +28,7 @@ private:
 	Quaternion m_playerRotation = Quaternion::Identity;		//player回転。
 	CharacterController m_playerCharaCon;					//playerキャラコン。
 
-	float m_runState = 1.0f;						//player走り状態の管理。
+	float m_runState = 1.0f;								//player走り状態の管理。
 
 	//アニメーション。
 	enum EnAnimationClip {
