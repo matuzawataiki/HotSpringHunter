@@ -1,14 +1,21 @@
 #pragma once
-class Test;
-class Game:public IGameObject
+
+class GameCamera;
+class BackGround;
+class Player;
+class Snake;
+class Game : public IGameObject
 {
 public:
 	Game();
 	~Game();
-	bool Start();
-	void Update();
-	void Render(RenderContext& rc);
+	bool Start()override;
+	void Update()override;
 
-	Test* m_test = nullptr;
+	GameCamera* m_gameCamera = nullptr;
+	BackGround* m_backGround = nullptr;
+	Player* m_player = nullptr;
+	Snake* m_snake = nullptr;
+private:
 };
 
