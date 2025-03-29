@@ -23,9 +23,9 @@ namespace nsK2EngineLow
 		/// 座標を設定。zは0.0fで。
 		/// </summary>
 		/// <param name="position">座標</param>
-		void SetPosition(float x, float y, float z)
+		void SetPosition(float x, float y)
 		{
-			SetPosition({ x, y, z });
+			SetPosition({ x, y, 0.0f });
 		}
 		/// <summary>
 		/// 大きさを設定。zは0.0fで。
