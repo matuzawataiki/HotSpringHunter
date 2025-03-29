@@ -24,6 +24,14 @@ bool Test::Start()
 	m_pointLight.SetColor(1.0f, 0.0f, 0.0f);
 	m_pointLight.SetRange(400.0f);
 
+	m_spotLight.Init(
+		Vector3(10000.0f, 10.0f, 0.0f),
+		Vector3(0.0f, 1.0f, 0.0f),
+		10000.0f,
+		Vector3(-1.0f, -1.0f, -1.0f),
+		Math::DegToRad(90.0f)
+	);
+
 
 	return true;
 }

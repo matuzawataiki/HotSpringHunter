@@ -10,11 +10,11 @@ namespace nsK2EngineLow
 		/// <summary>
 		/// ポイントライトの初期化
 		/// </summary>
-		void Init(const Vector3& pos, const Vector3& color, const float& influenceRange);
+		void Init(const Vector3& pos, const Vector3& color, const float& range);
 		/// <summary>
 		/// ポイントライトの位置を設定
 		/// </summary>
-		/// <param name="direction"></param>
+		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
 		{
 			m_pointLig->SetPosition(pos);
@@ -38,10 +38,10 @@ namespace nsK2EngineLow
 		/// <summary>
 		/// 影響範囲の設定
 		/// </summary>
-		/// <param name="color"></param>
-		void SetRange(const float& influenceRange)
+		/// <param name="range"></param>
+		void SetRange(const float& range)
 		{
-			m_pointLig->SetRange(influenceRange);
+			m_pointLig->SetRange(range);
 		}
 
 	private:

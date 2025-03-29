@@ -333,6 +333,7 @@
     <ClCompile Include="TMEngine\FontRender.cpp" />
     <ClCompile Include="TMEngine\light\PointLight.cpp" />
     <ClCompile Include="TMEngine\light\SceneLight.cpp" />
+    <ClCompile Include="TMEngine\light\SpotLight.cpp" />
     <ClCompile Include="TMEngine\ModelRender.cpp" />
     <ClCompile Include="TMEngine\SpriteRender.cpp" />
   </ItemGroup>
@@ -433,6 +434,7 @@
     <ClInclude Include="TMEngine\IRenderer.h" />
     <ClInclude Include="TMEngine\light\PointLight.h" />
     <ClInclude Include="TMEngine\light\SceneLight.h" />
+    <ClInclude Include="TMEngine\light\SpotLight.h" />
     <ClInclude Include="TMEngine\ModelRender.h" />
     <ClInclude Include="TMEngine\MyRenderer.h" />
     <ClInclude Include="TMEngine\SpriteRender.h" />

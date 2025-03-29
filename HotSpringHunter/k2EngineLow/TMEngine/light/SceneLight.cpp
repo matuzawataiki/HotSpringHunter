@@ -5,7 +5,7 @@ namespace nsK2EngineLow
 	SceneLight::SceneLight()
 	{
 		//ディレクションライトの設定
-		m_light.m_drectionLight.SetPosition(1.0f, -1.0f, 1.0f);
+		m_light.m_drectionLight.SetDirection(1.0f, -1.0f, 1.0f);
 		m_light.m_drectionLight.SetColor(0.3f, 0.3f, 0.3f);
 		//カメラの位置の登録
 		m_light.SetCameraPos();
@@ -28,6 +28,21 @@ namespace nsK2EngineLow
 				m_light.m_pointLight[i].Use();
 				m_light.m_numPointLig++;
 				return &m_light.m_pointLight[i];
+			}
+		}
+	}
+
+	SSpotLight* SceneLight::NewSpotLight()
+	{
+		if (m_light.m_numSpotLig >= MAX_SPOT_LIGHT) {
+			return nullptr;
+		}
+
+		for (int i = 0; i <= MAX_SPOT_LIGHT;i++) {
+			if (m_light.m_spotLight[i].m_isUse == false) {
+				m_light.m_spotLight[i].Use();
+				m_light.m_numSpotLig++;
+				return &m_light.m_spotLight[i];
 			}
 		}
 	}

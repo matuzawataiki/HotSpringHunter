@@ -238,6 +238,7 @@
       <Filter>TMEngine\light</Filter>
     </ClCompile>
     <ClCompile Include="TMEngine\light\PointLight.cpp" />
+    <ClCompile Include="TMEngine\light\SpotLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -532,6 +533,7 @@
       <Filter>TMEngine\light</Filter>
     </ClInclude>
     <ClInclude Include="TMEngine\light\PointLight.h" />
+    <ClInclude Include="TMEngine\light\SpotLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

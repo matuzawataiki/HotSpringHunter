@@ -15,6 +15,7 @@ private:
 	//SpriteRender m_testImage;
 	//FontRender	m_testText;
 	PointLight m_pointLight;
+	SpotLight m_spotLight;
 
 	Vector3 m_cameraPos = Vector3(0.0f, 500.0f, -1000.0f);
 };

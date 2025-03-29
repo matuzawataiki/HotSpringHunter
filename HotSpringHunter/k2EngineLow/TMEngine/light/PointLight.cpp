@@ -11,10 +11,10 @@ namespace nsK2EngineLow
 	{
 	}
 
-	void PointLight::Init(const Vector3& pos, const Vector3& color, const float& influenceRange)
+	void PointLight::Init(const Vector3& pos, const Vector3& color, const float& range)
 	{
 		m_pointLig->SetPosition(pos);
 		m_pointLig->SetColor(color);
-		m_pointLig->SetRange(influenceRange);
+		m_pointLig->SetRange(range);
 	}
 }
