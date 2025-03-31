@@ -15,6 +15,7 @@ namespace nsK2EngineLow
 		/// <param name="direction">向き</param>
 		/// <param name="angle">影響範囲</param>
 		void Init(const Vector3& pos, const Vector3& color, const float& range, const Vector3& direction, const float angle);
+
 		/// <summary>
 		/// ライトの位置を設定
 		/// </summary>
@@ -27,6 +28,7 @@ namespace nsK2EngineLow
 		{
 			SetPosition({ x,y,z });
 		}
+
 		/// <summary>
 		/// 色の設定
 		/// </summary>
@@ -39,6 +41,7 @@ namespace nsK2EngineLow
 		{
 			SetColor({ x,y,z });
 		}
+
 		/// <summary>
 		/// 影響距離の設定
 		/// </summary>
@@ -47,6 +50,7 @@ namespace nsK2EngineLow
 		{
 			m_spotLig->SetRange(range);
 		}
+
 		/// <summary>
 		/// ライトの向きを設定
 		/// </summary>
@@ -59,6 +63,7 @@ namespace nsK2EngineLow
 		{
 			SetDirection({ x,y,z });
 		}
+
 		/// <summary>
 		/// ライトの影響範囲
 		/// </summary>

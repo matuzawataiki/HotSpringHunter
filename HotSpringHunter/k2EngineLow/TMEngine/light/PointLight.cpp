@@ -5,7 +5,7 @@ namespace nsK2EngineLow
 {
 	PointLight::PointLight()
 	{
-		m_pointLig = g_sceneLight->NewPointLight();
+		m_pointLig = g_sceneLight->NewPointLight();	//ポイントライトを取得
 	}
 	PointLight::~PointLight()
 	{

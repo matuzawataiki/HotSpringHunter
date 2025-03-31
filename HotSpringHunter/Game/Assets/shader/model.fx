@@ -332,6 +332,7 @@ SPSIn VSSkinMain( SVSIn vsIn )
 {
 	return VSMainCore(vsIn, true);
 }
+
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
 /// </summary>

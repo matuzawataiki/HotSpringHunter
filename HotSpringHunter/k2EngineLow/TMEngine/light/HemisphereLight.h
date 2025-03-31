@@ -52,6 +52,6 @@ namespace nsK2EngineLow
 			SetGroundNormal({ x,y,z });
 		}
 	private:
-		SHemisphereLight* m_hemisphereLight;
+		SHemisphereLight* m_hemisphereLight;	//”¼‹…ƒ‰ƒCƒg
 	};
 }

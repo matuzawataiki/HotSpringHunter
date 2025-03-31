@@ -1,7 +1,7 @@
 #pragma once
 namespace nsK2EngineLow {
-	static const int MAX_POINT_LIGHT = 32;
-	static const int MAX_SPOT_LIGHT = 32;
+	static const int MAX_POINT_LIGHT = 32;	//ポイントライトの最大数
+	static const int MAX_SPOT_LIGHT = 32;	//スポットライトの最大数
 
 	/// <summary>
 	/// ディレクションライトの構造体
@@ -270,17 +270,32 @@ namespace nsK2EngineLow {
 
 		void Init();
 
+		/// <summary>
+		/// 新規ポイントライトを登録
+		/// </summary>
+		/// <returns></returns>
 		SPointLight* NewPointLight();
 
+		/// <summary>
+		/// 新規スポットライトを登録
+		/// </summary>
+		/// <returns></returns>
 		SSpotLight* NewSpotLight();
 
+		/// <summary>
+		/// 半球ライトを取得
+		/// </summary>
+		/// <returns></returns>
 		SHemisphereLight* GetHemisphereLight()
 		{
 			return &m_light.m_hemisphereLight;
 		}
 
-		//ライトのデータを取得
-		Light* GetLightData()
+		/// <summary>
+		/// ライトを取得
+		/// </summary>
+		/// <returns></returns>
+		Light* GetLight()
 		{
 			return &m_light;
 		}

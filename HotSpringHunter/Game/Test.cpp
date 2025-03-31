@@ -17,9 +17,11 @@ bool Test::Start()
 	//m_testText.SetText(L"âiå©Í£");
 	//m_testText.SetPosition(500.0f, 500.0f);
 
-	m_pointLight.SetPosition(10.0f, 10.0f, 0.0f);
-	m_pointLight.SetColor(1.0f, 0.0f, 0.0f);
-	m_pointLight.SetRange(400.0f);
+	m_pointLight.Init(
+		Vector3(10.0f, 10.0f, 0.0f),
+		Vector3(1.0f, 0.0f, 0.0f),
+		400.0f
+	);
 
 	m_spotLight.Init(
 		Vector3(10.0f, 10.0f, 0.0f),
