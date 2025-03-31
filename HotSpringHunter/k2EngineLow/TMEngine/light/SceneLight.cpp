@@ -10,7 +10,7 @@ namespace nsK2EngineLow
 		//ƒJƒƒ‰‚ÌˆÊ’u‚Ì“o˜^
 		m_light.SetCameraPos();
 		//ŠÂ‹«Œõ‚Ìİ’è
-		m_light.SetAmbientLight(0.1f, 0.1f, 0.1f);
+		m_light.SetAmbientLight(1.0f, 1.0f, 1.0f);
 	}
 
 	SceneLight::~SceneLight()

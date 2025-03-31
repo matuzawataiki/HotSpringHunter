@@ -239,6 +239,7 @@
     </ClCompile>
     <ClCompile Include="TMEngine\light\PointLight.cpp" />
     <ClCompile Include="TMEngine\light\SpotLight.cpp" />
+    <ClCompile Include="TMEngine\light\HemisphereLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -534,6 +535,7 @@
     </ClInclude>
     <ClInclude Include="TMEngine\light\PointLight.h" />
     <ClInclude Include="TMEngine\light\SpotLight.h" />
+    <ClInclude Include="TMEngine\light\HemisphereLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
