@@ -22,6 +22,7 @@ namespace nsK2EngineLow {
 			AnimationClip* animationeClips = nullptr,
 			int numAnimationClips = 0,
 			EnModelUpAxis enModelUpAxiz = enModelUpAxisZ);
+
 		/// <summary>
 		/// アニメーションの再生
 		/// </summary>
@@ -30,6 +31,15 @@ namespace nsK2EngineLow {
 		void PlayAnimation(int animNo, float interpolateTime = 0.0f) {
 			m_animation.Play(animNo, interpolateTime);
 		}
+
+		/// <summary>
+		/// アニメーションが再生中か
+		/// </summary>
+		/// <returns></returns>
+		bool IsPlayAnimation() const {
+			return m_animation.IsPlaying();
+		}
+
 		/// <summary>
 		/// 描画処理。
 		/// </summary>
@@ -46,6 +56,7 @@ namespace nsK2EngineLow {
 			m_rot = rot;
 			m_sca = sca;
 		}
+
 		/// <summary>
 		/// 位置の設定
 		/// </summary>
@@ -54,6 +65,7 @@ namespace nsK2EngineLow {
 		{
 			m_pos = pos;
 		}
+
 		/// <summary>
 		/// 位置の設定
 		/// </summary>
@@ -64,6 +76,7 @@ namespace nsK2EngineLow {
 		{
 			m_pos = Vector3(x, y, z);
 		}
+
 		/// <summary>
 		/// 回転の設定
 		/// </summary>
@@ -72,6 +85,7 @@ namespace nsK2EngineLow {
 		{
 			m_rot = rot;
 		}
+
 		/// <summary>
 		/// 大きさの設定
 		/// </summary>
@@ -84,6 +98,7 @@ namespace nsK2EngineLow {
 		{
 			m_sca = Vector3(x, y, z);
 		}
+
 		/// <summary>
 		/// モデルを取得。
 		/// </summary>
@@ -92,6 +107,13 @@ namespace nsK2EngineLow {
 		{
 			return m_model;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="modelInitData"></param>
+		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
+
 		/// <summary>
 		/// 更新処理。
 		/// </summary>
@@ -103,6 +125,7 @@ namespace nsK2EngineLow {
 		/// </summary>
 		/// <param name="filePath"></param>
 		void InitSkeleton(const char* filePath);
+
 		/// <summary>
 		/// アニメーションの初期化用変数
 		/// </summary>
@@ -114,10 +137,13 @@ namespace nsK2EngineLow {
 			int numAnimationClips,
 			EnModelUpAxis enModelUpAxis
 		);
+
 		/// <summary>
 		/// 各種モデルのワールド行列の更新
 		/// </summary>
 		void UpdateWorldMatrixInModes() ;
+
+
 
 	private:
 
@@ -130,5 +156,6 @@ namespace nsK2EngineLow {
 		Animation		m_animation;
 		AnimationClip*	m_animationClips = nullptr;	//アニメーションクリップ
 		int				m_numAnimationClips = 0;	//アニメーションクリップの数
-	};
+		float			m_animationSpeed = 1.0f;	//アニメーションの再生速度
+};
 }

@@ -80,6 +80,8 @@ struct SVSIn{
 	float4 pos 		: POSITION;		//モデルの頂点座標。
 	float2 uv 		: TEXCOORD0;	//UV座標。
     float3 normal	: NORMAL;		//法線ベクトル
+    float3 tangent  : TANGENT;      //接ベクトル
+    float3 biNormal : BINORMAL;     //従ベクトル
 	SSkinVSIn skinVert;				//スキン用のデータ。
 };
 //ピクセルシェーダーへの入力。
@@ -89,6 +91,8 @@ struct SPSIn{
     float3 normal		: NORMAL;		//法線ベクトル
     float3 worldPos     : TEXCOORD1;	// ワールド空間でのピクセルの座標
     float3 normalInView : TEXC00RD2;    //カメラ空間の法線
+    float3 tangent      : TANGENT;      //接ベクトル
+    float3 biNormal     : BINORMAL;     //従ベクトル
 
 };
 
@@ -96,6 +100,9 @@ struct SPSIn{
 // グローバル変数。
 ////////////////////////////////////////////////
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
+Texture2D<float4> g_normalMap : register(t1);           //ノーマルマップ
+Texture2D<float4> g_specularMap : register(t2);         //ノーマルマップ
+Texture2D<float4> g_aoMap : register(t10);              //ノーマルマップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
@@ -116,7 +123,7 @@ float3 CalcHemisphereLight(SPSIn psIn, HemisphereLig hemisphereLig);
 //Lambert拡散反射光の計算
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 //Phon鏡面反射光の計算
-float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos);
+float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos);
 
 ////////////////////////////////////////////////
 // 関数定義。
@@ -129,7 +136,7 @@ float3 CalcDirectionLight(SPSIn psIn)
     //拡散反射
     float3 diffuseLig = CalcLambertDiffuse(m_directionLig.direction, m_directionLig.color, psIn.normal);
     //鏡面反射
-    float3 specularLig = CalcPhongSpecular(m_directionLig.direction, m_directionLig.color, psIn.normal, psIn.worldPos);
+    float3 specularLig = CalcPhongSpecular(psIn, m_directionLig.direction, m_directionLig.color, psIn.normal, psIn.worldPos);
     
     float3 finalLig = diffuseLig + specularLig;
 	
@@ -147,7 +154,7 @@ float3 CalcPointLight(SPSIn psIn, PointLig pointLig)
     //拡散反射の計算
     float3 diffPoint = CalcLambertDiffuse(ligDir, pointLig.color, psIn.normal);
     //鏡面反射の計算
-    float3 specPoint = CalcPhongSpecular(ligDir, pointLig.color, psIn.normal, psIn.worldPos);
+    float3 specPoint = CalcPhongSpecular(psIn, ligDir, pointLig.color, psIn.normal, psIn.worldPos);
     
     //距離を計算
     float distance = length(psIn.worldPos - pointLig.position);
@@ -175,7 +182,7 @@ float3 CalcSpotLight(SPSIn psIn, SpotLig spotLig)
     //拡散反射の計算
     float3 diffPoint = CalcLambertDiffuse(ligDir, spotLig.color, psIn.normal);
     //鏡面反射の計算
-    float3 specPoint = CalcPhongSpecular(ligDir, spotLig.color, psIn.normal, psIn.worldPos);
+    float3 specPoint = CalcPhongSpecular(psIn, ligDir, spotLig.color, psIn.normal, psIn.worldPos);
     
     //距離を計算
     float distance = length(psIn.worldPos - spotLig.position);
@@ -222,13 +229,12 @@ float3 CalcRimLight(SPSIn psIn, float3 lig, DirectionLig directionLig)
 /// 半球ライトの計算
 /// </summary>
 float3 CalcHemisphereLight(SPSIn psIn,HemisphereLig hemisphereLig)
-{
+{       
     float t = dot(psIn.normal, hemisphereLig.groundNormal);
-    
     t = (t + 1.0f) / 2.0f;
     
     float3 hemiLig = lerp(hemisphereLig.groundColor, hemisphereLig.skyColor, t);
-    
+        
     return hemiLig;
 }
 
@@ -250,8 +256,10 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
 /// <summary>
 /// Phon鏡面反射光の計算
 /// </summary>
-float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos)
+float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos)
 {
+    float specPower = g_specularMap.Sample(g_sampler, psIn.uv).r;
+    
     //ディレクションライトの向きの反射ベクトルを求める
     float3 refVec = reflect(lightDirection, normal);
     
@@ -269,6 +277,8 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 normal
     
 	//鏡面反射をつける
     float3 specularLig = lightColor * t;
+    specularLig *= specPower * 10.0f;
+
 	
     return specularLig;
 }
@@ -312,8 +322,11 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.uv = vsIn.uv;
 	
 	//追加
-    psIn.normal = mul(mWorld, vsIn.normal);//法線を回転させる
-    psIn.normalInView = mul(mView, psIn.normal);//カメラ空間の法線を求める
+    psIn.normal = mul(mWorld, vsIn.normal);         //法線を回転させる
+    psIn.normalInView = mul(mView, psIn.normal);    //カメラ空間の法線を求める
+    
+    psIn.tangent = mul(mWorld, vsIn.tangent);       //接ベクトル
+    psIn.biNormal = mul(mWorld, vsIn.biNormal);     //接ベクトル
 
 	return psIn;
 }
@@ -338,6 +351,10 @@ SPSIn VSSkinMain( SVSIn vsIn )
 /// </summary>
 float4 PSMain( SPSIn psIn) : SV_Target0
 {
+    float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+    localNormal = (localNormal - 0.5) * 2.0f;
+    psIn.normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + psIn.normal * localNormal.z;
+    
     float3 finalLig;
 	//ディレクションライトの計算
     finalLig = CalcDirectionLight(psIn);
@@ -386,6 +403,8 @@ float4 PSMain( SPSIn psIn) : SV_Target0
     finalLig += CalcRimLight(psIn, finalLig, m_directionLig);
     
     //環境光の設定
+    //float ambientPower = g_aoMap.Sample(g_sampler, psIn.uv);
+    //finalLig += m_ambientLight * ambientPower;
     finalLig += m_ambientLight;
     //半球ライトの設定
     //finalLig += CalcHemisphereLight(psIn, m_hemisphereLig);
