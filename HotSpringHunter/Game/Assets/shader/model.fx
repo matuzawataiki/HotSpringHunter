@@ -35,6 +35,13 @@ struct SpotLig
     float3  direction;  //向き
     float   angle;      //影響範囲
 };
+//半球ライト構造体
+struct HemisphereLig
+{
+    float3 groundColor;     //地面の色
+    float3 skyColor;        //空の色
+    float3 groundNormal;    //地面の法線
+};
 
 ////////////////////////////////////////////////
 // 定数バッファ。
@@ -53,6 +60,7 @@ cbuffer LightCb : register(b1)
     DirectionLig	m_directionLig;					//ディレクションライト
     PointLig		m_pointLig[MAX_POINT_LIGHT];	//ポイントライト
     SpotLig         m_spotLig[MAX_SPOT_LIGHT];      //スポットライト
+    HemisphereLig   m_hemisphereLig;                //半球ライト
     int				m_numPointLig;					//ポイントライトの使用数
     float3          m_eyePos;                       //視点の位置
     int             m_numSpotLig;                   //スポットライトの使用数
@@ -79,7 +87,8 @@ struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float2 uv 			: TEXCOORD0;	//uv座標。
     float3 normal		: NORMAL;		//法線ベクトル
-    float3 worldPos : TEXCOORD1;		// ワールド空間でのピクセルの座標
+    float3 worldPos     : TEXCOORD1;	// ワールド空間でのピクセルの座標
+    float3 normalInView : TEXC00RD2;    //カメラ空間の法線
 
 };
 
@@ -99,6 +108,10 @@ float3 CalcDirectionLight(SPSIn psIn);
 float3 CalcPointLight(SPSIn psIn, PointLig pointLig);
 //スポットライト
 float3 CalcSpotLight(SPSIn psIn, SpotLig spotLig);
+//リムライトの計算
+float3 CalcRimLight(SPSIn psIn, float3 lig, DirectionLig directionLig);
+//半球ライトの計算
+float3 CalcHemisphereLight(SPSIn psIn, HemisphereLig hemisphereLig);
 
 //Lambert拡散反射光の計算
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
@@ -122,6 +135,7 @@ float3 CalcDirectionLight(SPSIn psIn)
 	
     return finalLig;
 }
+
 /// <summary>
 /// ポイントライトの計算
 /// </summary>
@@ -149,6 +163,7 @@ float3 CalcPointLight(SPSIn psIn, PointLig pointLig)
     return diffPoint + specPoint;
 
 }
+
 /// <summary>
 /// ポイントライトの計算
 /// </summary>
@@ -187,6 +202,37 @@ float3 CalcSpotLight(SPSIn psIn, SpotLig spotLig)
 }
 
 /// <summary>
+/// リムライトの計算
+/// </summary>
+float3 CalcRimLight(SPSIn psIn, float3 lig, DirectionLig directionLig)
+{
+    float power1 = 1.0f - max(0.0f, dot(directionLig.direction, psIn.normal));
+    float power2 = 1.0f - max(0.0f, psIn.normalInView.z * -1.0f);
+    
+    float rimPower = power1 * power2;
+    rimPower = pow(rimPower, 1.3f);
+    
+    float3 rimColor = rimPower * lig;
+    
+    return rimColor;
+
+}
+
+/// <summary>
+/// 半球ライトの計算
+/// </summary>
+float3 CalcHemisphereLight(SPSIn psIn,HemisphereLig hemisphereLig)
+{
+    float t = dot(psIn.normal, hemisphereLig.groundNormal);
+    
+    t = (t + 1.0f) / 2.0f;
+    
+    float3 hemiLig = lerp(hemisphereLig.groundColor, hemisphereLig.skyColor, t);
+    
+    return hemiLig;
+}
+
+/// <summary>
 //Lambert拡散反射光の計算
 /// </summary>
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal)
@@ -200,8 +246,9 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
     
     return diffuseLig;
 }
+
 /// <summary>
-//Phon鏡面反射光の計算
+/// Phon鏡面反射光の計算
 /// </summary>
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos)
 {
@@ -266,6 +313,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	
 	//追加
     psIn.normal = mul(mWorld, vsIn.normal);//法線を回転させる
+    psIn.normalInView = mul(mView, psIn.normal);//カメラ空間の法線を求める
 
 	return psIn;
 }
@@ -284,6 +332,7 @@ SPSIn VSSkinMain( SVSIn vsIn )
 {
 	return VSMainCore(vsIn, true);
 }
+
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
 /// </summary>
@@ -333,11 +382,13 @@ float4 PSMain( SPSIn psIn) : SV_Target0
 
     }
     
+    //リムライトの設定
+    finalLig += CalcRimLight(psIn, finalLig, m_directionLig);
+    
     //環境光の設定
-    //finalLig += m_ambientLight;
-    finalLig.x += 0.1f;
-    finalLig.y += 0.1f;
-    finalLig.z += 0.1f;
+    finalLig += m_ambientLight;
+    //半球ライトの設定
+    //finalLig += CalcHemisphereLight(psIn, m_hemisphereLig);
 	
     //最終合成
     float4 finalColor = g_albedo.Sample(g_sampler, psIn.uv);

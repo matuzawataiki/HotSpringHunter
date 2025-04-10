@@ -119,3 +119,4 @@ static const int MAX_BONE = 512;	// ƒ{[ƒ“‚ÌÅ‘å”B
 #include "TMEngine/light/SceneLight.h"
 #include "TMEngine/light/PointLight.h"
 #include "TMEngine/light/SpotLight.h"
+#include "TMEngine/light/HemisphereLight.h"

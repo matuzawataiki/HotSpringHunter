@@ -7,10 +7,12 @@ namespace nsK2EngineLow
 	public:
 		PointLight();
 		~PointLight();
+
 		/// <summary>
 		/// ポイントライトの初期化
 		/// </summary>
 		void Init(const Vector3& pos, const Vector3& color, const float& range);
+
 		/// <summary>
 		/// ポイントライトの位置を設定
 		/// </summary>
@@ -23,6 +25,7 @@ namespace nsK2EngineLow
 		{
 			SetPosition({ x,y,z });
 		}
+
 		/// <summary>
 		/// 色の設定
 		/// </summary>
@@ -35,6 +38,7 @@ namespace nsK2EngineLow
 		{
 			SetColor({ x,y,z });
 		}
+
 		/// <summary>
 		/// 影響範囲の設定
 		/// </summary>

@@ -331,6 +331,7 @@
     <ClCompile Include="tkFile\TknFile.cpp" />
     <ClCompile Include="tkFile\TksFile.cpp" />
     <ClCompile Include="TMEngine\FontRender.cpp" />
+    <ClCompile Include="TMEngine\light\HemisphereLight.cpp" />
     <ClCompile Include="TMEngine\light\PointLight.cpp" />
     <ClCompile Include="TMEngine\light\SceneLight.cpp" />
     <ClCompile Include="TMEngine\light\SpotLight.cpp" />
@@ -432,6 +433,7 @@
     <ClInclude Include="tkFile\TksFile.h" />
     <ClInclude Include="TMEngine\FontRender.h" />
     <ClInclude Include="TMEngine\IRenderer.h" />
+    <ClInclude Include="TMEngine\light\HemisphereLight.h" />
     <ClInclude Include="TMEngine\light\PointLight.h" />
     <ClInclude Include="TMEngine\light\SceneLight.h" />
     <ClInclude Include="TMEngine\light\SpotLight.h" />
