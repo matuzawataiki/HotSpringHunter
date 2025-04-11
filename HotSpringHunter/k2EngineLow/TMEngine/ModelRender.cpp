@@ -26,7 +26,9 @@ namespace nsK2EngineLow {
 		//シェーダーのファイルパスの指定
 		modelData.m_fxFilePath = "Assets/shader/model.fx";
 
-		modelData.m_expandConstantBuffer = g_sceneLight->GetLightData();
+		//SetupVertexShaderEntryPointFunc(modelData);
+
+		modelData.m_expandConstantBuffer = g_sceneLight->GetLight();
 		modelData.m_expandConstantBufferSize = sizeof(Light);
 
 		m_model.Init(modelData);
@@ -57,6 +59,17 @@ namespace nsK2EngineLow {
 
 	}
 
+	void ModelRender::SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData)
+	{
+		//modelInitData.m_vsSkinEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
+		//modelInitData.m_vsEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
+
+		//if (m_animationClips != nullptr) {
+		//	// アニメーションあり。
+		//	modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+		//}
+	}
+
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
 		m_model.UpdateWorldMatrix(m_pos, m_rot, m_sca);
@@ -65,6 +78,14 @@ namespace nsK2EngineLow {
 	void ModelRender::Update()
 	{
 		UpdateWorldMatrixInModes();
+
+		if (m_skeleton.IsInited()) {
+			m_skeleton.Update(m_model.GetWorldMatrix());
+		}
+
+		//アニメーションを進める。
+		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
+
 	}
 
 	void ModelRender::Draw(RenderContext& rc)
