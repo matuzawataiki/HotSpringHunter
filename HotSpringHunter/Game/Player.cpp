@@ -6,6 +6,7 @@ namespace {
 	const float JUMP_AMOUNT = 700.0f;
 	const float DASH_AMOUNT = 2.5f;
 	const float GRAVITY_AMOUNT = 10.0f;
+	const float GUARD_MOVE_AMOUNT = 0.001f;
 
 	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };
 }
@@ -28,7 +29,7 @@ bool Player::Start()
 	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Jump].Load("Assets/animData/jump.tka");
 	m_animationClips[enAnimationClip_Jump].SetLoopFlag(false);
-	m_playerModelRender.Init("Assets/ModelData/UnityChan.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
+	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
 
 	//player座標初期化
 	m_playerPosition = PLAYER_NEW_POSITION;
@@ -84,13 +85,7 @@ void Player::Move()
 		//移動速度に加算。
 		m_playerSpeed += rightDir + forwardDir;
 
-		//ダッシュ(地面についているときだけ入力可）。
-		if (g_pad[0]->IsPress(enButtonX)) {
-			m_runState = DASH_AMOUNT;
-		}
-		else if (g_pad[0]->IsPress(enButtonX) == false) {
-			m_runState = 1.0f;
-		}
+		MoveAdjust();
 
 		//重力をなくす。
 		m_playerSpeed.y = 0.0f;
@@ -108,6 +103,25 @@ void Player::Move()
 
 	m_playerPosition = m_playerCharaCon.Execute(m_playerSpeed, 1.0f / 60.0f);
 	m_playerModelRender.SetPosition(m_playerPosition);
+}
+
+void Player::MoveAdjust()
+{
+	//ガード中。
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_guardState = GUARD_MOVE_AMOUNT;
+	}
+	else {
+		m_guardState = 1.0f;
+	}
+
+	//ダッシュ。
+	if (g_pad[0]->IsPress(enButtonX)) {
+		m_runState = DASH_AMOUNT;
+	}
+	else{
+		m_runState = 1.0f;
+	}
 }
 
 /// <summary>

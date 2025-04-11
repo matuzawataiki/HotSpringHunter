@@ -32,7 +32,7 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
-	CameraSwitch();
+	//CameraSwitch();
 	CameraUpdate();
 }
 

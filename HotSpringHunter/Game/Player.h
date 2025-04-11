@@ -8,6 +8,8 @@ public:
 	void Update()override;
 	//player移動
 	void Move();
+	//player移動速度調整。
+	void MoveAdjust();
 	//player回転。
 	void Rotation();
 	//state管理。
@@ -20,6 +22,10 @@ public:
 	Vector3 GetPlayerPosition() {
 		return m_playerPosition;
 	}
+	//player速度ベクトルのゲッター。
+	Vector3 GetPlayerSpeed() {
+		return m_playerSpeed;
+	}
 
 private:
 	ModelRender m_playerModelRender;						//player描画。
@@ -29,6 +35,7 @@ private:
 	CharacterController m_playerCharaCon;					//playerキャラコン。
 
 	float m_runState = 1.0f;								//player走り状態の管理。
+	float m_guardState = 1.0f;								//ガード状態の管理。
 
 	//アニメーション。
 	enum EnAnimationClip {
