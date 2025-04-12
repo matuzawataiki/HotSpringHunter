@@ -21,7 +21,7 @@ bool GameCamera::Start()
 	m_player = FindGO<Player>("player");
 	m_backGround = FindGO<BackGround>("backGround");
 
-	m_cameraState = EnCameraVar::follow;
+	m_cameraState = EnCameraVar::lookDown;
 	//近平面
 	g_camera3D->SetNear(CAMERA_NEAR);
 	//遠平面
@@ -32,7 +32,7 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
-	//CameraSwitch();
+	CameraSwitch();
 	CameraUpdate();
 }
 
@@ -41,15 +41,15 @@ void GameCamera::Update()
 /// </summary>
 void GameCamera::CameraSwitch()
 {
-	//Bボタンでカメラ切り替え(仮）。
-	if (g_pad[0]->IsTrigger(enButtonB)) {
-		if (m_cameraState == EnCameraVar::follow) {
-			m_cameraState = EnCameraVar::lookDown;
-		}
-		else if (m_cameraState == EnCameraVar::lookDown) {
-			m_cameraState = EnCameraVar::follow;
-		}
-	}
+	////Bボタンでカメラ切り替え(仮）。
+	//if (g_pad[0]->IsTrigger(enButtonB)) {
+	//	if (m_cameraState == EnCameraVar::follow) {
+	//		m_cameraState = EnCameraVar::lookDown;
+	//	}
+	//	else if (m_cameraState == EnCameraVar::lookDown) {
+	//		m_cameraState = EnCameraVar::follow;
+	//	}
+	//}
 
 	//カメラのstate管理。
 	//俯瞰カメラ。

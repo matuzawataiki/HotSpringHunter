@@ -43,15 +43,21 @@ private:
 		enAnimationClip_Walk,
 		enAnimationClip_Run,
 		enAnimationClip_Jump,
+		enAnimationClip_GuardStart,
+		enAnimationClip_GuardEnd,
+		enAnimationClip_WeakAttack,
 		enAnimationClip_Num,
 	};
 	AnimationClip m_animationClips[enAnimationClip_Num];
 
 	int m_animationState = 0;			//playerアニメーションの状態。
 	enum EnPlayerAnimVar {
-		idle,
-		walk,
-		run,
-		jump,
+		enIdle,
+		enWalk,
+		enRun,
+		enJump,
+		enGuardStart,
+		enGuardEnd,
+		enWeakAttack
 	};
 };

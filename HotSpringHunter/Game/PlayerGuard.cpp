@@ -21,7 +21,7 @@ bool PlayerGuard::Start()
 
 void PlayerGuard::Update()
 {
-	if (g_pad[0]->IsPress(enButtonB)) {
+	if (g_pad[0]->IsPress(enButtonX)) {
 		GuardDirection();
 	}
 }
