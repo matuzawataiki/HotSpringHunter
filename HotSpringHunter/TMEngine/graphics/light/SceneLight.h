@@ -1,5 +1,5 @@
 #pragma once
-namespace nsK2EngineLow {
+namespace nsTMEngine {
 	static const int MAX_POINT_LIGHT = 32;	//ポイントライトの最大数
 	static const int MAX_SPOT_LIGHT = 32;	//スポットライトの最大数
 

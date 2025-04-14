@@ -1,5 +1,5 @@
-#include "k2EngineLowPreCompile.h"
-namespace nsK2EngineLow 
+#include "TMEnginePreCompile.h"
+namespace nsTMEngine 
 {
 	SpotLight::SpotLight()
 	{
@@ -17,4 +17,3 @@ namespace nsK2EngineLow
 		SetAngle(angle);
 	}
 }
-

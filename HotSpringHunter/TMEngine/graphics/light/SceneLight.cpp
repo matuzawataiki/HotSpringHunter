@@ -1,6 +1,6 @@
-#include "k2EngineLowPreCompile.h"
+#include "TMEnginePreCompile.h"
 #include "SceneLight.h"
-namespace nsK2EngineLow 
+namespace nsTMEngine
 {
 	SceneLight::SceneLight()
 	{
@@ -56,4 +56,3 @@ namespace nsK2EngineLow
 	}
 
 }
-

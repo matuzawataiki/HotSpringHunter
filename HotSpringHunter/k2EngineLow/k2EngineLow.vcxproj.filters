@@ -225,21 +225,6 @@
     <ClCompile Include="graphics\FrameBuffer.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
-    <ClCompile Include="TMEngine\ModelRender.cpp">
-      <Filter>TMEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="TMEngine\SpriteRender.cpp">
-      <Filter>TMEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="TMEngine\FontRender.cpp">
-      <Filter>TMEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="TMEngine\light\SceneLight.cpp">
-      <Filter>TMEngine\light</Filter>
-    </ClCompile>
-    <ClCompile Include="TMEngine\light\PointLight.cpp" />
-    <ClCompile Include="TMEngine\light\SpotLight.cpp" />
-    <ClCompile Include="TMEngine\light\HemisphereLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -515,27 +500,6 @@
       <Filter>graphics</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="TMEngine\ModelRender.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\SpriteRender.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\MyRenderer.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\IRenderer.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\FontRender.h">
-      <Filter>TMEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\light\SceneLight.h">
-      <Filter>TMEngine\light</Filter>
-    </ClInclude>
-    <ClInclude Include="TMEngine\light\PointLight.h" />
-    <ClInclude Include="TMEngine\light\SpotLight.h" />
-    <ClInclude Include="TMEngine\light\HemisphereLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
