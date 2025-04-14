@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsK2EngineLow {
+namespace nsTMEngine {
 	class IRenderer : public Noncopyable
 	{
 	};

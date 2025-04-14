@@ -1,7 +1,7 @@
-#include "k2EngineLowPreCompile.h"
+#include "TMEnginePreCompile.h"
 #include "SpriteRender.h"
 
-namespace nsK2EngineLow {
+namespace nsTMEngine {
 	SpriteRender::SpriteRender()
 	{
 	}

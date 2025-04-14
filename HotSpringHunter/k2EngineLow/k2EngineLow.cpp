@@ -5,8 +5,6 @@
 namespace nsK2EngineLow {
 	K2EngineLow* g_engine = nullptr;
 	GameTime* g_gameTime = nullptr;
-	//’Ç‰Á
-	SceneLight* g_sceneLight = nullptr;
 
 	K2EngineLow::~K2EngineLow()
 	{

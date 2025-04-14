@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -27,7 +27,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="graphics\postEffect\Bloom.cpp" />
     <ClCompile Include="graphics\FontRender.cpp" />
     <ClCompile Include="graphics\light\HemisphereLight.cpp" />
     <ClCompile Include="graphics\light\PointLight.cpp" />
@@ -35,15 +34,12 @@
     <ClCompile Include="graphics\light\SpotLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
-    <ClCompile Include="graphics\postEffect\PostEffect.cpp" />
-    <ClCompile Include="graphics\postEffect\PostEffectComponentBase.cpp" />
     <ClCompile Include="TMEngine.cpp" />
     <ClCompile Include="TMEnginePreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics\postEffect\Bloom.h" />
     <ClInclude Include="graphics\FontRender.h" />
     <ClInclude Include="graphics\IRenderer.h" />
     <ClInclude Include="graphics\light\HemisphereLight.h" />
@@ -53,8 +49,6 @@
     <ClInclude Include="graphics\ModelRender.h" />
     <ClInclude Include="graphics\MyRenderer.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
-    <ClInclude Include="graphics\postEffect\PostEffect.h" />
-    <ClInclude Include="graphics\postEffect\PostEffectComponentBase.h" />
     <ClInclude Include="TMEngine.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
   </ItemGroup>

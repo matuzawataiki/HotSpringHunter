@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsK2EngineLow
+namespace nsTMEngine
 {
 	class HemisphereLight
 	{
@@ -52,6 +52,6 @@ namespace nsK2EngineLow
 			SetGroundNormal({ x,y,z });
 		}
 	private:
-		SHemisphereLight* m_hemisphereLight;	//半球ライト
+		SHemisphereLight* m_hemisphereLight = nullptr;	//半球ライト
 	};
 }

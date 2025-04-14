@@ -1,7 +1,7 @@
 #pragma once
-#include "TMEngine/IRenderer.h"
+#include "IRenderer.h"
 
-namespace nsK2EngineLow
+namespace nsTMEngine
 {
 	class FontRender : public IRenderer
 	{

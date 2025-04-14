@@ -1,7 +1,7 @@
-#include "k2EngineLowPreCompile.h"
+#include "TMEnginePreCompile.h"
 #include "HemisphereLight.h"
 
-namespace nsK2EngineLow
+namespace nsTMEngine
 {
 	HemisphereLight::HemisphereLight()
 	{

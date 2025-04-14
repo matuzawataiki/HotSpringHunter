@@ -1,5 +1,5 @@
 #pragma once
-namespace nsK2EngineLow
+namespace nsTMEngine
 {
 	class SpotLight
 	{
