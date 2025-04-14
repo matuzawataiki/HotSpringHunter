@@ -8,7 +8,7 @@ namespace nsTMEngine {
 		/// 初期化
 		/// </summary>
 		/// <param name="mainRenderTarget"></param>
-		void OnInit(RenderContext& mainRenderTarget);
+		void OnInit(RenderTarget& mainRenderTarget);
 
 		/// <summary>
 		/// 描画
@@ -47,8 +47,6 @@ namespace nsTMEngine {
 		/// </summary>
 		struct SSampleingLuminanceCB1
 		{
-			int isToneMap;
-			float middlegray;
 			float threshold = 1.0f;
 		};
 		RenderTarget m_luminanceRenderTarget;	//光度抽出用のレンダリングターゲット

@@ -24,6 +24,9 @@
     <ClCompile Include="graphics\light\SpotLight.cpp">
       <Filter>graphics\light</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\postEffect\Bloom.cpp" />
+    <ClCompile Include="graphics\postEffect\PostEffect.cpp" />
+    <ClCompile Include="graphics\postEffect\PostEffectComponentBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TMEnginePreCompile.h" />
@@ -55,6 +58,9 @@
     <ClInclude Include="graphics\light\SpotLight.h">
       <Filter>graphics\light</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\postEffect\Bloom.h" />
+    <ClInclude Include="graphics\postEffect\PostEffect.h" />
+    <ClInclude Include="graphics\postEffect\PostEffectComponentBase.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

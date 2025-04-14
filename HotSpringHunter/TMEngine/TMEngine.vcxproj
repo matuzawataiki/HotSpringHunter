@@ -33,6 +33,9 @@
     <ClCompile Include="graphics\light\SceneLight.cpp" />
     <ClCompile Include="graphics\light\SpotLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\postEffect\Bloom.cpp" />
+    <ClCompile Include="graphics\postEffect\PostEffect.cpp" />
+    <ClCompile Include="graphics\postEffect\PostEffectComponentBase.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
     <ClCompile Include="TMEngine.cpp" />
     <ClCompile Include="TMEnginePreCompile.cpp">
@@ -48,6 +51,9 @@
     <ClInclude Include="graphics\light\SpotLight.h" />
     <ClInclude Include="graphics\ModelRender.h" />
     <ClInclude Include="graphics\MyRenderer.h" />
+    <ClInclude Include="graphics\postEffect\Bloom.h" />
+    <ClInclude Include="graphics\postEffect\PostEffect.h" />
+    <ClInclude Include="graphics\postEffect\PostEffectComponentBase.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="TMEngine.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
