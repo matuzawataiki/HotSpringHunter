@@ -3,6 +3,9 @@
 #include "Player.h"
 #include "Enemy.h"
 
+namespace {
+	const float GUARD_TOLERANCE = 0.3f;				//ガード方向の許容角度。
+}
 PlayerGuard::PlayerGuard()
 {
 }
@@ -28,25 +31,21 @@ void PlayerGuard::Update()
 
 void PlayerGuard::GuardDirection()
 {
-	m_playerDirection = m_player->GetPlayerSpeed();
-	//m_enemyDirection = m_enemy->GetEnemySpeed();
+	/*
+	Vector3 enemyPos = m_enemy->GetPosition();
+	Vector3 playerPos = m_player->GetPosition();
+	Vector3 toEnemyDirection = playerPos - enemyPos;
+	toEnemyDirection.ノーマライズ();
+	Vector3 playerDirection = m_player->GetPlayerDirection();
+	Vector3 guard = Dot(playerDirection,toEnemyDirection)
 
-	m_playerDirection.y = 0.0f;
-	m_enemyDirection.y = 0.0f;
-
-	m_playerDirection.Normalize();
-	m_enemyDirection.Normalize();
-
-	m_enemyDirection * -1.0f;
-
-	m_directionGap = m_playerDirection - m_enemyDirection;
-
-	if (fabsf(m_directionGap.x) <= 0.3f && fabsf(m_directionGap.z) <= 0.3f) {
-		m_directionFlag = true;
-	}
+	if(guard <= GUARD_TOLERANCE){
+		m_guardFlag = true;
+	}	
 	else {
-		m_directionFlag = false;
+		m_guardFlag = false;
 	}
+	*/
 }
 
 void PlayerGuard::Render(RenderContext& rc) 

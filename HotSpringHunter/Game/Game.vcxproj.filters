@@ -19,6 +19,8 @@
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="PlayerGuard.cpp" />
     <ClCompile Include="PlayerAttack.cpp" />
+    <ClCompile Include="PlayerHealth.cpp" />
+    <ClCompile Include="PlayerChargeAttack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -33,5 +35,7 @@
     <ClInclude Include="Snake.h" />
     <ClInclude Include="PlayerGuard.h" />
     <ClInclude Include="PlayerAttack.h" />
+    <ClInclude Include="PlayerHealth.h" />
+    <ClInclude Include="PlayerChargeAttack.h" />
   </ItemGroup>
 </Project>
