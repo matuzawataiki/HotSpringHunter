@@ -5,6 +5,7 @@
 #include "CharacterBase.h"
 #include "Player.h"
 #include "Snake.h"
+#include "Test.h"
 
 
 Game::Game()
@@ -21,6 +22,7 @@ bool Game::Start()
 	m_backGround = NewGO<BackGround>(0, "backGround");
 	m_player = NewGO<Player>(0, "player");
 	//m_snake = NewGO<Snake>(0, "snake");
+	m_test = NewGO<Test>(0, "test");
 
 	return true;
 }

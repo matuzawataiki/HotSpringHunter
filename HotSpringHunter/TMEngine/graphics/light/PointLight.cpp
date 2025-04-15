@@ -1,0 +1,20 @@
+#include "TMEnginePreCompile.h"
+#include "PointLight.h"
+
+namespace nsTMEngine
+{
+	PointLight::PointLight()
+	{
+		m_pointLig = g_sceneLight->NewPointLight();	//ポイントライトを取得
+	}
+	PointLight::~PointLight()
+	{
+	}
+
+	void PointLight::Init(const Vector3& pos, const Vector3& color, const float& range)
+	{
+		m_pointLig->SetPosition(pos);
+		m_pointLig->SetColor(color);
+		m_pointLig->SetRange(range);
+	}
+}
