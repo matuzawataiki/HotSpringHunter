@@ -6,6 +6,7 @@ namespace {
 	const float JUMP_AMOUNT = 700.0f;
 	const float DASH_AMOUNT = 2.5f;
 	const float GRAVITY_AMOUNT = 10.0f;
+	const float GUARD_MOVE_AMOUNT = 0.001f;
 
 	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };
 }
@@ -20,15 +21,21 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/idle.tka");
+	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/walk.tka");
+	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
 	m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Run].Load("Assets/animData/run.tka");
+	m_animationClips[enAnimationClip_Run].Load("Assets/animData/player/run.tka");
 	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Jump].Load("Assets/animData/jump.tka");
+	m_animationClips[enAnimationClip_Jump].Load("Assets/animData/player/jump.tka");
 	m_animationClips[enAnimationClip_Jump].SetLoopFlag(false);
-	m_playerModelRender.Init("Assets/ModelData/UnityChan.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
+	m_animationClips[enAnimationClip_GuardStart].Load("Assets/animData/player/guardStart.tka");
+	m_animationClips[enAnimationClip_GuardStart].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_GuardEnd].Load("Assets/animData/player/guardEnd.tka");
+	m_animationClips[enAnimationClip_GuardEnd].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_WeakAttack].Load("Assets/animData/player/weakAttack.tka");
+	m_animationClips[enAnimationClip_WeakAttack].SetLoopFlag(false);
+	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
 
 	//player座標初期化
 	m_playerPosition = PLAYER_NEW_POSITION;
@@ -84,13 +91,7 @@ void Player::Move()
 		//移動速度に加算。
 		m_playerSpeed += rightDir + forwardDir;
 
-		//ダッシュ(地面についているときだけ入力可）。
-		if (g_pad[0]->IsPress(enButtonX)) {
-			m_runState = DASH_AMOUNT;
-		}
-		else if (g_pad[0]->IsPress(enButtonX) == false) {
-			m_runState = 1.0f;
-		}
+		MoveAdjust();
 
 		//重力をなくす。
 		m_playerSpeed.y = 0.0f;
@@ -105,32 +106,57 @@ void Player::Move()
 		//重力を発生させる。
 		m_playerSpeed.y -= GRAVITY_AMOUNT;
 	}
-
+	
 	m_playerPosition = m_playerCharaCon.Execute(m_playerSpeed, 1.0f / 60.0f);
 	m_playerModelRender.SetPosition(m_playerPosition);
 }
 
+void Player::MoveAdjust()
+{
+	//ガード中。
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_guardState = GUARD_MOVE_AMOUNT;
+	}
+	else {
+		m_guardState = 1.0f;
+	}
+
+	//ダッシュ。
+	if (g_pad[0]->IsPress(enButtonX)) {
+		m_runState = DASH_AMOUNT;
+	}
+	else{
+		m_runState = 1.0f;
+	}
+}
+
 /// <summary>
-/// ステート管理。
+/// アニメーションステート管理。
 /// </summary>
 void Player::StateManage()
 {
 	//ジャンプ中。
 	if (m_playerCharaCon.IsOnGround() == false) {
-		m_animationState = EnPlayerAnimVar::jump;
+		m_animationState = EnPlayerAnimVar::enJump;
 	}
 	else {
-		//歩行中。
-		if (fabsf(m_playerSpeed.x) >= 0.001f || fabsf(m_playerSpeed.z) >= 0.001f) {
-			m_animationState = EnPlayerAnimVar::walk;
+		if (g_pad[0]->IsPress(enButtonX)) {
+			m_animationState = EnPlayerAnimVar::enGuardStart;
+		}
+		if (g_pad[0]->IsPress(enButtonY)) {
+			m_animationState = EnPlayerAnimVar::enWeakAttack;
+		}
+		//歩行中。		
+		if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
+			m_animationState = EnPlayerAnimVar::enWalk;
 			//Xボタン入力中なら。
-			if (g_pad[0]->IsPress(enButtonX)) {
-				m_animationState = EnPlayerAnimVar::run;
+			if (g_pad[0]->IsPress(enButtonB)) {
+				m_animationState = EnPlayerAnimVar::enRun;
 			}
 		}
 		//待機中。
 		else {
-			m_animationState = EnPlayerAnimVar::idle;
+			m_animationState = EnPlayerAnimVar::enIdle;
 		}
 	}
 }
@@ -149,17 +175,23 @@ void Player::Rotation()
 void Player::AnimationManage()
 {
 	switch (m_animationState) {
-	case EnPlayerAnimVar::idle:
+	case EnPlayerAnimVar::enIdle:
 		m_playerModelRender.PlayAnimation(enAnimationClip_Idle);
 		break;
-	case EnPlayerAnimVar::walk:
+	case EnPlayerAnimVar::enWalk:
 		m_playerModelRender.PlayAnimation(enAnimationClip_Walk);
 		break;
-	case EnPlayerAnimVar::jump:
+	case EnPlayerAnimVar::enJump:
 		m_playerModelRender.PlayAnimation(enAnimationClip_Jump);
 		break;
-	case EnPlayerAnimVar::run:
+	case EnPlayerAnimVar::enRun:
 		m_playerModelRender.PlayAnimation(enAnimationClip_Run);
+		break;
+	case EnPlayerAnimVar::enGuardStart:
+		m_playerModelRender.PlayAnimation(enAnimationClip_GuardStart);
+		break;
+	case EnPlayerAnimVar::enWeakAttack:
+		m_playerModelRender.PlayAnimation(enAnimationClip_WeakAttack);
 		break;
 	default:
 		break;
