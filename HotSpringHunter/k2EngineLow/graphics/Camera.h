@@ -97,6 +97,13 @@ namespace nsK2EngineLow {
 			return m_position;
 		}
 		/// <summary>
+		/// カメラの座標のポインタを取得。
+		/// </summary>
+		const Vector3* GetPositionPinta() const
+		{
+			return &m_position;
+		}
+		/// <summary>
 		/// 注視点を設定。
 		/// </summary>
 		void SetTarget(float x, float y, float z)
