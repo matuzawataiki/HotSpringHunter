@@ -27,6 +27,7 @@
     <ClCompile Include="graphics\postEffect\Bloom.cpp" />
     <ClCompile Include="graphics\postEffect\PostEffect.cpp" />
     <ClCompile Include="graphics\postEffect\PostEffectComponentBase.cpp" />
+    <ClCompile Include="graphics\RenderingEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TMEnginePreCompile.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="graphics\postEffect\Bloom.h" />
     <ClInclude Include="graphics\postEffect\PostEffect.h" />
     <ClInclude Include="graphics\postEffect\PostEffectComponentBase.h" />
+    <ClInclude Include="graphics\RenderingEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
