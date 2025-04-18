@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="collision\CollisionObject.cpp" />
     <ClCompile Include="graphics\FontRender.cpp" />
     <ClCompile Include="graphics\light\HemisphereLight.cpp" />
     <ClCompile Include="graphics\light\PointLight.cpp" />
@@ -40,6 +41,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="collision\CollisionObject.h" />
     <ClInclude Include="graphics\FontRender.h" />
     <ClInclude Include="graphics\IRenderer.h" />
     <ClInclude Include="graphics\light\HemisphereLight.h" />

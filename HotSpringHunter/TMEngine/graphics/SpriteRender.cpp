@@ -26,7 +26,7 @@ namespace nsTMEngine {
 
 	}
 
-	void SpriteRender::Drow(RenderContext& rc)
+	void SpriteRender::Draw(RenderContext& rc)
 	{
 		m_sprite.Draw(rc);
 	}

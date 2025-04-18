@@ -24,6 +24,7 @@
     <ClCompile Include="graphics\light\SpotLight.cpp">
       <Filter>graphics\light</Filter>
     </ClCompile>
+    <ClCompile Include="collision\CollisionObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TMEnginePreCompile.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="graphics\light\SpotLight.h">
       <Filter>graphics\light</Filter>
     </ClInclude>
+    <ClInclude Include="collision\CollisionObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

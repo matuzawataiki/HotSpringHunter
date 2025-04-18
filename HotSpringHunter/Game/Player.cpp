@@ -1,12 +1,17 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "PlayerHealth.h"
+#include "PlayerAttack.h"
+#include "PlayerGuard.h"
+#include "PlayerChargeAttack.h"
+#include "Towel.h"
+#include "Bucket.h"
 
 namespace {
 	const float MOVE_AMOUNT = 120.0f;
 	const float JUMP_AMOUNT = 700.0f;
-	const float DASH_AMOUNT = 2.5f;
+	const float DASH_AMOUNT = 4.0f;
 	const float GRAVITY_AMOUNT = 10.0f;
-	const float GUARD_MOVE_AMOUNT = 0.001f;
 
 	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };
 }
@@ -17,10 +22,31 @@ Player::Player()
 
 Player::~Player()
 {
+	DeleteGO(m_playerAttack);
+	DeleteGO(m_playerGuard);
+	DeleteGO(m_playerChaAt);
+	DeleteGO(m_playerHealth);
 }
 
 bool Player::Start()
 {
+	//player座標初期化
+	m_playerPosition = PLAYER_NEW_POSITION;
+	//playerキャラコン初期化
+	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPosition);
+
+	LoadModel();
+	GenerateMinions();
+
+	return true;
+}
+
+/// <summary>
+/// Assetsロード。
+/// </summary>
+void Player::LoadModel()
+{
+	//アニメーションロード。
 	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
@@ -35,14 +61,31 @@ bool Player::Start()
 	m_animationClips[enAnimationClip_GuardEnd].SetLoopFlag(false);
 	m_animationClips[enAnimationClip_WeakAttack].Load("Assets/animData/player/weakAttack.tka");
 	m_animationClips[enAnimationClip_WeakAttack].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_ChargeAttack].Load("Assets/animData/player/chargeAttack.tka");
+	m_animationClips[enAnimationClip_ChargeAttack].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Charging].Load("Assets/animData/player/charging.tka");
+	m_animationClips[enAnimationClip_Charging].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Hit].Load("Assets/animData/player/hit.tka");
+	m_animationClips[enAnimationClip_Hit].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Death].Load("Assets/animData/player/death.tka");
+	m_animationClips[enAnimationClip_Death].SetLoopFlag(false);
+
+	//モデルロード。
 	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
+}
 
-	//player座標初期化
-	m_playerPosition = PLAYER_NEW_POSITION;
-	//playerキャラコン初期化
-	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPosition);
+/// <summary>
+/// 子クラスNewGO。
+/// </summary>
+void Player::GenerateMinions()
+{
+	m_playerHealth = NewGO<PlayerHealth>(0, "playerHealth");
+	m_playerAttack = NewGO<PlayerAttack>(0, "playerAttack");
+	m_playerGuard = NewGO<PlayerGuard>(0, "playerGuard");
+	m_playerChaAt = NewGO<PlayerChargeAttack>(0, "playerChargeAttack");
 
-	return true;
+	//NewGO<Towel>(0, "towel");
+	//NewGO<Bucket>(0, "bucket");
 }
 
 void Player::Update()
@@ -82,16 +125,23 @@ void Player::Move()
 
 		//前方向ベクトルを正規化。
 		//カメラの上下方向でキャラの移動速度が変わらないようにする。
-		forwardDir.Normalize();
+		forwardDir.Normalize();		
 
-		//左スティックの入力量に120.0fを乗算。
-		forwardDir *= stickL.y * MOVE_AMOUNT * m_runState;
-		rightDir *= stickL.x * MOVE_AMOUNT * m_runState;
+		//移動方向を計算。
+		forwardDir *= stickL.y;
+		rightDir *= stickL.x;
+
+		//playerの向きを取得。
+		GetDirection(forwardDir, rightDir);
+
+		//移動速度を計算。
+		//移動速度 = 歩行速度 * ダッシュ状態 * ガード状態。
+		MoveAdjust();
+		forwardDir *= MOVE_AMOUNT * m_runState * m_guardState;
+		rightDir *= MOVE_AMOUNT * m_runState * m_guardState;
 
 		//移動速度に加算。
-		m_playerSpeed += rightDir + forwardDir;
-
-		MoveAdjust();
+		m_playerSpeed += forwardDir + rightDir;		
 
 		//重力をなくす。
 		m_playerSpeed.y = 0.0f;
@@ -114,19 +164,35 @@ void Player::Move()
 void Player::MoveAdjust()
 {
 	//ガード中。
-	if (g_pad[0]->IsPress(enButtonB)) {
-		m_guardState = GUARD_MOVE_AMOUNT;
+	if (g_pad[0]->IsPress(enButtonX)) {
+		m_guardState = 0.0f;
 	}
 	else {
 		m_guardState = 1.0f;
 	}
 
 	//ダッシュ。
-	if (g_pad[0]->IsPress(enButtonX)) {
+	if (g_pad[0]->IsPress(enButtonB)) {
 		m_runState = DASH_AMOUNT;
 	}
 	else{
 		m_runState = 1.0f;
+	}
+}
+
+/// <summary>
+/// playerの向きを更新。
+/// </summary>
+/// <param name="forward"></param>スティックの縦方向。
+/// <param name="right"></param>スティックの横方向。
+void Player::GetDirection(Vector3 forward,Vector3 right)
+{
+	//スティックが倒されているなら。
+	if (fabsf(forward.x) >= 0.01f || fabsf(forward.z) >= 0.01f ||
+		fabsf(right.x) >= 0.01f || fabsf(right.z) >= 0.01f) {
+		//playerの向きを更新する。
+		m_playerDirection = forward + right;
+		m_playerDirection.Normalize();
 	}
 }
 
@@ -140,13 +206,7 @@ void Player::StateManage()
 		m_animationState = EnPlayerAnimVar::enJump;
 	}
 	else {
-		if (g_pad[0]->IsPress(enButtonX)) {
-			m_animationState = EnPlayerAnimVar::enGuardStart;
-		}
-		if (g_pad[0]->IsPress(enButtonY)) {
-			m_animationState = EnPlayerAnimVar::enWeakAttack;
-		}
-		//歩行中。		
+		//歩行中。
 		if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
 			m_animationState = EnPlayerAnimVar::enWalk;
 			//Xボタン入力中なら。
@@ -155,18 +215,16 @@ void Player::StateManage()
 			}
 		}
 		//待機中。
-		else {
+		/*else {
 			m_animationState = EnPlayerAnimVar::enIdle;
-		}
+		}*/
 	}
 }
 
 void Player::Rotation()
 {
-	if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
-		m_playerRotation.SetRotationYFromDirectionXZ(m_playerSpeed);
-		m_playerModelRender.SetRotation(m_playerRotation);
-	}
+	m_playerRotation.SetRotationYFromDirectionXZ(m_playerDirection);
+	m_playerModelRender.SetRotation(m_playerRotation);
 }
 
 /// <summary>
@@ -193,6 +251,17 @@ void Player::AnimationManage()
 	case EnPlayerAnimVar::enWeakAttack:
 		m_playerModelRender.PlayAnimation(enAnimationClip_WeakAttack);
 		break;
+	case EnPlayerAnimVar::enChargeAttack:
+		m_playerModelRender.PlayAnimation(enAnimationClip_ChargeAttack);
+		break;
+	case EnPlayerAnimVar::enCharging:
+		m_playerModelRender.PlayAnimation(enAnimationClip_Charging);
+		break;
+	case EnPlayerAnimVar::enHit:
+		m_playerModelRender.PlayAnimation(enAnimationClip_Hit);
+		break;
+	case EnPlayerAnimVar::enDeath:
+		m_playerModelRender.PlayAnimation(enAnimationClip_Death);
 	default:
 		break;
 	}

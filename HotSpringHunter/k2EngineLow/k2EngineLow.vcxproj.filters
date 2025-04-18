@@ -565,6 +565,9 @@
     <Filter Include="TMEngine\light">
       <UniqueIdentifier>{370d6a31-9803-481b-aa94-622b365ada52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="collision">
+      <UniqueIdentifier>{29af9645-eb5c-453b-8a11-9b2494dd0928}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="k2EngineLow.rc" />

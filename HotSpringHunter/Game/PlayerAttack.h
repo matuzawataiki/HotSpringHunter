@@ -1,4 +1,6 @@
 #pragma once
+class Player;
+class SnakeEnemy;
 class PlayerAttack :public IGameObject
 {
 public:
@@ -7,7 +9,13 @@ public:
 
 	bool Start()override;
 	void Update()override;
-	void WeakAttack();
+	void WeakAttack();					//弱攻撃。
+	void MakeCollision();				//コリジョン生成。
 	void Render(RenderContext& rc)override;
+
+	CollisionObject* m_collision = nullptr;
+private:
+
+	Player* m_player = nullptr;	
 };
 

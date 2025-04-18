@@ -3,8 +3,8 @@
 class GameCamera;
 class BackGround;
 class Player;
-class Snake;
-class Test;
+class Bear;
+class StartWaveCollision;
 class Game : public IGameObject
 {
 public:
@@ -16,8 +16,8 @@ public:
 	GameCamera* m_gameCamera = nullptr;
 	BackGround* m_backGround = nullptr;
 	Player* m_player = nullptr;
-	Snake* m_snake = nullptr;
-	Test* m_test = nullptr;
+	StartWaveCollision* m_waveCollision = nullptr;
+	Bear* m_bear = nullptr;
 private:
 };
 
