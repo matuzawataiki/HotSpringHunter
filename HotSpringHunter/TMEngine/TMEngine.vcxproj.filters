@@ -28,6 +28,7 @@
     <ClCompile Include="graphics\postEffect\PostEffect.cpp" />
     <ClCompile Include="graphics\postEffect\PostEffectComponentBase.cpp" />
     <ClCompile Include="graphics\RenderingEngine.cpp" />
+    <ClCompile Include="collision\CollisionObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TMEnginePreCompile.h" />
@@ -63,6 +64,7 @@
     <ClInclude Include="graphics\postEffect\PostEffect.h" />
     <ClInclude Include="graphics\postEffect\PostEffectComponentBase.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
+    <ClInclude Include="collision\CollisionObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

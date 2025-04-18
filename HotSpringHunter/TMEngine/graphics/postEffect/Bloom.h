@@ -43,7 +43,7 @@ namespace nsTMEngine {
 
 	private:
 		/// <summary>
-		/// 高度抽出パスの定数バッファ１に送る内容
+		/// 輝度抽出パスの定数バッファ１に送る内容
 		/// </summary>
 		struct SSampleingLuminanceCB1
 		{

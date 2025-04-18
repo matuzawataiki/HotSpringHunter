@@ -16,6 +16,10 @@ namespace nsK2EngineLow {
 		auto d3dDevice = g_graphicsEngine->GetD3DDevice();
 		auto hr = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_pipelineState));
 		if (FAILED(hr)) {
+			ID3D12Debug* debugController;
+			D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
+			debugController->EnableDebugLayer();
+
 			MessageBoxA(nullptr, "パイプラインステートの作成に失敗しました。\n", "エラー", MB_OK);
 			std::abort();
 		}

@@ -16,6 +16,7 @@ namespace nsTMEngine
 		InitMainRenderTarget();
 		InitCopyMainRenderTargetToFrameBufferSprite();
 		m_postEffect.Init(m_mainRenderTarget);
+		m_sceneLight.Init();
 	}
 
 	void RenderingEngine::Update()
@@ -30,8 +31,8 @@ namespace nsTMEngine
 			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			DXGI_FORMAT_D32_FLOAT
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
+			DXGI_FORMAT_UNKNOWN
 		);
 	}
 
@@ -44,7 +45,7 @@ namespace nsTMEngine
 		spriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
 		spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
 
-		spriteInitData.m_fxFilePath = "Asset/shader/sprite.fx";
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 		spriteInitData.m_psEntryPoinFunc = "PSMain";
 		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 

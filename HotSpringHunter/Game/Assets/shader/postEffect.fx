@@ -9,7 +9,7 @@ cbuffer cb : register(b0)
 
 struct VSInput
 {
-    float4 pos : POSITIONT;
+    float4 pos : POSITION;
     float2 uv : TEXCOORD0;
 };
 
@@ -32,7 +32,7 @@ PSInput VSMain(VSInput In)
 }
 
 Texture2D<float4> mainRenderTargeetTexture:register(t0);
-Texture2D<float4> luminanceAvgTexture:register(t0);
+Texture2D<float4> luminanceAvgTexture:register(t1);
 sampler Sampler : register(s0);
 
 /////////////////////////////////////////////////////
@@ -49,9 +49,13 @@ cbuffer SamplingLuminanceCb : register(b1)
 float4 PSSamplingLuminance(PSInput In):SV_Target0
 {
     float4 color = mainRenderTargeetTexture.Sample(Sampler, In.uv);
-    float t = dot(color.xyz, float3(0.2125f, 07154f, 0.0721f));
+    
+    float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
     
     clip(t - threshold);
+    
+    color = float4(1, 0, 0, 1);
+    
     return color;
 }
 

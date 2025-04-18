@@ -15,13 +15,14 @@ namespace nsTMEngine
 		{
 			SpriteInitData spriteInitData;
 			spriteInitData.m_fxFilePath = "Assets/shader/postEffect.fx";
-			spriteInitData.m_vsEntryPointFunc = "VSmain";
+			spriteInitData.m_vsEntryPointFunc = "VSMain";
 			spriteInitData.m_psEntryPoinFunc = "PSSamplingLuminance";
 			spriteInitData.m_expandConstantBuffer = &m_samplingLuminanceCB1;
 			spriteInitData.m_expandConstantBufferSize = sizeof(m_samplingLuminanceCB1);
 			spriteInitData.m_width = mainRenderTarget.GetWidth();
 			spriteInitData.m_height = mainRenderTarget.GetHeight();
 			spriteInitData.m_textures[0] = &mainRenderTarget.GetRenderTargetTexture();
+			//spriteInitData.m_textures[1] = g_graphicsEngine.get
 			spriteInitData.m_colorBufferFormat[0] = mainRenderTarget.GetColorBufferFormat();
 			m_luminanceSprite.Init(spriteInitData);
 		}

@@ -176,7 +176,7 @@ namespace nsTMEngine {
 		/// <param name="angle"></param>
 		void SetAngle(const float angle)
 		{
-			m_angle = angle;
+			m_angle = Math::DegToRad(angle);
 		}
 
 		/// <summary>
@@ -257,10 +257,10 @@ namespace nsTMEngine {
 		/// ƒJƒƒ‰‚Ì‹“_‚ÌˆÊ’u‚Ìİ’è
 		/// </summary>
 		/// <param name="cameraPos"></param>
-		/*void SetCameraPos()
+		void SetCameraPos()
 		{
 			m_cameraPos = g_camera3D->GetPosition();
-		}*/
+		}
 
 		/// <summary>
 		/// ŠÂ‹«Œõ‚Ìİ’è

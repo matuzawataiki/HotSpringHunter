@@ -1,4 +1,6 @@
 #pragma once
+using namespace nsK2Engine;
+
 namespace nsTMEngine {
 	class SceneLight;
 	class RenderingEngine;
@@ -56,11 +58,14 @@ namespace nsTMEngine {
 
 		K2EngineLow m_k2EngineLow;
 		RenderingEngine m_renderingEngine;
+		CollisionObjectManager m_collisionObjectManager;
+
 
 		static TMEngine* m_instance;
 
 	};
 
+	extern CollisionObjectManager* g_collisionObjectManager;
 	extern TMEngine*		g_tmEngine;
 	extern SceneLight*		g_sceneLight;
 	extern RenderingEngine* g_renderingEngine;
