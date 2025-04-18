@@ -4,11 +4,13 @@
 #include "PlayerAttack.h"
 #include "PlayerGuard.h"
 #include "PlayerChargeAttack.h"
+#include "Towel.h"
+#include "Bucket.h"
 
 namespace {
 	const float MOVE_AMOUNT = 120.0f;
 	const float JUMP_AMOUNT = 700.0f;
-	const float DASH_AMOUNT = 2.5f;
+	const float DASH_AMOUNT = 4.0f;
 	const float GRAVITY_AMOUNT = 10.0f;
 
 	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };
@@ -20,6 +22,10 @@ Player::Player()
 
 Player::~Player()
 {
+	DeleteGO(m_playerAttack);
+	DeleteGO(m_playerGuard);
+	DeleteGO(m_playerChaAt);
+	DeleteGO(m_playerHealth);
 }
 
 bool Player::Start()
@@ -35,6 +41,9 @@ bool Player::Start()
 	return true;
 }
 
+/// <summary>
+/// Assetsロード。
+/// </summary>
 void Player::LoadModel()
 {
 	//アニメーションロード。
@@ -52,6 +61,10 @@ void Player::LoadModel()
 	m_animationClips[enAnimationClip_GuardEnd].SetLoopFlag(false);
 	m_animationClips[enAnimationClip_WeakAttack].Load("Assets/animData/player/weakAttack.tka");
 	m_animationClips[enAnimationClip_WeakAttack].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_ChargeAttack].Load("Assets/animData/player/chargeAttack.tka");
+	m_animationClips[enAnimationClip_ChargeAttack].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Charging].Load("Assets/animData/player/charging.tka");
+	m_animationClips[enAnimationClip_Charging].SetLoopFlag(false);
 	m_animationClips[enAnimationClip_Hit].Load("Assets/animData/player/hit.tka");
 	m_animationClips[enAnimationClip_Hit].SetLoopFlag(false);
 	m_animationClips[enAnimationClip_Death].Load("Assets/animData/player/death.tka");
@@ -61,12 +74,18 @@ void Player::LoadModel()
 	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
 }
 
+/// <summary>
+/// 子クラスNewGO。
+/// </summary>
 void Player::GenerateMinions()
 {
-	NewGO<PlayerHealth>(0, "playerHealth");
-	NewGO<PlayerAttack>(0, "playerAttack");
-	NewGO<PlayerGuard>(0, "playerGuard");
-	NewGO<PlayerChargeAttack>(0, "playerChargeAttack");
+	m_playerHealth = NewGO<PlayerHealth>(0, "playerHealth");
+	m_playerAttack = NewGO<PlayerAttack>(0, "playerAttack");
+	m_playerGuard = NewGO<PlayerGuard>(0, "playerGuard");
+	m_playerChaAt = NewGO<PlayerChargeAttack>(0, "playerChargeAttack");
+
+	//NewGO<Towel>(0, "towel");
+	//NewGO<Bucket>(0, "bucket");
 }
 
 void Player::Update()
@@ -145,7 +164,7 @@ void Player::Move()
 void Player::MoveAdjust()
 {
 	//ガード中。
-	if (g_pad[0]->IsPress(enButtonB)) {
+	if (g_pad[0]->IsPress(enButtonX)) {
 		m_guardState = 0.0f;
 	}
 	else {
@@ -153,7 +172,7 @@ void Player::MoveAdjust()
 	}
 
 	//ダッシュ。
-	if (g_pad[0]->IsPress(enButtonX)) {
+	if (g_pad[0]->IsPress(enButtonB)) {
 		m_runState = DASH_AMOUNT;
 	}
 	else{
@@ -187,13 +206,7 @@ void Player::StateManage()
 		m_animationState = EnPlayerAnimVar::enJump;
 	}
 	else {
-		if (g_pad[0]->IsPress(enButtonX)) {
-			m_animationState = EnPlayerAnimVar::enGuardStart;
-		}
-		if (g_pad[0]->IsPress(enButtonY)) {
-			m_animationState = EnPlayerAnimVar::enWeakAttack;
-		}
-		//歩行中。		
+		//歩行中。
 		if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
 			m_animationState = EnPlayerAnimVar::enWalk;
 			//Xボタン入力中なら。
@@ -202,9 +215,9 @@ void Player::StateManage()
 			}
 		}
 		//待機中。
-		else {
+		/*else {
 			m_animationState = EnPlayerAnimVar::enIdle;
-		}
+		}*/
 	}
 }
 
@@ -237,6 +250,12 @@ void Player::AnimationManage()
 		break;
 	case EnPlayerAnimVar::enWeakAttack:
 		m_playerModelRender.PlayAnimation(enAnimationClip_WeakAttack);
+		break;
+	case EnPlayerAnimVar::enChargeAttack:
+		m_playerModelRender.PlayAnimation(enAnimationClip_ChargeAttack);
+		break;
+	case EnPlayerAnimVar::enCharging:
+		m_playerModelRender.PlayAnimation(enAnimationClip_Charging);
 		break;
 	case EnPlayerAnimVar::enHit:
 		m_playerModelRender.PlayAnimation(enAnimationClip_Hit);

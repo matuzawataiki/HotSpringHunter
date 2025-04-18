@@ -3,5 +3,6 @@
 
 #include "TMEnginePreCompile.h"
 using namespace nsTMEngine;
+using namespace nsK2Engine;
 // K2EngineLowのグローバルアクセスポイント
 extern K2EngineLow* g_k2EngineLow;

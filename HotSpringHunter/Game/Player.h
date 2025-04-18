@@ -1,4 +1,10 @@
 #pragma once
+class PlayerAttack;
+class PlayerGuard;
+class PlayerHealth;
+class PlayerChargeAttack;
+class Towel;
+class Bucket;
 class Player :public IGameObject
 {
 
@@ -24,12 +30,15 @@ public:
 	void Render(RenderContext& rc)override;
 
 	//player座標のゲッター。
-	Vector3 GetPlayerPosition() {
+	Vector3 GetPlayerPos() {
 		return m_playerPosition;
 	}
 	//playerの向きのゲッター。
-	Vector3 GetPlayerDirection() {
+	Vector3 GetPlayerDir() {
 		return m_playerDirection;
+	}
+	int GetAnimationState() {
+		return m_animationState;
 	}
 
 	int m_animationState = 0;			//playerアニメーションの状態。
@@ -41,17 +50,27 @@ public:
 		enGuardStart,
 		enGuardEnd,
 		enWeakAttack,
+		enChargeAttack,
+		enCharging,
 		enHit,
 		enDeath,
 	};
 
+	CharacterController m_playerCharaCon;					//playerキャラコン。
+
 private:
+	PlayerAttack* m_playerAttack = nullptr;
+	PlayerGuard* m_playerGuard = nullptr;
+	PlayerChargeAttack* m_playerChaAt = nullptr;
+	PlayerHealth* m_playerHealth = nullptr;
+	Towel* m_towel = nullptr;
+	Bucket* m_bucket = nullptr;
+
 	ModelRender m_playerModelRender;						//player描画。
 	Vector3 m_playerPosition = Vector3::Zero;				//player座標。
 	Vector3 m_playerSpeed = Vector3::Zero;					//player移動スピード。
 	Vector3 m_playerDirection = Vector3::Zero;				//player向き。
 	Quaternion m_playerRotation = Quaternion::Identity;		//player回転。
-	CharacterController m_playerCharaCon;					//playerキャラコン。
 
 	float m_runState = 1.0f;								//player走り状態の管理。
 	float m_guardState = 1.0f;								//ガード状態の管理。
@@ -65,6 +84,8 @@ private:
 		enAnimationClip_GuardStart,
 		enAnimationClip_GuardEnd,
 		enAnimationClip_WeakAttack,
+		enAnimationClip_ChargeAttack,
+		enAnimationClip_Charging,
 		enAnimationClip_Hit,
 		enAnimationClip_Death,
 		enAnimationClip_Num,

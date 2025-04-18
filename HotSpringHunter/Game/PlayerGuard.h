@@ -1,6 +1,6 @@
 #pragma once
 class Player;
-class Enemy;
+class SnakeEnemy;
 class PlayerGuard:public IGameObject
 {
 public:
@@ -17,7 +17,7 @@ public:
 	}
 private:
 	Player* m_player = nullptr;
-	Enemy* m_enemy = nullptr;
+	SnakeEnemy* m_snakeEnemy = nullptr;
 
 	Vector3 m_directionGap = Vector3::Zero;				//Œü‚«‚Ì·•ªB
 

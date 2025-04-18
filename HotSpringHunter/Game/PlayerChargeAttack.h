@@ -1,5 +1,6 @@
 #pragma once
 class Player;
+class SnakeEnemy;
 class PlayerChargeAttack:public IGameObject
 {
 public:
@@ -8,13 +9,25 @@ public:
 	bool Start()override;
 	void Update()override;
 	void StickCharge();				//チャージ蓄積。
+	void ChargeAttack();			//攻撃。
+	void MakeCollision();			//コリジョン生成。
 	void DisplayCharge();			//チャージ量表示（仮）。
 	void Render(RenderContext& rc)override;
+
+	//チャージのゲッター。
+	float GetCharge(){
+		return m_charge;
+	}
+
+	CollisionObject* m_collision = nullptr;
+
+private:
 
 	Player* m_player = nullptr;
 
 	Vector3 m_RStickOld = Vector3::Zero;				//Rスティックの入力量（変更前）。
 	float m_charge = 0.0f;								//チャージ量。
+	float m_collisionSize = 0.0f;
 
 	//チャージ量表示（仮）
 	FontRender m_chargeRender;

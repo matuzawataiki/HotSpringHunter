@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "playerGuard.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "SnakeEnemy.h"
 
 namespace {
 	const float GUARD_TOLERANCE = 0.3f;				//ガード方向の許容角度。
@@ -17,7 +17,7 @@ PlayerGuard::~PlayerGuard()
 bool PlayerGuard::Start()
 {
 	m_player = FindGO<Player>("player");
-	m_enemy = FindGO<Enemy>("enemy");
+	m_snakeEnemy = FindGO<SnakeEnemy>("snakeEnemy");
 
 	return true;
 }
@@ -35,7 +35,7 @@ void PlayerGuard::GuardDirection()
 	Vector3 enemyPos = m_enemy->GetPosition();
 	Vector3 playerPos = m_player->GetPosition();
 	Vector3 toEnemyDirection = playerPos - enemyPos;
-	toEnemyDirection.ノーマライズ();
+	toEnemyDirection.Normalize();
 	Vector3 playerDirection = m_player->GetPlayerDirection();
 	Vector3 guard = Dot(playerDirection,toEnemyDirection)
 
@@ -46,6 +46,7 @@ void PlayerGuard::GuardDirection()
 		m_guardFlag = false;
 	}
 	*/
+	m_player->m_animationState = m_player->enGuardStart;
 }
 
 void PlayerGuard::Render(RenderContext& rc) 

@@ -2,6 +2,7 @@
 #include "system/system.h"
 
 #include "Game.h"
+#include"Title.h"
 
 
 // K2EngineLowのグローバルアクセスポイント。
@@ -24,8 +25,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	SceneLight sceneLigth;
 	g_sceneLight = &sceneLigth;
 
-	//Gameクラスのオブジェクトを作成。
-	NewGO<Game>(0, "game");
+	TMEngine tmEngine;
+	tmEngine.Init();
+
+	//Titleクラスのオブジェクトを作成。
+	NewGO<Title>(0, "title");
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
