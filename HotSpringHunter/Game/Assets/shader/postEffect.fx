@@ -54,8 +54,6 @@ float4 PSSamplingLuminance(PSInput In):SV_Target0
     
     clip(t - threshold);
     
-    color = float4(1, 0, 0, 1);
-    
     return color;
 }
 

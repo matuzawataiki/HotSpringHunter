@@ -10,19 +10,20 @@ namespace nsTMEngine
 			1,
 			1,
 			mainRenderTarget.GetColorBufferFormat(),
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_D32_FLOAT
 		);
 		{
 			SpriteInitData spriteInitData;
 			spriteInitData.m_fxFilePath = "Assets/shader/postEffect.fx";
 			spriteInitData.m_vsEntryPointFunc = "VSMain";
 			spriteInitData.m_psEntryPoinFunc = "PSSamplingLuminance";
+			//spriteInitData.m_psEntryPoinFunc = "PSBloomFinal";
 			spriteInitData.m_expandConstantBuffer = &m_samplingLuminanceCB1;
 			spriteInitData.m_expandConstantBufferSize = sizeof(m_samplingLuminanceCB1);
 			spriteInitData.m_width = mainRenderTarget.GetWidth();
 			spriteInitData.m_height = mainRenderTarget.GetHeight();
 			spriteInitData.m_textures[0] = &mainRenderTarget.GetRenderTargetTexture();
-			//spriteInitData.m_textures[1] = g_graphicsEngine.get
+			//spriteInitData.m_textures[1] = g_graphicsEngine->GetLuminanceAvgTextureInScene();
 			spriteInitData.m_colorBufferFormat[0] = mainRenderTarget.GetColorBufferFormat();
 			m_luminanceSprite.Init(spriteInitData);
 		}
@@ -44,6 +45,7 @@ namespace nsTMEngine
 			spriteInitData.m_psEntryPoinFunc = "PSBloomFinal";
 			spriteInitData.m_alphaBlendMode = AlphaBlendMode_Add;
 			spriteInitData.m_colorBufferFormat[0] = mainRenderTarget.GetColorBufferFormat();
+			//spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 
 			m_finalSprite.Init(spriteInitData);
 		}

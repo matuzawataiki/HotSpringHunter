@@ -43,12 +43,22 @@ namespace nsTMEngine
 		/// <param name="rc"></param>
 		void Execute(RenderContext& rc);
 
+		/// <summary>
+		/// レンダリングターゲットに登録
+		/// </summary>
+		/// <param name="model"></param>
+		void RegisterModel(Model* model)
+		{
+			m_registerModels.push_back(model);
+		}
+
 	private:
 		Sprite m_mainSprite;
 		Sprite m_copyMainRtToFrameBufferSprite;
 		SceneLight m_sceneLight;
 		RenderTarget m_mainRenderTarget;
 		PostEffect m_postEffect;
+		std::vector<Model*> m_registerModels;
 
 	};
 }

@@ -31,8 +31,8 @@ namespace nsTMEngine
 			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
-			DXGI_FORMAT_R16G16B16A16_FLOAT,
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT
 		);
 	}
 
@@ -78,7 +78,14 @@ namespace nsTMEngine
 	}
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
+		rc.SetRenderTarget(m_mainRenderTarget);
+		rc.ClearRenderTargetView(m_mainRenderTarget);
+		for (auto model : m_registerModels)
+		{
+			model->Draw(rc);
+		}
 		m_postEffect.Render(rc, m_mainRenderTarget);
 		CopyMainRenderTargetToFrameBufferSprite(rc);
+		m_registerModels.clear();
 	}
 }

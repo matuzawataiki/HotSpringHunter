@@ -90,7 +90,7 @@ namespace nsTMEngine {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		m_model.Draw(rc);
+		g_renderingEngine->RegisterModel(&m_model);
 	}
 
 }
