@@ -34,10 +34,16 @@
     <ClCompile Include="graphics\light\SceneLight.cpp" />
     <ClCompile Include="graphics\light\SpotLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\postEffect\Bloom.cpp" />
+    <ClCompile Include="graphics\postEffect\PostEffect.cpp" />
+    <ClCompile Include="graphics\postEffect\PostEffectComponentBase.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
+    <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="TMEngine.cpp" />
     <ClCompile Include="TMEnginePreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,7 +56,11 @@
     <ClInclude Include="graphics\light\SpotLight.h" />
     <ClInclude Include="graphics\ModelRender.h" />
     <ClInclude Include="graphics\MyRenderer.h" />
+    <ClInclude Include="graphics\postEffect\Bloom.h" />
+    <ClInclude Include="graphics\postEffect\PostEffect.h" />
+    <ClInclude Include="graphics\postEffect\PostEffectComponentBase.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
+    <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="TMEngine.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
   </ItemGroup>
@@ -225,6 +235,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>TMEnginePreCompile.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -248,6 +259,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>TMEnginePreCompile.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
       <SubSystem>

@@ -10,7 +10,8 @@ using namespace nsK2EngineLow;
 #include "graphics/light/HemisphereLight.h"
 #include "graphics/light/PointLight.h"
 #include "graphics/light/SpotLight.h"
+#include "graphics/postEffect/PostEffect.h"
+#include "graphics/RenderingEngine.h"
 #include "collision/CollisionObject.h"
 #include "TMEngine.h"
-
 

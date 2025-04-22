@@ -21,6 +21,7 @@ namespace nsK2EngineLow {
 		ReleaseD3D12Object(m_blob);
 		ReleaseD3D12Object(m_dxcBlob);
 	}
+
 	void Shader::Load(const char* filePath, const char* entryFuncName, const char* shaderModel)
 	{
 		Release();

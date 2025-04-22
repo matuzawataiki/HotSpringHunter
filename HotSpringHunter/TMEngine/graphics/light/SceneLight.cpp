@@ -2,15 +2,11 @@
 #include "SceneLight.h"
 namespace nsTMEngine
 {
+
+
 	SceneLight::SceneLight()
 	{
-		//ディレクションライトの設定
-		m_light.m_drectionLight.SetDirection(1.0f, -1.0f, 1.0f);
-		m_light.m_drectionLight.SetColor(0.3f, 0.3f, 0.3f);
-		//カメラの位置の登録
-		m_light.SetCameraPos();
-		//環境光の設定
-		m_light.SetAmbientLight(0.5f, 0.5f, 0.5f);
+		
 	}
 
 	SceneLight::~SceneLight()
@@ -52,6 +48,29 @@ namespace nsTMEngine
 	}
 
 	void SceneLight::Init()
+	{
+		//ディレクションライトの設定
+		m_light.m_drectionLight.SetDirection(1.0f, -1.0f, 1.0f);
+		m_light.m_drectionLight.SetColor(0.3f, 0.3f, 0.3f);
+		//カメラの位置の登録
+		m_light.m_cameraPos = g_camera3D->GetPosition();
+		//環境光の設定
+		m_light.SetAmbientLight(0.5f, 0.5f, 0.5f);
+	}
+
+	void SPointLight::Update()
+	{
+		m_posInView = m_pos;
+		g_camera3D->GetViewMatrix().Apply(m_posInView);
+	}
+
+	void SSpotLight::Update()
+	{
+		m_posInView = m_pos;
+		g_camera3D->GetViewMatrix().Apply(m_posInView);
+	}
+
+	void SceneLight::Update()
 	{
 	}
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system.h"
 #include "graphics/GraphicsEngine.h"
+#include "graphics/RenderingEngine.h"
 #include "sound/SoundEngine.h"
 
 HWND			g_hWnd = NULL;				//ウィンドウハンドル。
@@ -81,6 +82,11 @@ void InitGame(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, in
 	//ウィンドウを初期化。
 	InitWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow, appName);
 
+	TMEngine::InitData initData;
+	initData.fremeBufferWidth = FRAME_BUFFER_W;
+	initData.frameBufferHeight = FRAME_BUFFER_H;
+	initData.hwnd = g_hWnd;
+	TMEngine::CreateInstance(initData);
 	
 }
 //ウィンドウメッセージをディスパッチ。falseが返ってきたら、ゲーム終了。

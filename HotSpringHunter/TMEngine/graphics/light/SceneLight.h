@@ -52,7 +52,9 @@ namespace nsTMEngine {
 		Vector3 m_pos;				//方向
 		int		m_isUse = false;	//ライトの使用状況
 		Vector3	m_color;			//色
-		float	m_range;	//影響範囲
+		float	m_range;			//影響範囲
+		Vector3 m_posInView;		//カメラ空間での座標
+		float   pad0;
 
 		/// <summary>
 		/// ポイントライトの位置を設定
@@ -96,6 +98,11 @@ namespace nsTMEngine {
 		{
 			m_isUse = true;
 		}
+
+		/// <summary>
+		/// 更新
+		/// </summary>
+		void Update();
 	public:
 
 	};
@@ -111,6 +118,8 @@ namespace nsTMEngine {
 		float	m_range;			//影響範囲
 		Vector3 m_direction;		//向き
 		float	m_angle;			//射出角度
+		Vector3 m_posInView;		//カメラ空間での座標
+		float	pad;
 
 		/// <summary>
 		/// ライトの位置を設定
@@ -167,7 +176,7 @@ namespace nsTMEngine {
 		/// <param name="angle"></param>
 		void SetAngle(const float angle)
 		{
-			m_angle = angle;
+			m_angle = Math::DegToRad(angle);
 		}
 
 		/// <summary>
@@ -177,6 +186,12 @@ namespace nsTMEngine {
 		{
 			m_isUse = true;
 		}
+
+		/// <summary>
+		/// 更新
+		/// </summary>
+		void Update();
+
 	};
 
 	/// <summary>
@@ -271,6 +286,11 @@ namespace nsTMEngine {
 		void Init();
 
 		/// <summary>
+		/// 更新
+		/// </summary>
+		void Update();
+
+		/// <summary>
 		/// 新規ポイントライトを登録
 		/// </summary>
 		/// <returns></returns>
@@ -302,6 +322,7 @@ namespace nsTMEngine {
 
 		Light m_light;	//シーンライト
 	private:
-
+		std::deque< SPointLight* > m_unusePointLightQueue;       // 未使用のポイントライトのキュー。
+		std::deque< SSpotLight* > m_unuseSpotLightQueue;         // 未使用のスポットライトのキュー。。
 	};
 }

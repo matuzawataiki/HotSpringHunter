@@ -1,7 +1,5 @@
 #include "TMEnginePreCompile.h"
 #include "CollisionObject.h"
-
-
 using namespace nsTMEngine;
 
 namespace nsK2Engine {

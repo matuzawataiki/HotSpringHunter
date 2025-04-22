@@ -24,6 +24,7 @@ struct PointLig
     int		use;		//使用状況
     float3	color;		//色
     float	range;		//影響範囲
+    float3  posInView;   //カメラ座空間での座標
 };
 //ポイントライトライト構造体
 struct SpotLig
@@ -34,6 +35,8 @@ struct SpotLig
     float   range;      //影響距離
     float3  direction;  //向き
     float   angle;      //影響範囲
+    float3 posInView; //カメラ座空間での座標
+
 };
 //半球ライト構造体
 struct HemisphereLig
