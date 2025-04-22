@@ -2,10 +2,9 @@
 #include "Game.h"
 #include "GameCamera.h"
 #include "BackGround.h"
-#include "CharacterBase.h"
 #include "Player.h"
-#include "Snake.h"
-#include "Test.h"
+#include "Bear.h"
+#include "StartWaveCollision.h"
 
 
 Game::Game()
@@ -14,6 +13,10 @@ Game::Game()
 
 Game::~Game()
 {
+	DeleteGO(m_gameCamera);
+	DeleteGO(m_backGround);
+	DeleteGO(m_player);
+	DeleteGO(m_bear);
 }
 
 bool Game::Start()
@@ -21,8 +24,7 @@ bool Game::Start()
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_backGround = NewGO<BackGround>(0, "backGround");
 	m_player = NewGO<Player>(0, "player");
-	//m_snake = NewGO<Snake>(0, "snake");
-	m_test = NewGO<Test>(0, "test");
+	m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 
 	return true;
 }

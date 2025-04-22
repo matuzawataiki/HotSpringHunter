@@ -21,7 +21,7 @@ bool GameCamera::Start()
 	m_player = FindGO<Player>("player");
 	m_backGround = FindGO<BackGround>("backGround");
 
-	m_cameraState = EnCameraVar::follow;
+	m_cameraState = EnCameraVar::lookDown;
 	//近平面
 	g_camera3D->SetNear(CAMERA_NEAR);
 	//遠平面
@@ -41,15 +41,15 @@ void GameCamera::Update()
 /// </summary>
 void GameCamera::CameraSwitch()
 {
-	//Bボタンでカメラ切り替え(仮）。
-	if (g_pad[0]->IsTrigger(enButtonB)) {
-		if (m_cameraState == EnCameraVar::follow) {
-			m_cameraState = EnCameraVar::lookDown;
-		}
-		else if (m_cameraState == EnCameraVar::lookDown) {
-			m_cameraState = EnCameraVar::follow;
-		}
-	}
+	////Bボタンでカメラ切り替え(仮）。
+	//if (g_pad[0]->IsTrigger(enButtonB)) {
+	//	if (m_cameraState == EnCameraVar::follow) {
+	//		m_cameraState = EnCameraVar::lookDown;
+	//	}
+	//	else if (m_cameraState == EnCameraVar::lookDown) {
+	//		m_cameraState = EnCameraVar::follow;
+	//	}
+	//}
 
 	//カメラのstate管理。
 	//俯瞰カメラ。
@@ -69,7 +69,7 @@ void GameCamera::CameraSwitch()
 void GameCamera::FollowCamera()
 {
 	//注視点をプレイヤーの座標に設定。
-	m_target = m_player->GetPlayerPosition();
+	m_target = m_player->GetPlayerPos();
 
 	//カメラ座標を設定。
 	m_toCameraPos.Set(m_followPos);
@@ -81,7 +81,7 @@ void GameCamera::FollowCamera()
 void GameCamera::LookDownCamera()
 {
 	//注視点を該当戦闘エリアの中心に設定(一旦ステージの中心）。
-	m_target = m_backGround->GetStagePosition();
+	m_target = m_player->GetPlayerPos();
 
 	//カメラ座標を設定。
 	m_toCameraPos.Set(m_lookDownPos);

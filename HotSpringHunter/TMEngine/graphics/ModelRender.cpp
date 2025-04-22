@@ -25,7 +25,12 @@ namespace nsTMEngine {
 		modelData.m_tkmFilePath = filePath;
 		//シェーダーのファイルパスの指定
 		modelData.m_fxFilePath = "Assets/shader/model.fx";
-
+		
+		if (animationeClips != nullptr) {
+			modelData.m_skeleton = &m_skeleton;
+			modelData.m_vsEntryPointFunc = "VSSkinMain";
+			modelData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		}
 		//SetupVertexShaderEntryPointFunc(modelData);
 
 		modelData.m_expandConstantBuffer = g_sceneLight->GetLight();
@@ -58,6 +63,12 @@ namespace nsTMEngine {
 		}
 
 	}
+
+	//void ModelRender::InitComputeAnimatoinVertexBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
+	//{
+	//	StructuredBuffer* worldMatrxiArraySB = nullptr;
+	//	m_
+	//}
 
 	void ModelRender::SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData)
 	{

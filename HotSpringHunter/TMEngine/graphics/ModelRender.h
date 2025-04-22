@@ -1,5 +1,7 @@
 #pragma once
 
+//#include "graphics/ComputeAnimationVertexBuffer.h"
+
 namespace nsTMEngine {
 	/// <summary>
 	/// スキンモデルレンダー
@@ -139,6 +141,17 @@ namespace nsTMEngine {
 		);
 
 		/// <summary>
+		/// アニメーション済み頂点バッファ計算処理の初期化
+		/// </summary>
+		/// <param name="tkmFilePath"></param>
+		/// <param name="enModelUpAxis"></param>
+		void InitComputeAnimatoinVertexBuffer(
+			const char* tkmFilePath,
+			EnModelUpAxis enModelUpAxis);
+
+		//void ComputeAnimatoinVertexBuffer()
+
+		/// <summary>
 		/// 各種モデルのワールド行列の更新
 		/// </summary>
 		void UpdateWorldMatrixInModes() ;
@@ -153,8 +166,10 @@ namespace nsTMEngine {
 
 		Model			m_model;					//モデル
 		Skeleton		m_skeleton;					//ボーン
-		Animation		m_animation;
+		Animation		m_animation;				//アニメーション
 		AnimationClip*	m_animationClips = nullptr;	//アニメーションクリップ
+		//ComputeAnimationVertexBuffer m
+
 		int				m_numAnimationClips = 0;	//アニメーションクリップの数
 		float			m_animationSpeed = 1.0f;	//アニメーションの再生速度
 };

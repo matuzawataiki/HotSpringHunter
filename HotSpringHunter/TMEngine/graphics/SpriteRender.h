@@ -75,7 +75,7 @@ namespace nsTMEngine {
 		/// 描画処理
 		/// </summary>
 		/// <param name="rc"></param>
-		void Drow(RenderContext& rc);
+		void Draw(RenderContext& rc);
 
 	private:
 		Sprite		m_sprite;						//スプライト
