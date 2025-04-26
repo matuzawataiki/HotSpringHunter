@@ -4,10 +4,6 @@
 
 #include "Game.h"
 #include "Player.h"
-#include "PlayerAttack.h"
-#include "PlayerChargeAttack.h"
-#include "PlayerHealth.h"
-
 #include "collision/CollisionObject.h"
 
 namespace {
@@ -18,7 +14,7 @@ SnakeEnemy::SnakeEnemy()
 {
 	//プレイヤー
 	m_player = FindGO<Player>("player");
-	m_playerAttack = FindGO<PlayerAttack>("playerAttack");
+	m_playerAttack = FindGO<PlayerWeakAttack>("playerAttack");
 	m_playerCharAt = FindGO<PlayerChargeAttack>("playerChargeAttack");
 	
 	m_playerHealth = FindGO<PlayerHealth>("playerHealth");

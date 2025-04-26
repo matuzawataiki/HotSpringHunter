@@ -15,10 +15,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="PlayerGuard.cpp" />
-    <ClCompile Include="PlayerAttack.cpp" />
-    <ClCompile Include="PlayerChargeAttack.cpp" />
-    <ClCompile Include="PlayerHealth.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Towel.cpp" />
     <ClCompile Include="Bucket.cpp" />
@@ -29,6 +25,7 @@
     <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="StartWaveCollision.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -39,10 +36,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="PlayerGuard.h" />
-    <ClInclude Include="PlayerAttack.h" />
-    <ClInclude Include="PlayerChargeAttack.h" />
-    <ClInclude Include="PlayerHealth.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Towel.h" />
     <ClInclude Include="Bucket.h" />
@@ -53,5 +46,6 @@
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="StartWaveCollision.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
 </Project>
