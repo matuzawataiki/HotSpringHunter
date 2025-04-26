@@ -20,29 +20,60 @@ namespace nsTMEngine {
 		//アニメーションの初期化
 		InitAnimation(animationeClips, numAnimationClips, enModelUpAxiz);
 		
-		ModelInitData modelData;			//モデルのデータ
+		ModelInitData modelInitData;			//モデルのデータ
 		//tkmのファイルパスの指定
-		modelData.m_tkmFilePath = filePath;
+		modelInitData.m_tkmFilePath = filePath;
 		//シェーダーのファイルパスの指定
-		modelData.m_fxFilePath = "Assets/shader/model.fx";
+		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		
+		SetupShaderEntryPointFunc(modelInitData);
+
 		if (animationeClips != nullptr) {
-			modelData.m_skeleton = &m_skeleton;
-			modelData.m_vsEntryPointFunc = "VSSkinMain";
-			modelData.m_vsSkinEntryPointFunc = "VSSkinMain";
+			modelInitData.m_skeleton = &m_skeleton;
 		}
-		//SetupVertexShaderEntryPointFunc(modelData);
 
-		modelData.m_expandConstantBuffer = g_sceneLight->GetLight();
-		modelData.m_expandConstantBufferSize = sizeof(Light);
+		modelInitData.m_expandConstantBuffer = g_sceneLight->GetLight();
+		modelInitData.m_expandConstantBufferSize = sizeof(Light);
 
-		m_model.Init(modelData);
+		m_model.Init(modelInitData);		
 
+
+	}
+
+	void ModelRender::InitModelOnShadowMap(RenderingEngine& renderingEngine, const char* tkmFinlePath, EnModelUpAxis modelUpAxis)
+	{
+		ModelInitData modelInitData;
+		modelInitData.m_tkmFilePath = tkmFinlePath;
+		modelInitData.m_modelUpAxis = modelUpAxis;
+
+		SetupShaderEntryPointFunc(modelInitData);
+
+		if (m_animationClips != nullptr) {
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+		}
+
+		modelInitData.m_fxFilePath = "Assets/shader/DrawShadowMap.fx";
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+
+		m_drawShadowMapCameraParamCB.Init(sizeof(Vector4), nullptr);
+		modelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB;
+		modelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+		m_shadowModels.Init(modelInitData);
+	}
+
+	void ModelRender::OnRenderShadowMap(RenderContext& rc)
+	{
+		Vector4 cameraParam;
+		cameraParam.x = g_camera3D->GetNear();
+		cameraParam.y = g_camera3D->GetFar();
+		m_drawShadowMapCameraParamCB.CopyToVRAM(cameraParam);
+		m_shadowModels.Draw(rc);
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
 	{
-		std::string skeletonFilePath = filePath;		//ストリング型の変数
+		std::string skeletonFilePath = filePath;
 		//tkmの中身をコピー
 		int pos = (int)skeletonFilePath.find(".tkm");
 		//スケルトンの情報を書き込み
@@ -64,26 +95,22 @@ namespace nsTMEngine {
 
 	}
 
-	//void ModelRender::InitComputeAnimatoinVertexBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
-	//{
-	//	StructuredBuffer* worldMatrxiArraySB = nullptr;
-	//	m_
-	//}
-
-	void ModelRender::SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData)
+	void ModelRender::SetupShaderEntryPointFunc(ModelInitData& modelInitData)
 	{
-		//modelInitData.m_vsSkinEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
-		//modelInitData.m_vsEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
+		modelInitData.m_vsEntryPointFunc = "VSMain";
+		modelInitData.m_vsSkinEntryPointFunc = "VSMain";
 
-		//if (m_animationClips != nullptr) {
-		//	// アニメーションあり。
-		//	modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-		//}
+
+		if (m_animationClips != nullptr) {
+			// アニメーションあり。
+			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		}
 	}
 
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
 		m_model.UpdateWorldMatrix(m_pos, m_rot, m_sca);
+		m_shadowModels.UpdateWorldMatrix(m_pos, m_rot, m_sca);
 	}
 
 	void ModelRender::Update()
@@ -102,6 +129,7 @@ namespace nsTMEngine {
 	void ModelRender::Draw(RenderContext& rc)
 	{
 		g_renderingEngine->RegisterModel(&m_model);
+		g_renderingEngine->AddRenderObject(this);
 	}
 
 }

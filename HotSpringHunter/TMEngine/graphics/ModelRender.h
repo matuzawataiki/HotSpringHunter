@@ -1,12 +1,10 @@
 #pragma once
 
-//#include "graphics/ComputeAnimationVertexBuffer.h"
-
 namespace nsTMEngine {
 	/// <summary>
 	/// スキンモデルレンダー
 	/// </summary>
-	class ModelRender : public Noncopyable
+	class ModelRender : public IRenderer
 	{
 	public:
 		ModelRender();
@@ -111,17 +109,32 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="modelInitData"></param>
-		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
-
-		/// <summary>
 		/// 更新処理。
 		/// </summary>
 		void Update();
 
 	private:
+		/// <summary>
+		/// シャドウマップへの描画パスから呼ばれる処理。
+		/// </summary>
+		/// <param name="rc">レンダリングコンテキスト</param>
+		/// <param name="ligNo">ライト番号</param>
+		/// <param name="shadowMapNo">シャドウマップ番号</param>
+		/// <param name="lvpMatrix">ライトビュープロジェクション行列</param>
+		void OnRenderShadowMap(RenderContext& rc) override;
+
+		/// <summary>
+		/// シャドウマップ描画用モデルの初期化
+		/// </summary>
+		/// <param name="renderingEngine"></param>
+		/// <param name="tkmFinlePath"></param>
+		/// <param name="modelUpAxis"></param>
+		void InitModelOnShadowMap(
+			RenderingEngine& renderingEngine, 
+			const char* tkmFinlePath, 
+			EnModelUpAxis modelUpAxis
+		);
+
 		/// <summary>
 		/// スケルトンの初期化用関数
 		/// </summary>
@@ -147,7 +160,14 @@ namespace nsTMEngine {
 		/// <param name="enModelUpAxis"></param>
 		void InitComputeAnimatoinVertexBuffer(
 			const char* tkmFilePath,
-			EnModelUpAxis enModelUpAxis);
+			EnModelUpAxis enModelUpAxis
+		);
+
+		/// <summary>
+		/// シェーダーエントリーポイントの設定
+		/// </summary>
+		/// <param name="modelInitData"></param>
+		void SetupShaderEntryPointFunc(ModelInitData& modelInitData);
 
 		//void ComputeAnimatoinVertexBuffer()
 
@@ -165,11 +185,14 @@ namespace nsTMEngine {
 		Quaternion		m_rot = Quaternion::Identity;	//回転
 
 		Model			m_model;					//モデル
+		Model			m_shadowModels;
+
 		Skeleton		m_skeleton;					//ボーン
 		Animation		m_animation;				//アニメーション
 		AnimationClip*	m_animationClips = nullptr;	//アニメーションクリップ
-		//ComputeAnimationVertexBuffer m
+		ConstantBuffer	m_drawShadowMapCameraParamCB;
 
+		int				m_maxInstance = 1;			// 最大インスタンス数。
 		int				m_numAnimationClips = 0;	//アニメーションクリップの数
 		float			m_animationSpeed = 1.0f;	//アニメーションの再生速度
 };

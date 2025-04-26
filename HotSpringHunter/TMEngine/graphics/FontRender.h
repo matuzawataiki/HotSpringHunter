@@ -82,7 +82,10 @@ namespace nsTMEngine
 		/// 描画処理。
 		/// </summary>
 		/// <param name="rc">レンダ―コンテキスト。</param>
-		void Draw(RenderContext& rc)
+		void Draw(RenderContext& rc);
+
+	private:
+		void OnRender2D(RenderContext& rc)override
 		{
 			m_font.Begin(rc);
 			m_font.Draw(m_text, Vector2(m_pos.x, m_pos.y), m_color, m_rot, m_sca, m_piv);

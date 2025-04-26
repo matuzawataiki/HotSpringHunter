@@ -15,7 +15,9 @@ namespace nsTMEngine
 	{
 		InitMainRenderTarget();
 		InitCopyMainRenderTargetToFrameBufferSprite();
+		m_shadowMapRender.Init();
 		m_postEffect.Init(m_mainRenderTarget);
+		Init2DRenderTarget();
 		m_sceneLight.Init();
 	}
 
@@ -34,6 +36,43 @@ namespace nsTMEngine
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT
 		);
+	}
+
+	void RenderingEngine::Init2DRenderTarget()
+	{
+		float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+
+		m_2DRenderTarget.Create(
+			UI_SPACE_WIDTH,
+			UI_SPACE_HEIGHT,
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_UNKNOWN,
+			clearColor
+		);
+
+		SpriteInitData spriteInitData;
+
+		spriteInitData.m_textures[0] = &m_2DRenderTarget.GetRenderTargetTexture();
+		spriteInitData.m_width = m_mainRenderTarget.GetWidth();
+		spriteInitData.m_height = m_mainRenderTarget.GetHeight();
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		spriteInitData.m_vsEntryPointFunc = "VSMain";
+		spriteInitData.m_psEntryPoinFunc = "PSMain";
+		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
+		spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
+		m_2DSprite.Init(spriteInitData);
+
+		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
+		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
+		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
+		m_mainSprite.Init(spriteInitData);
+	}
+
+	void RenderingEngine::InitShadowMapRender()
+	{
+		m_shadowMapRender.Init();
 	}
 
 	void RenderingEngine::InitCopyMainRenderTargetToFrameBufferSprite()
@@ -76,16 +115,44 @@ namespace nsTMEngine
 
 		EndGPUEvent();
 	}
+
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
-		rc.SetRenderTarget(m_mainRenderTarget);
+		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
+		RenderToShadowMap(rc);
 		for (auto model : m_registerModels)
 		{
 			model->Draw(rc);
 		}
 		m_postEffect.Render(rc, m_mainRenderTarget);
+		Render2D(rc);
 		CopyMainRenderTargetToFrameBufferSprite(rc);
 		m_registerModels.clear();
+	}
+
+	void RenderingEngine::RenderToShadowMap(RenderContext& rc)
+	{
+		m_shadowMapRender.Render(rc, m_renderObjects);
+		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+	}
+
+	void RenderingEngine::Render2D(RenderContext& rc)
+	{
+		rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
+		rc.SetRenderTargetAndViewport(m_2DRenderTarget);
+		rc.ClearRenderTargetView(m_2DRenderTarget);
+		m_mainSprite.Draw(rc);
+		for (auto& renderObj : m_renderObjects)
+		{
+			renderObj->OnRender2D(rc);
+		}
+		rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
+
+		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+		m_2DSprite.Draw(rc);
+		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 	}
 }

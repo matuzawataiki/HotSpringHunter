@@ -1,7 +1,8 @@
 #pragma once
 
+
 namespace nsTMEngine {
-	class SpriteRender
+	class SpriteRender :public IRenderer
 	{
 	public:
 		SpriteRender();
@@ -76,6 +77,14 @@ namespace nsTMEngine {
 		/// </summary>
 		/// <param name="rc"></param>
 		void Draw(RenderContext& rc);
+
+	private:
+		void OnRender2D(RenderContext& rc)override
+		{
+			m_sprite.Draw(rc);
+		}
+
+
 
 	private:
 		Sprite		m_sprite;						//スプライト
