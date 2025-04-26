@@ -235,10 +235,6 @@
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerAttack.cpp" />
-    <ClCompile Include="PlayerChargeAttack.cpp" />
-    <ClCompile Include="PlayerGuard.cpp" />
-    <ClCompile Include="PlayerHealth.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="StartWaveCollision.cpp" />
@@ -251,6 +247,7 @@
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Towel.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -261,10 +258,6 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerAttack.h" />
-    <ClInclude Include="PlayerChargeAttack.h" />
-    <ClInclude Include="PlayerGuard.h" />
-    <ClInclude Include="PlayerHealth.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="StartWaveCollision.h" />
@@ -273,6 +266,7 @@
     <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Towel.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

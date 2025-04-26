@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Towel.h"
 #include "Player.h"
-#include "PlayerChargeAttack.h"
 
 Towel::Towel()
 {

@@ -1,20 +1,30 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "PlayerHealth.h"
-#include "PlayerAttack.h"
-#include "PlayerGuard.h"
-#include "PlayerChargeAttack.h"
 #include "Towel.h"
 #include "Bucket.h"
 
-namespace {
-	const float MOVE_AMOUNT = 120.0f;
-	const float JUMP_AMOUNT = 700.0f;
-	const float DASH_AMOUNT = 4.0f;
-	const float GRAVITY_AMOUNT = 10.0f;
+#include "SnakeEnemy.h"
 
-	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };
+namespace {
+	const float MOVE_AMOUNT = 120.0f;			//ˆÚ“®FˆÚ“®—ÊB
+	const float GRAVITY_AMOUNT = 10.0f;			//ˆÚ“®Fd—Í—ÊB
+
+	const float JUMP_AMOUNT = 700.0f;			//ƒWƒƒƒ“ƒvFƒWƒƒƒ“ƒv—ÍB
+
+	const float DASH_AMOUNT = 4.0f;				//ƒ_ƒbƒVƒ…Fƒ_ƒbƒVƒ…”{—¦B
+
+	const float WEAK_COLLISION_DIS = 100.0f;	//ãUŒ‚FƒRƒŠƒWƒ‡ƒ“ˆÊ’uB
+	const float WEAK_COLLISION_SIZE = 150.0f;	//ãUŒ‚FƒRƒŠƒWƒ‡ƒ“ƒTƒCƒYB
+
+	const float CHARGE_DECREASE = 1.3f;			//—­‚ßUŒ‚Fƒ`ƒƒ[ƒWŒ¸­—ÊB
+	const float CHARGE_COLLISION_SIZE = 2.0f;	//—­‚ßUŒ‚FƒRƒŠƒWƒ‡ƒ“‘å‚«‚³‚Ì”{—¦B
+
+	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };	//player‰Šú’lB
 }
+
+/*********************************************************************************/
+//playerŠî’êƒNƒ‰ƒXB
+/*********************************************************************************/
 
 Player::Player()
 {
@@ -22,31 +32,61 @@ Player::Player()
 
 Player::~Player()
 {
-	DeleteGO(m_playerAttack);
-	DeleteGO(m_playerGuard);
-	DeleteGO(m_playerChaAt);
-	DeleteGO(m_playerHealth);
+	DeleteList();
+}
+
+/// <summary>
+/// ƒŠƒXƒgíœB
+/// </summary>
+void Player::DeleteList()
+{
+	//state‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‚¢‚ê‚ÄAíœ‚·‚éB
+	for (int i = 0; i < m_stateList.size(); ++i) {
+		auto* state = m_stateList[i];
+		delete state;
+		state = nullptr;
+	}
+	m_stateList.clear();
 }
 
 bool Player::Start()
 {
-	//playeråº§æ¨™åˆæœŸåŒ–
+	//playerÀ•W‰Šú‰»
 	m_playerPosition = PLAYER_NEW_POSITION;
-	//playerã‚­ãƒ£ãƒ©ã‚³ãƒ³åˆæœŸåŒ–
+	//playerƒLƒƒƒ‰ƒRƒ“‰Šú‰»
 	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPosition);
 
-	LoadModel();
-	GenerateMinions();
-
+	AddList();
+	LoadAssets();
+	
 	return true;
 }
 
 /// <summary>
-/// Assetsãƒ­ãƒ¼ãƒ‰ã€‚
+/// ƒŠƒXƒg’Ç‰ÁB
 /// </summary>
-void Player::LoadModel()
+void Player::AddList()
 {
-	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ­ãƒ¼ãƒ‰ã€‚
+	//m_stateList‚ğ‰Šú‰»B
+	m_stateList.clear();
+	//ƒŠƒXƒg‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ğ’Ç‰Á‚µ‚Ä‚¢‚­B
+	m_stateList.push_back(new PlayerMove);
+	m_stateList.push_back(new PlayerJump);
+	m_stateList.push_back(new PlayerDash);
+	m_stateList.push_back(new PlayerWeakAttack);
+	m_stateList.push_back(new PlayerChargeAttack);
+	m_stateList.push_back(new PlayerGuard);
+	m_stateList.push_back(new PlayerHealth);
+	m_stateList.push_back(new PlayerHit);
+	m_stateList.push_back(new PlayerDeath);
+}
+
+/// <summary>
+/// Assetsƒ[ƒhB
+/// </summary>
+void Player::LoadAssets()
+{
+	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒ[ƒhB
 	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
@@ -69,205 +109,653 @@ void Player::LoadModel()
 	m_animationClips[enAnimationClip_Hit].SetLoopFlag(false);
 	m_animationClips[enAnimationClip_Death].Load("Assets/animData/player/death.tka");
 	m_animationClips[enAnimationClip_Death].SetLoopFlag(false);
-
-	//ãƒ¢ãƒ‡ãƒ«ãƒ­ãƒ¼ãƒ‰ã€‚
-	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
-}
-
-/// <summary>
-/// å­ã‚¯ãƒ©ã‚¹NewGOã€‚
-/// </summary>
-void Player::GenerateMinions()
-{
-	m_playerHealth = NewGO<PlayerHealth>(0, "playerHealth");
-	m_playerAttack = NewGO<PlayerAttack>(0, "playerAttack");
-	m_playerGuard = NewGO<PlayerGuard>(0, "playerGuard");
-	m_playerChaAt = NewGO<PlayerChargeAttack>(0, "playerChargeAttack");
-
-	//NewGO<Towel>(0, "towel");
-	//NewGO<Bucket>(0, "bucket");
+	//ƒ‚ƒfƒ‹ƒ[ƒhB
+	m_playerModel.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
 }
 
 void Player::Update()
 {
-	Move();
-	Rotation();
-	StateManage();
-	AnimationManage();
+	StateManage();	
 
-	m_playerModelRender.Update();
+	m_playerModel.Update();
 }
 
 /// <summary>
-/// playerã®ç§»å‹•ã€‚
-/// </summary>
-void Player::Move()
-{
-	//åœ°é¢ã«ã¤ã„ã¦ã„ãŸã‚‰ã€‚
-	if (m_playerCharaCon.IsOnGround() == true) {
-
-		//ç§»å‹•é€Ÿåº¦ã‚’0.0fã«ã™ã‚‹ã€‚
-		m_playerSpeed.x = 0.0f;
-		m_playerSpeed.z = 0.0f;
-
-		//å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›é‡ã‚’å–å¾—ã€‚
-		Vector3 stickL;
-		stickL.x = g_pad[0]->GetLStickXF();
-		stickL.y = g_pad[0]->GetLStickYF();
-
-		//ã‚«ãƒ¡ãƒ©ã®å‰æ–¹å‘ã¨å³æ–¹å‘ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—ã€‚
-		Vector3 forwardDir = g_camera3D->GetForward();
-		Vector3 rightDir = g_camera3D->GetRight();
-
-		//yæ–¹å‘ã‚’0ã«ã™ã‚‹ã€‚
-		forwardDir.y = 0.0f;
-		rightDir.y = 0.0f;
-
-		//å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã€‚
-		//ã‚«ãƒ¡ãƒ©ã®ä¸Šä¸‹æ–¹å‘ã§ã‚­ãƒ£ãƒ©ã®ç§»å‹•é€Ÿåº¦ãŒå¤‰ã‚ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹ã€‚
-		forwardDir.Normalize();		
-
-		//ç§»å‹•æ–¹å‘ã‚’è¨ˆç®—ã€‚
-		forwardDir *= stickL.y;
-		rightDir *= stickL.x;
-
-		//playerã®å‘ãã‚’å–å¾—ã€‚
-		GetDirection(forwardDir, rightDir);
-
-		//ç§»å‹•é€Ÿåº¦ã‚’è¨ˆç®—ã€‚
-		//ç§»å‹•é€Ÿåº¦ = æ­©è¡Œé€Ÿåº¦ * ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ * ã‚¬ãƒ¼ãƒ‰çŠ¶æ…‹ã€‚
-		MoveAdjust();
-		forwardDir *= MOVE_AMOUNT * m_runState * m_guardState;
-		rightDir *= MOVE_AMOUNT * m_runState * m_guardState;
-
-		//ç§»å‹•é€Ÿåº¦ã«åŠ ç®—ã€‚
-		m_playerSpeed += forwardDir + rightDir;		
-
-		//é‡åŠ›ã‚’ãªãã™ã€‚
-		m_playerSpeed.y = 0.0f;
-
-		//ã‚¸ãƒ£ãƒ³ãƒ—ã€‚
-		if (g_pad[0]->IsTrigger(enButtonA)) {
-			m_playerSpeed.y = JUMP_AMOUNT;
-		}
-	}
-	//åœ°é¢ã«ã¤ã„ã¦ã„ãªã‹ã£ãŸã‚‰ã€‚
-	else {
-		//é‡åŠ›ã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚
-		m_playerSpeed.y -= GRAVITY_AMOUNT;
-	}
-	
-	m_playerPosition = m_playerCharaCon.Execute(m_playerSpeed, 1.0f / 60.0f);
-	m_playerModelRender.SetPosition(m_playerPosition);
-}
-
-void Player::MoveAdjust()
-{
-	//ã‚¬ãƒ¼ãƒ‰ä¸­ã€‚
-	if (g_pad[0]->IsPress(enButtonX)) {
-		m_guardState = 0.0f;
-	}
-	else {
-		m_guardState = 1.0f;
-	}
-
-	//ãƒ€ãƒƒã‚·ãƒ¥ã€‚
-	if (g_pad[0]->IsPress(enButtonB)) {
-		m_runState = DASH_AMOUNT;
-	}
-	else{
-		m_runState = 1.0f;
-	}
-}
-
-/// <summary>
-/// playerã®å‘ãã‚’æ›´æ–°ã€‚
-/// </summary>
-/// <param name="forward"></param>ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®ç¸¦æ–¹å‘ã€‚
-/// <param name="right"></param>ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ¨ªæ–¹å‘ã€‚
-void Player::GetDirection(Vector3 forward,Vector3 right)
-{
-	//ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒå€’ã•ã‚Œã¦ã„ã‚‹ãªã‚‰ã€‚
-	if (fabsf(forward.x) >= 0.01f || fabsf(forward.z) >= 0.01f ||
-		fabsf(right.x) >= 0.01f || fabsf(right.z) >= 0.01f) {
-		//playerã®å‘ãã‚’æ›´æ–°ã™ã‚‹ã€‚
-		m_playerDirection = forward + right;
-		m_playerDirection.Normalize();
-	}
-}
-
-/// <summary>
-/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†ã€‚
+/// ƒXƒe[ƒgŠÇ—B
 /// </summary>
 void Player::StateManage()
 {
-	//ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã€‚
-	if (m_playerCharaCon.IsOnGround() == false) {
-		m_animationState = EnPlayerAnimVar::enJump;
+	//ƒXƒe[ƒg‚ª•Ï‚í‚Á‚½‚çB
+	if (m_requestState != m_currentState) {
+		m_stateList[m_currentState]->Exit();
+		//Œ»İ‚ÌƒXƒe[ƒg‚ğØ‚è‘Ö‚¦‚éB
+		m_currentState = m_requestState;
+		m_stateList[m_currentState]->Enter();
 	}
-	else {
-		//æ­©è¡Œä¸­ã€‚
-		if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
-			m_animationState = EnPlayerAnimVar::enWalk;
-			//Xãƒœã‚¿ãƒ³å…¥åŠ›ä¸­ãªã‚‰ã€‚
-			if (g_pad[0]->IsPress(enButtonB)) {
-				m_animationState = EnPlayerAnimVar::enRun;
-			}
-		}
-		//å¾…æ©Ÿä¸­ã€‚
-		/*else {
-			m_animationState = EnPlayerAnimVar::enIdle;
-		}*/
-	}
-}
-
-void Player::Rotation()
-{
-	m_playerRotation.SetRotationYFromDirectionXZ(m_playerDirection);
-	m_playerModelRender.SetRotation(m_playerRotation);
-}
-
-/// <summary>
-/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç®¡ç†ã€‚
-/// </summary>
-void Player::AnimationManage()
-{
-	switch (m_animationState) {
-	case EnPlayerAnimVar::enIdle:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Idle);
-		break;
-	case EnPlayerAnimVar::enWalk:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Walk);
-		break;
-	case EnPlayerAnimVar::enJump:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Jump);
-		break;
-	case EnPlayerAnimVar::enRun:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Run);
-		break;
-	case EnPlayerAnimVar::enGuardStart:
-		m_playerModelRender.PlayAnimation(enAnimationClip_GuardStart);
-		break;
-	case EnPlayerAnimVar::enWeakAttack:
-		m_playerModelRender.PlayAnimation(enAnimationClip_WeakAttack);
-		break;
-	case EnPlayerAnimVar::enChargeAttack:
-		m_playerModelRender.PlayAnimation(enAnimationClip_ChargeAttack);
-		break;
-	case EnPlayerAnimVar::enCharging:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Charging);
-		break;
-	case EnPlayerAnimVar::enHit:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Hit);
-		break;
-	case EnPlayerAnimVar::enDeath:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Death);
-	default:
-		break;
-	}
+	//Œ»İ‚ÌƒXƒe[ƒg‚ÌUpdate()‚µ‚©Às‚µ‚È‚¢B
+	m_stateList[m_currentState]->Update();
 }
 
 void Player::Render(RenderContext& rc)
 {
-	m_playerModelRender.Draw(rc);
+	m_playerModel.Draw(rc);
+}
+
+/*********************************************************************************/
+//ˆÚ“®—pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerMove::PlayerMove(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerMove::~PlayerMove()
+{
+
+}
+
+void PlayerMove::Enter()
+{
+
+}
+
+void PlayerMove::Update()
+{
+	Move();
+	Rotation();
+}
+
+/// <summary>
+/// ˆÚ“®B
+/// </summary>
+void PlayerMove::Move()
+{
+	//’n–Ê‚É‚Â‚¢‚Ä‚¢‚½‚çB
+	if (m_player->m_playerCharaCon.IsOnGround() == false) {
+		return;
+	}
+	if (g_pad[0]->GetLStickXF() < 0.01f) {
+		if (g_pad[0]->GetLStickYF() < 0.01f) {
+			return;
+		}
+	}
+
+	//ˆÚ“®‘¬“x‚ğ0.0f‚É‚·‚éB
+	m_player->m_playerSpeed.x = 0.0f;
+	m_player->m_playerSpeed.z = 0.0f;
+
+	//¶ƒXƒeƒBƒbƒN‚Ì“ü—Í—Ê‚ğæ“¾B
+	Vector3 stickL;
+	stickL.x = g_pad[0]->GetLStickXF();
+	stickL.y = g_pad[0]->GetLStickYF();
+
+	//ƒJƒƒ‰‚Ì‘O•ûŒü‚Æ‰E•ûŒü‚ÌƒxƒNƒgƒ‹‚ğæ“¾B
+	Vector3 forwardDir = g_camera3D->GetForward();
+	Vector3 rightDir = g_camera3D->GetRight();
+
+	//y•ûŒü‚ğ0‚É‚·‚éB
+	forwardDir.y = 0.0f;
+	rightDir.y = 0.0f;
+
+	//‘O•ûŒüƒxƒNƒgƒ‹‚ğ³‹K‰»B
+	//ƒJƒƒ‰‚Ìã‰º•ûŒü‚ÅƒLƒƒƒ‰‚ÌˆÚ“®‘¬“x‚ª•Ï‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚éB
+	forwardDir.Normalize();
+
+	//ˆÚ“®•ûŒü‚ğŒvZB
+	forwardDir *= stickL.y;
+	rightDir *= stickL.x;
+
+	//player‚ÌŒü‚«‚ğXVB
+	GetDirection(forwardDir, rightDir);
+
+	//ˆÚ“®‘¬“x‚ğŒvZB
+	//ˆÚ“®‘¬“x = •às‘¬“x * ƒ_ƒbƒVƒ…ó‘Ô * ƒK[ƒhó‘ÔB
+	MoveAdjust();
+	forwardDir *= MOVE_AMOUNT;
+	rightDir *= MOVE_AMOUNT;
+
+	//ˆÚ“®‘¬“x‚É‰ÁZB
+	m_player->m_playerSpeed += forwardDir + rightDir;
+
+	//d—Í‚ğ‚È‚­‚·B
+	m_player->m_playerSpeed.y = 0.0f;
+
+	//ƒWƒƒƒ“ƒvB
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		m_player->m_playerSpeed.y = JUMP_AMOUNT;
+	}
+	//’n–Ê‚É‚Â‚¢‚Ä‚¢‚È‚©‚Á‚½‚çB
+	else {
+		//d—Í‚ğ”­¶‚³‚¹‚éB
+		m_player->m_playerSpeed.y -= GRAVITY_AMOUNT;
+	}
+
+	m_player->m_playerModel.PlayAnimation(enAnimationClip_Walk);
+
+	m_player->m_playerPosition = m_player->m_playerCharaCon.Execute(m_player->m_playerSpeed, 1.0f / 60.0f);
+	m_player->m_playerModel.SetPosition(m_player->m_playerPosition);
+}
+
+/// <summary>
+/// player‚ÌŒü‚«‚ğXVB
+/// </summary>
+/// <param name="forward"></param>c‚ÌˆÚ“®—ÊB
+/// <param name="right"></param>‰¡‚ÌˆÚ“®—ÊB
+void PlayerMove::GetDirection(Vector3 forward, Vector3 right)
+{
+	//ƒXƒeƒBƒbƒN‚ª“|‚³‚ê‚Ä‚¢‚é‚È‚çB
+	if (fabsf(forward.x) >= 0.01f || fabsf(forward.z) >= 0.01f ||
+		fabsf(right.x) >= 0.01f || fabsf(right.z) >= 0.01f) {
+		//player‚ÌŒü‚«‚ğXV‚·‚éB
+		m_player->m_playerDirection = forward + right;
+		m_player->m_playerDirection.Normalize();
+	}
+}
+
+/// <summary>
+/// ˆÚ“®‘¬“x‚ğ‰Á–¡B
+/// </summary>
+void PlayerMove::MoveAdjust()
+{
+	//ƒK[ƒh’†B
+	if (g_pad[0]->IsPress(enButtonX)) {
+		m_player->m_guardState = 0.0f;
+	}
+	else {
+		m_player->m_guardState = 1.0f;
+	}
+
+	//ƒ_ƒbƒVƒ…B
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_dashState = DASH_AMOUNT;
+	}
+	else {
+		m_dashState = 1.0f;
+	}
+}
+
+/// <summary>
+/// ‰ñ“]‚ğXVB
+/// </summary>
+void PlayerMove::Rotation()
+{
+	m_player->m_playerRotation.SetRotationYFromDirectionXZ(m_player->m_playerDirection);
+	m_player->m_playerModel.SetRotation(m_player->m_playerRotation);
+}
+
+void PlayerMove::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//ƒ_ƒbƒVƒ…—pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerDash::PlayerDash(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerDash::~PlayerDash()
+{
+
+}
+
+void PlayerDash::Enter()
+{
+
+}
+
+void PlayerDash::Update()
+{
+	Dash();
+}
+
+/// <summary>
+/// ƒ_ƒbƒVƒ…B
+/// </summary>
+void PlayerDash::Dash()
+{
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_player->m_dashState = DASH_AMOUNT;
+	}
+	else {
+		m_player->m_dashState = 1.0f;
+	}
+}
+
+void PlayerDash::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//ƒWƒƒƒ“ƒv—pƒNƒ‰ƒXB
+/*********************************************************************************/
+PlayerJump::PlayerJump(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerJump::~PlayerJump()
+{
+
+}
+
+void PlayerJump::Enter()
+{
+}
+
+void PlayerJump::Update()
+{
+
+}
+
+/// <summary>
+/// ƒWƒƒƒ“ƒvB
+/// </summary>
+void PlayerJump::Jump()
+{
+
+}
+
+void PlayerJump::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//ãUŒ‚—pƒNƒ‰ƒXB
+/*********************************************************************************/
+PlayerWeakAttack::PlayerWeakAttack(Player* player)
+	: IState(player)
+{
+	
+}
+
+PlayerWeakAttack::~PlayerWeakAttack()
+{
+
+}
+
+void PlayerWeakAttack::Enter()
+{
+}
+
+void PlayerWeakAttack::Update()
+{
+	WeakAttack();
+}
+
+/// <summary>
+/// ãUŒ‚B
+/// </summary>
+void PlayerWeakAttack::WeakAttack()
+{
+	if (g_pad[0]->IsTrigger(enButtonY)) {
+		m_player->m_animationState = enWeakAttack;
+		SnakeEnemy* snakeEnemy = FindGO<SnakeEnemy>("snakeEnemy");
+		if (snakeEnemy == nullptr) {
+			return;
+		}
+		MakeCollision();
+		if (m_player->m_collision->IsHit(snakeEnemy->m_characterController)) {
+			snakeEnemy->Hit();
+		}
+		DeleteGO(m_player->m_collision);
+	}
+}
+
+/// <summary>
+/// ƒRƒŠƒWƒ‡ƒ“ì¬B
+/// </summary>
+void PlayerWeakAttack::MakeCollision()
+{
+	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
+	m_player->m_collision = NewGO<CollisionObject>(0, "weakAttack");
+	Vector3 collisionPosition = m_player->m_playerPosition;
+	//À•W‚ğƒvƒŒƒCƒ„[‚Ì­‚µ‘O‚Éİ’è
+	collisionPosition += m_player->m_playerDirection * WEAK_COLLISION_DIS;
+	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
+	m_player->m_collision->CreateSphere(collisionPosition,
+		Quaternion::Identity,
+		WEAK_COLLISION_SIZE);
+}
+void PlayerWeakAttack::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//—­‚ßUŒ‚—pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerChargeAttack::PlayerChargeAttack(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerChargeAttack::~PlayerChargeAttack()
+{
+
+}
+
+void PlayerChargeAttack::Enter()
+{
+
+}
+
+void PlayerChargeAttack::Update()
+{
+	StickCharge();
+	ChargeAttack();
+	DisplayCharge();
+}
+
+/// <summary>
+/// ƒ`ƒƒ[ƒW‚ğ—­‚ß‚éB
+/// </summary>
+void PlayerChargeAttack::StickCharge()
+{
+	Vector3 RStick = Vector3::Zero;				//RƒXƒeƒBƒbƒN“ü—Í—ÊB	
+	float movePower = 0.0f;						//ƒpƒ[i“ü—Í•Ï“®—ÊjB
+
+	//RƒXƒeƒBƒbƒN‚Ì“ü—Í‚ª‚ ‚Á‚½‚çB
+	if ((fabsf(g_pad[0]->GetRStickXF()) >= 0.001f) || (fabsf(g_pad[0]->GetRStickYF()) >= 0.001f)) {
+		//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgØ‚è‘Ö‚¦B
+		//m_player->m_animationState = m_player->enCharging;
+
+		//RƒXƒeƒBƒbƒN‚Ì“ü—Í—Ê‚ğ‚Æ‚éB		
+		RStick.x = g_pad[0]->GetRStickXF();
+		RStick.y = g_pad[0]->GetRStickYF();
+		//ƒ`ƒƒ[ƒW—Ê‚É‚½‚·ƒpƒ[‚ğŒvZ‚·‚éiƒXƒeƒBƒbƒN‚Ì•ÏXŒãA•ÏX‘O‚Ì“àÏjB
+		movePower = Dot(RStick, m_RStickOld);
+		//ƒXƒeƒBƒbƒN‚ª“®‚¢‚Ä‚¢‚È‚¢‚È‚çAƒpƒ[‚ğ0‚É‚·‚éB
+		if ((RStick.x == m_RStickOld.x) && (RStick.y == m_RStickOld.y)) {
+			movePower = 0.0f;
+		}
+		//ƒpƒ[‚Ì’l‚ªƒ}ƒCƒiƒX‚È‚çƒvƒ‰ƒX‚É‚·‚éB
+		if (movePower < 0.0f) {
+			movePower *= -1.0f;
+		}
+		//ƒpƒ[‚ğƒ`ƒƒ[ƒW‚É‘«‚·B
+		m_charge += movePower;
+	}
+	//ƒpƒ[ƒŠƒZƒbƒgB
+	movePower = 0.0f;
+
+	//ƒ`ƒƒ[ƒW‚ğŒ¸­‚³‚¹‚éB
+	m_charge -= CHARGE_DECREASE;
+
+	//ƒ`ƒƒ[ƒW‚ğ0ˆÈ‰º‚É‚³‚¹‚È‚¢B
+	if (m_charge <= 0.0f) {
+		m_charge = 0.0f;
+	}
+
+	if (m_charge >= 100.0f) {
+		m_charge = 100.0f;
+	}
+
+	//ƒXƒeƒBƒbƒN“ü—Í—Ê‚ğXVB
+	m_RStickOld = RStick;
+
+}
+
+/// <summary>
+/// —­‚ßUŒ‚B
+/// </summary>
+void PlayerChargeAttack::ChargeAttack()
+{
+	//ƒ`ƒƒ[ƒW‚ª20ˆÈã‚ÅƒXƒeƒBƒbƒN‚Ì“ü—Í‚ª‚È‚©‚Á‚½‚çB
+	if ((fabsf(g_pad[0]->GetRStickXF()) <= 0.001f) || (fabsf(g_pad[0]->GetRStickYF()) <= 0.001f)) {
+		if (m_charge >= 20.0f) {
+			//player‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgØ‚è‘Ö‚¦B
+			m_player->m_animationState = enChargeAttack;
+			SnakeEnemy* snakeEnemy = FindGO<SnakeEnemy>("enemy");
+			/*if (snakeEnemy == nullptr) {
+				return;
+			}*/
+			MakeCollision();
+			//if (m_collision->IsHit(snakeEnemy->m_characterController)) {
+			//	//snakeEnemy->Hit(m_charge * 2.0f);
+			//}
+			DeleteGO(m_player->m_collision);
+		}
+	}
+}
+
+/// <summary>
+/// ƒRƒŠƒWƒ‡ƒ“‚ğì¬B
+/// </summary>
+void PlayerChargeAttack::MakeCollision()
+{
+	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
+	m_player->m_collision = NewGO<CollisionObject>(0);
+	Vector3 collisionPosition = m_player->m_playerPosition;
+	m_collisionSize = CHARGE_COLLISION_SIZE * m_charge + 100.0f;
+	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
+	m_player->m_collision->CreateSphere(collisionPosition,
+		Quaternion::Identity,
+		m_collisionSize);
+	//–¼‘O‚ğ‚Â‚¯‚é
+	m_player->m_collision->SetName("chargeAttack");
+	//ƒ`ƒƒ[ƒWƒŠƒZƒbƒgB
+	m_charge = 0.0f;
+}
+
+/// <summary>
+/// ƒ`ƒƒ[ƒW—Ê•\¦i‰¼jB
+/// </summary>
+void PlayerChargeAttack::DisplayCharge()
+{
+	m_chargeRender.SetScale(1.2);
+	m_chargeRender.SetPosition({ 425.0f,475.0f,0.0f });
+	m_chargeRender.SetColor(g_vec4Black);
+
+	swprintf_s(m_chargeText, 100, L"ƒ`ƒƒ[ƒW %.1f", float(m_charge));
+	m_chargeRender.SetText(m_chargeText);
+}
+
+void PlayerChargeAttack::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//ƒK[ƒh—pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerGuard::PlayerGuard(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerGuard::~PlayerGuard()
+{
+
+}
+
+void PlayerGuard::Exit()
+{
+}
+
+void PlayerGuard::Update()
+{
+	if (g_pad[0]->IsPress(enButtonX)) {
+		GuardDirection();
+	}
+}
+
+/// <summary>
+/// ƒK[ƒh•ûŒü‚ğ‰Á–¡B
+/// </summary>
+void PlayerGuard::GuardDirection()
+{
+	/*
+	Vector3 enemyPos = m_enemy->GetPosition();
+	Vector3 playerPos = m_player->GetPosition();
+	Vector3 toEnemyDirection = playerPos - enemyPos;
+	toEnemyDirection.Normalize();
+	Vector3 playerDirection = m_player->GetPlayerDirection();
+	Vector3 guard = Dot(playerDirection,toEnemyDirection)
+
+	if(guard <= GUARD_TOLERANCE){
+		m_guardFlag = true;
+	}
+	else {
+		m_guardFlag = false;
+	}
+	*/
+	m_player->m_animationState = enGuardStart;
+}
+
+void PlayerGuard::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//‘Ì—ÍŠÇ——pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerHealth::PlayerHealth(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerHealth::~PlayerHealth()
+{
+
+}
+
+void PlayerHealth::Exit()
+{
+}
+
+void PlayerHealth::Update()
+{
+	TakeDamage();
+	DisplayHP();
+}
+
+/// <summary>
+/// UŒ‚‚ğó‚¯‚éB
+/// </summary>
+void PlayerHealth::TakeDamage()
+{
+	//‚Ü‚¾¶‚«‚Ä‚¢‚é‚Æ‚«B
+	if (m_player->m_playerHP >= 1.0f) {
+		m_player->m_animationState = enHit;
+	}
+	//HP‚ª0‚É‚È‚Á‚½‚Æ‚«B
+	else {
+	}
+}
+
+/// <summary>
+/// HP•\¦i‰¼jB
+/// </summary>
+void PlayerHealth::DisplayHP()
+{
+	m_HPRender.SetScale(1.2);
+	m_HPRender.SetPosition({ 800.0f,-400.0f, 0.0f });
+	m_HPRender.SetColor(g_vec4Black);
+
+	swprintf_s(m_HPText, 100, L"HP %f", float(m_playerHP));
+	m_HPRender.SetText(m_HPText);
+}
+
+void PlayerHealth::Exit()
+{
+}
+/*********************************************************************************/
+//”í’e—pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerHit::PlayerHit(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerHit::~PlayerHit()
+{
+
+}
+
+void PlayerHit::Exit()
+{
+	
+}
+
+void PlayerHit::Update()
+{
+	
+}
+
+/// <summary>
+/// ”í’eB
+/// </summary>
+/// <param name="reduce"></param>‘Ì—ÍŒ¸­—ÊB
+void PlayerHit::Hit(float reduce)
+{
+	//ƒK[ƒh‚ª‚Å‚«‚Ä‚¢‚È‚¢‚È‚çB
+	if (m_player->m_guardFlag == true) {
+		return;
+	}
+
+	//HP‚ğŒ¸‚ç‚·B
+	m_player->m_playerHP -= reduce;
+}
+
+void PlayerHit::Exit()
+{
+
+
+}
+/*********************************************************************************/
+//€–S—pƒNƒ‰ƒXB
+/*********************************************************************************/
+
+PlayerDeath::PlayerDeath(Player* player)
+	: IState(player)
+{
+
+}
+
+PlayerDeath::~PlayerDeath()
+{
+
+}
+
+void PlayerDeath::Enter()
+{
+}
+
+void PlayerDeath::Update()
+{
+	DeathJudge();
+}
+
+/// <summary>
+/// €–S”»’èB
+/// </summary>
+void PlayerDeath::DeathJudge()
+{
+	if (m_player->m_playerHP <= 0.0f) {
+		m_player->m_animationState = enDeath;
+	}
+}
+
+void PlayerDeath::Exit()
+{
+
 }
