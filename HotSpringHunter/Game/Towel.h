@@ -7,12 +7,12 @@ public:
 	Towel();
 	~Towel();
 	bool Start()override;
-	void LoadModel();			//ƒ‚ƒfƒ‹“Ç‚İ‚İB
+	void LoadModel();			//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿ã€‚
 	void Update()override;
-	void FollowPlayer();		//player’Ç]B
-	void StateManage();			//ƒXƒe[ƒgØ‚è‘Ö‚¦B
-	void ChargeAttackScale();	//—­‚ßUŒ‚‚Ìƒ^ƒIƒ‹‚Ì‘å‚«‚³‚ğ•Ï‚¦‚éB
-	void DisplayManage();		//•\¦ó‘ÔØ‚è‘Ö‚¦B
+	void FollowPlayer();		//playerè¿½å¾“ã€‚
+	void StateManage();			//ã‚¹ãƒ†ãƒ¼ãƒˆåˆ‡ã‚Šæ›¿ãˆã€‚
+	void ChargeAttackScale();	//æºœã‚æ”»æ’ƒæ™‚ã®ã‚¿ã‚ªãƒ«ã®å¤§ãã•ã‚’å¤‰ãˆã‚‹ã€‚
+	void DisplayManage();		//è¡¨ç¤ºçŠ¶æ…‹åˆ‡ã‚Šæ›¿ãˆã€‚
 	void Render(RenderContext& rc)override;
 private:
 	Player* m_player = nullptr;
@@ -20,12 +20,12 @@ private:
 
 	ModelRender m_towelModel;
 	Quaternion m_towelRot = Quaternion::Identity;
-	Vector3 m_towelDir = Vector3::Zero;				//ƒ^ƒIƒ‹Œü‚«B
-	Vector3 m_towelPos = Vector3::Zero;				//ƒ^ƒIƒ‹ˆÊ’uB
-	Vector3 m_towelSca = Vector3::Zero;				//ƒ^ƒIƒ‹‘å‚«‚³B
+	Vector3 m_towelDir = Vector3::Zero;				//ã‚¿ã‚ªãƒ«å‘ãã€‚
+	Vector3 m_towelPos = Vector3::Zero;				//ã‚¿ã‚ªãƒ«ä½ç½®ã€‚
+	Vector3 m_towelSca = Vector3::Zero;				//ã‚¿ã‚ªãƒ«å¤§ãã•ã€‚
 
-	bool m_displayFlag = true;			//ƒ^ƒIƒ‹•\¦‚Ìƒtƒ‰ƒbƒOB
-	int m_animState = 0;			//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgB
+	bool m_displayFlag = true;			//ã‚¿ã‚ªãƒ«è¡¨ç¤ºã®ãƒ•ãƒ©ãƒƒã‚°ã€‚
+	int m_animState = 0;			//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã€‚
 
 	enum EnAnimState {
 		WeakAttack,

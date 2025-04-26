@@ -16,7 +16,7 @@ namespace {
 
 SnakeEnemy::SnakeEnemy()
 {
-	//ƒvƒŒƒCƒ„[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	m_player = FindGO<Player>("player");
 	m_playerAttack = FindGO<PlayerAttack>("playerAttack");
 	m_playerCharAt = FindGO<PlayerChargeAttack>("playerChargeAttack");
@@ -29,9 +29,9 @@ SnakeEnemy::SnakeEnemy()
 
 	
 
-	//ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
 	m_characterController.Init(30.0f, 50.0f, m_position);
-	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒ[ƒh
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ­ãƒ¼ãƒ‰
 	/*m_animationClips[enAnimationClip_Idle].Load("Assets/animData/snake_idle.tka");
 	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/snake_walk.tka");
@@ -43,7 +43,7 @@ SnakeEnemy::SnakeEnemy()
 	m_animationClips[enAnimationClip_Death].Load("Assets/animData/snake_death.tka");
 	m_animationClips[enAnimationClip_Death].SetLoopFlag(true);*/
 
-	//ƒGƒlƒ~[ƒ‚ƒfƒ‹
+	//ã‚¨ãƒãƒŸãƒ¼ãƒ¢ãƒ‡ãƒ«
 	m_modelRender.Init("Assets/animal/snake_model.tkm"/*, m_animationClips, enAnimationClip_Num, enModelUpAxisY*/);
 	m_modelRender.Update();
 
@@ -64,24 +64,24 @@ void SnakeEnemy::Update()
 	if (m_isSpawn == true)
 	{
 		if (m_isAlive == true) {
-			//ƒvƒŒƒCƒ„[‚Ì’Ç]
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¿½å¾“
 			Tracking();
-			//ƒvƒŒƒCƒ„[‚ÉUŒ‚
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«æ”»æ’ƒ
 			SnakeAttack();
 			Hit();
 		}
 		else {
-			//ƒGƒlƒ~[‚Ì‚Á”ò‚Ñ
+			//ã‚¨ãƒãƒŸãƒ¼ã®å¹ã£é£›ã³
 			EnemyDeath();
 		}		
 
-		//“G‚ª‚Á”ò‚Ô‚Æ‚«‚ÉƒLƒƒƒ‰ƒRƒ“‚ğÁ‚µ‚Ä“§–¾‚È•Ç‚ğ‚·‚è”²‚¯‚é
+		//æ•µãŒå¹ã£é£›ã¶ã¨ãã«ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’æ¶ˆã—ã¦é€æ˜ãªå£ã‚’ã™ã‚ŠæŠœã‘ã‚‹
 		if (m_isAlive) {
-			// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ª‚ ‚é‚ÍˆÚ“®ˆ—‚ÌŒ‹‰Ê‚ğó‚¯æ‚é‚¾‚¯
+			// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒã‚ã‚‹æ™‚ã¯ç§»å‹•å‡¦ç†ã®çµæœã‚’å—ã‘å–ã‚‹ã ã‘
 			m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
 		}
 		else {
-			// ‚È‚¢‚Æ‚«‚Í©•ª‚ÅˆÚ“®Œ‹‰Ê‚ğŒvZ
+			// ãªã„ã¨ãã¯è‡ªåˆ†ã§ç§»å‹•çµæœã‚’è¨ˆç®—
 			const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
 			m_position.Add(move);
 		}
@@ -91,11 +91,11 @@ void SnakeEnemy::Update()
 		m_position = BACK_YARD_POS;
 	}
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 	//EnemyAnimation();
-	//ƒXƒe[ƒgŠÇ—
+	//ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†
 	ManageState();
-	//ƒGƒlƒ~[‚ªƒvƒŒƒCƒ„[‚ÉŒü‚­
+	//ã‚¨ãƒãƒŸãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã
 	Rotation();
 	
 	m_modelRender.SetPosition(m_position);
@@ -103,22 +103,22 @@ void SnakeEnemy::Update()
 	m_modelRender.Update();
 }
 
-//ƒGƒlƒ~[‚ªƒvƒŒƒCƒ„[‚ÉŒü‚­
+//ã‚¨ãƒãƒŸãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã
 void SnakeEnemy::Rotation()
 {
 	m_rotation.SetRotationYFromDirectionXZ(m_toPlayer);
 	m_modelRender.SetRotation(m_rotation);
 }
 
-//ƒvƒŒƒCƒ„[‚Æ“G‚Ì“–‚½‚è”»’è
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨æ•µã®å½“ãŸã‚Šåˆ¤å®š
 void SnakeEnemy::SnakeAttack()
 {
-	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª200ˆÈ‰º‚Ìê‡
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢ãŒ200ä»¥ä¸‹ã®å ´åˆ
 	Vector3 diff = m_player->GetPlayerPos() - m_position;
 
 	if (diff.Length() < 200.0f && m_enemyATK == false)
 	{
-		//‘O•û‚ÉƒRƒŠƒWƒ‡ƒ“‚ğì‚é
+		//å‰æ–¹ã«ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’ä½œã‚‹
 		EnemyAttackCollision();
 	}
 	else if(diff.Length() >= 220.0f)
@@ -128,20 +128,20 @@ void SnakeEnemy::SnakeAttack()
 
 	if (m_enemyHP <= 0.0f)
 	{
-		// €–S‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ğÁ‚µ‚Ä•ÇŠÑ’Ê‚·‚é‚æ‚¤‚É‚·‚é
+		// æ­»äº¡ã—ãŸã‚‰ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’æ¶ˆã—ã¦å£è²«é€šã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		m_characterController.RemoveRigidBoby();
 		m_isAlive = false;
 	}
 }
 
-//”ÍˆÍ“à‚ÌƒvƒŒƒCƒ„[‚ğ’Ç‚¢‚©‚¯‚é
+//ç¯„å›²å†…ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½ã„ã‹ã‘ã‚‹
 void SnakeEnemy::Tracking()
 {
-	//ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚ÄL‚Ñ‚éƒxƒNƒgƒ‹‚ğŒvZ
+	//ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‹ã£ã¦ä¼¸ã³ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
 	m_toPlayer = m_player->GetPlayerPos() - m_position;
 	m_toPlayer.y = 0.0f;
 
-	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ğŒvZ‚·‚é
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢ã‚’è¨ˆç®—ã™ã‚‹
 	float distToPlayer = m_toPlayer.Length();
 
 	if (distToPlayer < 200.0f) {
@@ -150,17 +150,17 @@ void SnakeEnemy::Tracking()
 		MoveStop();
 	}
 	else if (distToPlayer < 1000.0f) {
-		//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª400ˆÈ‰º‚¾‚Á‚½‚ç’Ç‚¢‚©‚¯‚é
-		//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»B
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢ãŒ400ä»¥ä¸‹ã ã£ãŸã‚‰è¿½ã„ã‹ã‘ã‚‹
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‹ã£ã¦ã„ã‚‹ä¼¸ã³ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã€‚
 		Vector3 toPlayerDir = m_toPlayer;
 		toPlayerDir.Normalize();
 
-		//³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
+		//æ­£è¦åŒ–ã§æ±‚ã‚ãŸãƒ™ã‚¯ãƒˆãƒ«ã‚’åˆ©ç”¨ã—ã¦ã€ã‚¨ãƒãƒŸãƒ¼ã®åº§æ¨™ã‚’å‹•ã‹ã™
 		m_moveSpeed = toPlayerDir * 100.0f;
 	}
 }
 
-//ˆê’â~
+//ä¸€æ™‚åœæ­¢
 void SnakeEnemy::MoveStop()
 {
 		if (m_moveStop == true)
@@ -184,17 +184,17 @@ void SnakeEnemy::Hit()
 
 }
 
-//ƒvƒŒƒCƒ„[‚Æ‹t•ûŒü‚É”ò‚ñ‚Å‚¢‚­
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨é€†æ–¹å‘ã«é£›ã‚“ã§ã„ã
 void SnakeEnemy::EnemyDeath()
 {
 	if (enemyDead)
 	{ 
-	//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‹ã£ã¦ã„ã‚‹ä¼¸ã³ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–
 	Vector3 toPlayerDir = m_toPlayer;
 	toPlayerDir.Normalize();
 	toPlayerDir *= -1.0f;
 
-	//³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
+	//æ­£è¦åŒ–ã§æ±‚ã‚ãŸãƒ™ã‚¯ãƒˆãƒ«ã‚’åˆ©ç”¨ã—ã¦ã€ã‚¨ãƒãƒŸãƒ¼ã®åº§æ¨™ã‚’å‹•ã‹ã™
 	m_moveSpeed = toPlayerDir * 2000.0f;
 	m_moveSpeed.y = 800.0f;
 
@@ -203,33 +203,33 @@ void SnakeEnemy::EnemyDeath()
 		m_deathCount = true;
 	}
 		
-	//‚Á”ò‚ÔƒAƒjƒ[ƒVƒ‡ƒ“
+	//å¹ã£é£›ã¶ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	m_animationState = enDeath;
 	}
 	enemyDead = true;
 }
 
-//ƒGƒlƒ~[‚ÌUŒ‚ƒRƒŠƒWƒ‡ƒ“
+//ã‚¨ãƒãƒŸãƒ¼ã®æ”»æ’ƒã‚³ãƒªã‚¸ãƒ§ãƒ³
 void SnakeEnemy::EnemyAttackCollision()
 {
-	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
+	//ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 	collisionObject = NewGO<CollisionObject>(0,"enemy_atk");
 	Vector3 collisionPosition = Vector3::Zero;
 
-	//ƒGƒlƒ~[‚Ì­‚µ‘O‚Éİ’è
+	//ã‚¨ãƒãƒŸãƒ¼ã®å°‘ã—å‰ã«è¨­å®š
 	m_enemyDirection = m_toPlayer;
 	m_enemyDirection.Normalize();
 	m_enemyDirection *= 100.0f;
 	collisionPosition = m_position + m_enemyDirection;
 
-	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
+	//çƒçŠ¶ã®ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’ä½œæˆ
 	collisionObject->CreateSphere(
 		collisionPosition,
 		Quaternion::Identity,
 		100.0f
 	);
 	
-	//ƒvƒŒƒCƒ„[‚ª“G‚É‚ ‚½‚é‚Æ-10
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ•µã«ã‚ãŸã‚‹ã¨-10
 	if (collisionObject->IsHit(m_player->m_playerCharaCon)) {
 		m_playerHealth->Hit(0.0f);
 		m_enemyHP -= 10.0f;
@@ -240,78 +240,78 @@ void SnakeEnemy::EnemyAttackCollision()
 	m_enemyATK = true;
 }
 
-//ƒvƒŒƒCƒ„[‚ÉUŒ‚‚³‚ê‚½‚Æ‚«ƒmƒbƒNƒoƒbƒN‚·‚é
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«æ”»æ’ƒã•ã‚ŒãŸã¨ããƒãƒƒã‚¯ãƒãƒƒã‚¯ã™ã‚‹
 void SnakeEnemy::KnockBack()
 {
-	//// Œã‘Ş
-	////ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»
+	//// å¾Œé€€
+	////ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‹ã£ã¦ã„ã‚‹ä¼¸ã³ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–
 	//Vector3 toPlayerDir = m_toPlayer;
 	//toPlayerDir.Normalize();
 	//toPlayerDir.y = 0;
 	//toPlayerDir * -1.0f;
 
-	////³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
+	////æ­£è¦åŒ–ã§æ±‚ã‚ãŸãƒ™ã‚¯ãƒˆãƒ«ã‚’åˆ©ç”¨ã—ã¦ã€ã‚¨ãƒãƒŸãƒ¼ã®åº§æ¨™ã‚’å‹•ã‹ã™
 	//m_moveSpeed = toPlayerDir * -500.0f;
 
-	////ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“
+	////ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	//m_animationState = enHit;
 }
 
 
-//ƒXƒe[ƒgŠÇ—
+//ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†
 void SnakeEnemy::ManageState()
 {
-	// €–S‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚Í–³‚­‚È‚é‚Ì‚Åˆ—‚µ‚È‚¢B
+	// æ­»äº¡ã—ãŸã‚‰ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¯ç„¡ããªã‚‹ã®ã§å‡¦ç†ã—ãªã„ã€‚
 	
 	if (m_characterController.IsOnGround() == true)
 	{
 		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
 		{
-			//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“
+			//æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 			m_animationState = enWalk;
 		}
 		else
 		{
-			//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“
+			//å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 			m_animationState = enIdle;
 		}
 		if (m_toPlayer.Length() <= 200.0f)
 		{
-			//UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“
+			//æ”»æ’ƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 			m_animationState = enAttack;
 		}
-		//ƒvƒŒƒCƒ„[‚ª“G‚É‚ ‚½‚é‚Æ-
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ•µã«ã‚ãŸã‚‹ã¨-
 		if (collisionObject->IsHit(m_player->m_playerCharaCon))
 		{
-			//ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“
+			//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 			m_animationState = enHit;
 		}
 	}
 }
 
-//ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 void SnakeEnemy::EnemyAnimation()
 {
-	//switch•¶
+	//switchæ–‡
 	switch (m_animationState)
 	{
-	case enIdle:	//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	case enIdle:	//å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 		m_modelRender.PlayAnimation(enAnimationClip_Idle);
 		break;
 
-	case enWalk:	//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	case enWalk:	//æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 		m_modelRender.PlayAnimation(enAnimationClip_Walk);
 		break;
 
-	case enAttack:	//UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	case enAttack:	//æ”»æ’ƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 		m_modelRender.PlayAnimation(enAnimationClip_Attack);
 		break;
 
-	case enHit:   //ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	case enHit:   //ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 		m_modelRender.PlayAnimation(enAnimationClip_Hit);
 		break;
 
-	case enDeath:	//‚Á”ò‚ÔƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	case enDeath:	//å¹ã£é£›ã¶ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 		m_modelRender.PlayAnimation(enAnimationClip_Death);
 		break;
 
@@ -323,6 +323,6 @@ void SnakeEnemy::EnemyAnimation()
 
 void SnakeEnemy::Render(RenderContext& rc)
 {
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	m_modelRender.Draw(rc);
 }

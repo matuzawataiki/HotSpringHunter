@@ -9,18 +9,18 @@ public:
 
 	bool Start()override;
 	void Update()override;
-	void GuardDirection();						//ƒK[ƒh‚Ì•ûŒü‚ğ‰Á–¡B
+	void GuardDirection();						//ã‚¬ãƒ¼ãƒ‰ã®æ–¹å‘ã‚’åŠ å‘³ã€‚
 	void Render(RenderContext& rc)override;
 
-	bool GetGuardFlag(){						//ƒK[ƒhƒtƒ‰ƒbƒO‚ÌƒQƒbƒ^[B
+	bool GetGuardFlag(){						//ã‚¬ãƒ¼ãƒ‰ãƒ•ãƒ©ãƒƒã‚°ã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 		return m_guardFlag;
 	}
 private:
 	Player* m_player = nullptr;
 	SnakeEnemy* m_snakeEnemy = nullptr;
 
-	Vector3 m_directionGap = Vector3::Zero;				//Œü‚«‚Ì·•ªB
+	Vector3 m_directionGap = Vector3::Zero;				//å‘ãã®å·®åˆ†ã€‚
 
-	bool m_guardFlag = false;				//ƒK[ƒh‚Ìƒtƒ‰ƒbƒOB
+	bool m_guardFlag = false;				//ã‚¬ãƒ¼ãƒ‰ã®ãƒ•ãƒ©ãƒƒã‚°ã€‚
 };
 

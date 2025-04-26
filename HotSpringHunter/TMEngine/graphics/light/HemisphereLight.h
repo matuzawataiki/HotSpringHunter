@@ -9,7 +9,7 @@ namespace nsTMEngine
 		~HemisphereLight();
 
 		/// <summary>
-		/// ”¼‹…ƒ‰ƒCƒg‚Ì‰Šúİ’è
+		/// åŠçƒãƒ©ã‚¤ãƒˆã®åˆæœŸè¨­å®š
 		/// </summary>
 		void Init(const Vector3& groundColor, const Vector3& skyColor, const Vector3& groundNormal)
 		{
@@ -19,7 +19,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ’n–Ê‚ÌF‚Ìİ’è
+		/// åœ°é¢ã®è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetGroundColor(const Vector3& color) {
@@ -30,7 +30,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ‹ó‚ÌF‚Ìİ’è
+		/// ç©ºã®è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetSkyColor(const Vector3& color) {
@@ -41,7 +41,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ’n–Ê‚Ì–@ü‚Ìİ’è
+		/// åœ°é¢ã®æ³•ç·šã®è¨­å®š
 		/// </summary>
 		/// <param name="normal"></param>
 		void SetGroundNormal(const Vector3& normal)
@@ -52,6 +52,6 @@ namespace nsTMEngine
 			SetGroundNormal({ x,y,z });
 		}
 	private:
-		SHemisphereLight* m_hemisphereLight = nullptr;	//”¼‹…ƒ‰ƒCƒg
+		SHemisphereLight* m_hemisphereLight = nullptr;	//åŠçƒãƒ©ã‚¤ãƒˆ
 	};
 }

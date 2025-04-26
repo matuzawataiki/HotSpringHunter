@@ -30,9 +30,9 @@ Player::~Player()
 
 bool Player::Start()
 {
-	//playerÀ•W‰Šú‰»
+	//playeråº§æ¨™åˆæœŸåŒ–
 	m_playerPosition = PLAYER_NEW_POSITION;
-	//playerƒLƒƒƒ‰ƒRƒ“‰Šú‰»
+	//playerã‚­ãƒ£ãƒ©ã‚³ãƒ³åˆæœŸåŒ–
 	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPosition);
 
 	LoadModel();
@@ -42,11 +42,11 @@ bool Player::Start()
 }
 
 /// <summary>
-/// Assetsƒ[ƒhB
+/// Assetsãƒ­ãƒ¼ãƒ‰ã€‚
 /// </summary>
 void Player::LoadModel()
 {
-	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒ[ƒhB
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ­ãƒ¼ãƒ‰ã€‚
 	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
@@ -70,12 +70,12 @@ void Player::LoadModel()
 	m_animationClips[enAnimationClip_Death].Load("Assets/animData/player/death.tka");
 	m_animationClips[enAnimationClip_Death].SetLoopFlag(false);
 
-	//ƒ‚ƒfƒ‹ƒ[ƒhB
+	//ãƒ¢ãƒ‡ãƒ«ãƒ­ãƒ¼ãƒ‰ã€‚
 	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
 }
 
 /// <summary>
-/// qƒNƒ‰ƒXNewGOB
+/// å­ã‚¯ãƒ©ã‚¹NewGOã€‚
 /// </summary>
 void Player::GenerateMinions()
 {
@@ -99,61 +99,61 @@ void Player::Update()
 }
 
 /// <summary>
-/// player‚ÌˆÚ“®B
+/// playerã®ç§»å‹•ã€‚
 /// </summary>
 void Player::Move()
 {
-	//’n–Ê‚É‚Â‚¢‚Ä‚¢‚½‚çB
+	//åœ°é¢ã«ã¤ã„ã¦ã„ãŸã‚‰ã€‚
 	if (m_playerCharaCon.IsOnGround() == true) {
 
-		//ˆÚ“®‘¬“x‚ğ0.0f‚É‚·‚éB
+		//ç§»å‹•é€Ÿåº¦ã‚’0.0fã«ã™ã‚‹ã€‚
 		m_playerSpeed.x = 0.0f;
 		m_playerSpeed.z = 0.0f;
 
-		//¶ƒXƒeƒBƒbƒN‚Ì“ü—Í—Ê‚ğæ“¾B
+		//å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›é‡ã‚’å–å¾—ã€‚
 		Vector3 stickL;
 		stickL.x = g_pad[0]->GetLStickXF();
 		stickL.y = g_pad[0]->GetLStickYF();
 
-		//ƒJƒƒ‰‚Ì‘O•ûŒü‚Æ‰E•ûŒü‚ÌƒxƒNƒgƒ‹‚ğæ“¾B
+		//ã‚«ãƒ¡ãƒ©ã®å‰æ–¹å‘ã¨å³æ–¹å‘ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—ã€‚
 		Vector3 forwardDir = g_camera3D->GetForward();
 		Vector3 rightDir = g_camera3D->GetRight();
 
-		//y•ûŒü‚ğ0‚É‚·‚éB
+		//yæ–¹å‘ã‚’0ã«ã™ã‚‹ã€‚
 		forwardDir.y = 0.0f;
 		rightDir.y = 0.0f;
 
-		//‘O•ûŒüƒxƒNƒgƒ‹‚ğ³‹K‰»B
-		//ƒJƒƒ‰‚Ìã‰º•ûŒü‚ÅƒLƒƒƒ‰‚ÌˆÚ“®‘¬“x‚ª•Ï‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚éB
+		//å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã€‚
+		//ã‚«ãƒ¡ãƒ©ã®ä¸Šä¸‹æ–¹å‘ã§ã‚­ãƒ£ãƒ©ã®ç§»å‹•é€Ÿåº¦ãŒå¤‰ã‚ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹ã€‚
 		forwardDir.Normalize();		
 
-		//ˆÚ“®•ûŒü‚ğŒvZB
+		//ç§»å‹•æ–¹å‘ã‚’è¨ˆç®—ã€‚
 		forwardDir *= stickL.y;
 		rightDir *= stickL.x;
 
-		//player‚ÌŒü‚«‚ğæ“¾B
+		//playerã®å‘ãã‚’å–å¾—ã€‚
 		GetDirection(forwardDir, rightDir);
 
-		//ˆÚ“®‘¬“x‚ğŒvZB
-		//ˆÚ“®‘¬“x = •às‘¬“x * ƒ_ƒbƒVƒ…ó‘Ô * ƒK[ƒhó‘ÔB
+		//ç§»å‹•é€Ÿåº¦ã‚’è¨ˆç®—ã€‚
+		//ç§»å‹•é€Ÿåº¦ = æ­©è¡Œé€Ÿåº¦ * ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ * ã‚¬ãƒ¼ãƒ‰çŠ¶æ…‹ã€‚
 		MoveAdjust();
 		forwardDir *= MOVE_AMOUNT * m_runState * m_guardState;
 		rightDir *= MOVE_AMOUNT * m_runState * m_guardState;
 
-		//ˆÚ“®‘¬“x‚É‰ÁZB
+		//ç§»å‹•é€Ÿåº¦ã«åŠ ç®—ã€‚
 		m_playerSpeed += forwardDir + rightDir;		
 
-		//d—Í‚ğ‚È‚­‚·B
+		//é‡åŠ›ã‚’ãªãã™ã€‚
 		m_playerSpeed.y = 0.0f;
 
-		//ƒWƒƒƒ“ƒvB
+		//ã‚¸ãƒ£ãƒ³ãƒ—ã€‚
 		if (g_pad[0]->IsTrigger(enButtonA)) {
 			m_playerSpeed.y = JUMP_AMOUNT;
 		}
 	}
-	//’n–Ê‚É‚Â‚¢‚Ä‚¢‚È‚©‚Á‚½‚çB
+	//åœ°é¢ã«ã¤ã„ã¦ã„ãªã‹ã£ãŸã‚‰ã€‚
 	else {
-		//d—Í‚ğ”­¶‚³‚¹‚éB
+		//é‡åŠ›ã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚
 		m_playerSpeed.y -= GRAVITY_AMOUNT;
 	}
 	
@@ -163,7 +163,7 @@ void Player::Move()
 
 void Player::MoveAdjust()
 {
-	//ƒK[ƒh’†B
+	//ã‚¬ãƒ¼ãƒ‰ä¸­ã€‚
 	if (g_pad[0]->IsPress(enButtonX)) {
 		m_guardState = 0.0f;
 	}
@@ -171,7 +171,7 @@ void Player::MoveAdjust()
 		m_guardState = 1.0f;
 	}
 
-	//ƒ_ƒbƒVƒ…B
+	//ãƒ€ãƒƒã‚·ãƒ¥ã€‚
 	if (g_pad[0]->IsPress(enButtonB)) {
 		m_runState = DASH_AMOUNT;
 	}
@@ -181,40 +181,40 @@ void Player::MoveAdjust()
 }
 
 /// <summary>
-/// player‚ÌŒü‚«‚ğXVB
+/// playerã®å‘ãã‚’æ›´æ–°ã€‚
 /// </summary>
-/// <param name="forward"></param>ƒXƒeƒBƒbƒN‚Ìc•ûŒüB
-/// <param name="right"></param>ƒXƒeƒBƒbƒN‚Ì‰¡•ûŒüB
+/// <param name="forward"></param>ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®ç¸¦æ–¹å‘ã€‚
+/// <param name="right"></param>ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ¨ªæ–¹å‘ã€‚
 void Player::GetDirection(Vector3 forward,Vector3 right)
 {
-	//ƒXƒeƒBƒbƒN‚ª“|‚³‚ê‚Ä‚¢‚é‚È‚çB
+	//ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒå€’ã•ã‚Œã¦ã„ã‚‹ãªã‚‰ã€‚
 	if (fabsf(forward.x) >= 0.01f || fabsf(forward.z) >= 0.01f ||
 		fabsf(right.x) >= 0.01f || fabsf(right.z) >= 0.01f) {
-		//player‚ÌŒü‚«‚ğXV‚·‚éB
+		//playerã®å‘ãã‚’æ›´æ–°ã™ã‚‹ã€‚
 		m_playerDirection = forward + right;
 		m_playerDirection.Normalize();
 	}
 }
 
 /// <summary>
-/// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgŠÇ—B
+/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†ã€‚
 /// </summary>
 void Player::StateManage()
 {
-	//ƒWƒƒƒ“ƒv’†B
+	//ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã€‚
 	if (m_playerCharaCon.IsOnGround() == false) {
 		m_animationState = EnPlayerAnimVar::enJump;
 	}
 	else {
-		//•às’†B
+		//æ­©è¡Œä¸­ã€‚
 		if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
 			m_animationState = EnPlayerAnimVar::enWalk;
-			//Xƒ{ƒ^ƒ““ü—Í’†‚È‚çB
+			//Xãƒœã‚¿ãƒ³å…¥åŠ›ä¸­ãªã‚‰ã€‚
 			if (g_pad[0]->IsPress(enButtonB)) {
 				m_animationState = EnPlayerAnimVar::enRun;
 			}
 		}
-		//‘Ò‹@’†B
+		//å¾…æ©Ÿä¸­ã€‚
 		/*else {
 			m_animationState = EnPlayerAnimVar::enIdle;
 		}*/
@@ -228,7 +228,7 @@ void Player::Rotation()
 }
 
 /// <summary>
-/// ƒAƒjƒ[ƒVƒ‡ƒ“ŠÇ—B
+/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç®¡ç†ã€‚
 /// </summary>
 void Player::AnimationManage()
 {

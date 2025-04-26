@@ -5,7 +5,7 @@ namespace nsTMEngine
 {
 	PointLight::PointLight()
 	{
-		m_pointLig = g_sceneLight->NewPointLight();	//ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ğæ“¾
+		m_pointLig = g_sceneLight->NewPointLight();	//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã‚’å–å¾—
 	}
 	PointLight::~PointLight()
 	{

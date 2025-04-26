@@ -22,9 +22,9 @@ bool GameCamera::Start()
 	m_backGround = FindGO<BackGround>("backGround");
 
 	m_cameraState = EnCameraVar::lookDown;
-	//‹ß•½–Ê
+	//è¿‘å¹³é¢
 	g_camera3D->SetNear(CAMERA_NEAR);
-	//‰“•½–Ê
+	//é å¹³é¢
 	g_camera3D->SetFar(CAMERA_FAR);
 
 	return true;
@@ -37,11 +37,11 @@ void GameCamera::Update()
 }
 
 /// <summary>
-/// ƒJƒƒ‰Ø‚è‘Ö‚¦B
+/// ã‚«ãƒ¡ãƒ©åˆ‡ã‚Šæ›¿ãˆã€‚
 /// </summary>
 void GameCamera::CameraSwitch()
 {
-	////Bƒ{ƒ^ƒ“‚ÅƒJƒƒ‰Ø‚è‘Ö‚¦(‰¼jB
+	////Bãƒœã‚¿ãƒ³ã§ã‚«ãƒ¡ãƒ©åˆ‡ã‚Šæ›¿ãˆ(ä»®ï¼‰ã€‚
 	//if (g_pad[0]->IsTrigger(enButtonB)) {
 	//	if (m_cameraState == EnCameraVar::follow) {
 	//		m_cameraState = EnCameraVar::lookDown;
@@ -51,54 +51,54 @@ void GameCamera::CameraSwitch()
 	//	}
 	//}
 
-	//ƒJƒƒ‰‚ÌstateŠÇ—B
-	//˜ëáÕƒJƒƒ‰B
+	//ã‚«ãƒ¡ãƒ©ã®stateç®¡ç†ã€‚
+	//ä¿¯ç°ã‚«ãƒ¡ãƒ©ã€‚
 	if (m_cameraState == EnCameraVar::lookDown) {
 		m_followPos = m_newFollowPos;
 		LookDownCamera();
 	}
-	//’Ç]ƒJƒƒ‰B
+	//è¿½å¾“ã‚«ãƒ¡ãƒ©ã€‚
 	else if (m_cameraState == EnCameraVar::follow) {
 		FollowCamera();
 	}
 }
 
 /// <summary>
-/// ’Ç]ƒJƒƒ‰B
+/// è¿½å¾“ã‚«ãƒ¡ãƒ©ã€‚
 /// </summary>
 void GameCamera::FollowCamera()
 {
-	//’‹“_‚ğƒvƒŒƒCƒ„[‚ÌÀ•W‚Éİ’èB
+	//æ³¨è¦–ç‚¹ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã«è¨­å®šã€‚
 	m_target = m_player->GetPlayerPos();
 
-	//ƒJƒƒ‰À•W‚ğİ’èB
+	//ã‚«ãƒ¡ãƒ©åº§æ¨™ã‚’è¨­å®šã€‚
 	m_toCameraPos.Set(m_followPos);
 }
 
 /// <summary>
-/// Œ©‰º‚ë‚µƒJƒƒ‰B
+/// è¦‹ä¸‹ã‚ã—ã‚«ãƒ¡ãƒ©ã€‚
 /// </summary>
 void GameCamera::LookDownCamera()
 {
-	//’‹“_‚ğŠY“–í“¬ƒGƒŠƒA‚Ì’†S‚Éİ’è(ˆê’UƒXƒe[ƒW‚Ì’†SjB
+	//æ³¨è¦–ç‚¹ã‚’è©²å½“æˆ¦é—˜ã‚¨ãƒªã‚¢ã®ä¸­å¿ƒã«è¨­å®š(ä¸€æ—¦ã‚¹ãƒ†ãƒ¼ã‚¸ã®ä¸­å¿ƒï¼‰ã€‚
 	m_target = m_player->GetPlayerPos();
 
-	//ƒJƒƒ‰À•W‚ğİ’èB
+	//ã‚«ãƒ¡ãƒ©åº§æ¨™ã‚’è¨­å®šã€‚
 	m_toCameraPos.Set(m_lookDownPos);
 }
 
 /// <summary>
-/// ƒJƒƒ‰XVB
+/// ã‚«ãƒ¡ãƒ©æ›´æ–°ã€‚
 /// </summary>
 void GameCamera::CameraUpdate()
 {
-	//‹“_‚ğŒvZB
+	//è¦–ç‚¹ã‚’è¨ˆç®—ã€‚
 	Vector3 pos = m_target + m_toCameraPos;
 
-	//ƒJƒƒ‰‚É’‹“_‚Æ‹“_‚ğİ’èB
+	//ã‚«ãƒ¡ãƒ©ã«æ³¨è¦–ç‚¹ã¨è¦–ç‚¹ã‚’è¨­å®šã€‚
 	g_camera3D->SetTarget(m_target);
 	g_camera3D->SetPosition(pos);
 
-	//ƒJƒƒ‰XVB
+	//ã‚«ãƒ¡ãƒ©æ›´æ–°ã€‚
 	g_camera3D->Update();
 }

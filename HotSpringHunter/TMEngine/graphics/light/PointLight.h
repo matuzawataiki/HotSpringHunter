@@ -9,12 +9,12 @@ namespace nsTMEngine
 		~PointLight();
 
 		/// <summary>
-		/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚Ì‰Šú‰»
+		/// ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®åˆæœŸåŒ–
 		/// </summary>
 		void Init(const Vector3& pos, const Vector3& color, const float& range);
 
 		/// <summary>
-		/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ÌˆÊ’u‚ğİ’è
+		/// ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®ä½ç½®ã‚’è¨­å®š
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -27,7 +27,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// F‚Ìİ’è
+		/// è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetColor(const Vector3& color)
@@ -40,7 +40,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ‰e‹¿”ÍˆÍ‚Ìİ’è
+		/// å½±éŸ¿ç¯„å›²ã®è¨­å®š
 		/// </summary>
 		/// <param name="range"></param>
 		void SetRange(const float& range)
@@ -50,6 +50,6 @@ namespace nsTMEngine
 
 	private:
 
-		SPointLight* m_pointLig = nullptr;	//ƒ|ƒCƒ“ƒgƒ‰ƒCƒg
+		SPointLight* m_pointLig = nullptr;	//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆ
 	};
 }

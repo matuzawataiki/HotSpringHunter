@@ -1,12 +1,12 @@
 /*!
- * @brief	ƒ†[ƒeƒBƒŠƒeƒBŠÖ”B
+ * @brief	ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°ã€‚
  */
 #pragma once
 
 namespace nsK2EngineLow{
 	
 	/*!
-	 * @brief	•¶š—ñ‚©‚ç32bit‚ÌƒnƒbƒVƒ…’l‚ğì¬B
+	 * @brief	æ–‡å­—åˆ—ã‹ã‚‰32bitã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’ä½œæˆã€‚
 	 */
 	static int MakeHash( const char* string )
 	{
@@ -22,7 +22,7 @@ namespace nsK2EngineLow{
 	}
 
 	/*!
-	* @brief	•¶š—ñ‚©‚ç32bit‚ÌƒnƒbƒVƒ…’l‚ğì¬B
+	* @brief	æ–‡å­—åˆ—ã‹ã‚‰32bitã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’ä½œæˆã€‚
 	*/
 	static int MakeHash(const wchar_t* string)
 	{

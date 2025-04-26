@@ -5,13 +5,13 @@ namespace nsTMEngine {
 	{
 	public:
 		/// <summary>
-		/// シャドウマップへの描画パスから呼ばれる処理
+		/// 繧ｷ繝｣繝峨え繝槭ャ繝励∈縺ｮ謠冗判繝代せ縺九ｉ蜻ｼ縺ｰ繧後ｋ蜃ｦ逅�
 		/// </summary>
 		/// <param name="rc"></param>
 		virtual void OnRenderShadowMap(RenderContext& rc){}
 		
 		/// <summary>
-		/// 2D描画パスから呼ばれる処理
+		/// 2D謠冗判繝代せ縺九ｉ蜻ｼ縺ｰ繧後ｋ蜃ｦ逅�
 		/// </summary>
 		/// <param name="rc"></param>
 		virtual void OnRender2D(RenderContext& rc){}

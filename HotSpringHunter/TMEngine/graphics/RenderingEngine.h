@@ -11,52 +11,52 @@ namespace nsTMEngine
 		RenderingEngine();
 		~RenderingEngine();
 		/// <summary>
-		/// ‰Šú‰»
+		/// åˆæœŸåŒ–
 		/// </summary>
 		/// <param name="mainRenderTarget"></param>
 		void Init();
 
 		/// <summary>
-		/// XVˆ—
+		/// æ›´æ–°å‡¦ç†
 		/// </summary>
 		void Update();
 
 		/// <summary>
-		/// ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚Ì‰Šú‰»
+		/// ãƒ¡ã‚¤ãƒ³ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®åˆæœŸåŒ–
 		/// </summary>
 		void InitMainRenderTarget();
 
 		/// <summary>
-		/// 2D•`‰æ—p‚ÌƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ğ‰Šú‰»
+		/// 2Dæç”»ç”¨ã®ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’åˆæœŸåŒ–
 		/// </summary>
 		void Init2DRenderTarget();
 
 
 		/// <summary>
-		/// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ö‚Ì•`‰æˆ—‚ğ‰Šú‰»
+		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã¸ã®æç”»å‡¦ç†ã‚’åˆæœŸåŒ–
 		/// </summary>
 		void InitShadowMapRender();
 
 		/// <summary>
-		/// ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚ÌƒJƒ‰[ƒoƒbƒtƒ@‚Ì“à—e‚ğ
-		/// ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÉƒRƒs[‚·‚é‚½‚ß‚ÌƒXƒvƒ‰ƒCƒg‚ğ‰Šú‰»‚·‚é
+		/// ãƒ¡ã‚¤ãƒ³ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚«ãƒ©ãƒ¼ãƒãƒƒãƒ•ã‚¡ã®å†…å®¹ã‚’
+		/// ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã«ã‚³ãƒ”ãƒ¼ã™ã‚‹ãŸã‚ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
 		/// </summary>
 		void InitCopyMainRenderTargetToFrameBufferSprite();
 
 		/// <summary>
-		/// ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚Ì“à—e‚ğƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÉƒRƒs[‚·‚é
+		/// ãƒ¡ã‚¤ãƒ³ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å†…å®¹ã‚’ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 		/// </summary>
 		/// <param name="rc"></param>
 		void CopyMainRenderTargetToFrameBufferSprite(RenderContext& rc);
 
 		/// <summary>
-		/// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒpƒCƒvƒ‰ƒCƒ“‚ÌÀs
+		/// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã®å®Ÿè¡Œ
 		/// </summary>
 		/// <param name="rc"></param>
 		void Execute(RenderContext& rc);
 
 		/// <summary>
-		/// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚É“o˜^
+		/// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã«ç™»éŒ²
 		/// </summary>
 		/// <param name="model"></param>
 		void RegisterModel(Model* model)
@@ -70,13 +70,13 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ƒVƒƒƒhƒEƒ}ƒbƒv‚É•`‰æ
+		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã«æç”»
 		/// </summary>
 		/// <param name="rc"></param>
 		void RenderToShadowMap(RenderContext& rc);
 
 		/// <summary>
-		/// 2DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+		/// 2Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 		/// </summary>
 		/// <param name="rc"></param>
 		void Render2D(RenderContext& rc);
@@ -85,8 +85,8 @@ namespace nsTMEngine
 		Sprite			m_copyMainRtToFrameBufferSprite;
 		SceneLight		m_sceneLight;
 		RenderTarget	m_mainRenderTarget;
-		RenderTarget	m_2DRenderTarget;						// 2D•`‰æ—p‚ÌƒŒƒ“ƒ_\ƒ^[ƒQƒbƒgB
-		Sprite			m_2DSprite;								// 2D‡¬—p‚ÌƒXƒvƒ‰ƒCƒgB
+		RenderTarget	m_2DRenderTarget;						// 2Dæç”»ç”¨ã®ãƒ¬ãƒ³ãƒ€â€•ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã€‚
+		Sprite			m_2DSprite;								// 2Dåˆæˆç”¨ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã€‚
 		Sprite			m_mainSprite;
 
 
@@ -94,7 +94,7 @@ namespace nsTMEngine
 		ShadowMapRender m_shadowMapRender;
 
 		std::vector<Model*>		m_registerModels;
-		std::vector<IRenderer*> m_renderObjects;				// •`‰æƒIƒuƒWƒFƒNƒg‚ÌƒŠƒXƒgB
+		std::vector<IRenderer*> m_renderObjects;				// æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªã‚¹ãƒˆã€‚
 
 
 	};

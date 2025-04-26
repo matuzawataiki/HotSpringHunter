@@ -15,15 +15,15 @@ namespace nsTMEngine {
 		int numAnimationClips,
 		EnModelUpAxis enModelUpAxiz) 
 	{
-		//ƒXƒPƒ‹ƒgƒ“‚Ì‰Šú‰»
+		//ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã®åˆæœŸåŒ–
 		InitSkeleton(filePath);
-		//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»
+		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–
 		InitAnimation(animationeClips, numAnimationClips, enModelUpAxiz);
 		
-		ModelInitData modelInitData;			//ƒ‚ƒfƒ‹‚Ìƒf[ƒ^
-		//tkm‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ÌŽw’è
+		ModelInitData modelInitData;			//ãƒ¢ãƒ‡ãƒ«ã®ãƒ‡ãƒ¼ã‚¿
+		//tkmã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æŒ‡å®š
 		modelInitData.m_tkmFilePath = filePath;
-		//ƒVƒF[ƒ_[‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ÌŽw’è
+		//ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æŒ‡å®š
 		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		
 		SetupShaderEntryPointFunc(modelInitData);
@@ -49,7 +49,7 @@ namespace nsTMEngine {
 		SetupShaderEntryPointFunc(modelInitData);
 
 		if (m_animationClips != nullptr) {
-			//ƒXƒPƒ‹ƒgƒ“‚ðŽw’è‚·‚éB
+			//ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã‚’æŒ‡å®šã™ã‚‹ã€‚
 			modelInitData.m_skeleton = &m_skeleton;
 		}
 
@@ -74,11 +74,11 @@ namespace nsTMEngine {
 	void ModelRender::InitSkeleton(const char* filePath)
 	{
 		std::string skeletonFilePath = filePath;
-		//tkm‚Ì’†g‚ðƒRƒs[
+		//tkmã®ä¸­èº«ã‚’ã‚³ãƒ”ãƒ¼
 		int pos = (int)skeletonFilePath.find(".tkm");
-		//ƒXƒPƒ‹ƒgƒ“‚Ìî•ñ‚ð‘‚«ž‚Ý
+		//ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã®æƒ…å ±ã‚’æ›¸ãè¾¼ã¿
 		skeletonFilePath.replace(pos, 4, ".tks");
-		//charŒ^‚É•ÏŠ·‚µ‚ÄInit
+		//charåž‹ã«å¤‰æ›ã—ã¦Init
 		m_skeleton.Init(skeletonFilePath.c_str());
 	}
 
@@ -102,7 +102,7 @@ namespace nsTMEngine {
 
 
 		if (m_animationClips != nullptr) {
-			// ƒAƒjƒ[ƒVƒ‡ƒ“‚ ‚èB
+			// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚ã‚Šã€‚
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 		}
 	}
@@ -121,7 +121,7 @@ namespace nsTMEngine {
 			m_skeleton.Update(m_model.GetWorldMatrix());
 		}
 
-		//ƒAƒjƒ[ƒVƒ‡ƒ“‚ði‚ß‚éB
+		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é€²ã‚ã‚‹ã€‚
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 
 	}

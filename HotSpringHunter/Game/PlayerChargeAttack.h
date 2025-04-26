@@ -8,13 +8,13 @@ public:
 	~PlayerChargeAttack();
 	bool Start()override;
 	void Update()override;
-	void StickCharge();				//ƒ`ƒƒ[ƒW’~ÏB
-	void ChargeAttack();			//UŒ‚B
-	void MakeCollision();			//ƒRƒŠƒWƒ‡ƒ“¶¬B
-	void DisplayCharge();			//ƒ`ƒƒ[ƒW—Ê•\¦i‰¼jB
+	void StickCharge();				//ãƒãƒ£ãƒ¼ã‚¸è“„ç©ã€‚
+	void ChargeAttack();			//æ”»æ’ƒã€‚
+	void MakeCollision();			//ã‚³ãƒªã‚¸ãƒ§ãƒ³ç”Ÿæˆã€‚
+	void DisplayCharge();			//ãƒãƒ£ãƒ¼ã‚¸é‡è¡¨ç¤ºï¼ˆä»®ï¼‰ã€‚
 	void Render(RenderContext& rc)override;
 
-	//ƒ`ƒƒ[ƒW‚ÌƒQƒbƒ^[B
+	//ãƒãƒ£ãƒ¼ã‚¸ã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	float GetCharge(){
 		return m_charge;
 	}
@@ -25,11 +25,11 @@ private:
 
 	Player* m_player = nullptr;
 
-	Vector3 m_RStickOld = Vector3::Zero;				//RƒXƒeƒBƒbƒN‚Ì“ü—Í—Êi•ÏX‘OjB
-	float m_charge = 0.0f;								//ƒ`ƒƒ[ƒW—ÊB
+	Vector3 m_RStickOld = Vector3::Zero;				//Rã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›é‡ï¼ˆå¤‰æ›´å‰ï¼‰ã€‚
+	float m_charge = 0.0f;								//ãƒãƒ£ãƒ¼ã‚¸é‡ã€‚
 	float m_collisionSize = 0.0f;
 
-	//ƒ`ƒƒ[ƒW—Ê•\¦i‰¼j
+	//ãƒãƒ£ãƒ¼ã‚¸é‡è¡¨ç¤ºï¼ˆä»®ï¼‰
 	FontRender m_chargeRender;
 	wchar_t m_chargeText[100];
 };

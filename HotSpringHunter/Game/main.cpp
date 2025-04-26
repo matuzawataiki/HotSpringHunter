@@ -5,21 +5,21 @@
 #include"Title.h"
 
 
-// K2EngineLow‚ÌƒOƒ[ƒoƒ‹ƒAƒNƒZƒXƒ|ƒCƒ“ƒgB
+// K2EngineLowã®ã‚°ãƒ­ãƒ¼ãƒãƒ«ã‚¢ã‚¯ã‚»ã‚¹ãƒã‚¤ãƒ³ãƒˆã€‚
 K2EngineLow* g_k2EngineLow = nullptr;
 
 /// <summary>
-/// ƒƒCƒ“ŠÖ”
+/// ãƒ¡ã‚¤ãƒ³é–¢æ•°
 /// </summary>
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	// ƒQ[ƒ€‚Ì‰Šú‰»B
+	// ã‚²ãƒ¼ãƒ ã®åˆæœŸåŒ–ã€‚
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 
-	//TitleƒNƒ‰ƒX‚ÌƒIƒuƒWƒFƒNƒg‚ğì¬B
+	//Titleã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã€‚
 	NewGO<Title>(0, "title");
 
-	// ‚±‚±‚©‚çƒQ[ƒ€ƒ‹[ƒvB
+	// ã“ã“ã‹ã‚‰ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—ã€‚
 	while (DispatchWindowMessage())
 	{
 		TMEngine::GetInstance()->Execute();

@@ -9,7 +9,7 @@ public:
 	void Update()override;
 	void Render(RenderContext& rc)override;
 
-	//backGroundÀ•W‚ÌƒQƒbƒ^[B
+	//backGroundåº§æ¨™ã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	Vector3 GetStagePosition() {
 		return m_position;
 	}

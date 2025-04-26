@@ -31,23 +31,23 @@ void PlayerHealth::Update()
 
 void PlayerHealth::Hit(float reduce)
 {
-	//UŒ‚‚ğó‚¯‚½B
+	//æ”»æ’ƒã‚’å—ã‘ãŸæ™‚ã€‚
 	if (m_playerGuard->GetGuardFlag() == false) {
-		//HP‚ğŒ¸‚ç‚·B
+		//HPã‚’æ¸›ã‚‰ã™ã€‚
 		m_playerHP -= reduce;
 	}
 }
 
 /// <summary>
-/// UŒ‚‚ğó‚¯‚éB
+/// æ”»æ’ƒã‚’å—ã‘ã‚‹ã€‚
 /// </summary>
 void PlayerHealth::TakeDamage()
 {
-	//‚Ü‚¾¶‚«‚Ä‚¢‚é‚Æ‚«B
+	//ã¾ã ç”Ÿãã¦ã„ã‚‹ã¨ãã€‚
 	if (m_playerHP >= 1.0f) {
 		m_player->m_animationState = m_player->enHit;
 	}
-	//HP‚ª0‚É‚È‚Á‚½‚Æ‚«B
+	//HPãŒ0ã«ãªã£ãŸã¨ãã€‚
 	else {
 		m_playerHP = 0.0f;
 		m_GameOver = NewGO<GameOver>(0, "gameOver");

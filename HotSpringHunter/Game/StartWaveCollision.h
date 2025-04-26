@@ -25,7 +25,7 @@ private:
 	Quaternion m_boxRot;
 	int m_waveWall = 0;
 
-	//‹N“®’†‚©
+	//èµ·å‹•ä¸­ã‹
 	enum
 	{
 		waveWall01,

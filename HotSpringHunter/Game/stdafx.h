@@ -4,5 +4,5 @@
 #include "TMEnginePreCompile.h"
 using namespace nsTMEngine;
 using namespace nsK2Engine;
-// K2EngineLow‚ÌƒOƒ[ƒoƒ‹ƒAƒNƒZƒXƒ|ƒCƒ“ƒg
+// K2EngineLowã®ã‚°ãƒ­ãƒ¼ãƒãƒ«ã‚¢ã‚¯ã‚»ã‚¹ãƒã‚¤ãƒ³ãƒˆ
 extern K2EngineLow* g_k2EngineLow;

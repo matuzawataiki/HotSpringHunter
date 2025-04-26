@@ -12,7 +12,7 @@ public:
 	bool Start()override;
 	void Update()override;
 	void Hit(float reduce);
-	void TakeDamage();				//UŒ‚”í’eB
+	void TakeDamage();				//æ”»æ’ƒè¢«å¼¾ã€‚
 	void DisplayHP();
 	void Render(RenderContext& rc)override;
 private:
@@ -21,10 +21,10 @@ private:
 	GameOver* m_GameOver = nullptr;
 	Game* m_game = nullptr;
 
-	float m_playerHP = 100.0f;				//player‘Ì—ÍB
-	bool m_takeAttack = false;			//UŒ‚‚ğó‚¯‚½‚©‚Ìƒtƒ‰ƒbƒOB
+	float m_playerHP = 100.0f;				//playerä½“åŠ›ã€‚
+	bool m_takeAttack = false;			//æ”»æ’ƒã‚’å—ã‘ãŸã‹ã®ãƒ•ãƒ©ãƒƒã‚°ã€‚
 
-	//ƒ`ƒƒ[ƒW—Ê•\¦i‰¼j
+	//ãƒãƒ£ãƒ¼ã‚¸é‡è¡¨ç¤ºï¼ˆä»®ï¼‰
 	FontRender m_HPRender;
 	wchar_t m_HPText[100];
 };
