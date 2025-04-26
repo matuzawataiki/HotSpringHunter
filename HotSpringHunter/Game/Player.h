@@ -4,8 +4,8 @@ class Bucket;
 
 class SnakeEnemy;
 
-//Œ»İƒAƒNƒeƒBƒu‚ÈƒXƒe[ƒgB
-//‡”Ô‹C‚ğ‚Â‚¯‚æ‚¤‚ËB
+//ç¾åœ¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¹ãƒ†ãƒ¼ãƒˆã€‚
+//é †ç•ªæ°—ã‚’ã¤ã‘ã‚ˆã†ã­ã€‚
 enum EnActiveState{
 	enPlayerMove,
 	enPlayerJump,
@@ -18,7 +18,7 @@ enum EnActiveState{
 	enPlayerDeath,
 };
 
-//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgB
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã€‚
 enum EnPlayerAnimVar {
 	enIdle,
 	enWalk,
@@ -33,7 +33,7 @@ enum EnPlayerAnimVar {
 	enDeath,
 };
 
-//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒvB
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã€‚
 enum EnAnimationClip {
 	enAnimationClip_Idle,
 	enAnimationClip_Walk,
@@ -54,23 +54,23 @@ class Player :public IGameObject
 public:
 	Player();
 	~Player();
-	//ƒŠƒXƒgíœB
+	//ãƒªã‚¹ãƒˆå‰Šé™¤ã€‚
 	void DeleteList();
 	bool Start()override;
-	//ƒŠƒXƒg’Ç‰ÁB
+	//ãƒªã‚¹ãƒˆè¿½åŠ ã€‚
 	void AddList();
-	//ƒAƒZƒbƒgƒ[ƒhB
+	//ã‚¢ã‚»ãƒƒãƒˆãƒ­ãƒ¼ãƒ‰ã€‚
 	void LoadAssets();	
 	void Update()override;
-	//stateŠÇ—B
+	//stateç®¡ç†ã€‚
 	void StateManage();
 	void Render(RenderContext& rc)override;
 
-	//playerÀ•W‚ÌƒQƒbƒ^[B
+	//playeråº§æ¨™ã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	Vector3 GetPlayerPos() {
 		return m_playerPosition;
 	}
-	//player‚ÌŒü‚«‚ÌƒQƒbƒ^[B
+	//playerã®å‘ãã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	Vector3 GetPlayerDir() {
 		return m_playerDirection;
 	}
@@ -87,21 +87,21 @@ public:
 	CollisionObject* m_collision = nullptr;
 
 
-	CharacterController m_playerCharaCon;					//ƒLƒƒƒ‰ƒRƒ“B
-	ModelRender m_playerModel;								//•`‰æB
-	Vector3 m_playerPosition = Vector3::Zero;				//À•WB
-	Vector3 m_playerSpeed = Vector3::Zero;					//ˆÚ“®ƒXƒs[ƒhB
-	Vector3 m_playerDirection = Vector3::Zero;				//Œü‚«B
-	Quaternion m_playerRotation = Quaternion::Identity;		//‰ñ“]B
+	CharacterController m_playerCharaCon;					//ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã€‚
+	ModelRender m_playerModel;								//æç”»ã€‚
+	Vector3 m_playerPosition = Vector3::Zero;				//åº§æ¨™ã€‚
+	Vector3 m_playerSpeed = Vector3::Zero;					//ç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰ã€‚
+	Vector3 m_playerDirection = Vector3::Zero;				//å‘ãã€‚
+	Quaternion m_playerRotation = Quaternion::Identity;		//å›è»¢ã€‚
 
-	float m_dashState = 1.0f;								//‘–‚èó‘Ô‚ÌŠÇ—B
-	float m_guardState = 1.0f;								//ƒK[ƒhó‘Ô‚ÌŠÇ—B
-	float m_playerHP = 100.0f;								//player‘Ì—ÍB
-	bool m_guardFlag = false;				//ƒK[ƒh‚Ìƒtƒ‰ƒbƒOB
+	float m_dashState = 1.0f;								//èµ°ã‚ŠçŠ¶æ…‹ã®ç®¡ç†ã€‚
+	float m_guardState = 1.0f;								//ã‚¬ãƒ¼ãƒ‰çŠ¶æ…‹ã®ç®¡ç†ã€‚
+	float m_playerHP = 100.0f;								//playerä½“åŠ›ã€‚
+	bool m_guardFlag = false;				//ã‚¬ãƒ¼ãƒ‰ã®ãƒ•ãƒ©ãƒƒã‚°ã€‚
 
 
-	int m_animationState = 0;								//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìó‘ÔB
-	AnimationClip m_animationClips[enAnimationClip_Num];	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒvB	
+	int m_animationState = 0;								//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®çŠ¶æ…‹ã€‚
+	AnimationClip m_animationClips[enAnimationClip_Num];	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã€‚	
 };
 
 class IState
@@ -119,7 +119,7 @@ protected:
 };
 
 /// <summary>
-/// ˆÚ“®B
+/// ç§»å‹•ã€‚
 /// </summary>
 class PlayerMove :public IState
 {
@@ -133,13 +133,13 @@ public:
 	~PlayerMove();
 	void Enter()override;
 	void Update()override;
-	//ˆÚ“®
+	//ç§»å‹•
 	void Move();										
-	//Œü‚«‚ğŒvZB
+	//å‘ãã‚’è¨ˆç®—ã€‚
 	void GetDirection(Vector3 foward, Vector3 right);
-	//ƒXƒe[ƒg‚ÅˆÚ“®‘¬“x’²®B
+	//ã‚¹ãƒ†ãƒ¼ãƒˆã§ç§»å‹•é€Ÿåº¦èª¿æ•´ã€‚
 	void MoveAdjust();
-	//‰ñ“]B
+	//å›è»¢ã€‚
 	void Rotation();
 	void Exit()override;
 private:
@@ -147,7 +147,7 @@ private:
 
 
 /// <summary>
-/// ƒ_ƒbƒVƒ…B
+/// ãƒ€ãƒƒã‚·ãƒ¥ã€‚
 /// </summary>
 class PlayerDash :public IState
 {
@@ -161,14 +161,14 @@ public:
 	~PlayerDash();
 	void Enter()override;
 	void Update()override;
-	//ƒ_ƒbƒVƒ…B
+	//ãƒ€ãƒƒã‚·ãƒ¥ã€‚
 	void Dash();
 	void Exit()override;
 private:
 };
 
 /// <summary>
-/// ƒWƒƒƒ“ƒvB
+/// ã‚¸ãƒ£ãƒ³ãƒ—ã€‚
 /// </summary>
 class PlayerJump :public  IState
 {
@@ -182,14 +182,14 @@ public:
 	~PlayerJump();
 	void Enter()override;
 	void Update()override;
-	//ƒWƒƒƒ“ƒvB
+	//ã‚¸ãƒ£ãƒ³ãƒ—ã€‚
 	void Jump();
 	void Exit()override;
 private:
 };
 
 /// <summary>
-/// ãUŒ‚B
+/// å¼±æ”»æ’ƒã€‚
 /// </summary>
 class PlayerWeakAttack :public IState
 {
@@ -203,9 +203,9 @@ public:
 	~PlayerWeakAttack();
 	void Enter()override;
 	void Update()override;
-	//ãUŒ‚B
+	//å¼±æ”»æ’ƒã€‚
 	void WeakAttack();
-	//ƒRƒŠƒWƒ‡ƒ“¶¬B
+	//ã‚³ãƒªã‚¸ãƒ§ãƒ³ç”Ÿæˆã€‚
 	void MakeCollision();			
 	void Exit()override;
 private:
@@ -213,7 +213,7 @@ private:
 };
 
 /// <summary>
-/// —­‚ßUŒ‚B
+/// æºœã‚æ”»æ’ƒã€‚
 /// </summary>
 class PlayerChargeAttack :public IState
 {
@@ -227,33 +227,33 @@ public:
 	~PlayerChargeAttack();
 	void Enter()override;
 	void Update()override;
-	//ƒ`ƒƒ[ƒW’~ÏB
+	//ãƒãƒ£ãƒ¼ã‚¸è“„ç©ã€‚
 	void StickCharge();				
-	//UŒ‚B
+	//æ”»æ’ƒã€‚
 	void ChargeAttack();			
-	//ƒRƒŠƒWƒ‡ƒ“¶¬B
+	//ã‚³ãƒªã‚¸ãƒ§ãƒ³ç”Ÿæˆã€‚
 	void MakeCollision();			
-	//ƒ`ƒƒ[ƒW—Ê•\¦i‰¼jB
+	//ãƒãƒ£ãƒ¼ã‚¸é‡è¡¨ç¤ºï¼ˆä»®ï¼‰ã€‚
 	void DisplayCharge();			
 	void Exit()override;
 
-	//ƒ`ƒƒ[ƒW‚ÌƒQƒbƒ^[B
+	//ãƒãƒ£ãƒ¼ã‚¸ã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	float GetCharge() {
 		return m_charge;
 	}
 private:
-	Vector3 m_RStickOld = Vector3::Zero;				//RƒXƒeƒBƒbƒN‚Ì“ü—Í—Êi•ÏX‘OjB
-	float m_charge = 0.0f;								//ƒ`ƒƒ[ƒW—ÊB
+	Vector3 m_RStickOld = Vector3::Zero;				//Rã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›é‡ï¼ˆå¤‰æ›´å‰ï¼‰ã€‚
+	float m_charge = 0.0f;								//ãƒãƒ£ãƒ¼ã‚¸é‡ã€‚
 	float m_collisionSize = 0.0f;
 
-	//ƒ`ƒƒ[ƒW—Ê•\¦i‰¼j
+	//ãƒãƒ£ãƒ¼ã‚¸é‡è¡¨ç¤ºï¼ˆä»®ï¼‰
 	FontRender m_chargeRender;
 	wchar_t m_chargeText[100];
 	
 };
 
 /// <summary>
-/// ƒK[ƒhB
+/// ã‚¬ãƒ¼ãƒ‰ã€‚
 /// </summary>
 class PlayerGuard :public IState
 {
@@ -268,16 +268,16 @@ public:
 
 	void Enter()override;
 	void Update()override;
-	//ƒK[ƒh‚Ì•ûŒü‚ğ‰Á–¡B
+	//ã‚¬ãƒ¼ãƒ‰ã®æ–¹å‘ã‚’åŠ å‘³ã€‚
 	void GuardDirection();						
 	void Exit()override;
 
 private:
-	Vector3 m_directionGap = Vector3::Zero;				//Œü‚«‚Ì·•ªB
+	Vector3 m_directionGap = Vector3::Zero;				//å‘ãã®å·®åˆ†ã€‚
 };
 
 /// <summary>
-/// HPŠÇ—B
+/// HPç®¡ç†ã€‚
 /// </summary>
 class PlayerHealth :public IState
 {
@@ -292,18 +292,18 @@ public:
 	void Enter()override;
 	void Update()override;
 	void Hit(float reduce);
-	void TakeDamage();				//UŒ‚”í’eB
+	void TakeDamage();				//æ”»æ’ƒè¢«å¼¾ã€‚
 	void DisplayHP();
 	void Exit()override;
 
 private:	
-	//ƒ`ƒƒ[ƒW—Ê•\¦i‰¼j
+	//ãƒãƒ£ãƒ¼ã‚¸é‡è¡¨ç¤ºï¼ˆä»®ï¼‰
 	FontRender m_HPRender;
 	wchar_t m_HPText[100];
 };
 
 /// <summary>
-/// ”í’eB
+/// è¢«å¼¾ã€‚
 /// </summary>
 class PlayerHit :public IState
 {
@@ -318,13 +318,13 @@ public:
 
 	void Enter()override;
 	void Update()override;
-	//”í’eB
+	//è¢«å¼¾ã€‚
 	void Hit(float reduce);
 	void Exit()override;
 };
 
 /// <summary>
-/// €–SB
+/// æ­»äº¡ã€‚
 /// </summary>
 class PlayerDeath :public IState
 {
@@ -339,7 +339,7 @@ public:
 
 	void Enter()override;
 	void Update()override;
-	//€–S”»’èB
+	//æ­»äº¡åˆ¤å®šã€‚
 	void DeathJudge();
 	void Exit()override;
 };
