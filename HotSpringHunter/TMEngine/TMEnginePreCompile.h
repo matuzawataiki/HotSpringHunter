@@ -3,6 +3,8 @@
 #include "k2EngineLowPreCompile.h"
 using namespace nsK2EngineLow;
 
+#include "graphics/IRenderer.h"
+#include "graphics/RenderingEngine.h"
 #include "graphics/FontRender.h"
 #include "graphics/ModelRender.h"
 #include "graphics/SpriteRender.h"
@@ -11,7 +13,6 @@ using namespace nsK2EngineLow;
 #include "graphics/light/PointLight.h"
 #include "graphics/light/SpotLight.h"
 #include "graphics/postEffect/PostEffect.h"
-#include "graphics/RenderingEngine.h"
 #include "collision/CollisionObject.h"
 #include "TMEngine.h"
 
