@@ -129,6 +129,7 @@ namespace nsTMEngine
 		Render2D(rc);
 		CopyMainRenderTargetToFrameBufferSprite(rc);
 		m_registerModels.clear();
+		m_renderObjects.clear();
 	}
 
 	void RenderingEngine::RenderToShadowMap(RenderContext& rc)
