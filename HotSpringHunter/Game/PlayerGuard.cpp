@@ -4,7 +4,7 @@
 #include "SnakeEnemy.h"
 
 namespace {
-	const float GUARD_TOLERANCE = 0.3f;				//ƒK[ƒh•ûŒü‚Ì‹–—eŠp“xB
+	const float GUARD_TOLERANCE = 0.3f;				//ã‚¬ãƒ¼ãƒ‰æ–¹å‘ã®è¨±å®¹è§’åº¦ã€‚
 }
 PlayerGuard::PlayerGuard()
 {

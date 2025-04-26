@@ -6,11 +6,11 @@ public:
 	Bucket();
 	~Bucket();
 	bool Start()override;
-	void LoadAssets();					//assets“Ç‚İ‚İB
+	void LoadAssets();					//assetsèª­ã¿è¾¼ã¿ã€‚
 	void Update()override;
-	void FollowPlayer();				//player’Ç]B
-	void ManageAnimState();				//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgŠÇ—B
-	void DisplayManage();				//•\¦ó‘ÔØ‚è‘Ö‚¦B
+	void FollowPlayer();				//playerè¿½å¾“ã€‚
+	void ManageAnimState();				//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†ã€‚
+	void DisplayManage();				//è¡¨ç¤ºçŠ¶æ…‹åˆ‡ã‚Šæ›¿ãˆã€‚
 	void Render(RenderContext& rc)override;
 
 private:
@@ -18,20 +18,20 @@ private:
 
 	ModelRender m_bucketModel;
 	Quaternion m_bucketRot = Quaternion::Identity;
-	Vector3 m_bucketPos = Vector3::Zero;				//‰±ˆÊ’uB
-	Vector3 m_bucketDir = Vector3::Zero;				//‰±Œü‚«B
+	Vector3 m_bucketPos = Vector3::Zero;				//æ¡¶ä½ç½®ã€‚
+	Vector3 m_bucketDir = Vector3::Zero;				//æ¡¶å‘ãã€‚
 
-	bool m_displayFlag = false;							//‰±•\¦‚Ìƒtƒ‰ƒbƒOB
-	int m_animState = 0;								//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgB
+	bool m_displayFlag = false;							//æ¡¶è¡¨ç¤ºã®ãƒ•ãƒ©ãƒƒã‚°ã€‚
+	int m_animState = 0;								//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã€‚
 
-	enum EnAnimClip{							//ƒAƒjƒ[ƒVƒ‡ƒ“ƒf[ƒ^B
+	enum EnAnimClip{							//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã€‚
 		enAnimClip_GuardStart,
 		enAnimClip_GuardEnd,
 		enAnimClip_Num,
 	};
 	AnimationClip m_animClips[enAnimClip_Num];
 
-	enum EnAnimState {							//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgB
+	enum EnAnimState {							//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã€‚
 		enGuardStart,
 		enGuardEnd,
 	};

@@ -13,11 +13,11 @@ namespace nsTMEngine {
 	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode)
 	{
 		SpriteInitData initData;
-		//DDSƒtƒ@ƒCƒ‹(‰æ‘œƒf[ƒ^)‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚Ìw’è
+		//DDSãƒ•ã‚¡ã‚¤ãƒ«(ç”»åƒãƒ‡ãƒ¼ã‚¿)ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æŒ‡å®š
 		initData.m_ddsFilePath[0] = filePath;
-		//ƒVƒF[ƒ_[‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚Ìw’è
+		//ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æŒ‡å®š
 		initData.m_fxFilePath = "Assets/shader/sprite.fx";
-		//ƒXƒvƒ‰ƒCƒg‚ÌƒTƒCƒY‚Ìw’è
+		//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ã‚µã‚¤ã‚ºã®æŒ‡å®š
 		initData.m_width = static_cast<UINT>(w);
 		initData.m_height = static_cast<UINT>(h);
 		initData.m_alphaBlendMode = alphaBlendMode;

@@ -4,24 +4,24 @@
 namespace nsK2EngineLow {
 
 	/// <summary>
-	/// FPS�ɐ�����������N���X�B
+	/// FPSに制限をかけるクラス。
 	/// </summary>
 	class FPSLimitter {
 	public:
 		/// <summary>
-		/// 1�t���[���̊J�n���ɌĂяo���Ă��������B
+		/// 1フレームの開始時に呼び出してください。
 		/// </summary>
 		void BeginFrame()
 		{
 			m_sw.Start();
 		}
 		/// <summary>
-		/// �w�肳�ꂽFPS�𒴂��ē��삵�Ă���ꍇ�A�E�F�C�g��������B
+		/// 指定されたFPSを超えて動作している場合、ウェイトをかける。
 		/// </summary>
 		void Wait()
 		{
-			//�X�s�����b�N���s���B
-			// 1�t���[���̍ŏ����Ԃ��v�Z
+			//スピンロックを行う。
+			// 1フレームの最小時間を計算
 			float frameDeltaTimeMin = 1000.0f / m_maxFPS;
 			float restTime = 0;
 			do {
@@ -30,7 +30,7 @@ namespace nsK2EngineLow {
 			} while (restTime > 1.0f);
 		}
 		/// <summary>
-		/// ���ݐݒ肳��Ă���ő�FPS���擾�B
+		/// 現在設定されている最大FPSを取得。
 		/// </summary>
 		/// <returns></returns>
 		int GetMaxFPS() const
@@ -38,7 +38,7 @@ namespace nsK2EngineLow {
 			return m_maxFPS;
 		}
 		/// <summary>
-		/// �ő�FPS��ݒ�B
+		/// 最大FPSを設定。
 		/// </summary>
 		/// <param name="maxFps"></param>
 		void SetMaxFPS(int maxFPS)

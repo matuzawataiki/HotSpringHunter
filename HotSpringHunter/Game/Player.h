@@ -15,25 +15,25 @@ public:
 	void LoadModel();
 	void GenerateMinions();
 	void Update()override;
-	//playerˆÚ“®
+	//playerç§»å‹•
 	void Move();
-	//player‚ÌŒü‚«‚ğŒvZB
+	//playerã®å‘ãã‚’è¨ˆç®—ã€‚
 	void GetDirection(Vector3 foward,Vector3 right);
-	//playerˆÚ“®‘¬“x’²®B
+	//playerç§»å‹•é€Ÿåº¦èª¿æ•´ã€‚
 	void MoveAdjust();
-	//player‰ñ“]B
+	//playerå›è»¢ã€‚
 	void Rotation();
-	//stateŠÇ—B
+	//stateç®¡ç†ã€‚
 	void StateManage();
-	//playerƒAƒjƒ[ƒVƒ‡ƒ“B
+	//playerã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã€‚
 	void AnimationManage();
 	void Render(RenderContext& rc)override;
 
-	//playerÀ•W‚ÌƒQƒbƒ^[B
+	//playeråº§æ¨™ã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	Vector3 GetPlayerPos() {
 		return m_playerPosition;
 	}
-	//player‚ÌŒü‚«‚ÌƒQƒbƒ^[B
+	//playerã®å‘ãã®ã‚²ãƒƒã‚¿ãƒ¼ã€‚
 	Vector3 GetPlayerDir() {
 		return m_playerDirection;
 	}
@@ -41,7 +41,7 @@ public:
 		return m_animationState;
 	}
 
-	int m_animationState = 0;			//playerƒAƒjƒ[ƒVƒ‡ƒ“‚Ìó‘ÔB
+	int m_animationState = 0;			//playerã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®çŠ¶æ…‹ã€‚
 	enum EnPlayerAnimVar {
 		enIdle,
 		enWalk,
@@ -56,7 +56,7 @@ public:
 		enDeath,
 	};
 
-	CharacterController m_playerCharaCon;					//playerƒLƒƒƒ‰ƒRƒ“B
+	CharacterController m_playerCharaCon;					//playerã‚­ãƒ£ãƒ©ã‚³ãƒ³ã€‚
 
 private:
 	PlayerAttack* m_playerAttack = nullptr;
@@ -66,16 +66,16 @@ private:
 	Towel* m_towel = nullptr;
 	Bucket* m_bucket = nullptr;
 
-	ModelRender m_playerModelRender;						//player•`‰æB
-	Vector3 m_playerPosition = Vector3::Zero;				//playerÀ•WB
-	Vector3 m_playerSpeed = Vector3::Zero;					//playerˆÚ“®ƒXƒs[ƒhB
-	Vector3 m_playerDirection = Vector3::Zero;				//playerŒü‚«B
-	Quaternion m_playerRotation = Quaternion::Identity;		//player‰ñ“]B
+	ModelRender m_playerModelRender;						//playeræç”»ã€‚
+	Vector3 m_playerPosition = Vector3::Zero;				//playeråº§æ¨™ã€‚
+	Vector3 m_playerSpeed = Vector3::Zero;					//playerç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰ã€‚
+	Vector3 m_playerDirection = Vector3::Zero;				//playerå‘ãã€‚
+	Quaternion m_playerRotation = Quaternion::Identity;		//playerå›è»¢ã€‚
 
-	float m_runState = 1.0f;								//player‘–‚èó‘Ô‚ÌŠÇ—B
-	float m_guardState = 1.0f;								//ƒK[ƒhó‘Ô‚ÌŠÇ—B
+	float m_runState = 1.0f;								//playerèµ°ã‚ŠçŠ¶æ…‹ã®ç®¡ç†ã€‚
+	float m_guardState = 1.0f;								//ã‚¬ãƒ¼ãƒ‰çŠ¶æ…‹ã®ç®¡ç†ã€‚
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“B
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã€‚
 	enum EnAnimationClip {
 		enAnimationClip_Idle,
 		enAnimationClip_Walk,

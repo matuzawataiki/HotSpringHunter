@@ -11,16 +11,16 @@ namespace nsTMEngine {
 		~TMEngine();
 	public:
 		/// <summary>
-		/// ‰Šú‰»ƒf[ƒ^
+		/// åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
 		/// </summary>
 		struct InitData {
-			HWND hwnd;					//ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-			UINT fremeBufferWidth;		//ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚Ì•
-			UINT frameBufferHeight;	//ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚Ì‚‚³
+			HWND hwnd;					//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+			UINT fremeBufferWidth;		//ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®å¹…
+			UINT frameBufferHeight;	//ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®é«˜ã•
 		};
 
 		/// <summary>
-		/// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìì¬
+		/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ä½œæˆ
 		/// </summary>
 		/// <param name="initData"></param>
 		static void CreateInstance(const InitData& initData)
@@ -29,24 +29,24 @@ namespace nsTMEngine {
 			m_instance->Init(initData);
 		}
 		/// <summary>
-		/// ‰Šú‰»
+		/// åˆæœŸåŒ–
 		/// </summary>
 		void Init(const InitData& initData);
 
 		/// <summary>
-		/// ƒGƒ“ƒWƒ“ˆ—‚ÌÀs
+		/// ã‚¨ãƒ³ã‚¸ãƒ³å‡¦ç†ã®å®Ÿè¡Œ
 		/// </summary>
 		void Execute();
 
 		/// <summary>
-		/// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì”jŠüB
+		/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ç ´æ£„ã€‚
 		/// </summary>
 		static void DeleteInstance()
 		{
 			delete m_instance;
 		}
 		/// <summary>
-		/// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾B
+		/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã€‚
 		/// </summary>
 		/// <returns></returns>
 		static TMEngine* GetInstance()

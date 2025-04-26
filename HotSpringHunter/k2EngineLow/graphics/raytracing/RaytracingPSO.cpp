@@ -17,7 +17,7 @@ namespace nsK2EngineLow {
 				HRESULT hr = D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &pSigBlob, &pErrorBlob);
 				if (FAILED(hr))
 				{
-					MessageBoxA(nullptr, (char*)pErrorBlob->GetBufferPointer(), "ƒGƒ‰[", MB_OK);
+					MessageBoxA(nullptr, (char*)pErrorBlob->GetBufferPointer(), "ã‚¨ãƒ©ãƒ¼", MB_OK);
 					std::abort();
 				}
 				ID3D12RootSignaturePtr pRootSig;
@@ -26,10 +26,10 @@ namespace nsK2EngineLow {
 				return pRootSig;
 			}
 		}
-		//ƒTƒuƒIƒuƒWƒFƒNƒgì¬‚Ìƒwƒ‹ƒp[B
+		//ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã€‚
 		namespace BuildSubObjectHelper {
 			/// <summary>
-			/// ƒ[ƒJƒ‹ãƒVƒOƒlƒ`ƒƒ‚ÌƒTƒuƒIƒuƒWƒFƒNƒgì¬‚Ìƒwƒ‹ƒp[\‘¢‘ÌB
+			/// ãƒ­ãƒ¼ã‚«ãƒ«âˆšã‚·ã‚°ãƒãƒãƒ£ã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆã®ãƒ˜ãƒ«ãƒ‘ãƒ¼æ§‹é€ ä½“ã€‚
 			/// </summary>
 			struct LocalRootSignatureSubobject {
 				LocalRootSignatureSubobject()
@@ -47,7 +47,7 @@ namespace nsK2EngineLow {
 				D3D12_STATE_SUBOBJECT subobject = {};
 			};
 			/// <summary>
-			/// ExportAssociation‚ÌƒTƒuƒIƒuƒWƒFƒNƒgì¬‚Ìƒwƒ‹ƒp[\‘¢‘ÌB
+			/// ExportAssociationã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆã®ãƒ˜ãƒ«ãƒ‘ãƒ¼æ§‹é€ ä½“ã€‚
 			/// </summary>
 			struct ExportAssociationSubobject
 			{
@@ -77,7 +77,7 @@ namespace nsK2EngineLow {
 				D3D12_STATE_SUBOBJECT subobject = {};
 			};
 			/// <summary>
-			/// ƒpƒCƒvƒ‰ƒCƒ“İ’è‚ÌƒTƒuƒIƒuƒWƒFƒNƒgì¬‚Ìƒwƒ‹ƒp[\‘¢‘ÌB
+			/// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³è¨­å®šã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆã®ãƒ˜ãƒ«ãƒ‘ãƒ¼æ§‹é€ ä½“ã€‚
 			/// </summary>
 			struct PipelineConfigSubobject
 			{
@@ -93,7 +93,7 @@ namespace nsK2EngineLow {
 				D3D12_STATE_SUBOBJECT subobject = {};
 			};
 			/// <summary>
-			/// ƒOƒ[ƒoƒ‹ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒTƒuƒIƒuƒWƒFƒNƒgì¬‚Ìƒwƒ‹ƒp[\‘¢‘ÌB
+			/// ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆã®ãƒ˜ãƒ«ãƒ‘ãƒ¼æ§‹é€ ä½“ã€‚
 			/// </summary>
 			struct GlobalRootSignatureSubobject
 			{
@@ -109,7 +109,7 @@ namespace nsK2EngineLow {
 				D3D12_STATE_SUBOBJECT subobject = {};
 			};
 			/// <summary>
-			/// ƒqƒbƒgƒOƒ‹[ƒvƒTƒuƒIƒuƒWƒFƒNƒg
+			/// ãƒ’ãƒƒãƒˆã‚°ãƒ«ãƒ¼ãƒ—ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 			/// </summary>
 			struct HitGroupSubObject
 			{
@@ -171,8 +171,8 @@ namespace nsK2EngineLow {
 
 			enum ERange {
 				eRange_SRV,		//SRV
-				eRange_Sampler,	//ƒTƒ“ƒvƒ‰
-				eRange_Num,		//”ÍˆÍ‚Ì”B
+				eRange_Sampler,	//ã‚µãƒ³ãƒ—ãƒ©
+				eRange_Num,		//ç¯„å›²ã®æ•°ã€‚
 			};
 			desc.range.resize(eRange_Num);
 
@@ -213,8 +213,8 @@ namespace nsK2EngineLow {
 			std::array<D3D12_STATE_SUBOBJECT, 14> subobjects;
 			uint32_t index = 0;
 
-			//DXILƒ‰ƒCƒuƒ‰ƒŠ‚ğì¬B
-			//ƒŒƒCƒgƒŒ[ƒVƒ“ƒO—p‚ÌƒVƒF[ƒ_[‚ğƒ[ƒhB
+			//DXILãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ä½œæˆã€‚
+			//ãƒ¬ã‚¤ãƒˆãƒ¬ãƒ¼ã‚·ãƒ³ã‚°ç”¨ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ãƒ­ãƒ¼ãƒ‰ã€‚
 			Shader raytraceShader;
 			raytraceShader.LoadRaytracing(L"Assets/shader/sample.fx");
 
@@ -237,7 +237,7 @@ namespace nsK2EngineLow {
 
 			index++;
 
-			//HitGroup‚ÌƒTƒuƒIƒuƒWƒFƒNƒg‚ğì¬B
+			//HitGroupã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã€‚
 			std::vector< HitGroupSubObject> hitGroupSOs;
 			hitGroupSOs.resize(eHitGroup_Num);
 			for (int i = 0; i < eHitGroup_Num; i++) {
@@ -265,7 +265,7 @@ namespace nsK2EngineLow {
 				int useRootSignature = 0;
 				for (auto& shaderData : shaderDatas) {
 					if (shaderData.useLocalRootSignature == eRS) {
-						//‚±‚¢‚Â‚Íw’è‚³‚ê‚½ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ğg‚¤B
+						//ã“ã„ã¤ã¯æŒ‡å®šã•ã‚ŒãŸãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã‚’ä½¿ã†ã€‚
 						exportNames[useRootSignature] = shaderData.entryPointName;
 						useRootSignature++;
 					}
@@ -273,7 +273,7 @@ namespace nsK2EngineLow {
 				ass.Init(exportNames, useRootSignature, &(subobjects[rgSOIndex]));
 				subobjects[index++] = ass.subobject;
 			};
-			//ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÆƒVƒF[ƒ_[‚ÌŠÖ˜A•t‚¯‚ğs‚¤ƒTƒuƒIƒuƒWƒFƒNƒg‚ğì‚Á‚Ä‚¢‚­B
+			//ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã¨ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®é–¢é€£ä»˜ã‘ã‚’è¡Œã†ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œã£ã¦ã„ãã€‚
 			LocalRootSignatureSubobject rayGenSignatureSO, modelSignatureSO, emptySignatureSO;
 			ExportAssociationSubobject rayGenAssSO, modelAssSO, emptyAssSO;
 			const WCHAR* rayGenExportName[eShader_Num];
@@ -285,7 +285,7 @@ namespace nsK2EngineLow {
 			BuildAndRegistRootSignatureAndAssSubobjectFunc(emptySignatureSO, emptyAssSO, eLocalRootSignature_Empty, emptyExportName);
 
 
-			// Payload‚ÌƒTƒCƒY‚Æˆø”‚Ì”‚Í‚Æ‚è‚ ‚¦‚¸ŒÅ’è‚ÅEEEBŒã‚ÅŒŸ“¢B
+			// Payloadã®ã‚µã‚¤ã‚ºã¨å¼•æ•°ã®æ•°ã¯ã¨ã‚Šã‚ãˆãšå›ºå®šã§ãƒ»ãƒ»ãƒ»ã€‚å¾Œã§æ¤œè¨ã€‚
 			ShaderConfigSubobject shaderConfig;
 			struct RayPayload
 			{
@@ -305,11 +305,11 @@ namespace nsK2EngineLow {
 			configAssociationSO.Init(entryPointNames, eShader_Num, &subobjects[shaderConfigIndex]);
 			subobjects[index++] = configAssociationSO.subobject;
 
-			// ƒpƒCƒvƒ‰ƒCƒ“İ’è‚ÌƒTƒuƒIƒuƒWƒFƒNƒg‚ğì¬B
+			// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³è¨­å®šã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã€‚
 			PipelineConfigSubobject config;
 			subobjects[index++] = config.subobject;
 
-			// ƒOƒ[ƒoƒ‹ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒTƒuƒIƒuƒWƒFƒNƒg‚ğì¬B
+			// ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚µãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã€‚
 			GlobalRootSignatureSubobject root;
 			m_emptyRootSignature = root.pRootSig;
 			subobjects[index++] = root.subobject;
@@ -322,7 +322,7 @@ namespace nsK2EngineLow {
 			auto d3dDevice = g_graphicsEngine->GetD3DDevice();
 			auto hr = d3dDevice->CreateStateObject(&desc, IID_PPV_ARGS(&m_pipelineState));
 			if (FAILED(hr)) {
-				MessageBox(nullptr, L"ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B\n", L"ƒGƒ‰[", MB_OK);
+				MessageBox(nullptr, L"ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n", L"ã‚¨ãƒ©ãƒ¼", MB_OK);
 				std::abort();
 			}
 		}

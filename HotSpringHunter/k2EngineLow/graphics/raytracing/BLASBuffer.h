@@ -7,21 +7,21 @@ namespace nsK2EngineLow {
 		/// BLASBuffer
 		/// </summary>
 		/// <remark>
-		/// BLAS( Bottom level acceleration structures )�Ƃ�
-		/// ���C�g�����[���h�ɓo�^����Ă���W�I���g���̃f�[�^�\���ł��B
-		/// BLAS��3D���f���̃|���S����񂪓o�^����邱�ƂɂȂ�܂��B
+		/// BLAS( Bottom level acceleration structures )とは
+		/// レイトレワールドに登録されているジオメトリのデータ構造です。
+		/// BLASに3Dモデルのポリゴン情報が登録されることになります。
 		/// </remark>
 		class BLASBuffer : public Noncopyable
 		{
 		public:
 			/// <summary>
-			/// �������B
+			/// 初期化。
 			/// </summary>
 			/// <param name="rc"></param>
 			/// <param name="instance"></param>
 			void Init(RenderContext& rc, const std::vector<InstancePtr>& instance);
 			/// <summary>
-			/// BLASBuffer�̃��X�g���擾�B
+			/// BLASBufferのリストを取得。
 			/// </summary>
 			/// <returns></returns>
 			const std::vector< AccelerationStructureBuffers>& Get() const

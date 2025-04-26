@@ -36,7 +36,7 @@
 
 #include "graphics/d3dx12.h"
 
-const int MAX_RENDERING_TARGET = D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT;	//�����_�����O�^�[�Q�b�g�̍ő吔�B
+const int MAX_RENDERING_TARGET = D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT;	//レンダリングターゲットの最大数。
 
 using namespace Microsoft::WRL;
 
@@ -77,13 +77,13 @@ using namespace Microsoft::WRL;
 
 #include "graphics/GaussianBlur.h"
 
-const UINT FRAME_BUFFER_W = 1600;	// �t���[���o�b�t�@�̕��B
-const UINT FRAME_BUFFER_H = 900;	// �t���[���o�b�t�@�̍����B
-const UINT UI_SPACE_WIDTH = 1920;	// UI��Ԃ̕��B
-const UINT UI_SPACE_HEIGHT = 1080;	// UI��Ԃ̍����B
-static const int MAX_BONE = 512;	// �{�[���̍ő吔�B
+const UINT FRAME_BUFFER_W = 1600;	// フレームバッファの幅。
+const UINT FRAME_BUFFER_H = 900;	// フレームバッファの高さ。
+const UINT UI_SPACE_WIDTH = 1920;	// UI空間の幅。
+const UINT UI_SPACE_HEIGHT = 1080;	// UI空間の高さ。
+static const int MAX_BONE = 512;	// ボーンの最大数。
 
-#define USE_FPS_LIMITTER	// �L����FPS�ɏ����݂���B
+#define USE_FPS_LIMITTER	// 有効でFPSに上限を設ける。
 
 #include "btBulletDynamicsCommon.h"
 #include "BulletCollision\CollisionDispatch\btGhostObject.h"

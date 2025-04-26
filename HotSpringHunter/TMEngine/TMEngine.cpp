@@ -1,4 +1,4 @@
-﻿#include "TMEnginePreCompile.h"
+#include "TMEnginePreCompile.h"
 #include "TMEngine.h"
 
 namespace nsTMEngine

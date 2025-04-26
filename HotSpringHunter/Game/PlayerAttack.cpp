@@ -46,12 +46,12 @@ void PlayerAttack::WeakAttack()
 
 void PlayerAttack::MakeCollision()
 {
-	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
+	//ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 	m_collision = NewGO<CollisionObject>(0,"weakAttack");
 	Vector3 collisionPosition = m_player->GetPlayerPos();
-	//À•W‚ğƒvƒŒƒCƒ„[‚Ì­‚µ‘O‚Éİ’è
+	//åº§æ¨™ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å°‘ã—å‰ã«è¨­å®š
 	collisionPosition += m_player->GetPlayerDir() * 100.0f;
-	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
+	//çƒçŠ¶ã®ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’ä½œæˆ
 	m_collision->CreateSphere(collisionPosition,
 		Quaternion::Identity,
 		150.0f);

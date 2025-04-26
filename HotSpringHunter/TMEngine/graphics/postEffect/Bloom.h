@@ -5,20 +5,20 @@ namespace nsTMEngine {
 	{
 	public:
 		/// <summary>
-		/// ‰Šú‰»
+		/// åˆæœŸåŒ–
 		/// </summary>
 		/// <param name="mainRenderTarget"></param>
 		void OnInit(RenderTarget& mainRenderTarget);
 
 		/// <summary>
-		/// •`‰æ
+		/// æç”»
 		/// </summary>
 		/// <param name="rc"></param>
 		/// <param name="mainRenderTarget"></param>
 		void OnRender(RenderContext& rc, RenderTarget& mainRenderTarget);
 
 		/// <summary>
-		/// ƒ|ƒXƒgƒGƒtƒFƒNƒg‚ğÀs‚µ‚½Œ‹‰Ê‚Æ‚È‚éƒeƒNƒXƒ`ƒƒ‚ğæ“¾
+		/// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å®Ÿè¡Œã—ãŸçµæœã¨ãªã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å–å¾—
 		/// </summary>
 		/// <returns></returns>
 		Texture& GetResultTexture() override
@@ -27,7 +27,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ƒuƒ‹[ƒ€‚ª”­¶‚·‚éè‡’l‚ğİ’è
+		/// ãƒ–ãƒ«ãƒ¼ãƒ ãŒç™ºç”Ÿã™ã‚‹é–¾å€¤ã‚’è¨­å®š
 		/// </summary>
 		/// <param name="value"></param>
 		void SetThreshold(float value)
@@ -43,16 +43,16 @@ namespace nsTMEngine {
 
 	private:
 		/// <summary>
-		/// ‹P“x’ŠoƒpƒX‚Ì’è”ƒoƒbƒtƒ@‚P‚É‘—‚é“à—e
+		/// è¼åº¦æŠ½å‡ºãƒ‘ã‚¹ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ï¼‘ã«é€ã‚‹å†…å®¹
 		/// </summary>
 		struct SSampleingLuminanceCB1
 		{
 			float threshold = 1.0f;
 		};
-		RenderTarget m_luminanceRenderTarget;	//Œõ“x’Šo—p‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg
-		Sprite m_luminanceSprite;				//Œõ“x’Šo—p‚ÌƒXƒvƒ‰ƒCƒg
-		GaussianBlur m_gaussianBlur[4];			//ƒKƒEƒVƒAƒ“ƒuƒ‰[
-		Sprite m_finalSprite;					//ÅI‡¬—p‚ÌƒXƒvƒ‰ƒCƒg
+		RenderTarget m_luminanceRenderTarget;	//å…‰åº¦æŠ½å‡ºç”¨ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
+		Sprite m_luminanceSprite;				//å…‰åº¦æŠ½å‡ºç”¨ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+		GaussianBlur m_gaussianBlur[4];			//ã‚¬ã‚¦ã‚·ã‚¢ãƒ³ãƒ–ãƒ©ãƒ¼
+		Sprite m_finalSprite;					//æœ€çµ‚åˆæˆç”¨ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 		SSampleingLuminanceCB1 m_samplingLuminanceCB1;
 	};
 }

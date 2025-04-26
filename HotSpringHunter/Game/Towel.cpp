@@ -24,19 +24,19 @@ bool Towel::Start()
 }
 
 /// <summary>
-/// assets“Ç‚İ‚İB
+/// assetsèª­ã¿è¾¼ã¿ã€‚
 /// </summary>
 void Towel::LoadModel()
 {
 	
-	//ƒAƒjƒ[ƒVƒ‡ƒ““Ç‚İ‚İB
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³èª­ã¿è¾¼ã¿ã€‚
 	m_animClips[enAnimClip_WeakAttack].Load("Assets/animData/towel/weakAttack.tka");
 	m_animClips[enAnimClip_WeakAttack].SetLoopFlag(false);
 	/*m_animClips[enAnimClip_ChargeAttack].Load("Assets/animData/towel/chargeAttack.tka");
 	m_animClips[enAnimClip_ChargeAttack].SetLoopFlag(false);
 	m_animClips[enAnimClip_Charging].Load("Assets/animData/towel/charging.tka");
 	m_animClips[enAnimClip_Charging].SetLoopFlag(false);*/
-	//ƒ‚ƒfƒ‹“Ç‚İ‚İB
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿ã€‚
 	m_towelModel.Init("Assets/modelData/towel/towel.tkm", m_animClips, enAnimClip_Num, enModelUpAxisY);
 }
 
@@ -54,11 +54,11 @@ void Towel::Update()
 }
 
 /// <summary>
-/// player’Ç]B
+/// playerè¿½å¾“ã€‚
 /// </summary>
 void Towel::FollowPlayer()
 {
-	//ˆÊ’u‚ğŒü‚«‚ğplayer‚Æ“¯‚¶‚É‚·‚éB
+	//ä½ç½®ã‚’å‘ãã‚’playerã¨åŒã˜ã«ã™ã‚‹ã€‚
 	m_towelPos = m_player->GetPlayerPos();
 	m_towelPos.y += 100.0f;
 	m_towelDir = m_player->GetPlayerDir();
@@ -67,7 +67,7 @@ void Towel::FollowPlayer()
 }
 
 /// <summary>
-/// ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶B
+/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿã€‚
 /// </summary>
 void Towel::StateManage()
 {
@@ -97,11 +97,11 @@ void Towel::ChargeAttackScale()
 }
 
 /// <summary>
-/// •\¦ó‘ÔØ‚è‘Ö‚¦B
+/// è¡¨ç¤ºçŠ¶æ…‹åˆ‡ã‚Šæ›¿ãˆã€‚
 /// </summary>
 void Towel::DisplayManage()
 {
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ªÄ¶’†‚È‚çƒ‚ƒfƒ‹‚ğ•\¦‚³‚¹‚éB
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒå†ç”Ÿä¸­ãªã‚‰ãƒ¢ãƒ‡ãƒ«ã‚’è¡¨ç¤ºã•ã›ã‚‹ã€‚
 	/*if (m_towelModel.IsPlayAnimation()) {
 		m_displayFlag = true;
 	}

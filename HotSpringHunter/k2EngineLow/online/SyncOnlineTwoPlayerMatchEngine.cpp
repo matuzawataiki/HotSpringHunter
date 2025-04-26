@@ -1,4 +1,4 @@
-﻿#include "k2EngineLowPreCompile.h"
+#include "k2EngineLowPreCompile.h"
 #include "online/SyncOnlineTwoPlayerMatchEngine.h"
 #include <random>
 

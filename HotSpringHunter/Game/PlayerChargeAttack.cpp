@@ -5,7 +5,7 @@
 #include "collision/CollisionObject.h"
 
 namespace {
-	const float CHARGE_DECREASE = 0.4f;			//ƒ`ƒƒ[ƒWŒ¸­—ÊB
+	const float CHARGE_DECREASE = 0.4f;			//ãƒãƒ£ãƒ¼ã‚¸æ¸›å°‘é‡ã€‚
 	const float COLLISION_SIZE = 3.0f;
 }
 
@@ -35,37 +35,37 @@ void PlayerChargeAttack::Update()
 
 void PlayerChargeAttack::StickCharge()
 {
-	Vector3 RStick = Vector3::Zero;				//RƒXƒeƒBƒbƒN“ü—Í—ÊB	
-	float movePower = 0.0f;						//ƒpƒ[i“ü—Í•Ï“®—ÊjB
+	Vector3 RStick = Vector3::Zero;				//Rã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›é‡ã€‚	
+	float movePower = 0.0f;						//ãƒ‘ãƒ¯ãƒ¼ï¼ˆå…¥åŠ›å¤‰å‹•é‡ï¼‰ã€‚
 
-	//RƒXƒeƒBƒbƒN‚Ì“ü—Í‚ª‚ ‚Á‚½‚çB
+	//Rã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›ãŒã‚ã£ãŸã‚‰ã€‚
 	if ((fabsf(g_pad[0]->GetRStickXF()) >= 0.001f) || (fabsf(g_pad[0]->GetRStickYF()) >= 0.001f)) {
-		//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgØ‚è‘Ö‚¦B
+		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆåˆ‡ã‚Šæ›¿ãˆã€‚
 		//m_player->m_animationState = m_player->enCharging;
 
-		//RƒXƒeƒBƒbƒN‚Ì“ü—Í—Ê‚ğ‚Æ‚éB		
+		//Rã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›é‡ã‚’ã¨ã‚‹ã€‚		
 		RStick.x = g_pad[0]->GetRStickXF();
 		RStick.y = g_pad[0]->GetRStickYF();
-		//ƒ`ƒƒ[ƒW—Ê‚É‚½‚·ƒpƒ[‚ğŒvZ‚·‚éiƒXƒeƒBƒbƒN‚Ì•ÏXŒãA•ÏX‘O‚Ì“àÏjB
+		//ãƒãƒ£ãƒ¼ã‚¸é‡ã«ãŸã™ãƒ‘ãƒ¯ãƒ¼ã‚’è¨ˆç®—ã™ã‚‹ï¼ˆã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å¤‰æ›´å¾Œã€å¤‰æ›´å‰ã®å†…ç©ï¼‰ã€‚
 		movePower = Dot(RStick, m_RStickOld);
-		//ƒXƒeƒBƒbƒN‚ª“®‚¢‚Ä‚¢‚È‚¢‚È‚çAƒpƒ[‚ğ0‚É‚·‚éB
+		//ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒå‹•ã„ã¦ã„ãªã„ãªã‚‰ã€ãƒ‘ãƒ¯ãƒ¼ã‚’0ã«ã™ã‚‹ã€‚
 		if ((RStick.x == m_RStickOld.x) && (RStick.y == m_RStickOld.y)) {
 			movePower = 0.0f;
 		}
-		//ƒpƒ[‚Ì’l‚ªƒ}ƒCƒiƒX‚È‚çƒvƒ‰ƒX‚É‚·‚éB
+		//ãƒ‘ãƒ¯ãƒ¼ã®å€¤ãŒãƒã‚¤ãƒŠã‚¹ãªã‚‰ãƒ—ãƒ©ã‚¹ã«ã™ã‚‹ã€‚
 		if (movePower < 0.0f) {
 			movePower *= -1.0f;
 		}
-		//ƒpƒ[‚ğƒ`ƒƒ[ƒW‚É‘«‚·B
+		//ãƒ‘ãƒ¯ãƒ¼ã‚’ãƒãƒ£ãƒ¼ã‚¸ã«è¶³ã™ã€‚
 		m_charge += movePower;
 	}
-	//ƒpƒ[ƒŠƒZƒbƒgB
+	//ãƒ‘ãƒ¯ãƒ¼ãƒªã‚»ãƒƒãƒˆã€‚
 	movePower = 0.0f;
 
-	//ƒ`ƒƒ[ƒW‚ğŒ¸­‚³‚¹‚éB
+	//ãƒãƒ£ãƒ¼ã‚¸ã‚’æ¸›å°‘ã•ã›ã‚‹ã€‚
 	m_charge -= CHARGE_DECREASE;
 
-	//ƒ`ƒƒ[ƒW‚ğ0ˆÈ‰º‚É‚³‚¹‚È‚¢B
+	//ãƒãƒ£ãƒ¼ã‚¸ã‚’0ä»¥ä¸‹ã«ã•ã›ãªã„ã€‚
 	if (m_charge <= 0.0f) {
 		m_charge = 0.0f;
 	}
@@ -74,17 +74,17 @@ void PlayerChargeAttack::StickCharge()
 		m_charge = 100.0f;
 	}
 
-	//ƒXƒeƒBƒbƒN“ü—Í—Ê‚ğXVB
+	//ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›é‡ã‚’æ›´æ–°ã€‚
 	m_RStickOld = RStick;
 
 }
 
 void PlayerChargeAttack::ChargeAttack()
 {
-	//ƒ`ƒƒ[ƒW‚ª20ˆÈã‚ÅƒXƒeƒBƒbƒN‚Ì“ü—Í‚ª‚È‚©‚Á‚½‚çB
+	//ãƒãƒ£ãƒ¼ã‚¸ãŒ20ä»¥ä¸Šã§ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›ãŒãªã‹ã£ãŸã‚‰ã€‚
 	if ((fabsf(g_pad[0]->GetRStickXF()) <= 0.001f) || (fabsf(g_pad[0]->GetRStickYF()) <= 0.001f)) {
 		if (m_charge >= 20.0f) {
-			//player‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒgØ‚è‘Ö‚¦B
+			//playerã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆåˆ‡ã‚Šæ›¿ãˆã€‚
 			m_player->m_animationState = m_player->enChargeAttack;
 			SnakeEnemy* snakeEnemy = FindGO<SnakeEnemy>("enemy");
 			/*if (snakeEnemy == nullptr) {
@@ -101,17 +101,17 @@ void PlayerChargeAttack::ChargeAttack()
 
 void PlayerChargeAttack::MakeCollision()
 {
-	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
+	//ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 	m_collision = NewGO<CollisionObject>(0);
 	Vector3 collisionPosition = m_player->GetPlayerPos();
 	m_collisionSize = COLLISION_SIZE * m_charge + 100.0f;
-	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
+	//çƒçŠ¶ã®ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’ä½œæˆ
 	m_collision->CreateSphere(collisionPosition,
 		Quaternion::Identity,
 		m_collisionSize);
-	//–¼‘O‚ğ‚Â‚¯‚é
+	//åå‰ã‚’ã¤ã‘ã‚‹
 	m_collision->SetName("chargeAttack");
-	//ƒ`ƒƒ[ƒWƒŠƒZƒbƒgB
+	//ãƒãƒ£ãƒ¼ã‚¸ãƒªã‚»ãƒƒãƒˆã€‚
 	m_charge = 0.0f;
 }
 
@@ -121,7 +121,7 @@ void PlayerChargeAttack::DisplayCharge()
 	m_chargeRender.SetPosition({ 425.0f,475.0f,0.0f });
 	m_chargeRender.SetColor(g_vec4Black);
 
-	swprintf_s(m_chargeText, 100, L"ƒ`ƒƒ[ƒW %.1f", float(m_charge));
+	swprintf_s(m_chargeText, 100, L"ãƒãƒ£ãƒ¼ã‚¸ %.1f", float(m_charge));
 	m_chargeRender.SetText(m_chargeText);
 }
 

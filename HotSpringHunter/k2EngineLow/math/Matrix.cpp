@@ -1,5 +1,5 @@
 /*!
- * @brief	s—ñB
+ * @brief	è¡Œåˆ—ã€‚
  */
 
 #include "k2EngineLowPreCompile.h"

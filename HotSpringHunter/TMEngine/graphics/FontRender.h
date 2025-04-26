@@ -12,7 +12,7 @@ namespace nsTMEngine
 
 		}
 		/// <summary>
-		/// •¶š‚Ìİ’è
+		/// æ–‡å­—ã®è¨­å®š
 		/// </summary>
 		/// <param name="text"></param>
 		void SetText(const wchar_t* text)
@@ -20,34 +20,34 @@ namespace nsTMEngine
 			swprintf_s(m_text, text);
 		}
 		/// <summary>
-		/// À•W‚ğİ’èBz‚Í0.0f‚ÅB
+		/// åº§æ¨™ã‚’è¨­å®šã€‚zã¯0.0fã§ã€‚
 		/// </summary>
-		/// <param name="position">À•W</param>
+		/// <param name="position">åº§æ¨™</param>
 		void SetPosition(float x, float y)
 		{
 			SetPosition({ x, y, 0.0f });
 		}
 		/// <summary>
-		/// ‘å‚«‚³‚ğİ’èBz‚Í0.0f‚ÅB
+		/// å¤§ãã•ã‚’è¨­å®šã€‚zã¯0.0fã§ã€‚
 		/// </summary>
-		/// <param name="position">À•W</param>
+		/// <param name="position">åº§æ¨™</param>
 		void SetPosition(const Vector3& pos)
 		{
 			m_pos = pos;
 		}
 		/// <summary>
-		/// ‘å‚«‚³‚ğİ’èB
+		/// å¤§ãã•ã‚’è¨­å®šã€‚
 		/// </summary>
-		/// <param name="scale">‘å‚«‚³B</param>
+		/// <param name="scale">å¤§ãã•ã€‚</param>
 		void SetScale(const float sca)
 		{
 			m_sca = sca;
 		}
 
 		/// <summary>
-		/// F‚ğİ’èB
+		/// è‰²ã‚’è¨­å®šã€‚
 		/// </summary>
-		/// <param name="color">FB</param>
+		/// <param name="color">è‰²ã€‚</param>
 		void SetColor(float r, float g, float b, float a)
 		{
 			SetColor({ r, g, b, a });
@@ -57,31 +57,31 @@ namespace nsTMEngine
 			m_color = color;
 		}
 		/// <summary>
-		/// ‰ñ“]‚ğİ’èB
+		/// å›è»¢ã‚’è¨­å®šã€‚
 		/// </summary>
-		/// <param name="rotation">‰ñ“]B</param>
+		/// <param name="rotation">å›è»¢ã€‚</param>
 		void SetRotation(const float rot)
 		{
 			m_rot = rot;
 		}
 		/// <summary>
-		/// ƒsƒ{ƒbƒg‚ğİ’èB
+		/// ãƒ”ãƒœãƒƒãƒˆã‚’è¨­å®šã€‚
 		/// </summary>
 		/// <param name="pivot">
-		/// ƒsƒ{ƒbƒgB
-		/// x = 0.5, y = 0.5‚Å‰æ‘œ‚Ì’†S‚ªŠî“_B
-		/// x = 0.0, y = 0.0‚Å‰æ‘œ‚Ì¶‰ºB
-		/// x = 1.0, y = 1.0‚Å‰æ‘œ‚Ì‰EãB
-		/// Unity‚ÌuGUI‚É€‹’B
+		/// ãƒ”ãƒœãƒƒãƒˆã€‚
+		/// x = 0.5, y = 0.5ã§ç”»åƒã®ä¸­å¿ƒãŒåŸºç‚¹ã€‚
+		/// x = 0.0, y = 0.0ã§ç”»åƒã®å·¦ä¸‹ã€‚
+		/// x = 1.0, y = 1.0ã§ç”»åƒã®å³ä¸Šã€‚
+		/// Unityã®uGUIã«æº–æ‹ ã€‚
 		/// </param>
 		void SetPivost(Vector2& piv)
 		{
 			m_piv = piv;
 		}
 		/// <summary>
-		/// •`‰æˆ—B
+		/// æç”»å‡¦ç†ã€‚
 		/// </summary>
-		/// <param name="rc">ƒŒƒ“ƒ_\ƒRƒ“ƒeƒLƒXƒgB</param>
+		/// <param name="rc">ãƒ¬ãƒ³ãƒ€â€•ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã€‚</param>
 		void Draw(RenderContext& rc);
 
 	private:
@@ -93,12 +93,12 @@ namespace nsTMEngine
 		}
 
 	private:
-		Vector3		m_pos = Vector3::Zero;			//ˆÊ’u
-		float		m_sca = 1.0f;					//‘å‚«‚³
-		Vector4		m_color = g_vec4White;			//F
-		float		m_rot = 0.0f;					//‰ñ“]
-		Vector2		m_piv = Sprite::DEFAULT_PIVOT;	//ƒsƒ{ƒbƒg
-		wchar_t		m_text[MAX_TEXT_SIZE];			//•¶š
-		Font		m_font;							//ƒtƒHƒ“ƒg
+		Vector3		m_pos = Vector3::Zero;			//ä½ç½®
+		float		m_sca = 1.0f;					//å¤§ãã•
+		Vector4		m_color = g_vec4White;			//è‰²
+		float		m_rot = 0.0f;					//å›è»¢
+		Vector2		m_piv = Sprite::DEFAULT_PIVOT;	//ãƒ”ãƒœãƒƒãƒˆ
+		wchar_t		m_text[MAX_TEXT_SIZE];			//æ–‡å­—
+		Font		m_font;							//ãƒ•ã‚©ãƒ³ãƒˆ
 	};
 }

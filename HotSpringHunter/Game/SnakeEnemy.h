@@ -12,7 +12,7 @@ public:
 	SnakeEnemy();
 	~SnakeEnemy();
 
-	void Rotation();				//‰ñ“]B
+	void Rotation();				//å›è»¢ã€‚
 	void SnakeAttack();
 	void Tracking();
 	void EnemyAnimation();
@@ -37,9 +37,9 @@ public:
 		enAnimationClip_Num,
 	};
 
-	AnimationClip m_animationClips[enAnimationClip_Num];  //ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
+	AnimationClip m_animationClips[enAnimationClip_Num];  //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
 
-	CharacterController m_characterController;  //ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ^[
+	CharacterController m_characterController;  //ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ã‚¿ãƒ¼
 	CollisionObject* collisionObject = nullptr;
 
 	Player* m_player = nullptr;
@@ -48,19 +48,19 @@ public:
 	PlayerHealth* m_playerHealth = nullptr;
 	EnemySpawn* m_enemySpawn = nullptr;
 	
-	Vector3 m_position        = Vector3::Zero;		//À•W
-	Vector3 m_moveSpeed       = Vector3::Zero;		//“G‚Ì‘¬“x
-	Vector3 m_enemyDirection  = Vector3::Zero;		//ƒRƒŠƒWƒ‡ƒ“
-	Vector3 m_toPlayer        = Vector3::Zero;		//ƒxƒNƒgƒ‹
-	Quaternion m_rotation     = Quaternion::Identity;		//ƒNƒH[ƒ^ƒjƒIƒ“
+	Vector3 m_position        = Vector3::Zero;		//åº§æ¨™
+	Vector3 m_moveSpeed       = Vector3::Zero;		//æ•µã®é€Ÿåº¦
+	Vector3 m_enemyDirection  = Vector3::Zero;		//ã‚³ãƒªã‚¸ãƒ§ãƒ³
+	Vector3 m_toPlayer        = Vector3::Zero;		//ãƒ™ã‚¯ãƒˆãƒ«
+	Quaternion m_rotation     = Quaternion::Identity;		//ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
 
-	ModelRender m_modelRender;  //ƒ‚ƒfƒ‹ƒŒƒ“ƒ_[
-	PhysicsStaticObject physicsStaticObject;  //“–‚½‚è”»’è
+	ModelRender m_modelRender;  //ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ¼
+	PhysicsStaticObject physicsStaticObject;  //å½“ãŸã‚Šåˆ¤å®š
 
 	///
 	
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
 	enum AnimationState
 	{
 		enIdle,
@@ -70,24 +70,24 @@ public:
 		enDeath,
 		enNum,
 	};
-	int m_animationState = enNum;  //ƒGƒlƒ~[ƒXƒe[ƒg‚Ìó‘Ô‚ğ•\‚·•Ï”
+	int m_animationState = enNum;  //ã‚¨ãƒãƒŸãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆã®çŠ¶æ…‹ã‚’è¡¨ã™å¤‰æ•°
 
-	Vector3 toPlayerDir;		//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚ÄL‚Ñ‚éƒxƒNƒgƒ‹
+	Vector3 toPlayerDir;		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‹ã£ã¦ä¼¸ã³ã‚‹ãƒ™ã‚¯ãƒˆãƒ«
 
-	bool m_isSpawn  = false;	//“G‚ªoŒ»‚·‚é‚©
-	bool m_isAlive   = true;    //“G‚ª¶‚«‚Ä‚¢‚é‚©
-	bool m_enemyATK = false;    //“G‚ªUŒ‚‚µ‚½‚©
+	bool m_isSpawn  = false;	//æ•µãŒå‡ºç¾ã™ã‚‹ã‹
+	bool m_isAlive   = true;    //æ•µãŒç”Ÿãã¦ã„ã‚‹ã‹
+	bool m_enemyATK = false;    //æ•µãŒæ”»æ’ƒã—ãŸã‹
 	bool m_deathCount = false;
 
-	float  m_enemyHP  = 50.0f;		//“G‚ÌHP
-	bool m_moveStop = false;    //UŒ‚‚É~‚Ü‚é
+	float  m_enemyHP  = 50.0f;		//æ•µã®HP
+	bool m_moveStop = false;    //æ”»æ’ƒæ™‚ã«æ­¢ã¾ã‚‹
 
-	int m_enemyDeathCuont = 0;  //“G‚ª‰½•C€‚ñ‚¾
+	int m_enemyDeathCuont = 0;  //æ•µãŒä½•åŒ¹æ­»ã‚“ã 
 
 	float posX = 0.0f;
 	float posY = 0.0f; 
 
-	bool enemyDead = false; //€‚ñ‚¾ˆ—‚ğˆê‰ñ‚¾‚¯
+	bool enemyDead = false; //æ­»ã‚“ã å‡¦ç†ã‚’ä¸€å›ã ã‘
 };
 
 

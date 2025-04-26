@@ -15,15 +15,15 @@ namespace nsTMEngine
 
 	SPointLight* SceneLight::NewPointLight()
 	{
-		//ƒ‰ƒCƒg‚Ì”‚ªãŒÀ‚É’B‚µ‚Ä‚¢‚½‚çì‚ç‚È‚¢
+		//ãƒ©ã‚¤ãƒˆã®æ•°ãŒä¸Šé™ã«é”ã—ã¦ã„ãŸã‚‰ä½œã‚‰ãªã„
 		if (m_light.m_numPointLig >= MAX_POINT_LIGHT) {
 			return nullptr;
 		}
 
-		//¸‡‚Åƒ‰ƒCƒg‚ğ“o˜^
+		//æ˜‡é †ã§ãƒ©ã‚¤ãƒˆã‚’ç™»éŒ²
 		for (int i = 0; i <= MAX_POINT_LIGHT;i++) {
 			if (m_light.m_pointLight[i].m_isUse == false) {
-				m_light.m_pointLight[i].Use();	//ƒ‰ƒCƒg‚ğg—p’†‚É‚·‚é
+				m_light.m_pointLight[i].Use();	//ãƒ©ã‚¤ãƒˆã‚’ä½¿ç”¨ä¸­ã«ã™ã‚‹
 				m_light.m_numPointLig++;
 				return &m_light.m_pointLight[i];
 			}
@@ -32,15 +32,15 @@ namespace nsTMEngine
 
 	SSpotLight* SceneLight::NewSpotLight()
 	{
-		//ƒ‰ƒCƒg‚Ì”‚ªãŒÀ‚É’B‚µ‚Ä‚¢‚½‚çì‚ç‚È‚¢
+		//ãƒ©ã‚¤ãƒˆã®æ•°ãŒä¸Šé™ã«é”ã—ã¦ã„ãŸã‚‰ä½œã‚‰ãªã„
 		if (m_light.m_numSpotLig >= MAX_SPOT_LIGHT) {
 			return nullptr;
 		}
 
-		//¸‡‚Åƒ‰ƒCƒg‚ğ“o˜^
+		//æ˜‡é †ã§ãƒ©ã‚¤ãƒˆã‚’ç™»éŒ²
 		for (int i = 0; i <= MAX_SPOT_LIGHT;i++) {
 			if (m_light.m_spotLight[i].m_isUse == false) {
-				m_light.m_spotLight[i].Use();	//ƒ‰ƒCƒg‚ğg—p’†‚É‚·‚é
+				m_light.m_spotLight[i].Use();	//ãƒ©ã‚¤ãƒˆã‚’ä½¿ç”¨ä¸­ã«ã™ã‚‹
 				m_light.m_numSpotLig++;
 				return &m_light.m_spotLight[i];
 			}
@@ -49,12 +49,12 @@ namespace nsTMEngine
 
 	void SceneLight::Init()
 	{
-		//ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚Ìİ’è
+		//ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆã®è¨­å®š
 		m_light.m_drectionLight.SetDirection(1.0f, -1.0f, 1.0f);
 		m_light.m_drectionLight.SetColor(0.3f, 0.3f, 0.3f);
-		//ƒJƒƒ‰‚ÌˆÊ’u‚Ì“o˜^
+		//ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®ç™»éŒ²
 		m_light.m_cameraPos = g_camera3D->GetPosition();
-		//ŠÂ‹«Œõ‚Ìİ’è
+		//ç’°å¢ƒå…‰ã®è¨­å®š
 		m_light.SetAmbientLight(0.5f, 0.5f, 0.5f);
 	}
 

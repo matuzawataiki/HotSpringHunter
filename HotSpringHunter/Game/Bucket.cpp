@@ -23,13 +23,13 @@ bool Bucket::Start()
 
 void Bucket::LoadAssets()
 {
-	//ƒAƒjƒ[ƒVƒ‡ƒ““Ç‚İ‚İB
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³èª­ã¿è¾¼ã¿ã€‚
 	/*m_animClips[enAnimClip_GuardStart].Load("Assets/animData/oke/guardStart");
 	m_animClips[enAnimClip_GuardStart].SetLoopFlag(false);
 	m_animClips[enAnimClip_GuardEnd].Load("Assets/animData/oke/guardEnd");
 	m_animClips[enAnimClip_GuardEnd].SetLoopFlag(false);*/
 
-	//ƒ‚ƒfƒ‹“Ç‚İ‚İB
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿ã€‚
 	m_bucketModel.Init("Assets/modelData/oke/oke.tkm");
 }
 
@@ -44,11 +44,11 @@ void Bucket::Update()
 }
 
 /// <summary>
-/// player’Ç]B
+/// playerè¿½å¾“ã€‚
 /// </summary>
 void Bucket::FollowPlayer()
 {
-	//ˆÊ’u‚ÆŒü‚«‚ğplayer‚Æ“¯‚¶‚É‚·‚éB
+	//ä½ç½®ã¨å‘ãã‚’playerã¨åŒã˜ã«ã™ã‚‹ã€‚
 	m_bucketPos = m_player->GetPlayerPos();
 	m_bucketDir = m_player->GetPlayerDir();
 
@@ -56,7 +56,7 @@ void Bucket::FollowPlayer()
 }
 
 /// <summary>
-/// ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶B
+/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿã€‚
 /// </summary>
 void Bucket::ManageAnimState()
 {
@@ -70,11 +70,11 @@ void Bucket::ManageAnimState()
 }
 
 /// <summary>
-/// •\¦ó‘ÔØ‚è‘Ö‚¦B
+/// è¡¨ç¤ºçŠ¶æ…‹åˆ‡ã‚Šæ›¿ãˆã€‚
 /// </summary>
 void Bucket::DisplayManage()
 {
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ªÄ¶’†‚È‚çƒ‚ƒfƒ‹‚ğ•\¦‚³‚¹‚éB
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒå†ç”Ÿä¸­ãªã‚‰ãƒ¢ãƒ‡ãƒ«ã‚’è¡¨ç¤ºã•ã›ã‚‹ã€‚
 	if (m_bucketModel.IsPlayAnimation() == true) {
 		m_displayFlag = true;
 	}

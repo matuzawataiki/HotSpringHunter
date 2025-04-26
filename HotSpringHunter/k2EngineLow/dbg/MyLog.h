@@ -1,12 +1,12 @@
 /*!
- *@brief		ƒƒO
+ *@brief		ãƒ­ã‚°
  */
 
 #pragma once
 
 namespace nsK2EngineLow {
 	/*!
-	 *@brief	ƒƒOo—Í
+	 *@brief	ãƒ­ã‚°å‡ºåŠ›
 	 */
 	static inline void Log( const char* format, ... )
 	{

@@ -9,8 +9,8 @@ public:
 
 	bool Start()override;
 	void Update()override;
-	void WeakAttack();					//ãUŒ‚B
-	void MakeCollision();				//ƒRƒŠƒWƒ‡ƒ“¶¬B
+	void WeakAttack();					//å¼±æ”»æ’ƒã€‚
+	void MakeCollision();				//ã‚³ãƒªã‚¸ãƒ§ãƒ³ç”Ÿæˆã€‚
 	void Render(RenderContext& rc)override;
 
 	CollisionObject* m_collision = nullptr;

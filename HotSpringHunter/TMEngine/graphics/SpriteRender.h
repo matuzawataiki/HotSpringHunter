@@ -8,15 +8,15 @@ namespace nsTMEngine {
 		SpriteRender();
 		~SpriteRender();
 		/// <summary>
-		/// ‰æ‘œ‚Ì‰Šú‰»—pŠÖ”
+		/// ç”»åƒã®åˆæœŸåŒ–ç”¨é–¢æ•°
 		/// </summary>
 		/// <param name="filePath"></param>
-		/// <param name="w">‰æ‘œ‚Ì‰¡•‚ÌƒTƒCƒY</param>
-		/// <param name="h">‰æ‘œ‚Ìc•‚ÌƒTƒCƒY</param>
+		/// <param name="w">ç”»åƒã®æ¨ªå¹…ã®ã‚µã‚¤ã‚º</param>
+		/// <param name="h">ç”»åƒã®ç¸¦å¹…ã®ã‚µã‚¤ã‚º</param>
 		/// <param name="alphaBlendMode"></param>
 		void Init(const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans);
 		/// <summary>
-		/// ˆÊ’u‚Ìİ’è
+		/// ä½ç½®ã®è¨­å®š
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector2& pos)
@@ -26,7 +26,7 @@ namespace nsTMEngine {
 			m_pos.x = 0.0f;
 		}
 		/// <summary>
-		/// ˆÊ’u‚Ìİ’è
+		/// ä½ç½®ã®è¨­å®š
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
@@ -36,7 +36,7 @@ namespace nsTMEngine {
 			m_pos = Vector3(x, y, 0.0f);
 		}
 		/// <summary>
-		/// ‰ñ“]‚Ìİ’è
+		/// å›è»¢ã®è¨­å®š
 		/// </summary>
 		/// <param name="rot"></param>
 		void SetRotation(const Quaternion& rot)
@@ -44,7 +44,7 @@ namespace nsTMEngine {
 			m_rot = rot;
 		}
 		/// <summary>
-		/// ‘å‚«‚³‚Ìİ’è
+		/// å¤§ãã•ã®è¨­å®š
 		/// </summary>
 		/// <param name="sca"></param>
 		void SetScale(const Vector2& sca)
@@ -54,15 +54,15 @@ namespace nsTMEngine {
 			m_sca.x = 0.0f;
 		}
 		/// <summary>
-		/// ƒsƒ{ƒbƒg‚ğİ’èB
+		/// ãƒ”ãƒœãƒƒãƒˆã‚’è¨­å®šã€‚
 		/// </summary>
-		/// <param name="pivot">ƒsƒ{ƒbƒgB</param>
+		/// <param name="pivot">ãƒ”ãƒœãƒƒãƒˆã€‚</param>
 		void SetPivot(const Vector2& piv)
 		{
 			m_piv = piv;
 		}
 		/// <summary>
-		/// XVˆ—
+		/// æ›´æ–°å‡¦ç†
 		/// </summary>
 		void Update() {
 			m_sprite.Update(
@@ -73,7 +73,7 @@ namespace nsTMEngine {
 			);
 		}
 		/// <summary>
-		/// •`‰æˆ—
+		/// æç”»å‡¦ç†
 		/// </summary>
 		/// <param name="rc"></param>
 		void Draw(RenderContext& rc);
@@ -87,11 +87,11 @@ namespace nsTMEngine {
 
 
 	private:
-		Sprite		m_sprite;						//ƒXƒvƒ‰ƒCƒg
-		Vector2		m_piv = Sprite::DEFAULT_PIVOT;	//ƒsƒ{ƒbƒg
-		Vector3		m_pos = Vector3::Zero;			//ˆÊ’u
-		Vector3		m_sca = Vector3::One;			//‘å‚«‚³
-		Quaternion	m_rot = Quaternion::Identity;	//‰ñ“]
+		Sprite		m_sprite;						//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+		Vector2		m_piv = Sprite::DEFAULT_PIVOT;	//ãƒ”ãƒœãƒƒãƒˆ
+		Vector3		m_pos = Vector3::Zero;			//ä½ç½®
+		Vector3		m_sca = Vector3::One;			//å¤§ãã•
+		Quaternion	m_rot = Quaternion::Identity;	//å›è»¢
 
 	};
 }

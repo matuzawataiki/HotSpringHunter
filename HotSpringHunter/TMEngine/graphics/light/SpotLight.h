@@ -7,17 +7,17 @@ namespace nsTMEngine
 		SpotLight();
 		~SpotLight();
 		/// <summary>
-		/// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì‰Šúİ’è
+		/// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®åˆæœŸè¨­å®š
 		/// </summary>
-		/// <param name="pos">ˆÊ’u</param>
-		/// <param name="color">F</param>
-		/// <param name="range">‰e‹¿‹——£</param>
-		/// <param name="direction">Œü‚«</param>
-		/// <param name="angle">‰e‹¿”ÍˆÍ</param>
+		/// <param name="pos">ä½ç½®</param>
+		/// <param name="color">è‰²</param>
+		/// <param name="range">å½±éŸ¿è·é›¢</param>
+		/// <param name="direction">å‘ã</param>
+		/// <param name="angle">å½±éŸ¿ç¯„å›²</param>
 		void Init(const Vector3& pos, const Vector3& color, const float& range, const Vector3& direction, const float angle);
 
 		/// <summary>
-		/// ƒ‰ƒCƒg‚ÌˆÊ’u‚ğİ’è
+		/// ãƒ©ã‚¤ãƒˆã®ä½ç½®ã‚’è¨­å®š
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -30,7 +30,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// F‚Ìİ’è
+		/// è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetColor(const Vector3& color)
@@ -43,7 +43,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ‰e‹¿‹——£‚Ìİ’è
+		/// å½±éŸ¿è·é›¢ã®è¨­å®š
 		/// </summary>
 		/// <param name="range"></param>
 		void SetRange(const float& range)
@@ -52,7 +52,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ƒ‰ƒCƒg‚ÌŒü‚«‚ğİ’è
+		/// ãƒ©ã‚¤ãƒˆã®å‘ãã‚’è¨­å®š
 		/// </summary>
 		/// <param name="direction"></param>
 		void SetDirection(const Vector3& direction)
@@ -65,7 +65,7 @@ namespace nsTMEngine
 		}
 
 		/// <summary>
-		/// ƒ‰ƒCƒg‚Ì‰e‹¿”ÍˆÍ
+		/// ãƒ©ã‚¤ãƒˆã®å½±éŸ¿ç¯„å›²
 		/// </summary>
 		/// <param name="angle"></param>
 		void SetAngle(const float& angle)
@@ -78,6 +78,6 @@ namespace nsTMEngine
 		}
 
 	private:
-		SSpotLight* m_spotLig = nullptr;	//ƒ|ƒCƒ“ƒgƒ‰ƒCƒg
+		SSpotLight* m_spotLig = nullptr;	//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆ
 	};
 }
