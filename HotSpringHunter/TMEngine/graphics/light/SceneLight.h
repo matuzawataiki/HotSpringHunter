@@ -12,6 +12,8 @@ namespace nsTMEngine {
 		float pad0;
 		Vector3 m_color;	//色
 		float pad1;
+		Matrix m_LVP;		//繝ｩ繧､繝医ン繝･繝ｼ繝励Ο繧ｸ繧ｧ繧ｯ繧ｷ繝ｧ繝ｳ
+
 
 		/// <summary>
 		/// ディレクションライトの方向を設定
@@ -275,7 +277,6 @@ namespace nsTMEngine {
 			SetAmbientLight({ x,y,z });
 		}
 	};
-
 
 	class SceneLight
 	{

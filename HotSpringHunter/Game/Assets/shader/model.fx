@@ -16,6 +16,7 @@ struct DirectionLig
 {
     float3 direction;	//方向
     float3 color;		//色
+    float4x4 LVP;       //ライトのビュープロジェクション
 };
 //ポイントライト構造体
 struct PointLig
@@ -55,7 +56,6 @@ cbuffer ModelCb : register(b0){
 	float4x4 mView;
 	float4x4 mProj;
 };
-
 
 //ライト用の定数バッファ
 cbuffer LightCb : register(b1)
