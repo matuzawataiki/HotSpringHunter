@@ -109,6 +109,7 @@ Texture2D<float4> g_aoMap : register(t10);              //ノーマルマップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
+Texture2D<float4> g_shadowMap : register(t4);           ///シャドウマップ
 ////////////////////////////////////////////////
 //関数宣言
 ////////////////////////////////////////////////

@@ -32,16 +32,19 @@ namespace nsTMEngine {
 			modelInitData.m_skeleton = &m_skeleton;
 		}
 
+		//シャドウマップテクスチャ
+		modelInitData.m_expandShaderResoruceView[4] = &g_renderingEngine->GetShadowMap();
+
+		//シーンライト
 		modelInitData.m_expandConstantBuffer = g_sceneLight->GetLight();
 		modelInitData.m_expandConstantBufferSize = sizeof(Light);
 
 		m_model.Init(modelInitData);		
-
-
 	}
 
 	void ModelRender::InitModelOnShadowMap(RenderingEngine& renderingEngine, const char* tkmFinlePath, EnModelUpAxis modelUpAxis)
 	{
+		//シャドウマップ描画用モデル
 		ModelInitData modelInitData;
 		modelInitData.m_tkmFilePath = tkmFinlePath;
 		modelInitData.m_modelUpAxis = modelUpAxis;
