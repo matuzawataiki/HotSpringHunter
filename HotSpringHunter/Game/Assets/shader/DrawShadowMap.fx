@@ -10,6 +10,11 @@ cbuffer ModelCb : register(b0)
     float4x4 mProj;
 };
 
+cbuffer LVP : register(b1)
+{
+    float4x4 mLVP;
+};
+
 //スキニング用の頂点データをひとまとめ。
 struct SSkinVSIn
 {
@@ -21,8 +26,6 @@ struct SSkinVSIn
 struct SVSIn
 {
     float4 pos : POSITION;  // モデルの頂点座標
-    float3 normal : NORMAL; // 法線
-    float2 uv : TEXCOORD0;  // UV座標
     SSkinVSIn skinVert; //スキン用のデータ。
 
 };
@@ -31,18 +34,13 @@ struct SVSIn
 struct SPSIn
 {
     float4 pos : SV_POSITION;   // スクリーン空間でのピクセルの座標
-    float3 normal : NORMAL;     // 法線
-    float2 uv : TEXCOORD0;      // uv座標
 };
 
 ///////////////////////////////////////////////////
 // グローバル変数
 ///////////////////////////////////////////////////
 
-Texture2D<float4> g_albedo : register(t0);      // アルベドマップ
-Texture2D<float4> g_shadowMap : register(t10);  // シャドウマップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3); //ボーン行列。
-sampler g_sampler : register(s0);               // サンプラーステート
 
 /// <summary>
 //スキン行列を計算する。
@@ -79,11 +77,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
         m = mWorld;
     }
     psIn.pos = mul(m, vsIn.pos);
-    psIn.pos = mul(mView, psIn.pos);
-    psIn.pos = mul(mProj, psIn.pos);
-    psIn.normal = mul(mWorld, vsIn.normal);
+    psIn.pos = mul(mLVP, psIn.pos);
 
-    psIn.uv = vsIn.uv;
     return psIn;
 }
 
@@ -108,7 +103,5 @@ SPSIn VSSkinMain(SVSIn vsIn)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
-    
     return float4(psIn.pos.z, psIn.pos.z, psIn.pos.z, 1.0f);
-
 }

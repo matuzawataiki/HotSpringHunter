@@ -46,18 +46,19 @@ namespace nsTMEngine {
 		modelInitData.m_fxFilePath = "Assets/shader/DrawShadowMap.fx";
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
-		m_drawShadowMapCameraParamCB.Init(sizeof(Vector4), nullptr);
-		modelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB;
-		modelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+		//m_drawShadowMapCameraParamCB.Init(sizeof(Vector4), nullptr);
+		//modelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB;
+		//modelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+		modelInitData.m_expandConstantBuffer = &g_sceneLight->GetLVP();
 		m_shadowModels.Init(modelInitData);
 	}
 
 	void ModelRender::OnRenderShadowMap(RenderContext& rc)
 	{
-		Vector4 cameraParam;
-		cameraParam.x = g_camera3D->GetNear();
-		cameraParam.y = g_camera3D->GetFar();
-		m_drawShadowMapCameraParamCB.CopyToVRAM(cameraParam);
+		//Vector4 cameraParam;
+		//cameraParam.x = g_camera3D->GetNear();
+		//cameraParam.y = g_camera3D->GetFar();
+		//m_drawShadowMapCameraParamCB.CopyToVRAM(cameraParam);
 		m_shadowModels.Draw(rc);
 	}
 

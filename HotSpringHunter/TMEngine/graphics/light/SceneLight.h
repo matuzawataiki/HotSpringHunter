@@ -325,6 +325,11 @@ namespace nsTMEngine {
 			return &m_light;
 		}
 
+		Matrix& GetLVP()
+		{
+			return m_light.m_drectionLight.m_LVP;
+		}
+
 		void SetLVPPosition(Vector3 positon)
 		{
 			m_LVPPos->x = positon.x;
@@ -334,6 +339,8 @@ namespace nsTMEngine {
 	public:
 		Vector3 m_lightPosition = { 0.0f,1000.0f,0.0f };
 		Vector3* m_LVPPos = &m_lightPosition;
+
+		Matrix m_mLVP;
 
 		Light m_light;	//シーンライト
 	private:

@@ -77,7 +77,13 @@ namespace nsTMEngine
 		target.y -= 100.0f;
 		target.x -= 100.0f;
 		Vector3 upAxis = { 0.0f,1.0f,0.0f };
-		LVP.MakeLookAt(m_lightPosition, target, upAxis);
+		// ライトをカメラと見立てたビュー行列を計算する
+		Matrix viewMatrix;
+		viewMatrix.MakeLookAt(m_lightPosition, target, upAxis);
+		// プロジェクション行列を計算する
+		Matrix projMatrix;
+		projMatrix.MakeOrthoProjectionMatrix(1000, 10000, 0.1, 10000);
+		LVP = viewMatrix * projMatrix;
 		m_light.m_drectionLight.UpdateLVP(LVP);
 		
 	}

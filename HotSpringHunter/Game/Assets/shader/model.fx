@@ -107,11 +107,10 @@ struct SPSIn{
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);           //ノーマルマップ
 Texture2D<float4> g_specularMap : register(t2);         //ノーマルマップ
-Texture2D<float4> g_aoMap : register(t10);              //ノーマルマップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
-Texture2D<float4> g_shadowMap : register(t4);           ///シャドウマップ
+Texture2D<float4> g_shadowMap : register(t10);           ///シャドウマップ
 ////////////////////////////////////////////////
 //関数宣言
 ////////////////////////////////////////////////
@@ -132,7 +131,7 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
 float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos);
 
 //シャドウマップの計算
-bool CalcShadowMap(SPSIn psIn);
+int CalcShadowMap(SPSIn psIn);
 
 ////////////////////////////////////////////////
 // 関数定義。
@@ -295,7 +294,7 @@ float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, f
 /// <summary>
 /// シャドウマップの計算
 /// </summary>
-bool CalcShadowMap(SPSIn psIn)
+int CalcShadowMap(SPSIn psIn)
 {
     float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
     shadowMapUV *= float2(0.5f, -0.5f);
@@ -306,13 +305,14 @@ bool CalcShadowMap(SPSIn psIn)
     {
         float zInShadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
         float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
-        if (zInLVP > zInShadowMap)
+        if (zInLVP > zInShadowMap + 0.001f)
         {
-            return true;
+            return 1;
         }
+        return 0;
     }
     
-    return false;    
+    return 0;    
 }
 
 /// <summary>
@@ -347,6 +347,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 	psIn.pos = mul(m, vsIn.pos);
+    psIn.posInLVP = mul(m_directionLig.LVP, psIn.pos);
     psIn.worldPos = psIn.pos;
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
@@ -356,8 +357,6 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//追加
     psIn.normal = mul(mWorld, vsIn.normal);         //法線を回転させる
     psIn.normalInView = mul(mView, psIn.normal);    //カメラ空間の法線を求める
-    
-    psIn.posInLVP = mul(m_directionLig.LVP, psIn.pos);
     
     psIn.tangent = mul(mWorld, vsIn.tangent);       //接ベクトル
     psIn.biNormal = mul(mWorld, vsIn.biNormal);     //接ベクトル
@@ -443,7 +442,7 @@ float4 PSMain( SPSIn psIn) : SV_Target0
     //半球ライトの設定
     //finalLig += CalcHemisphereLight(psIn, m_hemisphereLig);
     
-    bool onShadow = CalcShadowMap(psIn);
+    int onShadow = CalcShadowMap(psIn);
 	
     //最終合成
     float4 finalColor = g_albedo.Sample(g_sampler, psIn.uv);
