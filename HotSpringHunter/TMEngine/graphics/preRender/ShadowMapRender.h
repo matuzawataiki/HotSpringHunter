@@ -17,7 +17,7 @@ namespace nsTMEngine {
 		void Render(RenderContext& rc, std::vector<IRenderer*>& renderObjects);	
 
 		/// <summary>
-		/// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å–å¾—
+		/// ƒeƒNƒXƒ`ƒƒ‚Ìæ“¾
 		/// </summary>
 		/// <returns></returns>
 		Texture& GetTexture()

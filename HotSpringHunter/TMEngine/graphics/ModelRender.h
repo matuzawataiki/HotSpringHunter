@@ -124,18 +124,6 @@ namespace nsTMEngine {
 		void OnRenderShadowMap(RenderContext& rc) override;
 
 		/// <summary>
-		/// シャドウマップ描画用モデルの初期化
-		/// </summary>
-		/// <param name="renderingEngine"></param>
-		/// <param name="tkmFinlePath"></param>
-		/// <param name="modelUpAxis"></param>
-		void InitModelOnShadowMap(
-			RenderingEngine& renderingEngine, 
-			const char* tkmFinlePath, 
-			EnModelUpAxis modelUpAxis
-		);
-
-		/// <summary>
 		/// スケルトンの初期化用関数
 		/// </summary>
 		/// <param name="filePath"></param>

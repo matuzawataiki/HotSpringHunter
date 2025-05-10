@@ -96,6 +96,8 @@ struct SPSIn{
     float3 normalInView : TEXC00RD2;    //カメラ空間の法線
     float3 tangent      : TANGENT;      //接ベクトル
     float3 biNormal     : BINORMAL;     //従ベクトル
+    float4 posInLVP     : TEXCOORD3; //ライトビュースクリーン空間でのピクセル座標
+
 
 };
 
@@ -128,6 +130,9 @@ float3 CalcHemisphereLight(SPSIn psIn, HemisphereLig hemisphereLig);
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 //Phon鏡面反射光の計算
 float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos);
+
+//シャドウマップの計算
+bool CalcShadowMap(SPSIn psIn);
 
 ////////////////////////////////////////////////
 // 関数定義。
@@ -288,6 +293,29 @@ float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, f
 }
 
 /// <summary>
+/// シャドウマップの計算
+/// </summary>
+bool CalcShadowMap(SPSIn psIn)
+{
+    float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+    shadowMapUV *= float2(0.5f, -0.5f);
+    shadowMapUV += 0.5f;
+    
+    if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+        && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
+    {
+        float zInShadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
+        float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
+        if (zInLVP > zInShadowMap)
+        {
+            return true;
+        }
+    }
+    
+    return false;    
+}
+
+/// <summary>
 //スキン行列を計算する。
 /// </summary>
 float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
@@ -328,6 +356,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//追加
     psIn.normal = mul(mWorld, vsIn.normal);         //法線を回転させる
     psIn.normalInView = mul(mView, psIn.normal);    //カメラ空間の法線を求める
+    
+    psIn.posInLVP = mul(m_directionLig.LVP, psIn.pos);
     
     psIn.tangent = mul(mWorld, vsIn.tangent);       //接ベクトル
     psIn.biNormal = mul(mWorld, vsIn.biNormal);     //接ベクトル
@@ -412,9 +442,15 @@ float4 PSMain( SPSIn psIn) : SV_Target0
     finalLig += m_ambientLight;
     //半球ライトの設定
     //finalLig += CalcHemisphereLight(psIn, m_hemisphereLig);
+    
+    bool onShadow = CalcShadowMap(psIn);
 	
     //最終合成
     float4 finalColor = g_albedo.Sample(g_sampler, psIn.uv);
+    if(onShadow)
+    {
+        finalColor.xyz *= 0.5;
+    }
     finalColor.xyz *= finalLig;
 
 	return finalColor;

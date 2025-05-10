@@ -134,9 +134,13 @@ namespace nsTMEngine
 
 	void RenderingEngine::RenderToShadowMap(RenderContext& rc)
 	{
+		BeginGPUEvent("RenderShadowmap");
+
 		m_shadowMapRender.Render(rc, m_renderObjects);
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::Render2D(RenderContext& rc)

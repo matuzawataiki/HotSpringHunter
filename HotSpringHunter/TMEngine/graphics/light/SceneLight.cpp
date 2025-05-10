@@ -2,8 +2,6 @@
 #include "SceneLight.h"
 namespace nsTMEngine
 {
-
-
 	SceneLight::SceneLight()
 	{
 		
@@ -63,6 +61,7 @@ namespace nsTMEngine
 	{
 		m_posInView = m_pos;
 		g_camera3D->GetViewMatrix().Apply(m_posInView);
+
 	}
 
 	void SSpotLight::Update()
@@ -73,6 +72,14 @@ namespace nsTMEngine
 
 	void SceneLight::Update()
 	{
+		Matrix LVP;
+		Vector3 target = m_lightPosition;
+		target.y -= 100.0f;
+		target.x -= 100.0f;
+		Vector3 upAxis = { 0.0f,1.0f,0.0f };
+		LVP.MakeLookAt(m_lightPosition, target, upAxis);
+		m_light.m_drectionLight.UpdateLVP(LVP);
+		
 	}
 
 }

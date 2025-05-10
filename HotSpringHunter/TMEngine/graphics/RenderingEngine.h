@@ -82,7 +82,7 @@ namespace nsTMEngine
 		void Render2D(RenderContext& rc);
 
 		/// <summary>
-		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã®å–å¾—
+		/// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ìæ“¾
 		/// </summary>
 		/// <returns></returns>
 		Texture& GetShadowMap()

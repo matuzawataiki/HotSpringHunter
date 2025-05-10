@@ -32,29 +32,16 @@ namespace nsTMEngine {
 			modelInitData.m_skeleton = &m_skeleton;
 		}
 
-		//ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ãƒ†ã‚¯ã‚¹ãƒãƒ£
-		modelInitData.m_expandShaderResoruceView[4] = &g_renderingEngine->GetShadowMap();
+		//ƒVƒƒƒhƒEƒ}ƒbƒvƒeƒNƒXƒ`ƒƒ
+		modelInitData.m_expandShaderResoruceView[0] = &g_renderingEngine->GetShadowMap();
 
-		//ã‚·ãƒ¼ãƒ³ãƒ©ã‚¤ãƒˆ
+		//ƒV[ƒ“ƒ‰ƒCƒg
 		modelInitData.m_expandConstantBuffer = g_sceneLight->GetLight();
 		modelInitData.m_expandConstantBufferSize = sizeof(Light);
+		m_model.Init(modelInitData);
 
-		m_model.Init(modelInitData);		
-	}
-
-	void ModelRender::InitModelOnShadowMap(RenderingEngine& renderingEngine, const char* tkmFinlePath, EnModelUpAxis modelUpAxis)
-	{
-		//ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»ç”¨ãƒ¢ãƒ‡ãƒ«
-		ModelInitData modelInitData;
-		modelInitData.m_tkmFilePath = tkmFinlePath;
-		modelInitData.m_modelUpAxis = modelUpAxis;
-
-		SetupShaderEntryPointFunc(modelInitData);
-
-		if (m_animationClips != nullptr) {
-			//ƒXƒPƒ‹ƒgƒ“‚ğw’è‚·‚éB
-			modelInitData.m_skeleton = &m_skeleton;
-		}
+		//ƒVƒƒƒhƒEƒ}ƒbƒvƒeƒNƒXƒ`ƒƒ
+		modelInitData.m_expandShaderResoruceView[0] = nullptr;
 
 		modelInitData.m_fxFilePath = "Assets/shader/DrawShadowMap.fx";
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;

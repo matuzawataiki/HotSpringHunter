@@ -12,7 +12,7 @@ namespace nsTMEngine {
 		float pad0;
 		Vector3 m_color;	//色
 		float pad1;
-		Matrix m_LVP;		//繝ｩ繧､繝医ン繝･繝ｼ繝励Ο繧ｸ繧ｧ繧ｯ繧ｷ繝ｧ繝ｳ
+		Matrix m_LVP;		//ライトビュープロジェクション
 
 
 		/// <summary>
@@ -42,7 +42,11 @@ namespace nsTMEngine {
 			SetColor({ x,y,z });
 		}
 
-	public:
+		void UpdateLVP(const Matrix LVP)
+		{
+			m_LVP = LVP;
+		}
+	
 
 	};
 
@@ -320,6 +324,16 @@ namespace nsTMEngine {
 		{
 			return &m_light;
 		}
+
+		void SetLVPPosition(Vector3 positon)
+		{
+			m_LVPPos->x = positon.x;
+			m_LVPPos->z = positon.z;
+		}
+
+	public:
+		Vector3 m_lightPosition = { 0.0f,1000.0f,0.0f };
+		Vector3* m_LVPPos = &m_lightPosition;
 
 		Light m_light;	//シーンライト
 	private:
