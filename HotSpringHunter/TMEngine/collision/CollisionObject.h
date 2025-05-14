@@ -121,7 +121,7 @@ namespace nsK2Engine {
 		/// <summary>
 		/// コリジョンオブジェクト同士の当たり判定。
 		/// </summary>
-		/// <param name="collisionObject">衝突判定したいコリジョンオブジェクト。</param>
+		/// <param name="m_enemyATCollision">衝突判定したいコリジョンオブジェクト。</param>
 		/// <returns>衝突したらtrue。</returns>
 		const bool IsHit(CollisionObject* collisionObject) const
 		{
@@ -136,7 +136,7 @@ namespace nsK2Engine {
 		/// <summary>
 		/// コリジョンオブジェクトとキャラコンの当たり判定。
 		/// </summary>
-		/// <param name="collisionObject">衝突判定したいキャラコン。</param>
+		/// <param name="m_enemyATCollision">衝突判定したいキャラコン。</param>
 		/// <returns>衝突したらtrue。</returns>
 		const bool IsHit(CharacterController& characterController) const
 		{

@@ -1,10 +1,28 @@
 #pragma once
 
 class Player;
-class PlayerAttack;
-class PlayerChargeAttack;
-class PlayerHealth;
 class EnemySpawn;
+class EnemyBase;
+
+//ヘビのステートの種類
+enum EnSnakeState {
+	enSnakeIdle,
+	enSnakeTrack,
+	enSnakeAttack,
+	enSnakeKnockBack,
+	enSnakeDeath,
+};
+
+//ヘビのアニメーションクリップ
+enum EnSnakeAnimClip
+{
+	enSnakeAnimClip_Idle,
+	enSnakeAnimClip_Walk,
+	enSnakeAnimClip_Attack,
+	enSnakeAnimClip_Hit,
+	enSnakeAnimClip_Death,
+	enSnakeAnimClip_Num,
+};
 
 class SnakeEnemy : public IGameObject
 {
@@ -12,82 +30,41 @@ public:
 	SnakeEnemy();
 	~SnakeEnemy();
 
-	void Rotation();				//回転。
-	void SnakeAttack();
-	void Tracking();
-	void EnemyAnimation();
-	void MoveStop();
-	void EnemyDeath();
-	void Hit();
+	bool Start()override;
+	//アセット読み込み
+	void LoadAsset();
+	void Update()override;
+	//ステート管理。
 	void ManageState();
-	void EnemyAttackCollision();
-	void KnockBack();
-	void Update();
+	//行動を実行
+	void ExecuteAction();
+	//いろいろ更新。
+	void VariousUpdate();
+	//速度を適応。
+	void ExecuteSpeed();
+	void Render(RenderContext& rc)override;
 
-
-	void Render(RenderContext& rc);
-
-	enum EnAnimationClip
-	{
-		enAnimationClip_Idle,
-		enAnimationClip_Walk,
-		enAnimationClip_Attack,
-		enAnimationClip_Hit,
-		enAnimationClip_Death,
-		enAnimationClip_Num,
-	};
-
-	AnimationClip m_animationClips[enAnimationClip_Num];  //アニメーションクリップ
-
-	CharacterController m_characterController;  //キャラクターコントローター
 	CollisionObject* collisionObject = nullptr;
-
 	Player* m_player = nullptr;
-	PlayerAttack* m_playerAttack = nullptr;
-	PlayerChargeAttack* m_playerCharAt = nullptr;
-	PlayerHealth* m_playerHealth = nullptr;
 	EnemySpawn* m_enemySpawn = nullptr;
-	
-	Vector3 m_position        = Vector3::Zero;		//座標
-	Vector3 m_moveSpeed       = Vector3::Zero;		//敵の速度
-	Vector3 m_enemyDirection  = Vector3::Zero;		//コリジョン
-	Vector3 m_toPlayer        = Vector3::Zero;		//ベクトル
-	Quaternion m_rotation     = Quaternion::Identity;		//クォータニオン
+	EnemyBase* m_enemyBase = nullptr;
 
-	ModelRender m_modelRender;  //モデルレンダー
-	PhysicsStaticObject physicsStaticObject;  //当たり判定
+	AnimationClip m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
+	CharacterController m_characterController;		//キャラクターコントローラー	
+	Quaternion m_rotation = Quaternion::Identity;		//回転
+	ModelRender m_modelRender;								//モデルレンダー
 
-	///
-	
+	Vector3 m_position        = Vector3::Zero;				//座標
+	Vector3 m_moveSpeed       = Vector3::Zero;				//速度
+	Vector3 m_enemyDir        = Vector3::Zero;				//向き
+	Vector3 m_toPlayer        = Vector3::Zero;				//プレイヤーへのベクトル
 
-	//アニメーションステート
-	enum AnimationState
-	{
-		enIdle,
-		enWalk,
-		enAttack,
-		enHit,
-		enDeath,
-		enNum,
-	};
-	int m_animationState = enNum;  //エネミーステートの状態を表す変数
+	float  m_enemyHP = 500.0f;		//敵のHP
 
-	Vector3 toPlayerDir;		//プレイヤーに向かって伸びるベクトル
+	int m_snakeState = 0;				//ヘビのステート
 
-	bool m_isSpawn  = false;	//敵が出現するか
-	bool m_isAlive   = true;    //敵が生きているか
-	bool m_enemyATK = false;    //敵が攻撃したか
-	bool m_deathCount = false;
-
-	float  m_enemyHP  = 50.0f;		//敵のHP
-	bool m_moveStop = false;    //攻撃時に止まる
-
-	int m_enemyDeathCuont = 0;  //敵が何匹死んだ
-
-	float posX = 0.0f;
-	float posY = 0.0f; 
-
-	bool enemyDead = false; //死んだ処理を一回だけ
+	bool m_isSpawn = true;	//敵が出現するか
+	bool m_isAlive = true;    //敵が生きているか
+	bool m_isFind = false;			//プレイヤーを捉えたか
+	bool m_isCanStateChange = true;	//ステートを変えてもよいか
 };
-
-

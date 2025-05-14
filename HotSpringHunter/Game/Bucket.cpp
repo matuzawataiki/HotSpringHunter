@@ -60,13 +60,13 @@ void Bucket::FollowPlayer()
 /// </summary>
 void Bucket::ManageAnimState()
 {
-	switch (m_player->m_animationState) {
-	case m_player->enGuardStart:
+	/*switch (m_player->m_animationState) {
+	case enGuardStart:
 		m_bucketModel.PlayAnimation(enAnimClip_GuardStart);
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 /// <summary>
