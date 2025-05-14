@@ -16,7 +16,7 @@ namespace nsK2EngineLow {
 				section.direction.Normalize();
 			}
 		}
-		Vector3 Path::Move(
+		Vector3 Path::AnimManage(
 			Vector3 pos, 
 			float moveSpeed, 
 			bool& isEnd,

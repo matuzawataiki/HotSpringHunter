@@ -229,6 +229,7 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="Bucket.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -247,12 +248,12 @@
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Towel.cpp" />
-    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="Bucket.h" />
+    <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
@@ -266,7 +267,6 @@
     <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Towel.h" />
-    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

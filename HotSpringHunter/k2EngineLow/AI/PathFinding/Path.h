@@ -20,7 +20,7 @@ namespace nsK2EngineLow {
 			/// 座標を地面にスナップします。
 			/// </param>
 			/// <returns>移動後の座標</returns>
-			Vector3 Move( 
+			Vector3 AnimManage( 
 				Vector3 pos, 
 				float moveSpeed, 
 				bool& isEnd,

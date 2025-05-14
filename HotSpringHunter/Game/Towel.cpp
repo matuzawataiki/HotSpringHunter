@@ -17,7 +17,6 @@ bool Towel::Start()
 	LoadModel();
 
 	m_player = FindGO<Player>("player");
-	m_playerCharAt = FindGO<PlayerChargeAttack>("playerChargeAttack");
 
 	return true;
 }
@@ -70,29 +69,29 @@ void Towel::FollowPlayer()
 /// </summary>
 void Towel::StateManage()
 {
-	switch (m_player->GetAnimationState()) {
-	case m_player->enChargeAttack:
+	/*switch (m_player->m_animationState) {
+	case enChargeAttack:
 		m_towelModel.PlayAnimation(enAnimClip_ChargeAttack);
 		break;
-	/*case m_player->enCharging:
+	case m_player->enCharging:
 		m_towelModel.PlayAnimation(enAnimClip_Charging);
 		break;
 	case m_player->enWeakAttack:
 		m_towelModel.PlayAnimation(enAnimClip_WeakAttack);
-		break;*/
+		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void Towel::ChargeAttackScale()
 {
-	if (m_player->m_animationState == m_player->enChargeAttack) {
-		m_towelSca.z = m_playerCharAt->GetCharge();
+	/*if (m_player->m_animationState == m_player->enChargeAttack) {
+
 	}
 	else {
 		m_towelSca = Vector3::One;
-	}
+	}*/
 }
 
 /// <summary>

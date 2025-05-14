@@ -1,42 +1,22 @@
 #include "stdafx.h"
 #include "Bear.h"
-
 #include "Game.h"
 #include "Player.h"
-
+#include "EnemySpawn.h"
+#include "EnemyBase.h"
 #include "collision/CollisionObject.h"
 
 namespace {
-	const Vector3 BACK_YARD_POS = { 100.0f,300.0f,500.0f };
-}
+	const float FIND_RANGE = 500.0f;			//プレイヤーを捉える距離
+	const float ATK_RANGE = 300.0f;				//近接攻撃のリーチ
+	const float MELEE_ATTACK_DAMAGE = 20.0f;	//近接攻撃の攻撃力
+	const float ATK_COOLTIME = 3.0f;			//近接攻撃のクールタイム
+	const Vector3 NEW_POSITION = Vector3{ 0.0f,0.0f,500.0f };		//初期位置
+};
 
 Bear::Bear()
 {
-	//プレイヤー
-	m_player = FindGO<Player>("player");
-
-	//アニメーションロード
-	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/bear/Idle.tka");
-	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Run].Load("Assets/animData/bear/Run.tka");
-	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Attack].Load("Assets/animData/bear/Attack.tka");
-	m_animationClips[enAnimationClip_Attack].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Hit].Load("Assets/animData/bear/Hit.tka");
-	m_animationClips[enAnimationClip_Hit].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Death].Load("Assets/animData/bear/Death.tka");
-	m_animationClips[enAnimationClip_Death].SetLoopFlag(true);
-
-	//エネミーモデル
-	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisZ);
-
-	m_position.y = 100.0f;
-	////初期値のランダム配置
-	//キャラクターコントローラー
-	m_characterController.Init(30.0f, 50.0f, m_position);
-	//m_modelRender.Update();
-
-	//physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
+	
 }
 
 Bear::~Bear()
@@ -44,261 +24,213 @@ Bear::~Bear()
 
 }
 
+bool Bear::Start()
+{
+	//アセット読み込み
+	LoadAssets();
+
+	//基底クラス生成
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+
+	//インスタンス探し
+	m_player = FindGO<Player>("player");
+
+	//クマを初期位置に
+	m_position = NEW_POSITION;
+
+	//キャラクターコントローラー
+	m_characterController.Init(80.0f, 80.0f, m_position);
+
+	return true;
+}
+
+void Bear::LoadAssets()
+{
+	//アニメーション読み込み
+	m_animationClips[enBearAnimClip_Idle].Load("Assets/animData/bear/Idle.tka");
+	m_animationClips[enBearAnimClip_Idle].SetLoopFlag(true);
+	m_animationClips[enBearAnimClip_Run].Load("Assets/animData/bear/Run.tka");
+	m_animationClips[enBearAnimClip_Run].SetLoopFlag(true);
+	m_animationClips[enBearAnimClip_Attack].Load("Assets/animData/bear/Attack.tka");
+	m_animationClips[enBearAnimClip_Attack].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Hit].Load("Assets/animData/bear/Hit.tka");
+	m_animationClips[enBearAnimClip_Hit].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Death].Load("Assets/animData/bear/Death.tka");
+	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
+
+	//モデル読み込み
+	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
+}
+
 void Bear::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		int a = 0;
-		a++;
-	}
-	if (m_isSpawn == true)
+	//スポーンしているなら
+	if (m_isSpawn)
 	{
-		if (m_isAlive == true) {
-			//プレイヤーの追従
-			Tracking();
-			//プレイヤーに攻撃
-			SnakeAttack();
-		}
-		else {
-			//エネミーの吹っ飛び
-			EnemyDeath();
-		}
-
-		//敵が吹っ飛ぶときにキャラコンを消して透明な壁をすり抜ける
-		if (m_isAlive) {
-			// キャラクターコントローラーがある時は移動処理の結果を受け取るだけ
-			m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
-		}
-		else {
-			// ないときは自分で移動結果を計算
-			const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
-			m_position.Add(move);
-		}
-	}
-	else
-	{
-		m_position = BACK_YARD_POS;
+		//ステート管理
+		ManageState();
+		//行動実行
+		ExecuteAction();
 	}
 
-	//アニメーションの再生
-	EnemyAnimation();
-	//ステート管理
-	ManageState();
-	//エネミーがプレイヤーに向く
-	Rotation();
-
-	m_modelRender.SetPosition(m_position);
-
-	m_modelRender.Update();
-}
-
-//エネミーがプレイヤーに向く
-void Bear::Rotation()
-{
-	m_rotation.SetRotationYFromDirectionXZ(m_toPlayer);
-	m_modelRender.SetRotation(m_rotation);
-}
-
-//プレイヤーと敵の当たり判定
-void Bear::SnakeAttack()
-{
-	//プレイヤーとの距離が200以下の場合
-	Vector3 diff = m_player->GetPlayerPos() - m_position;
-
-	if (diff.Length() < 200.0f && m_enemyATK == false)
-	{
-		//前方にコリジョンを作る
-		EnemyAttackCollision();
-	}
-	else if (diff.Length() >= 220.0f)
-	{
-		m_enemyATK = false;
-	}
-
-	if (m_enemyHP <= 0.0f)
-	{
-		// 死亡したらキャラクターコントローラーを消して壁貫通するようにする
-		m_characterController.RemoveRigidBoby();
-		m_isAlive = false;
-	}
-}
-
-//範囲内のプレイヤーを追いかける
-void Bear::Tracking()
-{
-	//エネミーからプレイヤーに向かって伸びるベクトルを計算
-	m_toPlayer = m_player->GetPlayerPos() - m_position;
-	m_toPlayer.y = 0.0f;
-
-	//プレイヤーとの距離を計算する
-	float distToPlayer = m_toPlayer.Length();
-
-	if (distToPlayer < 200.0f) {
-		m_moveSpeed.Set(Vector3::Zero);
-		m_moveStop = true;
-		MoveStop();
-	}
-	else if (distToPlayer < 1000.0f) {
-		//プレイヤーとの距離が400以下だったら追いかける
-		//プレイヤーに向かっている伸びるベクトルを正規化。
-		Vector3 toPlayerDir = m_toPlayer;
-		toPlayerDir.Normalize();
-
-		//正規化で求めたベクトルを利用して、エネミーの座標を動かす
-		m_moveSpeed = toPlayerDir * 100.0f;
-	}
-}
-
-//一時停止
-void Bear::MoveStop()
-{
-	if (m_moveStop == true)
-	{
-		m_moveSpeed = toPlayerDir * 0.0f;
-		m_moveStop = false;
-
-		return;
-	}
-}
-
-void Bear::Hit(float takeDamage)
-{
-	m_enemyHP -= takeDamage;
-}
-
-//プレイヤーと逆方向に飛んでいく
-void Bear::EnemyDeath()
-{
-	if (enemyDead)
-	{
-		//プレイヤーに向かっている伸びるベクトルを正規化
-		Vector3 toPlayerDir = m_toPlayer;
-		toPlayerDir.Normalize();
-		toPlayerDir *= -1.0f;
-
-		//正規化で求めたベクトルを利用して、エネミーの座標を動かす
-		m_moveSpeed = toPlayerDir * 2000.0f;
-		m_moveSpeed.y = 800.0f;
-
-		//吹っ飛ぶアニメーション
-		m_animationState = enDeath;
-	}
-	enemyDead = true;
-}
-
-//エネミーの攻撃コリジョン
-void Bear::EnemyAttackCollision()
-{
-	//コリジョンオブジェクトを作成
-	collisionObject = NewGO<CollisionObject>(0, "bear_atk");
-	Vector3 collisionPosition = Vector3::Zero;
-
-	//エネミーの少し前に設定
-	m_enemyDirection = m_toPlayer;
-	m_enemyDirection.Normalize();
-	m_enemyDirection *= 100.0f;
-	collisionPosition = m_position + m_enemyDirection;
-
-	//球状のコリジョンを作成
-	collisionObject->CreateSphere(
-		collisionPosition,
-		Quaternion::Identity,
-		100.0f
-	);
-
-	//プレイヤーが敵にあたると-10
-	if (collisionObject->IsHit(m_player->m_playerCharaCon)) {
-		m_enemyHP -= 10;
-		//ノックバック
-		KnockBack();
-	}
-
-	DeleteGO(collisionObject);
-
-	m_enemyATK = true;
-}
-
-//プレイヤーに攻撃されたときノックバックする
-void Bear::KnockBack()
-{
-	//// 後退
-	////プレイヤーに向かっている伸びるベクトルを正規化
-	//Vector3 toPlayerDir = m_toPlayer;
-	//toPlayerDir.Normalize();
-	//toPlayerDir.y = 0;
-	//toPlayerDir * -1.0f;
-
-	////正規化で求めたベクトルを利用して、エネミーの座標を動かす
-	//m_moveSpeed = toPlayerDir * -500.0f;
-
-	////ノックバックアニメーション
-	//m_animationState = enHit;
+	//いろいろ更新
+	VariousUpdate();
 }
 
 
-//ステート管理
+/// <summary>
+/// ステート管理
+/// </summary>
 void Bear::ManageState()
 {
-	// 死亡したらキャラクターコントローラーは無くなるので処理しない。
-	if (m_characterController.IsOnGround() == true)
-	{
-		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
-		{
-			//歩くアニメーション
-			m_animationState = enWalk;
-		}
-		else
-		{
-			//待機アニメーション
-			m_animationState = enIdle;
-		}
-		if (m_toPlayer.Length() <= 200.0f)
-		{
-			//攻撃アニメーション
-			m_animationState = enAttack;
-		}
-		//プレイヤーが敵にあたると-
-		if (collisionObject->IsHit(m_player->m_playerCharaCon))
-		{
-			//ノックバックアニメーション
-			m_animationState = enHit;
-		}
+	//ステートを変えてもよいなら
+	m_isCanStateChange = m_enemyBase->ChangeFlag();
+	if (!m_isCanStateChange) {
+		return;
 	}
+	//被弾した場合
+	if (m_player->m_collision->IsHit(m_characterController)) {
+
+		//HP減らす。
+		m_enemyHP -= m_player->m_attackPower;
+
+		//HPがまだ残っている。
+		if (m_enemyHP > 0.0f) {
+			m_bearState = enBearKnockBack;
+		}
+		//HPがなくなった
+		else {
+			m_bearState = enBearDeath;
+		}
+		return;
+	}
+
+	//向きの更新
+	DirUpdate();
+
+	//近接攻撃
+	if (m_toPlayer.Length() < ATK_RANGE) {
+		m_bearState = enBearMeleeAttack;
+		return;
+	}
+	
+	//追従
+	if ((ATK_RANGE < m_toPlayer.Length()) && (m_findFlag)) {
+		m_bearState = enBearTrack;
+		return;
+	}
+
+	//見つけたらずっと追従し続ける
+	if (m_toPlayer.Length() < FIND_RANGE) {
+		m_findFlag = true;
+	}
+	
+	//待機
+	m_bearState = enBearIdle;
 }
 
-//アニメーション再生
-void Bear::EnemyAnimation()
+/// <summary>
+/// 
+/// </summary>
+void Bear::DirUpdate()
 {
-	//switch文
-	switch (m_animationState)
-	{
-	case enIdle:	//待機アニメーションの再生
-		m_modelRender.PlayAnimation(enAnimationClip_Idle);
-		break;
+	//向きの更新。
+	m_enemyDir = m_toPlayer;
+	m_enemyDir.Normalize();
+}
 
-	case enWalk:	//歩くアニメーションの再生
-		m_modelRender.PlayAnimation(enAnimationClip_Run);
-		break;
+/// <summary>
+/// 行動を実行。
+/// </summary>
+void Bear::ExecuteAction()
+{
+	//移動速度を0する
+	m_moveSpeed = Vector3::Zero;
+	//近接攻撃のクールタイムを計算
+	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
 
-	case enAttack:	//攻撃アニメーションの再生
-		m_modelRender.PlayAnimation(enAnimationClip_Attack);
+	switch (m_bearState) {
+		//ノックバック
+	case enBearKnockBack:
+		m_moveSpeed = m_enemyBase->KnockBack(m_enemyDir);
+		//被弾アニメーションを再生
+		m_modelRender.PlayAnimation(enBearAnimClip_Hit);
 		break;
-
-	case enHit:   //ノックバックアニメーションの再生
-		m_modelRender.PlayAnimation(enAnimationClip_Hit);
+		//死亡
+	case enBearDeath:
+		m_enemyBase->Death();
+		//死亡アニメーションを再生
+		m_modelRender.PlayAnimation(enBearAnimClip_Death);
 		break;
-
-	case enDeath:	//吹っ飛ぶアニメーションの再生
-		m_modelRender.PlayAnimation(enAnimationClip_Death);
+		//近接攻撃
+	case enBearMeleeAttack:
+		//クールタイムが0だったら
+		if (m_ATKCoolTime <= 0.0f)
+		{
+			//近接攻撃
+			m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
+			//近接攻撃アニメーションを再生
+			m_modelRender.PlayAnimation(enBearAnimClip_Attack);
+			//タイマーをセット
+			m_ATKCoolTime = ATK_COOLTIME;
+		}
+		//攻撃しないときは待機アニメーション
+		else if(!m_modelRender.IsPlayAnimation()){
+			m_modelRender.PlayAnimation(enBearAnimClip_Idle);
+		}		
 		break;
-
+		//追従
+	case enBearTrack:
+		m_moveSpeed = m_enemyBase->Tracking(m_toPlayer);
+		//歩きアニメーションを再生
+		m_modelRender.PlayAnimation(enBearAnimClip_Run);
+		break;
+		//待機
+	case enBearIdle:
+		//待機アニメーションを再生
+		m_modelRender.PlayAnimation(enBearAnimClip_Idle);
+		break;
 	default:
 		break;
 	}
 }
 
+/// <summary>
+/// いろいろ更新（座標、回転など）
+/// </summary>
+void Bear::VariousUpdate()
+{
+	//エネミーからプレイヤーに向かって伸びるベクトルを計算
+	m_toPlayer = m_player->GetPlayerPos() - m_position;
+	//速度を適応。
+	ExecuteSpeed();
+	//回転の更新。
+	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
+	m_modelRender.SetRotation(m_rotation);
+	//座標の更新。
+	m_modelRender.SetPosition(m_position);
+	//モデルの更新。
+	m_modelRender.Update();
+}
+
+/// <summary>
+/// 速度を適応。
+/// </summary>
+void Bear::ExecuteSpeed()
+{
+	//敵が吹っ飛ぶときにキャラコンを消して透明な壁をすり抜ける
+	if (m_isAlive) {
+		// キャラクターコントローラーがある時は移動処理の結果を受け取るだけ
+		m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
+	}
+	else {
+		// ないときは自分で移動結果を計算
+		const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
+		m_position.Add(move);
+	}
+}
 
 void Bear::Render(RenderContext& rc)
 {
-	//モデル
 	m_modelRender.Draw(rc);
 }

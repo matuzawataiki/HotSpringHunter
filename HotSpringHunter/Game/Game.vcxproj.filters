@@ -21,11 +21,11 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="GameOver.cpp" />
-    <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
-    <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="StartWaveCollision.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Bear.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
+    <ClCompile Include="SnakeEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -42,10 +42,10 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="GameOver.h" />
-    <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemySpawn.h" />
-    <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="StartWaveCollision.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="Bear.h" />
+    <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="SnakeEnemy.h" />
   </ItemGroup>
 </Project>

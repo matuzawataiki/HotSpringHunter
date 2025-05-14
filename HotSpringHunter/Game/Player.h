@@ -1,52 +1,36 @@
 #pragma once
 class Towel;
 class Bucket;
-
+class IState;
+class StateMachine;
 class SnakeEnemy;
 
 //現在アクティブなステート。
 //順番気をつけようね。
-enum EnActiveState{
-	enPlayerMove,
-	enPlayerJump,
-	enPlayerDash,
+enum EnPlayerActiveState{
+	enPlayerIdle,
+	enPlayerWalk,
 	enPlayerWeakAttack,
 	enPlayerChargeAttack,
-	enPlayeGuard,
-	enPlayerHealth,
+	enPlayerGuard,
 	enPlayerHit,
 	enPlayerDeath,
 };
 
-//アニメーションステート。
-enum EnPlayerAnimVar {
-	enIdle,
-	enWalk,
-	enRun,
-	enJump,
-	enGuardStart,
-	enGuardEnd,
-	enWeakAttack,
-	enChargeAttack,
-	enCharging,
-	enHit,
-	enDeath,
-};
-
 //アニメーションクリップ。
-enum EnAnimationClip {
-	enAnimationClip_Idle,
-	enAnimationClip_Walk,
-	enAnimationClip_Run,
-	enAnimationClip_Jump,
-	enAnimationClip_GuardStart,
-	enAnimationClip_GuardEnd,
-	enAnimationClip_WeakAttack,
-	enAnimationClip_ChargeAttack,
-	enAnimationClip_Charging,
-	enAnimationClip_Hit,
-	enAnimationClip_Death,
-	enAnimationClip_Num,
+enum EnPlayerAnimClip {
+	enPlayerAnimClip_Idle,
+	enPlayerAnimClip_Walk,
+	enPlayerAnimClip_Run,
+	enPlayerAnimClip_Jump,
+	enPlayerAnimClip_GuardStart,
+	enPlayerAnimClip_GuardEnd,
+	enPlayerAnimClip_WeakAttack,
+	enPlayerAnimClip_ChargeAttack,
+	enPLayerAnimClip_Charging,
+	enPlayerAnimClip_Hit,
+	enPlayerAnimClip_Death,
+	enPlayerAnimClip_Num,
 };
 
 class Player :public IGameObject
@@ -62,23 +46,46 @@ public:
 	//アセットロード。
 	void LoadAssets();	
 	void Update()override;
+	//基本的な挙動。
+	void BasicBehavior();
+	//向きを更新。
+	void DirectionUpdate();
+	//被弾。
+	void Hit(float reduce);
 	//state管理。
 	void StateManage();
+	//チャージ量表示（仮）。
+	void DisplayCharge();
 	void Render(RenderContext& rc)override;
 
 	//player座標のゲッター。
 	Vector3 GetPlayerPos() {
-		return m_playerPosition;
+		return m_playerPos;
 	}
 	//playerの向きのゲッター。
 	Vector3 GetPlayerDir() {
-		return m_playerDirection;
+		return m_playerDir;
 	}
 
-	std::vector<IState*>m_stateList;
-	int m_currentState = 0;
-	int m_requestState = 0;
+	//攻撃力のゲッター。
+	float GetAttackPower() {
+		return m_attackPower;
+	}
+	//チャージのゲッター。
+	float GetCharge() {
+		return m_charge;
+	}
 
+	//チャージ量表示（仮）
+	FontRender m_chargeRender;
+	wchar_t m_chargeText[100];
+
+
+	std::vector<IState*>m_stateList;
+	int m_currentState = 0;						//現在のステート。
+	int m_requestState = 0;						//変更したいステート。
+
+	StateMachine* m_stateMachine = nullptr;
 	Towel* m_towel = nullptr;
 	Bucket* m_bucket = nullptr;
 
@@ -89,19 +96,30 @@ public:
 
 	CharacterController m_playerCharaCon;					//キャラコン。
 	ModelRender m_playerModel;								//描画。
-	Vector3 m_playerPosition = Vector3::Zero;				//座標。
+	Vector3 m_playerPos = Vector3::Zero;				//座標。
 	Vector3 m_playerSpeed = Vector3::Zero;					//移動スピード。
-	Vector3 m_playerDirection = Vector3::Zero;				//向き。
-	Quaternion m_playerRotation = Quaternion::Identity;		//回転。
+	Vector3 m_playerDir = Vector3::Zero;				//向き。
+	Quaternion m_playerRot = Quaternion::Identity;		//回転。
 
-	float m_dashState = 1.0f;								//走り状態の管理。
-	float m_guardState = 1.0f;								//ガード状態の管理。
-	float m_playerHP = 100.0f;								//player体力。
-	bool m_guardFlag = false;				//ガードのフラッグ。
+	float m_playerHP = 10000.0f;								//player体力。
+
+	float m_dashState = 1.0f;								//ダッシュ：走り状態の移動管理。
 
 
-	int m_animationState = 0;								//アニメーションの状態。
-	AnimationClip m_animationClips[enAnimationClip_Num];	//アニメーションクリップ。	
+	float m_guardState = 1.0f;								//ガード：ガード状態の移動管理。
+	bool m_guardFlag = false;								//ガード：ガードのフラッグ。
+
+	bool m_weakAtFlag = false;								//弱攻撃：弱攻撃中か。
+	bool m_chargeAtFlag = false;							//溜め攻撃：溜め攻撃中か。
+	float m_charge = 0.0f;									//溜め攻撃：チャージ量。
+
+	float m_attackPower = 0.0f;								//攻撃共通：攻撃力。
+
+	bool m_hitFlag = false;									//被弾：被弾中かのフラッグ。
+	bool m_deathFlag = false;								//死亡：死亡しているかのフラッグ。
+
+
+	AnimationClip m_animationClips[enPlayerAnimClip_Num];	//アニメーションクリップ。	
 };
 
 class IState
@@ -114,8 +132,38 @@ public:
 	virtual void Enter() = 0;
 	virtual void Update() = 0;
 	virtual void Exit() = 0;
+
 protected:
 	Player* m_player = nullptr;
+};
+
+class StateMachine:public IGameObject
+{
+public:
+	StateMachine();
+	~StateMachine();
+	bool Start()override;
+	void Update()override;
+	//ステート遷移（仮）。
+	void StateManage();
+private:
+	Player* m_player = nullptr;
+	float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
+};
+
+class PlayerIdle :public IState
+{
+public:
+	PlayerIdle(Player* player)
+		: IState(player)
+	{
+	}
+	~PlayerIdle();
+	void Enter()override;
+	void Update()override;
+	//待機。
+	void idle();
+	void Exit()override;
 };
 
 /// <summary>
@@ -124,64 +172,19 @@ protected:
 class PlayerMove :public IState
 {
 public:
-	PlayerMove(Player*player) 
+	PlayerMove(Player* player) 
 		: IState(player)
 	{
-		
 	}
-	PlayerMove();
 	~PlayerMove();
 	void Enter()override;
 	void Update()override;
 	//移動
-	void Move();										
-	//向きを計算。
-	void GetDirection(Vector3 foward, Vector3 right);
-	//ステートで移動速度調整。
-	void MoveAdjust();
-	//回転。
-	void Rotation();
-	void Exit()override;
-private:
-};
-
-
-/// <summary>
-/// ダッシュ。
-/// </summary>
-class PlayerDash :public IState
-{
-public:
-	PlayerDash(Player* player)
-		: IState(player)
-	{
-
-	}
-	PlayerDash();
-	~PlayerDash();
-	void Enter()override;
-	void Update()override;
+	void AnimManage();
+	//歩き。
+	void Walk();
 	//ダッシュ。
 	void Dash();
-	void Exit()override;
-private:
-};
-
-/// <summary>
-/// ジャンプ。
-/// </summary>
-class PlayerJump :public  IState
-{
-public:
-	PlayerJump(Player* player)
-		: IState(player)
-	{
-
-	}
-	PlayerJump();
-	~PlayerJump();
-	void Enter()override;
-	void Update()override;
 	//ジャンプ。
 	void Jump();
 	void Exit()override;
@@ -199,10 +202,11 @@ public:
 	{
 
 	}
-	PlayerWeakAttack();
 	~PlayerWeakAttack();
 	void Enter()override;
 	void Update()override;
+	//ステート変更。
+	void ChangeState();
 	//弱攻撃。
 	void WeakAttack();
 	//コリジョン生成。
@@ -223,33 +227,24 @@ public:
 	{
 
 	}
-	PlayerChargeAttack();
 	~PlayerChargeAttack();
 	void Enter()override;
 	void Update()override;
 	//チャージ蓄積。
-	void StickCharge();				
+	void Charging();				
 	//攻撃。
 	void ChargeAttack();			
 	//コリジョン生成。
 	void MakeCollision();			
-	//チャージ量表示（仮）。
-	void DisplayCharge();			
+	//ステート切り替え。
+	void ChangeState();
 	void Exit()override;
 
-	//チャージのゲッター。
-	float GetCharge() {
-		return m_charge;
-	}
 private:
 	Vector3 m_RStickOld = Vector3::Zero;				//Rスティックの入力量（変更前）。
-	float m_charge = 0.0f;								//チャージ量。
-	float m_collisionSize = 0.0f;
-
-	//チャージ量表示（仮）
-	FontRender m_chargeRender;
-	wchar_t m_chargeText[100];
-	
+	float m_collisionSize = 0.0f;						//コリジョンサイズ。
+	bool m_isCharging = true;							//チャージ中？
+	bool m_isStateChange = false;						//アニメーションを切り替えた？	
 };
 
 /// <summary>
@@ -263,7 +258,6 @@ public:
 	{
 
 	}
-	PlayerGuard();
 	~PlayerGuard();
 
 	void Enter()override;
@@ -276,31 +270,6 @@ private:
 	Vector3 m_directionGap = Vector3::Zero;				//向きの差分。
 };
 
-/// <summary>
-/// HP管理。
-/// </summary>
-class PlayerHealth :public IState
-{
-public:
-	PlayerHealth(Player* player)
-		: IState(player)
-	{
-
-	}
-	PlayerHealth();
-	~PlayerHealth();
-	void Enter()override;
-	void Update()override;
-	void Hit(float reduce);
-	void TakeDamage();				//攻撃被弾。
-	void DisplayHP();
-	void Exit()override;
-
-private:	
-	//チャージ量表示（仮）
-	FontRender m_HPRender;
-	wchar_t m_HPText[100];
-};
 
 /// <summary>
 /// 被弾。
@@ -313,14 +282,14 @@ public:
 	{
 
 	}
-	PlayerHit();
 	~PlayerHit();
 
 	void Enter()override;
 	void Update()override;
-	//被弾。
-	void Hit(float reduce);
+	//被弾の硬直。
+	void ChangeState();
 	void Exit()override;
+private:
 };
 
 /// <summary>
@@ -334,12 +303,12 @@ public:
 	{
 
 	}
-	PlayerDeath();
 	~PlayerDeath();
 
 	void Enter()override;
 	void Update()override;
-	//死亡判定。
-	void DeathJudge();
+	//ゲームオーバーへ移行。
+	void ToGameOver();
 	void Exit()override;
+private:
 };

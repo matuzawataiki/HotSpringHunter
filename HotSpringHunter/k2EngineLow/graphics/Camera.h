@@ -29,7 +29,7 @@ namespace nsK2EngineLow {
 		/// カメラを動かす。
 		/// </summary>
 		/// <param name="move">動かす量</param>
-		void Move(const Vector3& move)
+		void AnimManage(const Vector3& move)
 		{
 			m_position += move;
 			m_target += move;
@@ -59,7 +59,7 @@ namespace nsK2EngineLow {
 		/// <param name="moveForward"></param>
 		void MoveForward(float moveForward)
 		{
-			Move(m_forward * moveForward);
+			AnimManage(m_forward * moveForward);
 		}
 		/// <summary>
 		/// カメラの右方向に移動。
@@ -67,7 +67,7 @@ namespace nsK2EngineLow {
 		/// <param name="moveRight"></param>
 		void MoveRight(float moveRight)
 		{
-			Move(m_right * moveRight);
+			AnimManage(m_right * moveRight);
 		}
 		/// <summary>
 		/// カメラの上方向に移動。
@@ -75,7 +75,7 @@ namespace nsK2EngineLow {
 		/// <param name="moveUp"></param>
 		void MoveUp(float moveUp)
 		{
-			Move(m_up * moveUp);
+			AnimManage(m_up * moveUp);
 		}
 		/// <summary>
 		/// カメラの座標を設定する。
