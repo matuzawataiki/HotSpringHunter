@@ -38,6 +38,8 @@ public:
 	void ManageState();
 	//行動を実行
 	void ExecuteAction();
+	//プレイヤーを探す
+	bool FindPlayer();
 	//いろいろ更新。
 	void VariousUpdate();
 	//速度を適応。
@@ -50,16 +52,17 @@ public:
 	EnemyBase* m_enemyBase = nullptr;
 
 	AnimationClip m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
-	CharacterController m_characterController;		//キャラクターコントローラー	
+	CharacterController m_characterController;			//キャラクターコントローラー	
 	Quaternion m_rotation = Quaternion::Identity;		//回転
-	ModelRender m_modelRender;								//モデルレンダー
+	ModelRender m_modelRender;							//モデルレンダー
 
 	Vector3 m_position        = Vector3::Zero;				//座標
 	Vector3 m_moveSpeed       = Vector3::Zero;				//速度
 	Vector3 m_enemyDir        = Vector3::Zero;				//向き
 	Vector3 m_toPlayer        = Vector3::Zero;				//プレイヤーへのベクトル
 
-	float  m_enemyHP = 500.0f;		//敵のHP
+	float  m_enemyHP = 100.0f;		//敵のHP
+	float m_ATKCoolTime = 0.0f;		//近接攻撃のクールタイム
 
 	int m_snakeState = 0;				//ヘビのステート
 

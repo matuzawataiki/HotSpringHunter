@@ -248,6 +248,8 @@
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Towel.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="WildBoar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -267,6 +269,8 @@
     <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Towel.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="WildBoar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

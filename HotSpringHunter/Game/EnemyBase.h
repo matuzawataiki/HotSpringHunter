@@ -19,7 +19,7 @@ public:
 	void EnemyAttackCollision(Vector3 position,Vector3 enemyDir);
 	//ヒット時のノックバック。
 	Vector3 KnockBack(Vector3 enemyDir);
-	//
+	//死亡
 	void Death();
 	//死亡時の吹っ飛び
 	Vector3 DeathBlown(Vector3 enemyDir);

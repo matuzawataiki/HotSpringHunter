@@ -75,7 +75,15 @@ public:
 	float GetCharge() {
 		return m_charge;
 	}
+	//HPのゲッター
+	float GetPlayerHP()
+	{
+		return m_playerHP;
+	}
+	//maxHPのゲッター
+	float GetPlayerMAXHP();
 
+public:
 	//チャージ量表示（仮）
 	FontRender m_chargeRender;
 	wchar_t m_chargeText[100];
@@ -101,7 +109,7 @@ public:
 	Vector3 m_playerDir = Vector3::Zero;				//向き。
 	Quaternion m_playerRot = Quaternion::Identity;		//回転。
 
-	float m_playerHP = 10000.0f;								//player体力。
+	float m_playerHP = 100.0f;								//player体力。
 
 	float m_dashState = 1.0f;								//ダッシュ：走り状態の移動管理。
 

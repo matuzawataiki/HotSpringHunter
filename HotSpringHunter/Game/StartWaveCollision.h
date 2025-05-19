@@ -9,17 +9,17 @@ public:
 	StartWaveCollision();
 	~StartWaveCollision();
 	bool Start()override;
+	void CreateBear();
 	void Update()override;
 	void MakeCollision();
 	void ChangePos();
 	void SwitchState();
-	void Render(RenderContext& rc);
-
-	Player* m_player;
-	EnemySpawn* m_enemySpawn;
+	void Render(RenderContext& rc)override;
 
 private:
 	CollisionObject* m_collision = nullptr;
+	Player* m_player = nullptr;
+	EnemySpawn* m_enemySpawn = nullptr;
 
 	Vector3 m_collisionPos = Vector3::Zero;		
 	Quaternion m_boxRot;

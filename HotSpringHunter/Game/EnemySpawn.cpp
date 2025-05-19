@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "EnemySpawn.h"
 #include "Result.h"
-
 #include "SnakeEnemy.h"
+#include "Bear.h"
 
 //#include <time.h>	//Random
 
@@ -33,6 +33,24 @@ EnemySpawn::~EnemySpawn()
 	}
 	NewGO<Result>(0, "result");
 	//m_nowEnemyNum = ENEMY_SNAKE_NUM;
+}
+
+bool EnemySpawn::Start()
+{
+	CreateBear();
+
+	return true;
+}
+
+/// <summary>
+/// クマ生成（仮）
+/// </summary>
+void EnemySpawn::CreateBear()
+{
+	for (int i = 0; i < 2; i++) {
+		m_bear[i] = NewGO<Bear>(0, "bear");
+		m_bear[i]->m_position = Vector3{ i * 200.0f,0.0f,500.0f };
+	}
 }
 
 void EnemySpawn::Update()
