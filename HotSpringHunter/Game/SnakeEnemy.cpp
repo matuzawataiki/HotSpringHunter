@@ -7,9 +7,10 @@
 #include "collision/CollisionObject.h"
 
 namespace {
-	const float FIND_RANGE = 500.0f;			//追従し始める距離
+	const float FIND_RANGE = 500.0f;			//プレイヤーを捉える距離
 	const float ATK_RANGE = 200.0f;				//近接攻撃のリーチ
 	const float MELEE_ATTACK_DAMAGE = 20.0f;	//近接攻撃のダメージ
+	const float ATK_COOLTIME = 3.0f;			//近接攻撃のクールタイム
 };
 
 SnakeEnemy::SnakeEnemy()
@@ -27,6 +28,9 @@ bool SnakeEnemy::Start()
 	//アセット読み込み
 	LoadAsset();
 
+	//基底クラス生成
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+
 	//インスタンス探し
 	m_player = FindGO<Player>("player");
 	m_enemySpawn = FindGO<EnemySpawn>("enemySpawn");
@@ -38,6 +42,9 @@ bool SnakeEnemy::Start()
 	return true;
 }
 
+/// <summary>
+/// アセットを読み込む
+/// </summary>
 void SnakeEnemy::LoadAsset()
 {
 	//アニメーション読み込み
@@ -53,13 +60,13 @@ void SnakeEnemy::LoadAsset()
 	m_animationClips[enSnakeAnimClip_Death].SetLoopFlag(true);
 
 	//モデル読み込み
-	m_modelRender.Init("Assets/modelData/snake.tkm", m_animationClips, enSnakeAnimClip_Num, enModelUpAxisY);
+	m_modelRender.Init("Assets/modelData/snake/snake.tkm"/*, m_animationClips, enSnakeAnimClip_Num, enModelUpAxisY*/);
 }
 
 void SnakeEnemy::Update()
 {
-	if (m_isSpawn == true)
-	{
+	//スポーンしているなら
+	if (m_isSpawn) {
 		//ステート管理
 		ManageState();
 		//行動を実行
@@ -81,36 +88,55 @@ void SnakeEnemy::ManageState()
 	if (!m_isCanStateChange) {
 		return;
 	}
-	//被弾した時
+	//被弾した場合
 	if (m_player->m_collision->IsHit(m_characterController)) {
 
-		//HP減らす
+		//HPを減らす
 		m_enemyHP -= m_player->m_attackPower;
 
 		//HPがまだ残っている
 		if (m_enemyHP > 0.0f) {
+			//ノックバック
 			m_snakeState = enSnakeKnockBack;
 		}
 		//HPがなくなった
 		else {
+			//死亡（吹っ飛び）
 			m_snakeState = enSnakeDeath;
 		}
 		return;
 	}
 
 	//近接攻撃
+	//攻撃範囲まで近づいたら
 	if (m_toPlayer.Length() < ATK_RANGE) {
 		m_snakeState = enSnakeAttack;
 		return;
 	}
+
 	//追従
-	if (m_toPlayer.Length() < FIND_RANGE || m_isFind) {
+	//攻撃範囲外へ出ていて、かつプレイヤーを捉えていたら
+	if ((m_toPlayer.Length() > ATK_RANGE) && (FindPlayer())) {
 		m_snakeState = enSnakeTrack;
-		m_isFind = true;
 		return;
 	}
+
 	//待機
 	m_snakeState = enSnakeIdle;
+}
+
+/// <summary>
+/// プレイヤーを探す
+/// </summary>
+/// <returns></returns>
+bool SnakeEnemy::FindPlayer()
+{
+	if (m_toPlayer.Length() < FIND_RANGE) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 /// <summary>
@@ -120,30 +146,47 @@ void SnakeEnemy::ExecuteAction()
 {
 	//移動速度を0する
 	m_moveSpeed = Vector3::Zero;
+	//近接攻撃のクールタイムを計算
+	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
 
 	switch (m_snakeState) {
+
+		//ノックバック
 	case enSnakeKnockBack:
-		//
+		//ノックバックをさせる
 		m_moveSpeed = m_enemyBase->KnockBack(m_enemyDir);
 		//被弾アニメーションを再生
 		//m_modelRender.PlayAnimation(enSnakeAnimClip_Hit);
 		break;
+
+		//死亡
 	case enSnakeDeath:
-		//
+		//吹っ飛ばせる
 		m_moveSpeed = m_enemyBase->DeathBlown(m_enemyDir);
 		//死亡アニメーション（ふっとび）を再生
 		//m_modelRender.PlayAnimation(enSnakeAnimClip_Death);
 		break;
+
+		//近接攻撃
 	case enSnakeAttack:
-		m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
-		//近接攻撃アニメーションを再生
-		//m_modelRender.PlayAnimation(enSnakeAnimClip_Attack);
+		//クールタイムが終わっていたら
+		if (m_ATKCoolTime <= 0.0f) {
+			m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
+			//近接攻撃アニメーションを再生
+			//m_modelRender.PlayAnimation(enSnakeAnimClip_Attack);
+			//タイマーをセット
+			m_ATKCoolTime = ATK_COOLTIME;
+		}		
 		break;
+
+		//追従
 	case enSnakeTrack:
 		m_moveSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		//m_modelRender.PlayAnimation(enSnakeAnimClip_Walk);
 		break;
+
+		//待機
 	case enSnakeIdle:
 		//待機アニメーションを再生
 		//m_modelRender.PlayAnimation(enSnakeAnimClip_Idle);
@@ -158,18 +201,26 @@ void SnakeEnemy::ExecuteAction()
 /// </summary>
 void SnakeEnemy::VariousUpdate()
 {
-	//エネミーからプレイヤーに向かって伸びるベクトルを計算
+	//プレイヤーへのベクトルを更新
 	m_toPlayer = m_player->GetPlayerPos() - m_position;
-	//向きの更新。
-	m_enemyDir = m_toPlayer;
-	m_enemyDir.Normalize();
+
+	//プレイヤーを捉えているときだけ向きの更新をする
+	if (FindPlayer()) {
+		//向きの更新。
+		m_enemyDir = m_toPlayer;
+		m_enemyDir.Normalize();
+	}
+
 	//速度を適応。
 	ExecuteSpeed();
+
 	//回転の更新。
 	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
 	m_modelRender.SetRotation(m_rotation);
+
 	//座標の更新。
 	m_modelRender.SetPosition(m_position);
+
 	//モデルの更新。
 	m_modelRender.Update();
 }

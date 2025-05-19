@@ -36,7 +36,7 @@ bool Bear::Start()
 	m_player = FindGO<Player>("player");
 
 	//クマを初期位置に
-	m_position = NEW_POSITION;
+	//m_position = NEW_POSITION;
 
 	//キャラクターコントローラー
 	m_characterController.Init(80.0f, 80.0f, m_position);
@@ -44,6 +44,10 @@ bool Bear::Start()
 	return true;
 }
 
+
+/// <summary>
+/// アセットを読み込む
+/// </summary>
 void Bear::LoadAssets()
 {
 	//アニメーション読み込み
@@ -91,38 +95,34 @@ void Bear::ManageState()
 	//被弾した場合
 	if (m_player->m_collision->IsHit(m_characterController)) {
 
-		//HP減らす。
+		//HPを減らす。
 		m_enemyHP -= m_player->m_attackPower;
 
 		//HPがまだ残っている。
 		if (m_enemyHP > 0.0f) {
+			//ノックバック
 			m_bearState = enBearKnockBack;
 		}
 		//HPがなくなった
 		else {
+			//死亡
 			m_bearState = enBearDeath;
 		}
 		return;
 	}
 
-	//向きの更新
-	DirUpdate();
-
 	//近接攻撃
+	//攻撃範囲まで近づいたら
 	if (m_toPlayer.Length() < ATK_RANGE) {
 		m_bearState = enBearMeleeAttack;
 		return;
 	}
 	
 	//追従
-	if ((ATK_RANGE < m_toPlayer.Length()) && (m_findFlag)) {
+	//攻撃範囲外へ出ていて、かつプレイヤーを捉えていたら
+	if ((m_toPlayer.Length() > ATK_RANGE) && (FindPlayer())) {
 		m_bearState = enBearTrack;
 		return;
-	}
-
-	//見つけたらずっと追従し続ける
-	if (m_toPlayer.Length() < FIND_RANGE) {
-		m_findFlag = true;
 	}
 	
 	//待機
@@ -130,14 +130,18 @@ void Bear::ManageState()
 }
 
 /// <summary>
-/// 
+/// プレイヤーを探す
 /// </summary>
-void Bear::DirUpdate()
+bool Bear::FindPlayer()
 {
-	//向きの更新。
-	m_enemyDir = m_toPlayer;
-	m_enemyDir.Normalize();
+	if (m_toPlayer.Length() < FIND_RANGE) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
+
 
 /// <summary>
 /// 行動を実行。
@@ -150,18 +154,21 @@ void Bear::ExecuteAction()
 	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
 
 	switch (m_bearState) {
+
 		//ノックバック
 	case enBearKnockBack:
 		m_moveSpeed = m_enemyBase->KnockBack(m_enemyDir);
 		//被弾アニメーションを再生
 		m_modelRender.PlayAnimation(enBearAnimClip_Hit);
 		break;
+
 		//死亡
 	case enBearDeath:
 		m_enemyBase->Death();
 		//死亡アニメーションを再生
 		m_modelRender.PlayAnimation(enBearAnimClip_Death);
 		break;
+
 		//近接攻撃
 	case enBearMeleeAttack:
 		//クールタイムが0だったら
@@ -179,17 +186,20 @@ void Bear::ExecuteAction()
 			m_modelRender.PlayAnimation(enBearAnimClip_Idle);
 		}		
 		break;
+
 		//追従
 	case enBearTrack:
 		m_moveSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_modelRender.PlayAnimation(enBearAnimClip_Run);
 		break;
+
 		//待機
 	case enBearIdle:
 		//待機アニメーションを再生
 		m_modelRender.PlayAnimation(enBearAnimClip_Idle);
 		break;
+
 	default:
 		break;
 	}
@@ -200,15 +210,27 @@ void Bear::ExecuteAction()
 /// </summary>
 void Bear::VariousUpdate()
 {
-	//エネミーからプレイヤーに向かって伸びるベクトルを計算
+	//プレイヤーへのベクトルを更新
 	m_toPlayer = m_player->GetPlayerPos() - m_position;
+
+	//死亡していないとき、且つプレイヤーを捉えているときだけ
+	//向きの更新をする
+	if ((m_bearState != enBearDeath) && (FindPlayer())) {
+		//向きの更新。
+		m_enemyDir = m_toPlayer;
+		m_enemyDir.Normalize();
+	}
+	
 	//速度を適応。
 	ExecuteSpeed();
+
 	//回転の更新。
 	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
 	m_modelRender.SetRotation(m_rotation);
+
 	//座標の更新。
 	m_modelRender.SetPosition(m_position);
+
 	//モデルの更新。
 	m_modelRender.Update();
 }

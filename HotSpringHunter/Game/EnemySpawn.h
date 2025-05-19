@@ -2,6 +2,7 @@
 
 class Game;
 class SnakeEnemy;
+class Bear;
 
 class EnemySpawn : public IGameObject
 {
@@ -9,6 +10,9 @@ public:
 	EnemySpawn();
 	~EnemySpawn();
 
+	bool Start()override;
+	//クマ生成（仮）
+	void CreateBear();
 	void Update()override;
 	void EnemyState();
 	void EnemyPos();		//座標
@@ -17,11 +21,12 @@ public:
 		m_nowEnemyNum--;
 	}
 
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 
 	//インスタンス
 	SnakeEnemy* m_snakeEnemyClass;
 	SnakeEnemy* m_snakeEnemy[10];
+	Bear* m_bear[3];
 	
 	//変数
 	int m_nowEnemyNum = 0;		//現在の敵の数
