@@ -4,9 +4,11 @@ class GameCamera;
 class BackGround;
 class Player;
 class EnemyBase;
-class Bear;
 class StartWaveCollision;
 class UI;
+
+class WildBoar;
+
 class Game : public IGameObject
 {
 public:
@@ -20,8 +22,9 @@ public:
 	Player* m_player = nullptr;
 	EnemyBase* m_enemyBase = nullptr;
 	StartWaveCollision* m_waveCollision = nullptr;
-	Bear* m_bear = nullptr;
 	UI* m_ui = nullptr;
+
+	WildBoar* m_wildBoar = nullptr;
 
 private:
 };

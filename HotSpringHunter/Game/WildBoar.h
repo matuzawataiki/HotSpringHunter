@@ -8,12 +8,25 @@ class EnemyBase;
 enum EnWildBoarState
 {
 	enWildBoarIdle,
+	enWildBoarTrack,
+	enWildBoarRun,
+	enWildBoarCharge,
+	enWildBoarAccum,
+	enWildBoarAttack,
+	enWildBoarKnockBack,
+	enWildBoarDeath
 };
 
 //イノシシのアニメーションクリップ
 enum EnWildBoarAnimClip
 {
 	enWildBoarAnimClip_Idle,
+	enWildBoarAnimClip_Walk,
+	enWildBoarAnimClip_Run,
+	enWildBoarAnimClip_Charge,
+	enWildBoarAnimClip_Attack,
+	enWildBoarAnimClip_Hit,
+	enWildBoarAnimcClip_Death,
 	enWildBoarAnimClip_Num,
 };
 
@@ -24,8 +37,25 @@ public:
 	~WildBoar();
 
 	bool Start()override;
+	//アセット読み込み
+	void LoadAssets();
 	void Update()override;
+	//突進チャージ
+	void Accumulate();
+	//突進攻撃
+	void Charge();
+	//ステート
 	void ManageState();
+	//プレイヤーを探す
+	bool FindPlayer();
+	//行動実行
+	void ExecuteAction();
+	//いろいろ更新
+	void VariousUpdate();
+	//速度を適応
+	void ExecuteSpeed();
+
+	//モデル
 	void Render(RenderContext& rc)override;
 
 	CollisionObject* collisionObject = nullptr;
@@ -44,6 +74,10 @@ public:
 	Vector3 m_toPlayer = Vector3::Zero; //ベクトル
 
 	float m_wildBoarHP = 100.0f; //イノシシのHP
+	float m_ATKCoolTime = 0.0f;			//近接攻撃のクールタイム
+
+	//行動状態
+	int m_wildBoarState = 0;
 
 	bool m_isSpawn = true;	//敵が出現するか
 	bool m_isAlive = true;    //敵が生きているか
