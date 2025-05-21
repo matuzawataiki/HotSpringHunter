@@ -2,6 +2,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "TMEnginePreCompile.h"
+#include "BackGround/ObjectBase.h";
+#include "BackGround/HitObjectBase.h";
 using namespace nsTMEngine;
 using namespace nsK2Engine;
 // K2EngineLowのグローバルアクセスポイント

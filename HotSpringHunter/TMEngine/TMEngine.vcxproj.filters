@@ -30,6 +30,7 @@
     <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="collision\CollisionObject.cpp" />
     <ClCompile Include="graphics\preRender\ShadowMapRender.cpp" />
+    <ClCompile Include="level3DRender\LevelRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TMEnginePreCompile.h" />
@@ -67,6 +68,7 @@
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="collision\CollisionObject.h" />
     <ClInclude Include="graphics\preRender\ShadowMapRender.h" />
+    <ClInclude Include="level3DRender\LevelRender.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

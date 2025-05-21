@@ -27,10 +27,10 @@ private:
 
 	Vector3 m_toCameraPos = Vector3::Zero;					//カメラ座標。
 	Vector3 m_toCameraPosOld = Vector3::Zero;				//変更前カメラ座標。
-	Vector3 m_target = Vector3::Zero;						//カメラ注視点。
+	Vector3 m_target = Vector3{ 0.0f,300.0f,0.0f };			//カメラ注視点。
 	Vector3 m_followPos = Vector3{ 0.0f,250.0f,-400.0f };	//追従カメラ座標。
 	Vector3 m_newFollowPos = Vector3{ 0.0f,250.0f,-400.0f };//追従カメラ初期値。
-	Vector3 m_lookDownPos = Vector3{ 0.0f,750.0f,-300.0f };	//俯瞰カメラ座標。
+	Vector3 m_lookDownPos = Vector3{ 0.0f,170.0f,-330.0f };	//俯瞰カメラ座標。
 
 
 	int m_cameraState = 0;				//カメラの状態。
