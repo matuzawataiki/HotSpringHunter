@@ -9,6 +9,12 @@ namespace {
 
 	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };	//player初期位置。
 
+	const float MAX_PLAYER_HP = 100.0f;
+	float GetPlayerMAXHP()
+	{
+		return MAX_PLAYER_HP;
+	}
+
 	const float MOVE_AMOUNT = 120.0f;			//移動：移動量。
 	const float GRAVITY_AMOUNT = 10.0f;			//移動：重力量。
 	const float JUMP_AMOUNT = 700.0f;			//移動：ジャンプ力。
@@ -221,6 +227,10 @@ void Player::Hit(float reduce)
 	//HPを減らす。
 	m_playerHP -= reduce;
 
+	if (m_playerHP < 0.0) {
+		m_playerHP = 0.0f;
+	}
+
 	//HPの残量でステートを変える。
 	if (m_playerHP > 0.0f) {
 		m_hitFlag = true;
@@ -266,6 +276,11 @@ void Player::Render(RenderContext& rc)
 {
 	m_playerModel.Draw(rc);
 	m_chargeRender.Draw(rc);
+}
+
+float Player::GetPlayerMAXHP()
+{
+	return MAX_PLAYER_HP;
 }
 
 /*********************************************************************************/
