@@ -5,6 +5,7 @@
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "collision/CollisionObject.h"
+#include "EnemyHPBar.h"
 
 namespace {
 	const float FIND_RANGE = 500.0f;			//プレイヤーを捉える距離
@@ -41,6 +42,9 @@ bool Bear::Start()
 	//キャラクターコントローラー
 	m_characterController.Init(80.0f, 80.0f, m_position);
 
+	m_hpBar = NewGO<EnemyHPBar>(0, "hpBar");
+	m_hpBar->Init(m_enemyHP, m_position);
+
 	return true;
 }
 
@@ -72,7 +76,7 @@ void Bear::Update()
 		//行動実行
 		ExecuteAction();
 	}
-
+	m_hpBar->SetHpBar(m_enemyHP, m_position);
 	//いろいろ更新
 	VariousUpdate();
 }

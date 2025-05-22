@@ -26,6 +26,8 @@
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="EnemyHPBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -47,5 +49,21 @@
     <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="SnakeEnemy.h" />
+    <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
+    <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
+    <ClInclude Include="BackGround\MapObject\BushBig.h" />
+    <ClInclude Include="BackGround\MapObject\BushSmall.h" />
+    <ClInclude Include="BackGround\ObjectBase.h" />
+    <ClInclude Include="BackGround\MapObject\GroundGool.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxBossBattle.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxGool.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
+    <ClInclude Include="BackGround\HitObjectBase.h" />
+    <ClInclude Include="BackGround\MapObject\GroundRun.h" />
+    <ClInclude Include="BackGround\StageManager.h" />
+    <ClInclude Include="BackGround\MapObject\GroundStart.h" />
+    <ClInclude Include="EnemyHPBar.h" />
   </ItemGroup>
 </Project>
