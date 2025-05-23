@@ -32,7 +32,7 @@ public:
 
 	bool Start()override;
 	//アセット読み込み
-	void LoadAsset();
+	void LoadAssets();
 	void Update()override;
 	//ステート管理。
 	void ManageState();
@@ -46,15 +46,17 @@ public:
 	void ExecuteSpeed();
 	void Render(RenderContext& rc)override;
 
-	CollisionObject* collisionObject = nullptr;
-	Player* m_player = nullptr;
-	EnemySpawn* m_enemySpawn = nullptr;
-	EnemyBase* m_enemyBase = nullptr;
+	CollisionObject*	collisionObject		= nullptr;
+	Player*				m_player			= nullptr;
+	EnemySpawn*			m_enemySpawn		= nullptr;
+	EnemyBase*			m_enemyBase			= nullptr;
+	EnemyHPBar*			m_hpBar		= nullptr;
 
-	AnimationClip m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
-	CharacterController m_characterController;			//キャラクターコントローラー	
-	Quaternion m_rotation = Quaternion::Identity;		//回転
-	ModelRender m_modelRender;							//モデルレンダー
+	AnimationClip		m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
+	CharacterController m_characterController;					//キャラクターコントローラー	
+	ModelRender			m_modelRender;							//モデルレンダー
+
+	Quaternion			m_rotation = Quaternion::Identity;		//回転
 
 	Vector3 m_position        = Vector3::Zero;				//座標
 	Vector3 m_moveSpeed       = Vector3::Zero;				//速度
@@ -64,10 +66,10 @@ public:
 	float  m_enemyHP = 100.0f;		//敵のHP
 	float m_ATKCoolTime = 0.0f;		//近接攻撃のクールタイム
 
-	int m_snakeState = 0;				//ヘビのステート
+	int m_snakeState = 0;			//ヘビのステート
 
-	bool m_isSpawn = true;	//敵が出現するか
-	bool m_isAlive = true;    //敵が生きているか
+	bool m_isSpawn = true;			//敵が出現するか
+	bool m_isAlive = true;			//敵が生きているか
 	bool m_isFind = false;			//プレイヤーを捉えたか
 	bool m_isCanStateChange = true;	//ステートを変えてもよいか
 };

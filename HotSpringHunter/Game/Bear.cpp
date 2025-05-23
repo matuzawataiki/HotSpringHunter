@@ -42,32 +42,7 @@ bool Bear::Start()
 	//キャラクターコントローラー
 	m_characterController.Init(80.0f, 80.0f, m_position);
 
-	m_hpBar = NewGO<EnemyHPBar>(0, "hpBar");
-	m_hpBar->Init(m_enemyHP, m_position);
-
 	return true;
-}
-
-
-/// <summary>
-/// アセットを読み込む
-/// </summary>
-void Bear::LoadAssets()
-{
-	//アニメーション読み込み
-	m_animationClips[enBearAnimClip_Idle].Load("Assets/animData/bear/Idle.tka");
-	m_animationClips[enBearAnimClip_Idle].SetLoopFlag(true);
-	m_animationClips[enBearAnimClip_Run].Load("Assets/animData/bear/Run.tka");
-	m_animationClips[enBearAnimClip_Run].SetLoopFlag(true);
-	m_animationClips[enBearAnimClip_Attack].Load("Assets/animData/bear/Attack.tka");
-	m_animationClips[enBearAnimClip_Attack].SetLoopFlag(false);
-	m_animationClips[enBearAnimClip_Hit].Load("Assets/animData/bear/Hit.tka");
-	m_animationClips[enBearAnimClip_Hit].SetLoopFlag(false);
-	m_animationClips[enBearAnimClip_Death].Load("Assets/animData/bear/Death.tka");
-	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
-
-	//モデル読み込み
-	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
 }
 
 void Bear::Update()
@@ -80,7 +55,7 @@ void Bear::Update()
 		//行動実行
 		ExecuteAction();
 	}
-	m_hpBar->SetHpBar(m_enemyHP, m_position);
+
 	//いろいろ更新
 	VariousUpdate();
 }
@@ -254,6 +229,27 @@ void Bear::ExecuteSpeed()
 		const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
 		m_position.Add(move);
 	}
+}
+
+/// <summary>
+/// アセットを読み込む
+/// </summary>
+void Bear::LoadAssets()
+{
+	//アニメーション読み込み
+	m_animationClips[enBearAnimClip_Idle].Load("Assets/animData/bear/Idle.tka");
+	m_animationClips[enBearAnimClip_Idle].SetLoopFlag(true);
+	m_animationClips[enBearAnimClip_Run].Load("Assets/animData/bear/Run.tka");
+	m_animationClips[enBearAnimClip_Run].SetLoopFlag(true);
+	m_animationClips[enBearAnimClip_Attack].Load("Assets/animData/bear/Attack.tka");
+	m_animationClips[enBearAnimClip_Attack].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Hit].Load("Assets/animData/bear/Hit.tka");
+	m_animationClips[enBearAnimClip_Hit].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Death].Load("Assets/animData/bear/Death.tka");
+	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
+
+	//モデル読み込み
+	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
 }
 
 void Bear::Render(RenderContext& rc)

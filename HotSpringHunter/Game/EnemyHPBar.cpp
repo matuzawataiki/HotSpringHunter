@@ -28,7 +28,7 @@ void EnemyHPBar::Update()
 	}
 	Vector3 pos = m_pos;
 	//少し上にする
-	pos.y += 300.0f;
+	pos.y += 200.0f;
 	//ワールド座標からスクリーン座標に変換
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, pos);
 
