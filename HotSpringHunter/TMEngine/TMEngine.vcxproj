@@ -40,6 +40,7 @@
     <ClCompile Include="graphics\SpriteRender.cpp" />
     <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="graphics\preRender\ShadowMapRender.cpp" />
+    <ClCompile Include="level3DRender\LevelRender.cpp" />
     <ClCompile Include="TMEngine.cpp" />
     <ClCompile Include="TMEnginePreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -63,6 +64,7 @@
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="graphics\preRender\ShadowMapRender.h" />
+    <ClInclude Include="level3DRender\LevelRender.h" />
     <ClInclude Include="TMEngine.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
   </ItemGroup>

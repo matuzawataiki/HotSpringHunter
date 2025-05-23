@@ -7,6 +7,7 @@ class EnemyBase;
 class Bear;
 class StartWaveCollision;
 class UI;
+class StageManager;
 class Game : public IGameObject
 {
 public:
@@ -24,5 +25,6 @@ public:
 	UI* m_ui = nullptr;
 
 private:
+	StageManager* m_stageManager = nullptr;
 };
 
