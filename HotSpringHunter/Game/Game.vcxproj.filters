@@ -1,69 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="system">
-      <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="system\system.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="Test.cpp" />
-    <ClCompile Include="Towel.cpp" />
     <ClCompile Include="Bucket.cpp" />
-    <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameOver.cpp" />
-    <ClCompile Include="EnemySpawn.cpp" />
-    <ClCompile Include="StartWaveCollision.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Towel.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
-    <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="EnemySpawn.cpp" />
+    <ClCompile Include="StartWaveCollision.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="system\system.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="GameCamera.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Test.h" />
-    <ClInclude Include="Towel.h" />
     <ClInclude Include="Bucket.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="Result.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="system\system.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Towel.h" />
+    <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="StartWaveCollision.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="SnakeEnemy.h" />
-    <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
-    <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
-    <ClInclude Include="BackGround\MapObject\BushBig.h" />
-    <ClInclude Include="BackGround\MapObject\BushSmall.h" />
-    <ClInclude Include="BackGround\ObjectBase.h" />
-    <ClInclude Include="BackGround\MapObject\GroundGool.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxBossBattle.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxGool.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
-    <ClInclude Include="BackGround\HitObjectBase.h" />
-    <ClInclude Include="BackGround\MapObject\GroundRun.h" />
-    <ClInclude Include="BackGround\StageManager.h" />
-    <ClInclude Include="BackGround\MapObject\GroundStart.h" />
-    <ClInclude Include="EnemyHPBar.h" />
   </ItemGroup>
 </Project>

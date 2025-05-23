@@ -35,8 +35,8 @@ public:
 	void Update()override;
 	//ステート管理
 	void ManageState();
-	//
-	void DirUpdate();
+	//プレイヤーを探す
+	bool FindPlayer();
 	//行動実行
 	void ExecuteAction();
 	//いろいろ更新
@@ -50,10 +50,10 @@ public:
 	EnemyBase*          m_enemyBase		= nullptr;
 	EnemyHPBar*			m_hpBar		= nullptr;
 
-	Quaternion m_rotation = Quaternion::Identity;			//クォータニオン
 	ModelRender m_modelRender;								//モデルレンダー
+	CharacterController m_characterController;				//キャラクターコントローラー
 	AnimationClip m_animationClips[enBearAnimClip_Num];		//アニメーションクリップ
-	CharacterController m_characterController;				//キャラクターコントローター
+	Quaternion m_rotation = Quaternion::Identity;			//回転
 
 	Vector3 m_position       = Vector3::Zero;		//座標
 	Vector3 m_moveSpeed      = Vector3::Zero;		//敵の速度
@@ -68,5 +68,5 @@ public:
 	bool m_isCanStateChange = true;		//ステート変更を受け付けているか
 	bool m_isSpawn = true;				//敵が出現するか
 	bool m_isAlive = true;				//敵が生きているか
-	bool m_findFlag = false;			//プレイヤーを発見したか
+	bool m_isFind = false;			//プレイヤーを発見したか
 };

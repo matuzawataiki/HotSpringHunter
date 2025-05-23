@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "StartWaveCollision.h"
 #include "collision/CollisionObject.h"
-
 #include "Player.h"
 #include "EnemySpawn.h"
 
@@ -21,9 +20,6 @@ bool StartWaveCollision::Start()
 	m_player = FindGO<Player>("player");
 	m_enemySpawn = NewGO<EnemySpawn>(0, "enemySpawn");
 
-	//
-	//m_enemySpawn = FindGO<EnemySpawn>("enemyspawn");
-
 	MakeCollision();
 
 	return true;
@@ -32,9 +28,7 @@ bool StartWaveCollision::Start()
 void StartWaveCollision::Update()
 {
 	ChangePos();
-	MakeCollision();
-
-	
+	MakeCollision();	
 }
 
 void StartWaveCollision::MakeCollision()

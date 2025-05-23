@@ -23,7 +23,7 @@ namespace nsTMEngine {
 		{
 			m_pos.x = pos.x;
 			m_pos.y = pos.y;
-			m_pos.x = 0.0f;
+			m_pos.z = 0.0f;
 		}
 		/// <summary>
 		/// 位置の設定
@@ -51,7 +51,7 @@ namespace nsTMEngine {
 		{
 			m_sca.x = sca.x;
 			m_sca.y = sca.y;
-			m_sca.x = 0.0f;
+			m_sca.z = 0.0f;
 		}
 		/// <summary>
 		/// ピボットを設定。
