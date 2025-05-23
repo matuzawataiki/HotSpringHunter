@@ -220,7 +220,7 @@ float3 CalcRimLight(SPSIn psIn, float3 lig, DirectionLig directionLig)
     float power2 = 1.0f - max(0.0f, psIn.normalInView.z * -1.0f);
     
     float rimPower = power1 * power2;
-    rimPower = pow(rimPower, 1.3f);
+    rimPower = pow(rimPower, 1.0f);
     
     float3 rimColor = rimPower * lig;
     
@@ -402,13 +402,12 @@ float4 PSMain( SPSIn psIn) : SV_Target0
 
     }
     
+    //環境光の設定
+    finalLig += m_ambientLight;
+    
     //リムライトの設定
     finalLig += CalcRimLight(psIn, finalLig, m_directionLig);
     
-    //環境光の設定
-    //float ambientPower = g_aoMap.Sample(g_sampler, psIn.uv);
-    //finalLig += m_ambientLight * ambientPower;
-    finalLig += m_ambientLight;
     //半球ライトの設定
     //finalLig += CalcHemisphereLight(psIn, m_hemisphereLig);
 	

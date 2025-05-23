@@ -27,8 +27,6 @@ namespace nsTMEngine
 
 		m_renderingEngine.Init();
 
-		
-
 	}
 
 	void TMEngine::Execute()

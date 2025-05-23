@@ -227,18 +227,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundBattle.cpp" />
     <ClCompile Include="Bear.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
     <ClCompile Include="Bucket.cpp" />
+    <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
+    <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundGool.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxBattle.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxBossBattle.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxGool.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxRun.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxStart.cpp" />
+    <ClCompile Include="BackGround\HitObjectBase.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="BackGround\ObjectBase.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundRun.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="BackGround\StageManager.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
     <ClCompile Include="StartWaveCollision.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -251,28 +266,42 @@
     <ClCompile Include="Towel.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
+    <ClCompile Include="BackGround\MapObject\Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
     <ClInclude Include="Bear.h" />
+    <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
     <ClInclude Include="Bucket.h" />
+    <ClInclude Include="BackGround\MapObject\BushBig.h" />
+    <ClInclude Include="BackGround\MapObject\BushSmall.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyHPBar.h" />
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="BackGround\ObjectBase.h" />
+    <ClInclude Include="BackGround\MapObject\GroundGool.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxBossBattle.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxGool.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
+    <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
+    <ClInclude Include="BackGround\HitObjectBase.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="BackGround\MapObject\GroundRun.h" />
     <ClInclude Include="SnakeEnemy.h" />
+    <ClInclude Include="BackGround\StageManager.h" />
+    <ClInclude Include="BackGround\MapObject\GroundStart.h" />
     <ClInclude Include="StartWaveCollision.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Towel.h" />
-    <ClInclude Include="UI.h" />
-    <ClInclude Include="WildBoar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

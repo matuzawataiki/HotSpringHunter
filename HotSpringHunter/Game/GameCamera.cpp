@@ -82,6 +82,7 @@ void GameCamera::LookDownCamera()
 {
 	//注視点を該当戦闘エリアの中心に設定(一旦ステージの中心）。
 	m_target = m_player->GetPlayerPos();
+	m_target.y += 100.0f;
 
 	//カメラ座標を設定。
 	m_toCameraPos.Set(m_lookDownPos);
