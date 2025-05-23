@@ -40,7 +40,7 @@ bool SnakeEnemy::Start()
 	m_characterController.Init(30.0f, 50.0f, m_position);
 	
 	m_hpBar = NewGO<EnemyHPBar>(0, "hpBar");
-	m_hpBar->Init(m_enemyHP, m_position);
+	m_hpBar->Init(m_enemyHP, m_position , m_player->GetPlayerPos());
 
 	return true;
 }
@@ -55,7 +55,7 @@ void SnakeEnemy::Update()
 		ExecuteAction();
 	}
 
-	m_hpBar->SetHpBar(m_enemyHP, m_position);
+	m_hpBar->SetHpBar(m_enemyHP, m_position, m_player->GetPlayerPos());
 
 	//いろいろ更新
 	VariousUpdate();

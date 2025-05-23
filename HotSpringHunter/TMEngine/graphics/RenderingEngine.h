@@ -68,6 +68,10 @@ namespace nsTMEngine
 		{
 			m_renderObjects.push_back(renderObject);
 		}
+		void RemoveRenderObject(IRenderer* renderObject)
+		{
+			
+		}
 
 		/// <summary>
 		/// シャドウマップに描画
