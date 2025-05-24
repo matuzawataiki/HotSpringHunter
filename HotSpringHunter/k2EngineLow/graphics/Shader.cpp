@@ -30,7 +30,7 @@ namespace nsK2EngineLow {
 		// Enable better shader debugging with the graphics debugging tools.
 		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
-		UINT compileFlags = 0;
+		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;;
 #endif
 		wchar_t wfxFilePath[256] = { L"" };
 		mbstowcs(wfxFilePath, filePath, 256);

@@ -20,6 +20,22 @@
     <ClCompile Include="StartWaveCollision.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
+    <ClCompile Include="BackGround\StageManager.cpp" />
+    <ClCompile Include="BackGround\MapObject\Tree.cpp" />
+    <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
+    <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
+    <ClCompile Include="BackGround\ObjectBase.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundBattle.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundGool.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundRun.cpp" />
+    <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxBattle.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxBossBattle.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxGool.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxRun.cpp" />
+    <ClCompile Include="BackGround\HitObject\HitBoxStart.cpp" />
+    <ClCompile Include="BackGround\HitObjectBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -38,7 +54,7 @@
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="StartWaveCollision.h" />
     <ClInclude Include="Bear.h" />
-    <ClInclude Include="UI.h" />
-    <ClInclude Include="WildBoar.h" />
+    <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="SnakeEnemy.h" />
   </ItemGroup>
 </Project>

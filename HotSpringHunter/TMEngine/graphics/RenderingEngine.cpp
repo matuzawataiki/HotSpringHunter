@@ -28,13 +28,16 @@ namespace nsTMEngine
 
 	void RenderingEngine::InitMainRenderTarget()
 	{
+		float clearColor[4] = { 0.5f,0.5f,0.5f,1.0f };
+
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			DXGI_FORMAT_D32_FLOAT
+			DXGI_FORMAT_D32_FLOAT,
+			clearColor
 		);
 	}
 
@@ -134,9 +137,13 @@ namespace nsTMEngine
 
 	void RenderingEngine::RenderToShadowMap(RenderContext& rc)
 	{
+		BeginGPUEvent("RenderShadowmap");
+
 		m_shadowMapRender.Render(rc, m_renderObjects);
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::Render2D(RenderContext& rc)

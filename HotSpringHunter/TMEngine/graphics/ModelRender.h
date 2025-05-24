@@ -2,7 +2,7 @@
 
 namespace nsTMEngine {
 	/// <summary>
-	/// ã‚¹ã‚­ãƒ³ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ¼
+	/// ƒXƒLƒ“ƒ‚ƒfƒ‹ƒŒƒ“ƒ_[
 	/// </summary>
 	class ModelRender : public IRenderer
 	{
@@ -11,12 +11,12 @@ namespace nsTMEngine {
 		~ModelRender();
 		
 		/// <summary>
-		/// ãƒ¢ãƒ‡ãƒ«ã®åˆæœŸåŒ–ç”¨é–¢æ•°
+		/// ƒ‚ƒfƒ‹‚Ì‰Šú‰»—pŠÖ”
 		/// </summary>
-		/// <param name="filePath">ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹</param>
-		/// <param name="animationeClips">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—</param>
-		/// <param name="numAnimationClips">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ•°</param>
-		/// <param name="enModelUpAxiz">ãƒ¢ãƒ‡ãƒ«ã®ä¸Šæ–¹å‘</param>
+		/// <param name="filePath">ƒtƒ@ƒCƒ‹ƒpƒX</param>
+		/// <param name="animationeClips">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv</param>
+		/// <param name="numAnimationClips">ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì”</param>
+		/// <param name="enModelUpAxiz">ƒ‚ƒfƒ‹‚Ìã•ûŒü</param>
 		void Init(
 			const char* filePath,
 			AnimationClip* animationeClips = nullptr,
@@ -24,16 +24,16 @@ namespace nsTMEngine {
 			EnModelUpAxis enModelUpAxiz = enModelUpAxisZ);
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
 		/// </summary>
-		/// <param name="animNo">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã®ç•ªå·</param>
-		/// <param name="interpolateTime">è£œå®Œæ™‚é–“(å˜ä½ï¼šç§’)</param>
+		/// <param name="animNo">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv‚Ì”Ô†</param>
+		/// <param name="interpolateTime">•âŠ®ŠÔ(’PˆÊF•b)</param>
 		void PlayAnimation(int animNo, float interpolateTime = 0.0f) {
 			m_animation.Play(animNo, interpolateTime);
 		}
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒå†ç”Ÿä¸­ã‹
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ªÄ¶’†‚©
 		/// </summary>
 		/// <returns></returns>
 		bool IsPlayAnimation() const {
@@ -41,16 +41,16 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// æç”»å‡¦ç†ã€‚
+		/// •`‰æˆ—B
 		/// </summary>
 		void Draw(RenderContext& rc);
 
 		/// <summary>
-		/// åº§æ¨™ã®è¨­å®š
+		/// À•W‚Ìİ’è
 		/// </summary>
-		/// <param name="pos">ä½ç½®</param>
-		/// <param name="rot">å›è»¢</param>
-		/// <param name="sce">å¤§ãã•</param>
+		/// <param name="pos">ˆÊ’u</param>
+		/// <param name="rot">‰ñ“]</param>
+		/// <param name="sce">‘å‚«‚³</param>
 		void SetTRS(const Vector3& pos, const Quaternion& rot, const Vector3& sca) {
 			m_pos = pos;
 			m_rot = rot;
@@ -58,7 +58,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ä½ç½®ã®è¨­å®š
+		/// ˆÊ’u‚Ìİ’è
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -67,7 +67,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ä½ç½®ã®è¨­å®š
+		/// ˆÊ’u‚Ìİ’è
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
@@ -78,7 +78,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// å›è»¢ã®è¨­å®š
+		/// ‰ñ“]‚Ìİ’è
 		/// </summary>
 		/// <param name="rot"></param>
 		void SetRotation(const Quaternion& rot) 
@@ -87,7 +87,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// å¤§ãã•ã®è¨­å®š
+		/// ‘å‚«‚³‚Ìİ’è
 		/// </summary>
 		/// <param name="sca"></param>
 		void SetScale(const Vector3& sca)
@@ -100,49 +100,37 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ãƒ¢ãƒ‡ãƒ«ã‚’å–å¾—ã€‚
+		/// ƒ‚ƒfƒ‹‚ğæ“¾B
 		/// </summary>
-		/// <returns>ãƒ¢ãƒ‡ãƒ«</returns>
+		/// <returns>ƒ‚ƒfƒ‹</returns>
 		Model& GetModel()
 		{
 			return m_model;
 		}
 
 		/// <summary>
-		/// æ›´æ–°å‡¦ç†ã€‚
+		/// XVˆ—B
 		/// </summary>
 		void Update();
 
 	private:
 		/// <summary>
-		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã¸ã®æç”»ãƒ‘ã‚¹ã‹ã‚‰å‘¼ã°ã‚Œã‚‹å‡¦ç†ã€‚
+		/// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ö‚Ì•`‰æƒpƒX‚©‚çŒÄ‚Î‚ê‚éˆ—B
 		/// </summary>
-		/// <param name="rc">ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ</param>
-		/// <param name="ligNo">ãƒ©ã‚¤ãƒˆç•ªå·</param>
-		/// <param name="shadowMapNo">ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ç•ªå·</param>
-		/// <param name="lvpMatrix">ãƒ©ã‚¤ãƒˆãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—</param>
+		/// <param name="rc">ƒŒƒ“ƒ_ƒŠƒ“ƒOƒRƒ“ƒeƒLƒXƒg</param>
+		/// <param name="ligNo">ƒ‰ƒCƒg”Ô†</param>
+		/// <param name="shadowMapNo">ƒVƒƒƒhƒEƒ}ƒbƒv”Ô†</param>
+		/// <param name="lvpMatrix">ƒ‰ƒCƒgƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ</param>
 		void OnRenderShadowMap(RenderContext& rc) override;
 
 		/// <summary>
-		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»ç”¨ãƒ¢ãƒ‡ãƒ«ã®åˆæœŸåŒ–
-		/// </summary>
-		/// <param name="renderingEngine"></param>
-		/// <param name="tkmFinlePath"></param>
-		/// <param name="modelUpAxis"></param>
-		void InitModelOnShadowMap(
-			RenderingEngine& renderingEngine, 
-			const char* tkmFinlePath, 
-			EnModelUpAxis modelUpAxis
-		);
-
-		/// <summary>
-		/// ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã®åˆæœŸåŒ–ç”¨é–¢æ•°
+		/// ƒXƒPƒ‹ƒgƒ“‚Ì‰Šú‰»—pŠÖ”
 		/// </summary>
 		/// <param name="filePath"></param>
 		void InitSkeleton(const char* filePath);
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–ç”¨å¤‰æ•°
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»—p•Ï”
 		/// </summary>
 		/// <param name="animtionClips"></param>
 		/// <param name="numAnimationClips"></param>
@@ -154,7 +142,7 @@ namespace nsTMEngine {
 		);
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ¸ˆã¿é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡è¨ˆç®—å‡¦ç†ã®åˆæœŸåŒ–
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“Ï‚İ’¸“_ƒoƒbƒtƒ@ŒvZˆ—‚Ì‰Šú‰»
 		/// </summary>
 		/// <param name="tkmFilePath"></param>
 		/// <param name="enModelUpAxis"></param>
@@ -164,7 +152,7 @@ namespace nsTMEngine {
 		);
 
 		/// <summary>
-		/// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚¨ãƒ³ãƒˆãƒªãƒ¼ãƒã‚¤ãƒ³ãƒˆã®è¨­å®š
+		/// ƒVƒF[ƒ_[ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg‚Ìİ’è
 		/// </summary>
 		/// <param name="modelInitData"></param>
 		void SetupShaderEntryPointFunc(ModelInitData& modelInitData);
@@ -172,7 +160,7 @@ namespace nsTMEngine {
 		//void ComputeAnimatoinVertexBuffer()
 
 		/// <summary>
-		/// å„ç¨®ãƒ¢ãƒ‡ãƒ«ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®æ›´æ–°
+		/// Šeíƒ‚ƒfƒ‹‚Ìƒ[ƒ‹ƒhs—ñ‚ÌXV
 		/// </summary>
 		void UpdateWorldMatrixInModes() ;
 
@@ -180,20 +168,20 @@ namespace nsTMEngine {
 
 	private:
 
-		Vector3			m_pos = Vector3::Zero;			//ä½ç½®
-		Vector3			m_sca = Vector3::One;			//å¤§ãã•
-		Quaternion		m_rot = Quaternion::Identity;	//å›è»¢
+		Vector3			m_pos = Vector3::Zero;			//ˆÊ’u
+		Vector3			m_sca = Vector3::One;			//‘å‚«‚³
+		Quaternion		m_rot = Quaternion::Identity;	//‰ñ“]
 
-		Model			m_model;					//ãƒ¢ãƒ‡ãƒ«
+		Model			m_model;					//ƒ‚ƒfƒ‹
 		Model			m_shadowModels;
 
-		Skeleton		m_skeleton;					//ãƒœãƒ¼ãƒ³
-		Animation		m_animation;				//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
-		AnimationClip*	m_animationClips = nullptr;	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
+		Skeleton		m_skeleton;					//ƒ{[ƒ“
+		Animation		m_animation;				//ƒAƒjƒ[ƒVƒ‡ƒ“
+		AnimationClip*	m_animationClips = nullptr;	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
 		ConstantBuffer	m_drawShadowMapCameraParamCB;
 
-		int				m_maxInstance = 1;			// æœ€å¤§ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ã€‚
-		int				m_numAnimationClips = 0;	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã®æ•°
-		float			m_animationSpeed = 1.0f;	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿé€Ÿåº¦
+		int				m_maxInstance = 1;			// Å‘åƒCƒ“ƒXƒ^ƒ“ƒX”B
+		int				m_numAnimationClips = 0;	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv‚Ì”
+		float			m_animationSpeed = 1.0f;	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶‘¬“x
 };
 }

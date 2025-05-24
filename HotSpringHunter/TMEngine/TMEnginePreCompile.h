@@ -15,4 +15,5 @@ using namespace nsK2EngineLow;
 #include "graphics/postEffect/PostEffect.h"
 #include "collision/CollisionObject.h"
 #include "TMEngine.h"
+#include "level3DRender/LevelRender.h";
 

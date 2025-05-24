@@ -6,6 +6,7 @@
 #include "EnemyBase.h"
 #include "StartWaveCollision.h"
 #include "UI.h"
+#include "BackGround/StageManager.h";
 
 #include "WildBoar.h"
 
@@ -23,7 +24,8 @@ Game::~Game()
 bool Game::Start()
 {
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
-	m_backGround = NewGO<BackGround>(0, "backGround");
+	//m_backGround = NewGO<BackGround>(0, "backGround");
+	m_stageManager = NewGO<StageManager>(0, "stageManager");
 	m_player = NewGO<Player>(0, "player");
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 	

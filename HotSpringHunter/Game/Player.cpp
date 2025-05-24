@@ -18,7 +18,7 @@ namespace {
 	const float MOVE_AMOUNT = 120.0f;			//移動：移動量。
 	const float GRAVITY_AMOUNT = 10.0f;			//移動：重力量。
 	const float JUMP_AMOUNT = 700.0f;			//移動：ジャンプ力。
-	const float DASH_AMOUNT = 500.0f;			//移動：ダッシュ速度。
+	const float DASH_AMOUNT = 3000.0f;			//移動：ダッシュ速度。
 
 	const float WEAK_COLLISION_DIS = 100.0f;	//弱攻撃：コリジョン位置。
 	const float WEAK_COLLISION_SIZE = 150.0f;	//弱攻撃：コリジョンサイズ。
@@ -91,6 +91,9 @@ bool Player::Start()
 	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
 
 	m_stateMachine = NewGO<StateMachine>(0,"stateMachine");
+
+	//ディレクションライトの位置に登録
+	g_sceneLight->SetLightPos(m_playerPos);
 
 	AddList();
 	LoadAssets();
