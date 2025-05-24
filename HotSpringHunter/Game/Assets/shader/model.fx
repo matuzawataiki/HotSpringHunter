@@ -225,7 +225,7 @@ float3 CalcRimLight(SPSIn psIn, float3 lig, DirectionLig directionLig)
     float power2 = 1.0f - max(0.0f, psIn.normalInView.z * -1.0f);
     
     float rimPower = power1 * power2;
-    rimPower = pow(rimPower, 1.0f);
+    rimPower = pow(rimPower, 2.0f);
     
     float3 rimColor = rimPower * lig;
     

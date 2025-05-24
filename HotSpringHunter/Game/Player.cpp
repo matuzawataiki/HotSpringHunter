@@ -92,6 +92,9 @@ bool Player::Start()
 
 	m_stateMachine = NewGO<StateMachine>(0,"stateMachine");
 
+	//ディレクションライトの位置に登録
+	g_sceneLight->SetLightPos(m_playerPos);
+
 	AddList();
 	LoadAssets();
 	
