@@ -85,6 +85,15 @@ namespace nsTMEngine
 		/// <param name="rc"></param>
 		void Render2D(RenderContext& rc);
 
+		/// <summary>
+		/// シャドウマップの取得
+		/// </summary>
+		/// <returns></returns>
+		Texture& GetShadowMap()
+		{
+			return m_shadowMapRender.GetTexture();
+		}
+
 	private:
 		Sprite			m_copyMainRtToFrameBufferSprite;
 		SceneLight		m_sceneLight;

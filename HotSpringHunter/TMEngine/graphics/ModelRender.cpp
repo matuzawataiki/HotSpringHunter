@@ -15,15 +15,15 @@ namespace nsTMEngine {
 		int numAnimationClips,
 		EnModelUpAxis enModelUpAxiz) 
 	{
-		//ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã®åˆæœŸåŒ–
+		//ƒXƒPƒ‹ƒgƒ“‚Ì‰Šú‰»
 		InitSkeleton(filePath);
-		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–
+		//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»
 		InitAnimation(animationeClips, numAnimationClips, enModelUpAxiz);
 		
-		ModelInitData modelInitData;			//ãƒ¢ãƒ‡ãƒ«ã®ãƒ‡ãƒ¼ã‚¿
-		//tkmã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æŒ‡å®š
+		ModelInitData modelInitData;			//ƒ‚ƒfƒ‹‚Ìƒf[ƒ^
+		//tkm‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ÌŽw’è
 		modelInitData.m_tkmFilePath = filePath;
-		//ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æŒ‡å®š
+		//ƒVƒF[ƒ_[‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚ÌŽw’è
 		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		
 		SetupShaderEntryPointFunc(modelInitData);
@@ -32,53 +32,44 @@ namespace nsTMEngine {
 			modelInitData.m_skeleton = &m_skeleton;
 		}
 
+		//ƒVƒƒƒhƒEƒ}ƒbƒvƒeƒNƒXƒ`ƒƒ
+		modelInitData.m_expandShaderResoruceView[0] = &g_renderingEngine->GetShadowMap();
+
+		//ƒV[ƒ“ƒ‰ƒCƒg
 		modelInitData.m_expandConstantBuffer = g_sceneLight->GetLight();
 		modelInitData.m_expandConstantBufferSize = sizeof(Light);
+		m_model.Init(modelInitData);
 
-		m_model.Init(modelInitData);		
-
-
-	}
-
-	void ModelRender::InitModelOnShadowMap(RenderingEngine& renderingEngine, const char* tkmFinlePath, EnModelUpAxis modelUpAxis)
-	{
-		ModelInitData modelInitData;
-		modelInitData.m_tkmFilePath = tkmFinlePath;
-		modelInitData.m_modelUpAxis = modelUpAxis;
-
-		SetupShaderEntryPointFunc(modelInitData);
-
-		if (m_animationClips != nullptr) {
-			//ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã‚’æŒ‡å®šã™ã‚‹ã€‚
-			modelInitData.m_skeleton = &m_skeleton;
-		}
+		//ƒVƒƒƒhƒEƒ}ƒbƒvƒeƒNƒXƒ`ƒƒ
+		modelInitData.m_expandShaderResoruceView[0] = nullptr;
 
 		modelInitData.m_fxFilePath = "Assets/shader/DrawShadowMap.fx";
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
-		m_drawShadowMapCameraParamCB.Init(sizeof(Vector4), nullptr);
-		modelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB;
-		modelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+		//m_drawShadowMapCameraParamCB.Init(sizeof(Vector4), nullptr);
+		//modelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB;
+		//modelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+		modelInitData.m_expandConstantBuffer = &g_sceneLight->GetLVP();
 		m_shadowModels.Init(modelInitData);
 	}
 
 	void ModelRender::OnRenderShadowMap(RenderContext& rc)
 	{
-		Vector4 cameraParam;
-		cameraParam.x = g_camera3D->GetNear();
-		cameraParam.y = g_camera3D->GetFar();
-		m_drawShadowMapCameraParamCB.CopyToVRAM(cameraParam);
+		//Vector4 cameraParam;
+		//cameraParam.x = g_camera3D->GetNear();
+		//cameraParam.y = g_camera3D->GetFar();
+		//m_drawShadowMapCameraParamCB.CopyToVRAM(cameraParam);
 		m_shadowModels.Draw(rc);
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
 	{
 		std::string skeletonFilePath = filePath;
-		//tkmã®ä¸­èº«ã‚’ã‚³ãƒ”ãƒ¼
+		//tkm‚Ì’†g‚ðƒRƒs[
 		int pos = (int)skeletonFilePath.find(".tkm");
-		//ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã®æƒ…å ±ã‚’æ›¸ãè¾¼ã¿
+		//ƒXƒPƒ‹ƒgƒ“‚Ìî•ñ‚ð‘‚«ž‚Ý
 		skeletonFilePath.replace(pos, 4, ".tks");
-		//charåž‹ã«å¤‰æ›ã—ã¦Init
+		//charŒ^‚É•ÏŠ·‚µ‚ÄInit
 		m_skeleton.Init(skeletonFilePath.c_str());
 	}
 
@@ -102,7 +93,7 @@ namespace nsTMEngine {
 
 
 		if (m_animationClips != nullptr) {
-			// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚ã‚Šã€‚
+			// ƒAƒjƒ[ƒVƒ‡ƒ“‚ ‚èB
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 		}
 	}
@@ -121,7 +112,7 @@ namespace nsTMEngine {
 			m_skeleton.Update(m_model.GetWorldMatrix());
 		}
 
-		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é€²ã‚ã‚‹ã€‚
+		//ƒAƒjƒ[ƒVƒ‡ƒ“‚ði‚ß‚éB
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 
 	}

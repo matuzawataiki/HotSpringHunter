@@ -8,10 +8,12 @@ namespace nsTMEngine {
 	/// </summary>
 	struct SDirectionLight
 	{
-		Vector3 m_pos;		//方向
+		Vector3 m_direction;		//方向
 		float pad0;
 		Vector3 m_color;	//色
 		float pad1;
+		Matrix m_LVP;		//ライトビュープロジェクション
+
 
 		/// <summary>
 		/// ディレクションライトの方向を設定
@@ -19,8 +21,8 @@ namespace nsTMEngine {
 		/// <param name="direction"></param>
 		void SetDirection(const Vector3& direction)
 		{
-			m_pos = direction;
-			m_pos.Normalize();
+			m_direction = direction;
+			m_direction.Normalize();
 		}
 		void SetDirection(float x, float y, float z)
 		{
@@ -40,7 +42,11 @@ namespace nsTMEngine {
 			SetColor({ x,y,z });
 		}
 
-	public:
+		void UpdateLVP(const Matrix LVP)
+		{
+			m_LVP = LVP;
+		}
+	
 
 	};
 
@@ -276,7 +282,6 @@ namespace nsTMEngine {
 		}
 	};
 
-
 	class SceneLight
 	{
 	public:
@@ -289,6 +294,14 @@ namespace nsTMEngine {
 		/// 更新
 		/// </summary>
 		void Update();
+
+		/// <summary>
+		/// ディレクションライトの位置の登録
+		/// </summary>
+		/// <param name="pos">ディクションライトの位置</param>
+		void SetLightPos(Vector3& pos) {
+			m_lightPos = &pos;
+		}
 
 		/// <summary>
 		/// 新規ポイントライトを登録
@@ -320,8 +333,23 @@ namespace nsTMEngine {
 			return &m_light;
 		}
 
+		/// <summary>
+		/// ライトビュープロジェクションの取得
+		/// </summary>
+		/// <returns></returns>
+		Matrix& GetLVP()
+		{
+			return m_light.m_drectionLight.m_LVP;
+		}
+
+	public:
+		Matrix m_mLVP;
+
 		Light m_light;	//シーンライト
 	private:
+		Vector3 m_defaultLightPos = Vector3::Zero;
+		Vector3* m_lightPos = &m_defaultLightPos;					//ディレクションライトの位置
+
 		std::deque< SPointLight* > m_unusePointLightQueue;       // 未使用のポイントライトのキュー。
 		std::deque< SSpotLight* > m_unuseSpotLightQueue;         // 未使用のスポットライトのキュー。。
 	};
