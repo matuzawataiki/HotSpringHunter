@@ -76,9 +76,6 @@ void PlayerHPUI::Update()
 
 void PlayerHPUI::UpdateBarWidth()
 {
-
-	// TODO:simoka 基点が今中心に来ているので、中央左に行くように修正。
-
 	m_playerHPBar.SetScale(Vector2{ m_player->GetPlayerHP() / m_player->GetPlayerMAXHP(),1.0f });
 	m_playerHPBar.Update();
 }
