@@ -36,12 +36,14 @@ void EnemyHPBar::Update()
 	//ワールド座標からスクリーン座標に変換
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, m_enemyPos);
 
-	Vector3 cameraToPos = g_camera3D->GetPosition() - m_enemyPos;
+	Vector3 cameraToPos = m_enemyPos - g_camera3D->GetPosition();
 	float distance = cameraToPos.Length();
-	float scale = 1000.0f / (distance + 400.0f);
+	float scale = 1000.0f / (distance + 500.0f);
 	float yOffset = BASE_OFFSET * scale;
+	float xOffset = scale + 0.55f;
 
 	m_spritePosition.y += yOffset;
+	m_spritePosition.x *= xOffset;
 
 	//座標をセット
 	m_backHpSprite.SetPosition(m_spritePosition);
