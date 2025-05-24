@@ -235,6 +235,8 @@
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
+    <ClCompile Include="Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameOver.cpp" />
@@ -270,6 +272,7 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
+    <ClInclude Include="BackGround\MapObject\Tree.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
     <ClInclude Include="Bucket.h" />
@@ -277,6 +280,8 @@
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemySpawn.h" />
+    <ClInclude Include="Enemy\EnemyBase.h" />
+    <ClInclude Include="Enemy\State\IState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameOver.h" />
