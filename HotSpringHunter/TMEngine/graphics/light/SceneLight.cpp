@@ -73,16 +73,15 @@ namespace nsTMEngine
 	void SceneLight::Update()
 	{
 		Matrix LVP;
-		Vector3 target = m_lightPosition;
-		target.y -= 100.0f;
-		target.x -= 100.0f;
 		Vector3 upAxis = { 0.0f,1.0f,0.0f };
 		// ライトをカメラと見立てたビュー行列を計算する
 		Matrix viewMatrix;
-		viewMatrix.MakeLookAt(m_lightPosition, target, upAxis);
+		viewMatrix.MakeLookAt(g_camera3D->GetPosition(), g_camera3D->GetTarget(), upAxis);
 		// プロジェクション行列を計算する
 		Matrix projMatrix;
-		projMatrix.MakeOrthoProjectionMatrix(1000, 10000, 0.1, 10000);
+		float shadowNear = g_camera3D->GetNear() - 4000;
+		float shadowFar = g_camera3D->GetFar() + 6000;
+		projMatrix.MakeOrthoProjectionMatrix(6000, 3000, shadowNear, shadowFar);
 		LVP = viewMatrix * projMatrix;
 		m_light.m_drectionLight.UpdateLVP(LVP);
 		

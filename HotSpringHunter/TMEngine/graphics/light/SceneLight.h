@@ -1,22 +1,22 @@
 #pragma once
 namespace nsTMEngine {
-	static const int MAX_POINT_LIGHT = 32;	//ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ÌÅ‘å”
-	static const int MAX_SPOT_LIGHT = 32;	//ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌÅ‘å”
+	static const int MAX_POINT_LIGHT = 32;	//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®æœ€å¤§æ•°
+	static const int MAX_SPOT_LIGHT = 32;	//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®æœ€å¤§æ•°
 
 	/// <summary>
-	/// ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚Ì\‘¢‘Ì
+	/// ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆã®æ§‹é€ ä½“
 	/// </summary>
 	struct SDirectionLight
 	{
-		Vector3 m_pos;		//•ûŒü
+		Vector3 m_pos;		//æ–¹å‘
 		float pad0;
-		Vector3 m_color;	//F
+		Vector3 m_color;	//è‰²
 		float pad1;
-		Matrix m_LVP;		//ƒ‰ƒCƒgƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“
+		Matrix m_LVP;		//ãƒ©ã‚¤ãƒˆãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
 
 
 		/// <summary>
-		/// ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚Ì•ûŒü‚ğİ’è
+		/// ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆã®æ–¹å‘ã‚’è¨­å®š
 		/// </summary>
 		/// <param name="direction"></param>
 		void SetDirection(const Vector3& direction)
@@ -30,7 +30,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// F‚Ìİ’è
+		/// è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetColor(const Vector3& color)
@@ -51,19 +51,19 @@ namespace nsTMEngine {
 	};
 
 	/// <summary>
-	/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚Ì\‘¢‘Ì
+	/// ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®æ§‹é€ ä½“
 	/// </summary>
 	struct SPointLight
 	{
-		Vector3 m_pos;				//•ûŒü
-		int		m_isUse = false;	//ƒ‰ƒCƒg‚Ìg—pó‹µ
-		Vector3	m_color;			//F
-		float	m_range;			//‰e‹¿”ÍˆÍ
-		Vector3 m_posInView;		//ƒJƒƒ‰‹óŠÔ‚Å‚ÌÀ•W
+		Vector3 m_pos;				//æ–¹å‘
+		int		m_isUse = false;	//ãƒ©ã‚¤ãƒˆã®ä½¿ç”¨çŠ¶æ³
+		Vector3	m_color;			//è‰²
+		float	m_range;			//å½±éŸ¿ç¯„å›²
+		Vector3 m_posInView;		//ã‚«ãƒ¡ãƒ©ç©ºé–“ã§ã®åº§æ¨™
 		float   pad0;
 
 		/// <summary>
-		/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ÌˆÊ’u‚ğİ’è
+		/// ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®ä½ç½®ã‚’è¨­å®š
 		/// </summary>
 		/// <param name="direction"></param>
 		void SetPosition(const Vector3& pos)
@@ -76,7 +76,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// F‚Ìİ’è
+		/// è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetColor(const Vector3& color)
@@ -89,7 +89,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ‰e‹¿”ÍˆÍ‚Ìİ’è
+		/// å½±éŸ¿ç¯„å›²ã®è¨­å®š
 		/// </summary>
 		/// <param name="range"></param>
 		void SetRange(const float& range)
@@ -98,7 +98,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ğg—p’†‚É‚·‚é
+		/// ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã‚’ä½¿ç”¨ä¸­ã«ã™ã‚‹
 		/// </summary>
 		void Use()
 		{
@@ -106,7 +106,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// XV
+		/// æ›´æ–°
 		/// </summary>
 		void Update();
 	public:
@@ -114,21 +114,21 @@ namespace nsTMEngine {
 	};
 
 	/// <summary>
-	/// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì\‘¢‘Ì
+	/// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®æ§‹é€ ä½“
 	/// </summary>
 	struct SSpotLight
 	{
-		Vector3 m_pos;				//ˆÊ’u
-		int		m_isUse = false;	//ƒ‰ƒCƒg‚Ìg—pó‹µ
-		Vector3 m_color;			//F
-		float	m_range;			//‰e‹¿”ÍˆÍ
-		Vector3 m_direction;		//Œü‚«
-		float	m_angle;			//ËoŠp“x
-		Vector3 m_posInView;		//ƒJƒƒ‰‹óŠÔ‚Å‚ÌÀ•W
+		Vector3 m_pos;				//ä½ç½®
+		int		m_isUse = false;	//ãƒ©ã‚¤ãƒˆã®ä½¿ç”¨çŠ¶æ³
+		Vector3 m_color;			//è‰²
+		float	m_range;			//å½±éŸ¿ç¯„å›²
+		Vector3 m_direction;		//å‘ã
+		float	m_angle;			//å°„å‡ºè§’åº¦
+		Vector3 m_posInView;		//ã‚«ãƒ¡ãƒ©ç©ºé–“ã§ã®åº§æ¨™
 		float	pad;
 
 		/// <summary>
-		/// ƒ‰ƒCƒg‚ÌˆÊ’u‚ğİ’è
+		/// ãƒ©ã‚¤ãƒˆã®ä½ç½®ã‚’è¨­å®š
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -141,7 +141,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// F‚Ìİ’è
+		/// è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetColor(const Vector3& color)
@@ -154,7 +154,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ‰e‹¿”ÍˆÍ‚Ìİ’è
+		/// å½±éŸ¿ç¯„å›²ã®è¨­å®š
 		/// </summary>
 		/// <param name="range"></param>
 		void SetRange(const float& range)
@@ -163,7 +163,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// Œü‚«‚Ìİ’è
+		/// å‘ãã®è¨­å®š
 		/// </summary>
 		/// <param name="direction"></param>
 		void SetDirection(const Vector3& direction)
@@ -177,7 +177,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ‰e‹¿”ÍˆÍ‚Ìİ’è
+		/// å½±éŸ¿ç¯„å›²ã®è¨­å®š
 		/// </summary>
 		/// <param name="angle"></param>
 		void SetAngle(const float angle)
@@ -186,7 +186,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ğg—p’†‚É‚·‚é
+		/// ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã‚’ä½¿ç”¨ä¸­ã«ã™ã‚‹
 		/// </summary>
 		void Use()
 		{
@@ -194,25 +194,25 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// XV
+		/// æ›´æ–°
 		/// </summary>
 		void Update();
 
 	};
 
 	/// <summary>
-	/// ”¼‹…ƒ‰ƒCƒg‚Ì\‘¢‘Ì
+	/// åŠçƒãƒ©ã‚¤ãƒˆã®æ§‹é€ ä½“
 	/// </summary>
 	struct SHemisphereLight
 	{
-		Vector3 m_groundColor;	//’n–Ê‚ÌF
+		Vector3 m_groundColor;	//åœ°é¢ã®è‰²
 		float pad0;
-		Vector3 m_skyColor;		//‹ó‚ÌF
+		Vector3 m_skyColor;		//ç©ºã®è‰²
 		float pad1;
-		Vector3 m_groundNormal;	//’n–Ê‚Ì–@ü
+		Vector3 m_groundNormal;	//åœ°é¢ã®æ³•ç·š
 
 		/// <summary>
-		/// ’n–Ê‚ÌF‚Ìİ’è
+		/// åœ°é¢ã®è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetGroundColor(const Vector3& color) {
@@ -223,7 +223,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ‹ó‚ÌF‚Ìİ’è
+		/// ç©ºã®è‰²ã®è¨­å®š
 		/// </summary>
 		/// <param name="color"></param>
 		void SetSkyColor(const Vector3& color) {
@@ -234,7 +234,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ’n–Ê‚Ì–@ü‚Ìİ’è
+		/// åœ°é¢ã®æ³•ç·šã®è¨­å®š
 		/// </summary>
 		/// <param name="normal"></param>
 		void SetGroundNormal(const Vector3& normal) {
@@ -247,20 +247,20 @@ namespace nsTMEngine {
 	};
 
 	/// <summary>
-	/// ƒ‰ƒCƒg‚Ì\‘¢‘Ì
+	/// ãƒ©ã‚¤ãƒˆã®æ§‹é€ ä½“
 	/// </summary>
 	struct Light {
-		SDirectionLight m_drectionLight;					//ƒV[ƒ“ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg
-		SPointLight		m_pointLight[MAX_POINT_LIGHT];		//ƒ|ƒCƒ“ƒgƒ‰ƒCƒg
-		SSpotLight		m_spotLight[MAX_SPOT_LIGHT];		//ƒXƒ|ƒbƒgƒ‰ƒCƒg
-		SHemisphereLight m_hemisphereLight;					//”¼‹…ƒ‰ƒCƒg
-		int				m_numPointLig = 0;					//ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚Ìg—p”
-		Vector3			m_cameraPos = Vector3::Zero;		//ƒJƒƒ‰‚ÌŒü‚¢‚Ä‚¢‚é•ûŒü
-		int				m_numSpotLig = 0;					//ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ìg—p”
-		Vector3			m_ambientLight = Vector3::Zero;		//ŠÂ‹«Œõ
+		SDirectionLight m_drectionLight;					//ã‚·ãƒ¼ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ãƒ©ã‚¤ãƒˆ
+		SPointLight		m_pointLight[MAX_POINT_LIGHT];		//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆ
+		SSpotLight		m_spotLight[MAX_SPOT_LIGHT];		//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
+		SHemisphereLight m_hemisphereLight;					//åŠçƒãƒ©ã‚¤ãƒˆ
+		int				m_numPointLig = 0;					//ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®ä½¿ç”¨æ•°
+		Vector3			m_cameraPos = Vector3::Zero;		//ã‚«ãƒ¡ãƒ©ã®å‘ã„ã¦ã„ã‚‹æ–¹å‘
+		int				m_numSpotLig = 0;					//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ä½¿ç”¨æ•°
+		Vector3			m_ambientLight = Vector3::Zero;		//ç’°å¢ƒå…‰
 
 		/// <summary>
-		/// ƒJƒƒ‰‚Ì‹“_‚ÌˆÊ’u‚Ìİ’è
+		/// ã‚«ãƒ¡ãƒ©ã®è¦–ç‚¹ã®ä½ç½®ã®è¨­å®š
 		/// </summary>
 		/// <param name="cameraPos"></param>
 		void SetCameraPos()
@@ -269,9 +269,9 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ŠÂ‹«Œõ‚Ìİ’è
+		/// ç’°å¢ƒå…‰ã®è¨­å®š
 		/// </summary>
-		/// <param name="color">ŠÂ‹«Œõ‚ÌF</param>
+		/// <param name="color">ç’°å¢ƒå…‰ã®è‰²</param>
 		void SetAmbientLight(const Vector3& color)
 		{
 			m_ambientLight = color;
@@ -291,24 +291,24 @@ namespace nsTMEngine {
 		void Init();
 
 		/// <summary>
-		/// XV
+		/// æ›´æ–°
 		/// </summary>
 		void Update();
 
 		/// <summary>
-		/// V‹Kƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ğ“o˜^
+		/// æ–°è¦ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã‚’ç™»éŒ²
 		/// </summary>
 		/// <returns></returns>
 		SPointLight* NewPointLight();
 
 		/// <summary>
-		/// V‹KƒXƒ|ƒbƒgƒ‰ƒCƒg‚ğ“o˜^
+		/// æ–°è¦ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã‚’ç™»éŒ²
 		/// </summary>
 		/// <returns></returns>
 		SSpotLight* NewSpotLight();
 
 		/// <summary>
-		/// ”¼‹…ƒ‰ƒCƒg‚ğæ“¾
+		/// åŠçƒãƒ©ã‚¤ãƒˆã‚’å–å¾—
 		/// </summary>
 		/// <returns></returns>
 		SHemisphereLight* GetHemisphereLight()
@@ -317,7 +317,7 @@ namespace nsTMEngine {
 		}
 
 		/// <summary>
-		/// ƒ‰ƒCƒg‚ğæ“¾
+		/// ãƒ©ã‚¤ãƒˆã‚’å–å¾—
 		/// </summary>
 		/// <returns></returns>
 		Light* GetLight()
@@ -330,21 +330,12 @@ namespace nsTMEngine {
 			return m_light.m_drectionLight.m_LVP;
 		}
 
-		void SetLVPPosition(Vector3 positon)
-		{
-			m_LVPPos->x = positon.x;
-			m_LVPPos->z = positon.z;
-		}
-
 	public:
-		Vector3 m_lightPosition = { 0.0f,1000.0f,0.0f };
-		Vector3* m_LVPPos = &m_lightPosition;
-
 		Matrix m_mLVP;
 
-		Light m_light;	//ƒV[ƒ“ƒ‰ƒCƒg
+		Light m_light;	//ã‚·ãƒ¼ãƒ³ãƒ©ã‚¤ãƒˆ
 	private:
-		std::deque< SPointLight* > m_unusePointLightQueue;       // –¢g—p‚Ìƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ÌƒLƒ…[B
-		std::deque< SSpotLight* > m_unuseSpotLightQueue;         // –¢g—p‚ÌƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌƒLƒ…[BB
+		std::deque< SPointLight* > m_unusePointLightQueue;       // æœªä½¿ç”¨ã®ãƒã‚¤ãƒ³ãƒˆãƒ©ã‚¤ãƒˆã®ã‚­ãƒ¥ãƒ¼ã€‚
+		std::deque< SSpotLight* > m_unuseSpotLightQueue;         // æœªä½¿ç”¨ã®ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ã‚­ãƒ¥ãƒ¼ã€‚ã€‚
 	};
 }
