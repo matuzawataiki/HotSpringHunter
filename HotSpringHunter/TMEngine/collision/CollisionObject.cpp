@@ -5,7 +5,7 @@ using namespace nsTMEngine;
 namespace nsK2Engine {
 	CollisionObject::CollisionObject()
 	{
-
+		
 	}
 
 	CollisionObject::~CollisionObject()
