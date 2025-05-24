@@ -83,7 +83,7 @@ namespace nsTMEngine
 		Matrix projMatrix;
 		float shadowNear = g_camera3D->GetNear() - 4000;
 		float shadowFar = g_camera3D->GetFar() + 6000;
-		projMatrix.MakeOrthoProjectionMatrix(10000, 10000, shadowNear, shadowFar);
+		projMatrix.MakeOrthoProjectionMatrix(4000, 4000, shadowNear, shadowFar);
 		LVP = viewMatrix * projMatrix;
 		m_light.m_drectionLight.UpdateLVP(LVP);
 		
