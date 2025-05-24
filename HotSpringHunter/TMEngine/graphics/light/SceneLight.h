@@ -12,6 +12,8 @@ namespace nsTMEngine {
 		float pad0;
 		Vector3 m_color;	//色
 		float pad1;
+		Matrix m_LVP;		//ライトビュープロジェクション
+
 
 		/// <summary>
 		/// ディレクションライトの方向を設定
@@ -40,7 +42,11 @@ namespace nsTMEngine {
 			SetColor({ x,y,z });
 		}
 
-	public:
+		void UpdateLVP(const Matrix LVP)
+		{
+			m_LVP = LVP;
+		}
+	
 
 	};
 
@@ -276,7 +282,6 @@ namespace nsTMEngine {
 		}
 	};
 
-
 	class SceneLight
 	{
 	public:
@@ -319,6 +324,14 @@ namespace nsTMEngine {
 		{
 			return &m_light;
 		}
+
+		Matrix& GetLVP()
+		{
+			return m_light.m_drectionLight.m_LVP;
+		}
+
+	public:
+		Matrix m_mLVP;
 
 		Light m_light;	//シーンライト
 	private:
