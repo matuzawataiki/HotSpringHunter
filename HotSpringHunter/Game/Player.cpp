@@ -1,20 +1,64 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "PlayerHealth.h"
-#include "PlayerAttack.h"
-#include "PlayerGuard.h"
-#include "PlayerChargeAttack.h"
 #include "Towel.h"
 #include "Bucket.h"
 
-namespace {
-	const float MOVE_AMOUNT = 120.0f;
-	const float JUMP_AMOUNT = 700.0f;
-	const float DASH_AMOUNT = 4.0f;
-	const float GRAVITY_AMOUNT = 10.0f;
+#include "SnakeEnemy.h"
 
-	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };
+namespace {
+
+	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };	//player初期位置。
+
+	const float MAX_PLAYER_HP = 100.0f;
+	float GetPlayerMAXHP()
+	{
+		return MAX_PLAYER_HP;
+	}
+
+	const float MOVE_AMOUNT = 120.0f;			//移動：移動量。
+	const float GRAVITY_AMOUNT = 10.0f;			//移動：重力量。
+	const float JUMP_AMOUNT = 700.0f;			//移動：ジャンプ力。
+	const float DASH_AMOUNT = 3000.0f;			//移動：ダッシュ速度。
+
+	const float WEAK_COLLISION_DIS = 100.0f;	//弱攻撃：コリジョン位置。
+	const float WEAK_COLLISION_SIZE = 150.0f;	//弱攻撃：コリジョンサイズ。
+	const float WEAK_ATTACK_POWER = 50.0f;		//弱攻撃：攻撃力。
+
+	const float CHARGE_DECREASE = 0.5f;			//溜め攻撃：チャージ減少量。
+	const float CHARGE_COLLISION_SIZE = 2.0f;	//溜め攻撃：コリジョンの大きさの倍率。
+	const float CHARGE_MAX = 100.0f;			//溜め攻撃：チャージ最大値。
+	const float CHARGE_POWER = 2.0f;			//溜め攻撃：攻撃力の倍率。
+	const float CHANGE_WEAK = 20.0f;			//溜め攻撃：弱攻撃になるチャージ
+	const float NEW_CHARGE = 5.0f;				//溜め攻撃：チャージの初期値。
+
+	const float GUARD_TOLERANCE = 1.0f;			//ガード：ガード可能な角度。
+
+	const float HIT_RIGIDITY_TiME = 0.5f;		//被弾：硬直時間。
+
+	const float DEATH_MOTION_TIME = 3.0f;		//死亡：ゲームオーバーに移行するまでの時間。
+
+	bool IsInputStickR()
+	{
+		if ((fabsf(g_pad[0]->GetRStickXF()) >= FLT_EPSILON) || (fabsf(g_pad[0]->GetRStickYF()) >= FLT_EPSILON)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	bool IsInputStickL()
+	{
+		if ((fabsf(g_pad[0]->GetLStickXF()) >= FLT_EPSILON) || (fabsf(g_pad[0]->GetLStickYF()) >= FLT_EPSILON)) {
+			return true;
+		}
+
+		return false;
+	}
 }
+
+/*********************************************************************************/
+//player基底クラス。
+/*********************************************************************************/
 
 Player::Player()
 {
@@ -22,252 +66,745 @@ Player::Player()
 
 Player::~Player()
 {
-	DeleteGO(m_playerAttack);
-	DeleteGO(m_playerGuard);
-	DeleteGO(m_playerChaAt);
-	DeleteGO(m_playerHealth);
+	DeleteList();
+}
+
+/// <summary>
+/// リスト削除。
+/// </summary>
+void Player::DeleteList()
+{
+	//stateにインスタンスをいれて削除する。
+	for (int i = 0; i < m_stateList.size(); ++i) {
+		auto* state = m_stateList[i];
+		delete state;
+		state = nullptr;
+	}
+	m_stateList.clear();
 }
 
 bool Player::Start()
 {
-	//player���W������
-	m_playerPosition = PLAYER_NEW_POSITION;
-	//player�L�����R��������
-	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPosition);
+	//player座標初期化
+	m_playerPos = PLAYER_NEW_POSITION;
+	//playerキャラコン初期化
+	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
 
-	LoadModel();
-	GenerateMinions();
+	m_stateMachine = NewGO<StateMachine>(0,"stateMachine");
 
+	AddList();
+	LoadAssets();
+	
 	return true;
 }
 
 /// <summary>
-/// Assets���[�h�B
+/// リスト追加。
 /// </summary>
-void Player::LoadModel()
+void Player::AddList()
 {
-	//�A�j���[�V�������[�h�B
-	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
-	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
-	m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Run].Load("Assets/animData/player/run.tka");
-	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Jump].Load("Assets/animData/player/jump.tka");
-	m_animationClips[enAnimationClip_Jump].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_GuardStart].Load("Assets/animData/player/guardStart.tka");
-	m_animationClips[enAnimationClip_GuardStart].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_GuardEnd].Load("Assets/animData/player/guardEnd.tka");
-	m_animationClips[enAnimationClip_GuardEnd].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_WeakAttack].Load("Assets/animData/player/weakAttack.tka");
-	m_animationClips[enAnimationClip_WeakAttack].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_ChargeAttack].Load("Assets/animData/player/chargeAttack.tka");
-	m_animationClips[enAnimationClip_ChargeAttack].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Charging].Load("Assets/animData/player/charging.tka");
-	m_animationClips[enAnimationClip_Charging].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Hit].Load("Assets/animData/player/hit.tka");
-	m_animationClips[enAnimationClip_Hit].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Death].Load("Assets/animData/player/death.tka");
-	m_animationClips[enAnimationClip_Death].SetLoopFlag(false);
-
-	//���f�����[�h�B
-	m_playerModelRender.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisY);
+	//m_stateListを初期化。
+	m_stateList.clear();
+	//リストにインスタンスを追加していく。
+	m_stateList.push_back(new PlayerIdle(this));
+	m_stateList.push_back(new PlayerMove(this));
+	m_stateList.push_back(new PlayerWeakAttack(this));
+	m_stateList.push_back(new PlayerChargeAttack(this));
+	m_stateList.push_back(new PlayerGuard(this));
+	m_stateList.push_back(new PlayerHit(this));
+	m_stateList.push_back(new PlayerDeath(this));
 }
 
 /// <summary>
-/// �q�N���XNewGO�B
+/// Assetsロード。
 /// </summary>
-void Player::GenerateMinions()
+void Player::LoadAssets()
 {
-	m_playerHealth = NewGO<PlayerHealth>(0, "playerHealth");
-	m_playerAttack = NewGO<PlayerAttack>(0, "playerAttack");
-	m_playerGuard = NewGO<PlayerGuard>(0, "playerGuard");
-	m_playerChaAt = NewGO<PlayerChargeAttack>(0, "playerChargeAttack");
-
-	//NewGO<Towel>(0, "towel");
-	//NewGO<Bucket>(0, "bucket");
+	//アニメーションロード。
+	m_animationClips[enPlayerAnimClip_Idle].Load("Assets/animData/player/idle.tka");
+	m_animationClips[enPlayerAnimClip_Idle].SetLoopFlag(true);
+	m_animationClips[enPlayerAnimClip_Walk].Load("Assets/animData/player/walk.tka");
+	m_animationClips[enPlayerAnimClip_Walk].SetLoopFlag(true);
+	m_animationClips[enPlayerAnimClip_Run].Load("Assets/animData/player/run.tka");
+	m_animationClips[enPlayerAnimClip_Run].SetLoopFlag(true);
+	m_animationClips[enPlayerAnimClip_Jump].Load("Assets/animData/player/jump.tka");
+	m_animationClips[enPlayerAnimClip_Jump].SetLoopFlag(false);
+	m_animationClips[enPlayerAnimClip_GuardStart].Load("Assets/animData/player/guardStart.tka");
+	m_animationClips[enPlayerAnimClip_GuardStart].SetLoopFlag(false);
+	m_animationClips[enPlayerAnimClip_GuardEnd].Load("Assets/animData/player/guardEnd.tka");
+	m_animationClips[enPlayerAnimClip_GuardEnd].SetLoopFlag(false);
+	m_animationClips[enPlayerAnimClip_WeakAttack].Load("Assets/animData/player/weakAttack.tka");
+	m_animationClips[enPlayerAnimClip_WeakAttack].SetLoopFlag(false);
+	m_animationClips[enPlayerAnimClip_ChargeAttack].Load("Assets/animData/player/chargeAttack.tka");
+	m_animationClips[enPlayerAnimClip_ChargeAttack].SetLoopFlag(false);
+	m_animationClips[enPLayerAnimClip_Charging].Load("Assets/animData/player/charging.tka");
+	m_animationClips[enPLayerAnimClip_Charging].SetLoopFlag(false);
+	m_animationClips[enPlayerAnimClip_Hit].Load("Assets/animData/player/hit.tka");
+	m_animationClips[enPlayerAnimClip_Hit].SetLoopFlag(false);
+	m_animationClips[enPlayerAnimClip_Death].Load("Assets/animData/player/death.tka");
+	m_animationClips[enPlayerAnimClip_Death].SetLoopFlag(false);
+	//モデルロード。
+	m_playerModel.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enPlayerAnimClip_Num, enModelUpAxisY);
 }
 
 void Player::Update()
 {
-	Move();
-	Rotation();
-	StateManage();
-	AnimationManage();
-
-	m_playerModelRender.Update();
+	StateManage();	
+	BasicBehavior();
+	DisplayCharge();
 }
 
 /// <summary>
-/// player�̈ړ��B
+/// playerの基本的な挙動。
 /// </summary>
-void Player::Move()
+void Player::BasicBehavior() 
 {
-	//�n�ʂɂ��Ă�����B
-	if (m_playerCharaCon.IsOnGround() == true) {
-
-		//�ړ����x��0.0f�ɂ���B
-		m_playerSpeed.x = 0.0f;
-		m_playerSpeed.z = 0.0f;
-
-		//���X�e�B�b�N�̓��͗ʂ��擾�B
-		Vector3 stickL;
-		stickL.x = g_pad[0]->GetLStickXF();
-		stickL.y = g_pad[0]->GetLStickYF();
-
-		//�J�����̑O�����ƉE�����̃x�N�g�����擾�B
-		Vector3 forwardDir = g_camera3D->GetForward();
-		Vector3 rightDir = g_camera3D->GetRight();
-
-		//y������0�ɂ���B
-		forwardDir.y = 0.0f;
-		rightDir.y = 0.0f;
-
-		//�O�����x�N�g���𐳋K���B
-		//�J�����̏㉺�����ŃL�����̈ړ����x���ς��Ȃ��悤�ɂ���B
-		forwardDir.Normalize();		
-
-		//�ړ��������v�Z�B
-		forwardDir *= stickL.y;
-		rightDir *= stickL.x;
-
-		//player�̌������擾�B
-		GetDirection(forwardDir, rightDir);
-
-		//�ړ����x���v�Z�B
-		//�ړ����x = ���s���x * �_�b�V����� * �K�[�h��ԁB
-		MoveAdjust();
-		forwardDir *= MOVE_AMOUNT * m_runState * m_guardState;
-		rightDir *= MOVE_AMOUNT * m_runState * m_guardState;
-
-		//�ړ����x�ɉ��Z�B
-		m_playerSpeed += forwardDir + rightDir;		
-
-		//�d�͂��Ȃ����B
-		m_playerSpeed.y = 0.0f;
-
-		//�W�����v�B
-		if (g_pad[0]->IsTrigger(enButtonA)) {
-			m_playerSpeed.y = JUMP_AMOUNT;
-		}
-	}
-	//�n�ʂɂ��Ă��Ȃ�������B
-	else {
-		//�d�͂𔭐�������B
+	//重力を発生させる。
+	if (!m_playerCharaCon.IsOnGround()) {
 		m_playerSpeed.y -= GRAVITY_AMOUNT;
 	}
-	
-	m_playerPosition = m_playerCharaCon.Execute(m_playerSpeed, 1.0f / 60.0f);
-	m_playerModelRender.SetPosition(m_playerPosition);
+
+	//ポジションの更新。
+	m_playerPos = m_playerCharaCon.Execute(m_playerSpeed, 1.0f / 60.0f);
+	m_playerModel.SetPosition(m_playerPos);
+	//向きの更新。
+	if (m_currentState == enPlayerWalk) {
+		DirectionUpdate();
+	}
+	//回転の更新。
+	m_playerRot.SetRotationYFromDirectionXZ(m_playerDir);
+	m_playerModel.SetRotation(m_playerRot);
+	//モデルの更新。
+	m_playerModel.Update();		
 }
 
-void Player::MoveAdjust()
+/// <summary>
+/// 向きを更新。
+/// </summary>
+void Player::DirectionUpdate()
 {
-	//�K�[�h���B
-	if (g_pad[0]->IsPress(enButtonX)) {
-		m_guardState = 0.0f;
+	//左スティックの入力量を取得。
+	Vector3 stickL;
+	stickL.x = g_pad[0]->GetLStickXF();
+	stickL.y = g_pad[0]->GetLStickYF();
+
+	//カメラの前方向と右方向のベクトルを取得。
+	Vector3 forwardDir = g_camera3D->GetForward();
+	Vector3 rightDir = g_camera3D->GetRight();
+
+	//y方向を0にする。
+	forwardDir.y = 0.0f;
+	rightDir.y = 0.0f;
+
+	//移動方向を計算。
+	forwardDir *= stickL.y;
+	rightDir *= stickL.x;
+
+	//スティックが倒されているなら。
+	if (IsInputStickL()) {
+		//playerの向きを更新する。
+		m_playerDir = forwardDir + rightDir;
+		m_playerDir.Normalize();
+	}
+
+	if (g_pad[0]->IsPress(enButtonA)) {
+		int hoge = 0;
+		hoge++;
+	}
+}
+
+/// <summary>
+/// 被弾。
+/// </summary>
+/// <param name="reduce"></param>体力減少量。
+void Player::Hit(float reduce)
+{
+	//ガードができていないなら。
+	if (m_guardFlag == true) {
+		return;
+	}
+
+	//HPを減らす。
+	m_playerHP -= reduce;
+
+	if (m_playerHP < 0.0) {
+		m_playerHP = 0.0f;
+	}
+
+	//HPの残量でステートを変える。
+	if (m_playerHP > 0.0f) {
+		m_hitFlag = true;
 	}
 	else {
-		m_guardState = 1.0f;
-	}
-
-	//�_�b�V���B
-	if (g_pad[0]->IsPress(enButtonB)) {
-		m_runState = DASH_AMOUNT;
-	}
-	else{
-		m_runState = 1.0f;
+		m_deathFlag = true;
 	}
 }
 
 /// <summary>
-/// player�̌������X�V�B
-/// </summary>
-/// <param name="forward"></param>�X�e�B�b�N�̏c�����B
-/// <param name="right"></param>�X�e�B�b�N�̉������B
-void Player::GetDirection(Vector3 forward,Vector3 right)
-{
-	//�X�e�B�b�N���|����Ă���Ȃ�B
-	if (fabsf(forward.x) >= 0.01f || fabsf(forward.z) >= 0.01f ||
-		fabsf(right.x) >= 0.01f || fabsf(right.z) >= 0.01f) {
-		//player�̌������X�V����B
-		m_playerDirection = forward + right;
-		m_playerDirection.Normalize();
-	}
-}
-
-/// <summary>
-/// �A�j���[�V�����X�e�[�g�Ǘ��B
+/// ステート管理。
 /// </summary>
 void Player::StateManage()
 {
-	//�W�����v���B
-	if (m_playerCharaCon.IsOnGround() == false) {
-		m_animationState = EnPlayerAnimVar::enJump;
-	}
-	else {
-		//���s���B
-		if (fabsf(m_playerSpeed.x) >= 0.01f || fabsf(m_playerSpeed.z) >= 0.01f) {
-			m_animationState = EnPlayerAnimVar::enWalk;
-			//X�{�^�����͒��Ȃ�B
-			if (g_pad[0]->IsPress(enButtonB)) {
-				m_animationState = EnPlayerAnimVar::enRun;
-			}
-		}
-		//�ҋ@���B
-		/*else {
-			m_animationState = EnPlayerAnimVar::enIdle;
-		}*/
-	}
-}
+	//ステートマシンのUpdate()は常に実行。
+	m_stateMachine->Update();
 
-void Player::Rotation()
-{
-	m_playerRotation.SetRotationYFromDirectionXZ(m_playerDirection);
-	m_playerModelRender.SetRotation(m_playerRotation);
+	//ステートが変わったら。
+	if (m_requestState != m_currentState) {
+		m_stateList[m_currentState]->Exit();
+		//現在のステートを切り替える。
+		m_currentState = m_requestState;
+		m_stateList[m_currentState]->Enter();
+	}
+	//現在のステートのUpdate()しか実行しない。
+	m_stateList[m_currentState]->Update();
 }
 
 /// <summary>
-/// �A�j���[�V�����Ǘ��B
+/// チャージ量表示（仮）。
 /// </summary>
-void Player::AnimationManage()
+void Player::DisplayCharge()
 {
-	switch (m_animationState) {
-	case EnPlayerAnimVar::enIdle:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Idle);
-		break;
-	case EnPlayerAnimVar::enWalk:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Walk);
-		break;
-	case EnPlayerAnimVar::enJump:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Jump);
-		break;
-	case EnPlayerAnimVar::enRun:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Run);
-		break;
-	case EnPlayerAnimVar::enGuardStart:
-		m_playerModelRender.PlayAnimation(enAnimationClip_GuardStart);
-		break;
-	case EnPlayerAnimVar::enWeakAttack:
-		m_playerModelRender.PlayAnimation(enAnimationClip_WeakAttack);
-		break;
-	case EnPlayerAnimVar::enChargeAttack:
-		m_playerModelRender.PlayAnimation(enAnimationClip_ChargeAttack);
-		break;
-	case EnPlayerAnimVar::enCharging:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Charging);
-		break;
-	case EnPlayerAnimVar::enHit:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Hit);
-		break;
-	case EnPlayerAnimVar::enDeath:
-		m_playerModelRender.PlayAnimation(enAnimationClip_Death);
-	default:
-		break;
-	}
+	m_chargeRender.SetScale(1.2);
+	m_chargeRender.SetPosition({ 425.0f,475.0f,0.0f });
+	m_chargeRender.SetColor(g_vec4Black);
+
+	swprintf_s(m_chargeText, 100, L"チャージ %.1f", float(m_charge));
+	m_chargeRender.SetText(m_chargeText);
 }
 
 void Player::Render(RenderContext& rc)
 {
-	m_playerModelRender.Draw(rc);
+	m_playerModel.Draw(rc);
+	m_chargeRender.Draw(rc);
+}
+
+float Player::GetPlayerMAXHP()
+{
+	return MAX_PLAYER_HP;
+}
+
+/*********************************************************************************/
+//ステートマシン（仮）。
+/*********************************************************************************/
+StateMachine::StateMachine()
+{
+}
+
+StateMachine::~StateMachine()
+{
+}
+
+bool StateMachine::Start()
+{
+	m_player = FindGO<Player>("player");
+
+	return true;
+}
+
+void StateMachine::Update()
+{
+	StateManage();
+}
+
+/// <summary>
+/// ステート遷移（仮）。
+/// </summary>
+void StateMachine::StateManage()
+{
+	//死亡。
+	//・死亡していたら。
+	if (m_player->m_deathFlag) {
+		m_player->m_requestState = enPlayerDeath;
+		return;
+	}
+
+	//被弾。
+	//・被弾の硬直中なら。
+	if (m_player->m_hitFlag) {
+		m_player->m_requestState = enPlayerHit;
+		return;
+	}
+
+	//弱攻撃。
+	//Yボタンが押されたら。
+	if ((g_pad[0]->IsTrigger(enButtonY)) || (m_player->m_weakAtFlag)) {
+		m_player->m_requestState = enPlayerWeakAttack;
+		return;
+	}
+
+	//溜め攻撃。
+	//右スティックでチャージ中なら。
+	if (IsInputStickR() || m_player->m_chargeAtFlag) {
+		m_player->m_requestState = enPlayerChargeAttack;
+		return;
+	}
+
+	//ガード。
+	//Xボタンが入力されているなら。
+	if (g_pad[0]->IsPress(enButtonX)) {
+		m_player->m_requestState = enPlayerGuard;
+		return;
+	}
+
+	//移動。
+	//・スティックが入力されている。
+	if (IsInputStickL()) {
+		m_player->m_requestState = enPlayerWalk;
+		return;
+	}
+
+	//待機。
+	//・ボタンとスティックが何も入力されていない。
+	if ((!g_pad[0]->IsPressAnyKey()) && (!IsInputStickL()) && (!IsInputStickR())) {
+		m_player->m_requestState = enPlayerIdle;
+	}
+}
+
+/*********************************************************************************/
+//待機用クラス。
+/*********************************************************************************/
+
+PlayerIdle::~PlayerIdle()
+{
+
+}
+
+void PlayerIdle::Enter()
+{
+	//待機アニメーションを再生。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Idle);
+}
+
+void PlayerIdle::Update()
+{
+	idle();
+}
+
+/// <summary>
+/// 待機。
+/// </summary>
+void PlayerIdle::idle()
+{
+	
+}
+
+void PlayerIdle::Exit()
+{
+
+}
+
+
+
+/*********************************************************************************/
+//移動用クラス。
+/*********************************************************************************/
+
+PlayerMove::~PlayerMove()
+{
+
+}
+
+void PlayerMove::Enter()
+{
+
+}
+
+void PlayerMove::Update()
+{
+	if (m_player->m_playerCharaCon.IsOnGround()) {		
+		//ダッシュ。
+		if (g_pad[0]->IsPress(enButtonB)) {
+			Dash();
+		}
+		//歩き。
+		else {
+			Walk();
+		}
+		//ジャンプ。
+		/*if (g_pad[0]->IsTrigger(enButtonA)) {
+			Jump();
+		}	*/	
+	}
+	AnimManage();
+}
+
+/// <summary>
+///アニメーション。
+/// </summary>
+void PlayerMove::AnimManage()
+{
+	//ジャンプ。
+	/*if (!m_player->m_playerCharaCon.IsOnGround()) {
+		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Jump);
+		return;
+	}*/
+	//ダッシュ。
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run);
+		return;
+	}
+	//歩き。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Walk);
+}
+
+/// <summary>
+/// 歩き。
+/// </summary>
+void PlayerMove::Walk()
+{
+	m_player->m_playerSpeed.x = m_player->m_playerDir.x * MOVE_AMOUNT;
+	m_player->m_playerSpeed.z = m_player->m_playerDir.z * MOVE_AMOUNT;
+}
+
+/// <summary>
+/// ダッシュ。
+/// </summary>
+void PlayerMove::Dash()
+{
+	m_player->m_playerSpeed.x = m_player->m_playerDir.x * DASH_AMOUNT;
+	m_player->m_playerSpeed.z = m_player->m_playerDir.z * DASH_AMOUNT;
+}
+
+/// <summary>
+/// ジャンプ。
+/// </summary>
+void PlayerMove::Jump()
+{
+	m_player->m_playerSpeed.y = JUMP_AMOUNT;
+}
+
+void PlayerMove::Exit()
+{
+	m_player->m_playerSpeed = Vector3::Zero;
+}
+
+/*********************************************************************************/
+//弱攻撃用クラス。
+/*********************************************************************************/
+
+PlayerWeakAttack::~PlayerWeakAttack()
+{
+	
+}
+
+void PlayerWeakAttack::Enter()
+{
+	//弱攻撃のフラッグを立てる。
+	m_player->m_weakAtFlag = true;
+	//攻撃力を設定。
+	m_player->m_attackPower = WEAK_ATTACK_POWER;
+	//弱攻撃。
+	WeakAttack();
+	//弱攻撃アニメーションを再生。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack);
+}
+
+void PlayerWeakAttack::Update()
+{
+	ChangeState();
+
+	//弱攻撃アニメーション再生。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack);
+}
+
+/// <summary>
+/// 弱攻撃。
+/// </summary>
+void PlayerWeakAttack::WeakAttack()
+{
+	//コリジョン生成。
+	MakeCollision();
+	//コリジョン削除。
+	DeleteGO(m_player->m_collision);
+}
+
+/// <summary>
+/// コリジョン作成。
+/// </summary>
+void PlayerWeakAttack::MakeCollision()
+{
+	//コリジョンオブジェクトを作成
+	m_player->m_collision = NewGO<CollisionObject>(0, "weakAttack");
+	Vector3 collisionPosition = m_player->m_playerPos;
+	//座標をプレイヤーの少し前に設定
+	collisionPosition += m_player->m_playerDir * WEAK_COLLISION_DIS;
+	//球状のコリジョンを作成
+	m_player->m_collision->CreateSphere(collisionPosition,
+		Quaternion::Identity,
+		WEAK_COLLISION_SIZE);
+}
+
+/// <summary>
+//ステート切り替え。
+/// </summary>
+void PlayerWeakAttack::ChangeState()
+{
+	//アニメーションが再生し終わったらステート変更。
+	if (!m_player->m_playerModel.IsPlayAnimation()) {
+		m_player->m_weakAtFlag = false;
+	}
+}
+
+void PlayerWeakAttack::Exit()
+{
+	//攻撃力をリセット。
+	m_player->m_attackPower = 0.0f;
+}
+
+/*********************************************************************************/
+//溜め攻撃用クラス。
+/*********************************************************************************/
+
+PlayerChargeAttack::~PlayerChargeAttack()
+{
+
+}
+
+void PlayerChargeAttack::Enter()
+{
+	//溜め攻撃のフラッグを立てる。
+	m_player->m_chargeAtFlag = true;
+	//チャージ中。
+	m_isCharging = true;
+	//まだステートを切り替えていない。
+	m_isStateChange = false;
+	//チャージの初期値。
+	m_player->m_charge = NEW_CHARGE;
+}
+
+void PlayerChargeAttack::Update()
+{
+	Charging();
+	ChangeState();
+}
+
+/// <summary>
+/// チャージを溜める。
+/// </summary>
+void PlayerChargeAttack::Charging()
+{
+	//チャージ中ではないなら実行しない。
+	if (!m_isCharging) {
+		return;
+	}
+
+	//チャージ中アニメーション再生。
+	m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging);
+
+	Vector3 RStick = Vector3::Zero;				//Rスティック入力量。
+	float movePower = 0.0f;						//パワー（入力変動量）。
+
+	//Rスティックの入力量をとる。
+	RStick.x = g_pad[0]->GetRStickXF();
+	RStick.y = g_pad[0]->GetRStickYF();
+	//チャージ量にたすパワーを計算する（スティックの変更後、変更前の内積）。
+	movePower = Dot(RStick, m_RStickOld);
+	//スティックが動いていないなら、パワーを0にする。
+	if ((RStick.x == m_RStickOld.x) && (RStick.y == m_RStickOld.y)) {
+		movePower = 0.0f;
+	}
+	//パワーをチャージに足す。
+	m_player->m_charge += fabsf(movePower);
+
+	//チャージを減少させる。
+	m_player->m_charge -= CHARGE_DECREASE;
+
+	//チャージを0以下にさせない。
+	if (m_player->m_charge < 0.0f) {
+		m_player->m_charge = 0.0f;
+	}
+
+	//チャージのMAX値。
+	if (m_player->m_charge >= CHARGE_MAX) {
+		m_player->m_charge = CHARGE_MAX;
+	}
+
+	//スティック入力量を更新。
+	m_RStickOld = RStick;
+
+	//スティックの入力をやめていたら。
+	if (!IsInputStickR()) {
+		//チャージが少なかったら弱攻撃に。
+		if(m_player->m_charge <= CHANGE_WEAK) {
+			m_player->m_weakAtFlag = true;
+			m_player->m_chargeAtFlag = false;
+			return;
+		}
+		if (!m_isStateChange) {
+			ChargeAttack();
+			//溜め攻撃アニメーションを再生。
+			m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_ChargeAttack);
+			//溜め攻撃をした。
+			m_isStateChange = true;
+		}
+		
+		m_isCharging = false;
+	}
+}
+
+/// <summary>
+/// 溜め攻撃実行。
+/// </summary>
+void PlayerChargeAttack::ChargeAttack()
+{
+	SnakeEnemy* snakeEnemy = FindGO<SnakeEnemy>("enemy");
+	//コリジョン生成。
+	MakeCollision();
+	//コリジョン削除。
+	DeleteGO(m_player->m_collision);	
+}
+
+/// <summary>
+/// コリジョンを作成。
+/// </summary>
+void PlayerChargeAttack::MakeCollision()
+{
+	//コリジョンオブジェクトを作成
+	m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
+	Vector3 collisionPosition = m_player->m_playerPos;
+	m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + 100.0f;
+	//球状のコリジョンを作成
+	m_player->m_collision->CreateSphere(collisionPosition,
+		Quaternion::Identity,
+		m_collisionSize);
+
+	//攻撃力を設定。
+	m_player->m_attackPower = m_player->m_charge * CHARGE_POWER;
+}
+
+/// <summary>
+/// ステートを変える条件。
+/// </summary>
+void PlayerChargeAttack::ChangeState()
+{
+	//チャージ中の場合。
+	//チャージが0になったら。
+	if((m_isCharging) && (m_player->m_charge <= 0.0f)){
+		m_player->m_chargeAtFlag = false;
+	}
+	//攻撃実行中の場合。
+	//アニメーションが再生し終わったら。
+	if ((!m_isCharging) && (!m_player->m_playerModel.IsPlayAnimation())) {
+		m_player->m_chargeAtFlag = false;
+	}
+}
+
+void PlayerChargeAttack::Exit()
+{
+	//チャージをリセット。
+	m_player->m_charge = 0.0f;
+}
+
+/*********************************************************************************/
+//ガード用クラス。
+/*********************************************************************************/
+
+PlayerGuard::~PlayerGuard()
+{
+
+}
+
+void PlayerGuard::Enter()
+{
+	//ガードアニメーションを再生。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_GuardStart);
+}
+
+void PlayerGuard::Update()
+{
+	GuardDirection();
+}
+
+/// <summary>
+/// ガード方向を加味。
+/// </summary>
+void PlayerGuard::GuardDirection()
+{
+	////ガードの相手指定どうすっかね
+	//Vector3 toEnemyDirection = m_player->m_playerPos - enemyPos;
+	//toEnemyDirection.Normalize();
+	//float guard = Dot(m_player->m_playerDir, toEnemyDirection);
+
+	//if(guard <= GUARD_TOLERANCE){
+	//	m_player->m_guardFlag = true;
+	//}
+	//else {
+	//	m_player->m_guardFlag = false;
+	//}
+}
+
+void PlayerGuard::Exit()
+{
+
+}
+
+/*********************************************************************************/
+//被弾用クラス。
+/*********************************************************************************/
+
+PlayerHit::~PlayerHit()
+{
+
+}
+
+void PlayerHit::Enter()
+{
+	//被弾アニメーションを再生。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Hit);
+}
+
+void PlayerHit::Update()
+{
+	ChangeState();	
+}
+
+/// <summary>
+/// 硬直時間を計算。
+/// </summary>
+void PlayerHit::ChangeState()
+{
+	//アニメーションが再生し終わったらステート変更。
+	if (!m_player->m_playerModel.IsPlayAnimation()) {
+		m_player->m_hitFlag = false;
+	}
+}
+
+void PlayerHit::Exit()
+{
+
+}
+/*********************************************************************************/
+//死亡用クラス。
+/*********************************************************************************/
+
+PlayerDeath::~PlayerDeath()
+{
+
+}
+
+void PlayerDeath::Enter()
+{
+	//死亡アニメーションを再生。
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Death);
+}
+
+void PlayerDeath::Update()
+{
+	ToGameOver();	
+}
+
+/// <summary>
+/// 死亡。
+/// </summary>
+void PlayerDeath::ToGameOver()
+{
+	//アニメーションが再生し終わったらゲームオーバーへ移行。
+	if (!m_player->m_playerModel.IsPlayAnimation()) {
+		
+	}
+}
+
+void PlayerDeath::Exit()
+{
+
 }

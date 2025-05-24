@@ -26,7 +26,7 @@ namespace nsK2EngineLow {
 			IID_PPV_ARGS(&m_vertexBuffer));
 
 		m_vertexBuffer->SetName(L"VertexBuffer");
-		//’¸“_ƒoƒbƒtƒ@‚Ìƒrƒ…[‚ðì¬B
+		//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ãƒ“ãƒ¥ãƒ¼ã‚’ä½œæˆã€‚
 		m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
 		m_vertexBufferView.SizeInBytes = size;
 		m_vertexBufferView.StrideInBytes = stride;

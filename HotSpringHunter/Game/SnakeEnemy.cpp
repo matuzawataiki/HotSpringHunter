@@ -1,53 +1,21 @@
 #include "stdafx.h"
 #include "SnakeEnemy.h"
 #include "EnemySpawn.h"
-
+#include "EnemyBase.h"
 #include "Game.h"
 #include "Player.h"
-#include "PlayerAttack.h"
-#include "PlayerChargeAttack.h"
-#include "PlayerHealth.h"
-
 #include "collision/CollisionObject.h"
 
 namespace {
-	const Vector3 BACK_YARD_POS = { 100.0f,300.0f,500.0f };
-}
+	const float FIND_RANGE = 500.0f;			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆã‚‹è·é›¢
+	const float ATK_RANGE = 200.0f;				//è¿‘æ¥æ”»æ’ƒã®ãƒªãƒ¼ãƒ
+	const float MELEE_ATTACK_DAMAGE = 20.0f;	//è¿‘æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+	const float ATK_COOLTIME = 3.0f;			//è¿‘æ¥æ”»æ’ƒã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
+};
 
 SnakeEnemy::SnakeEnemy()
 {
-	//ƒvƒŒƒCƒ„[
-	m_player = FindGO<Player>("player");
-	m_playerAttack = FindGO<PlayerAttack>("playerAttack");
-	m_playerCharAt = FindGO<PlayerChargeAttack>("playerChargeAttack");
 	
-	m_playerHealth = FindGO<PlayerHealth>("playerHealth");
-
-	///
-	m_enemySpawn = FindGO<EnemySpawn>("enemySpawn");
-
-
-	
-
-	//ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[
-	m_characterController.Init(30.0f, 50.0f, m_position);
-	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒ[ƒh
-	/*m_animationClips[enAnimationClip_Idle].Load("Assets/animData/snake_idle.tka");
-	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/snake_walk.tka");
-	m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Attack].Load("Assets/animData/snake_attack.tka");
-	m_animationClips[enAnimationClip_Attack].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Hit].Load("Assets/animData/snake_hit.tka");
-	m_animationClips[enAnimationClip_Hit].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Death].Load("Assets/animData/snake_death.tka");
-	m_animationClips[enAnimationClip_Death].SetLoopFlag(true);*/
-
-	//ƒGƒlƒ~[ƒ‚ƒfƒ‹
-	m_modelRender.Init("Assets/animal/snake_model.tkm"/*, m_animationClips, enAnimationClip_Num, enModelUpAxisY*/);
-	m_modelRender.Update();
-
-	//physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
 }
 
 SnakeEnemy::~SnakeEnemy()
@@ -55,274 +23,226 @@ SnakeEnemy::~SnakeEnemy()
 
 }
 
+bool SnakeEnemy::Start()
+{
+	//ã‚¢ã‚»ãƒƒãƒˆèª­ã¿è¾¼ã¿
+	LoadAsset();
+
+	//åŸºåº•ã‚¯ãƒ©ã‚¹ç”Ÿæˆ
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ¢ã—
+	m_player = FindGO<Player>("player");
+	m_enemySpawn = FindGO<EnemySpawn>("enemySpawn");
+	m_enemyBase = NewGO<EnemyBase>(0,"enemyBase");
+
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+	m_characterController.Init(30.0f, 50.0f, m_position);
+	
+	return true;
+}
+
+/// <summary>
+/// ã‚¢ã‚»ãƒƒãƒˆã‚’èª­ã¿è¾¼ã‚€
+/// </summary>
+void SnakeEnemy::LoadAsset()
+{
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³èª­ã¿è¾¼ã¿
+	m_animationClips[enSnakeAnimClip_Idle].Load("Assets/animData/snake/idle.tka");
+	m_animationClips[enSnakeAnimClip_Idle].SetLoopFlag(true);
+	m_animationClips[enSnakeAnimClip_Walk].Load("Assets/animData/snake/walk.tka");
+	m_animationClips[enSnakeAnimClip_Walk].SetLoopFlag(true);
+	m_animationClips[enSnakeAnimClip_Attack].Load("Assets/animData/snake/attack.tka");
+	m_animationClips[enSnakeAnimClip_Attack].SetLoopFlag(false);
+	m_animationClips[enSnakeAnimClip_Hit].Load("Assets/animData/snake/hit.tka");
+	m_animationClips[enSnakeAnimClip_Hit].SetLoopFlag(true);
+	m_animationClips[enSnakeAnimClip_Death].Load("Assets/animData/snake/death.tka");
+	m_animationClips[enSnakeAnimClip_Death].SetLoopFlag(true);
+
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
+	m_modelRender.Init("Assets/modelData/snake/snake.tkm"/*, m_animationClips, enSnakeAnimClip_Num, enModelUpAxisY*/);
+}
+
 void SnakeEnemy::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		int a = 0;
-		a++;
-	}
-	if (m_isSpawn == true)
-	{
-		if (m_isAlive == true) {
-			//ƒvƒŒƒCƒ„[‚Ì’Ç]
-			Tracking();
-			//ƒvƒŒƒCƒ„[‚ÉUŒ‚
-			SnakeAttack();
-			Hit();
-		}
-		else {
-			//ƒGƒlƒ~[‚Ì‚Á”ò‚Ñ
-			EnemyDeath();
-		}		
-
-		//“G‚ª‚Á”ò‚Ô‚Æ‚«‚ÉƒLƒƒƒ‰ƒRƒ“‚ğÁ‚µ‚Ä“§–¾‚È•Ç‚ğ‚·‚è”²‚¯‚é
-		if (m_isAlive) {
-			// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ª‚ ‚é‚ÍˆÚ“®ˆ—‚ÌŒ‹‰Ê‚ğó‚¯æ‚é‚¾‚¯
-			m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
-		}
-		else {
-			// ‚È‚¢‚Æ‚«‚Í©•ª‚ÅˆÚ“®Œ‹‰Ê‚ğŒvZ
-			const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
-			m_position.Add(move);
-		}
-	}
-	else 
-	{
-		m_position = BACK_YARD_POS;
+	//ã‚¹ãƒãƒ¼ãƒ³ã—ã¦ã„ã‚‹ãªã‚‰
+	if (m_isSpawn) {
+		//ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†
+		ManageState();
+		//è¡Œå‹•ã‚’å®Ÿè¡Œ
+		ExecuteAction();
 	}
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-	//EnemyAnimation();
-	//ƒXƒe[ƒgŠÇ—
-	ManageState();
-	//ƒGƒlƒ~[‚ªƒvƒŒƒCƒ„[‚ÉŒü‚­
-	Rotation();
-	
-	m_modelRender.SetPosition(m_position);
-
-	m_modelRender.Update();
-}
-
-//ƒGƒlƒ~[‚ªƒvƒŒƒCƒ„[‚ÉŒü‚­
-void SnakeEnemy::Rotation()
-{
-	m_rotation.SetRotationYFromDirectionXZ(m_toPlayer);
-	m_modelRender.SetRotation(m_rotation);
-}
-
-//ƒvƒŒƒCƒ„[‚Æ“G‚Ì“–‚½‚è”»’è
-void SnakeEnemy::SnakeAttack()
-{
-	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª200ˆÈ‰º‚Ìê‡
-	Vector3 diff = m_player->GetPlayerPos() - m_position;
-
-	if (diff.Length() < 200.0f && m_enemyATK == false)
-	{
-		//‘O•û‚ÉƒRƒŠƒWƒ‡ƒ“‚ğì‚é
-		EnemyAttackCollision();
-	}
-	else if(diff.Length() >= 220.0f)
-	{
-		m_enemyATK = false;
-	}
-
-	if (m_enemyHP <= 0.0f)
-	{
-		// €–S‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ğÁ‚µ‚Ä•ÇŠÑ’Ê‚·‚é‚æ‚¤‚É‚·‚é
-		m_characterController.RemoveRigidBoby();
-		m_isAlive = false;
-	}
-}
-
-//”ÍˆÍ“à‚ÌƒvƒŒƒCƒ„[‚ğ’Ç‚¢‚©‚¯‚é
-void SnakeEnemy::Tracking()
-{
-	//ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚ÄL‚Ñ‚éƒxƒNƒgƒ‹‚ğŒvZ
-	m_toPlayer = m_player->GetPlayerPos() - m_position;
-	m_toPlayer.y = 0.0f;
-
-	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ğŒvZ‚·‚é
-	float distToPlayer = m_toPlayer.Length();
-
-	if (distToPlayer < 200.0f) {
-		m_moveSpeed.Set(Vector3::Zero);
-		m_moveStop = true;
-		MoveStop();
-	}
-	else if (distToPlayer < 1000.0f) {
-		//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª400ˆÈ‰º‚¾‚Á‚½‚ç’Ç‚¢‚©‚¯‚é
-		//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»B
-		Vector3 toPlayerDir = m_toPlayer;
-		toPlayerDir.Normalize();
-
-		//³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
-		m_moveSpeed = toPlayerDir * 100.0f;
-	}
-}
-
-//ˆê’â~
-void SnakeEnemy::MoveStop()
-{
-		if (m_moveStop == true)
-		{
-			m_moveSpeed = toPlayerDir * 0.0f;
-			m_moveStop = false;
-
-			return;
-		}
-}
-
-void SnakeEnemy::Hit()
-{
-	if (m_playerAttack->m_collision->IsHit(m_characterController)) {
-		m_enemyHP -= 100.0f;
-	}
-	if (m_playerCharAt->m_collision->IsHit(m_characterController)) {
-		m_enemyHP -= 100.0f;
-
-	}
-
-}
-
-//ƒvƒŒƒCƒ„[‚Æ‹t•ûŒü‚É”ò‚ñ‚Å‚¢‚­
-void SnakeEnemy::EnemyDeath()
-{
-	if (enemyDead)
-	{ 
-	//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»
-	Vector3 toPlayerDir = m_toPlayer;
-	toPlayerDir.Normalize();
-	toPlayerDir *= -1.0f;
-
-	//³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
-	m_moveSpeed = toPlayerDir * 2000.0f;
-	m_moveSpeed.y = 800.0f;
-
-	if (m_deathCount == false) {
-		m_enemySpawn->EnemyDecrease();
-		m_deathCount = true;
-	}
-		
-	//‚Á”ò‚ÔƒAƒjƒ[ƒVƒ‡ƒ“
-	m_animationState = enDeath;
-	}
-	enemyDead = true;
-}
-
-//ƒGƒlƒ~[‚ÌUŒ‚ƒRƒŠƒWƒ‡ƒ“
-void SnakeEnemy::EnemyAttackCollision()
-{
-	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
-	collisionObject = NewGO<CollisionObject>(0,"enemy_atk");
-	Vector3 collisionPosition = Vector3::Zero;
-
-	//ƒGƒlƒ~[‚Ì­‚µ‘O‚Éİ’è
-	m_enemyDirection = m_toPlayer;
-	m_enemyDirection.Normalize();
-	m_enemyDirection *= 100.0f;
-	collisionPosition = m_position + m_enemyDirection;
-
-	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
-	collisionObject->CreateSphere(
-		collisionPosition,
-		Quaternion::Identity,
-		100.0f
-	);
-	
-	//ƒvƒŒƒCƒ„[‚ª“G‚É‚ ‚½‚é‚Æ-10
-	if (collisionObject->IsHit(m_player->m_playerCharaCon)) {
-		m_playerHealth->Hit(0.0f);
-		m_enemyHP -= 10.0f;
-	}
-
-	DeleteGO(collisionObject);
-
-	m_enemyATK = true;
-}
-
-//ƒvƒŒƒCƒ„[‚ÉUŒ‚‚³‚ê‚½‚Æ‚«ƒmƒbƒNƒoƒbƒN‚·‚é
-void SnakeEnemy::KnockBack()
-{
-	//// Œã‘Ş
-	////ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»
-	//Vector3 toPlayerDir = m_toPlayer;
-	//toPlayerDir.Normalize();
-	//toPlayerDir.y = 0;
-	//toPlayerDir * -1.0f;
-
-	////³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
-	//m_moveSpeed = toPlayerDir * -500.0f;
-
-	////ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“
-	//m_animationState = enHit;
+	//ã„ã‚ã„ã‚æ›´æ–°
+	VariousUpdate();
 }
 
 
-//ƒXƒe[ƒgŠÇ—
+/// <summary>
+/// ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†
+/// </summary>
 void SnakeEnemy::ManageState()
 {
-	// €–S‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚Í–³‚­‚È‚é‚Ì‚Åˆ—‚µ‚È‚¢B
-	
-	if (m_characterController.IsOnGround() == true)
-	{
-		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
-		{
-			//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enWalk;
+	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰ãˆã¦ã‚‚ã‚ˆã„ãªã‚‰
+	m_isCanStateChange = m_enemyBase->ChangeFlag();
+	if (!m_isCanStateChange) {
+		return;
+	}
+	//è¢«å¼¾ã—ãŸå ´åˆ
+	if (m_player->m_collision->IsHit(m_characterController)) {
+
+		//HPã‚’æ¸›ã‚‰ã™
+		m_enemyHP -= m_player->m_attackPower;
+
+		//HPãŒã¾ã æ®‹ã£ã¦ã„ã‚‹
+		if (m_enemyHP > 0.0f) {
+			//ãƒãƒƒã‚¯ãƒãƒƒã‚¯
+			m_snakeState = enSnakeKnockBack;
 		}
-		else
-		{
-			//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enIdle;
+		//HPãŒãªããªã£ãŸ
+		else {
+			//æ­»äº¡ï¼ˆå¹ã£é£›ã³ï¼‰
+			m_snakeState = enSnakeDeath;
 		}
-		if (m_toPlayer.Length() <= 200.0f)
-		{
-			//UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enAttack;
-		}
-		//ƒvƒŒƒCƒ„[‚ª“G‚É‚ ‚½‚é‚Æ-
-		if (collisionObject->IsHit(m_player->m_playerCharaCon))
-		{
-			//ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enHit;
-		}
+		return;
+	}
+
+	//è¿‘æ¥æ”»æ’ƒ
+	//æ”»æ’ƒç¯„å›²ã¾ã§è¿‘ã¥ã„ãŸã‚‰
+	if (m_toPlayer.Length() < ATK_RANGE) {
+		m_snakeState = enSnakeAttack;
+		return;
+	}
+
+	//è¿½å¾“
+	//æ”»æ’ƒç¯„å›²å¤–ã¸å‡ºã¦ã„ã¦ã€ã‹ã¤ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆã¦ã„ãŸã‚‰
+	if ((m_toPlayer.Length() > ATK_RANGE) && (FindPlayer())) {
+		m_snakeState = enSnakeTrack;
+		return;
+	}
+
+	//å¾…æ©Ÿ
+	m_snakeState = enSnakeIdle;
+}
+
+/// <summary>
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+/// </summary>
+/// <returns></returns>
+bool SnakeEnemy::FindPlayer()
+{
+	if (m_toPlayer.Length() < FIND_RANGE) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
-//ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
-void SnakeEnemy::EnemyAnimation()
+/// <summary>
+/// è¡Œå‹•ã‚’å®Ÿè¡Œã€‚
+/// </summary>
+void SnakeEnemy::ExecuteAction()
 {
-	//switch•¶
-	switch (m_animationState)
-	{
-	case enIdle:	//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Idle);
+	//ç§»å‹•é€Ÿåº¦ã‚’0ã™ã‚‹
+	m_moveSpeed = Vector3::Zero;
+	//è¿‘æ¥æ”»æ’ƒã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ã‚’è¨ˆç®—
+	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
+
+	switch (m_snakeState) {
+
+		//ãƒãƒƒã‚¯ãƒãƒƒã‚¯
+	case enSnakeKnockBack:
+		//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã‚’ã•ã›ã‚‹
+		m_moveSpeed = m_enemyBase->KnockBack(m_enemyDir);
+		//è¢«å¼¾ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		//m_modelRender.PlayAnimation(enSnakeAnimClip_Hit);
 		break;
 
-	case enWalk:	//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Walk);
+		//æ­»äº¡
+	case enSnakeDeath:
+		//å¹ã£é£›ã°ã›ã‚‹
+		m_moveSpeed = m_enemyBase->DeathBlown(m_enemyDir);
+		//æ­»äº¡ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ï¼ˆãµã£ã¨ã³ï¼‰ã‚’å†ç”Ÿ
+		//m_modelRender.PlayAnimation(enSnakeAnimClip_Death);
 		break;
 
-	case enAttack:	//UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Attack);
+		//è¿‘æ¥æ”»æ’ƒ
+	case enSnakeAttack:
+		//ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ãŒçµ‚ã‚ã£ã¦ã„ãŸã‚‰
+		if (m_ATKCoolTime <= 0.0f) {
+			m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
+			//è¿‘æ¥æ”»æ’ƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+			//m_modelRender.PlayAnimation(enSnakeAnimClip_Attack);
+			//ã‚¿ã‚¤ãƒãƒ¼ã‚’ã‚»ãƒƒãƒˆ
+			m_ATKCoolTime = ATK_COOLTIME;
+		}		
 		break;
 
-	case enHit:   //ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Hit);
+		//è¿½å¾“
+	case enSnakeTrack:
+		m_moveSpeed = m_enemyBase->Tracking(m_toPlayer);
+		//æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		//m_modelRender.PlayAnimation(enSnakeAnimClip_Walk);
 		break;
 
-	case enDeath:	//‚Á”ò‚ÔƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Death);
+		//å¾…æ©Ÿ
+	case enSnakeIdle:
+		//å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		//m_modelRender.PlayAnimation(enSnakeAnimClip_Idle);
 		break;
-
 	default:
 		break;
 	}
 }
 
+/// <summary>
+/// ã„ã‚ã„ã‚æ›´æ–°ï¼ˆåº§æ¨™ã€å›è»¢ãªã©ï¼‰
+/// </summary>
+void SnakeEnemy::VariousUpdate()
+{
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ›´æ–°
+	m_toPlayer = m_player->GetPlayerPos() - m_position;
+
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆã¦ã„ã‚‹ã¨ãã ã‘å‘ãã®æ›´æ–°ã‚’ã™ã‚‹
+	if (FindPlayer()) {
+		//å‘ãã®æ›´æ–°ã€‚
+		m_enemyDir = m_toPlayer;
+		m_enemyDir.Normalize();
+	}
+
+	//é€Ÿåº¦ã‚’é©å¿œã€‚
+	ExecuteSpeed();
+
+	//å›è»¢ã®æ›´æ–°ã€‚
+	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
+	m_modelRender.SetRotation(m_rotation);
+
+	//åº§æ¨™ã®æ›´æ–°ã€‚
+	m_modelRender.SetPosition(m_position);
+
+	//ãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°ã€‚
+	m_modelRender.Update();
+}
+
+/// <summary>
+/// é€Ÿåº¦ã‚’é©å¿œã€‚
+/// </summary>
+void SnakeEnemy::ExecuteSpeed()
+{
+	//æ•µãŒå¹ã£é£›ã¶ã¨ãã«ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’æ¶ˆã—ã¦é€æ˜ãªå£ã‚’ã™ã‚ŠæŠœã‘ã‚‹
+	if (m_isAlive) {
+		// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒã‚ã‚‹æ™‚ã¯ç§»å‹•å‡¦ç†ã®çµæœã‚’å—ã‘å–ã‚‹ã ã‘
+		m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
+	}
+	else {
+		// ãªã„ã¨ãã¯è‡ªåˆ†ã§ç§»å‹•çµæœã‚’è¨ˆç®—
+		const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
+		m_position.Add(move);
+	}
+}
 
 void SnakeEnemy::Render(RenderContext& rc)
 {
-	//ƒ‚ƒfƒ‹
 	m_modelRender.Draw(rc);
 }

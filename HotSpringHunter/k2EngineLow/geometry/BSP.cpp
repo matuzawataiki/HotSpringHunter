@@ -3,14 +3,14 @@
 
 namespace nsK2EngineLow {
     /// <summary>
-    /// ƒ„ƒRƒr–@‚ğ—p‚¢‚Än~ns—ñ‚ÌŒÅ—L’l‚ÆŒÅ—LƒxƒNƒgƒ‹‚ğ‹‚ß‚éB
-    /// ‰º‹L‚Ìƒy[ƒW‚ÌƒvƒƒOƒ‰ƒ€‚ğ—˜—pB
+    /// ãƒ¤ã‚³ãƒ“æ³•ã‚’ç”¨ã„ã¦nÃ—nè¡Œåˆ—ã®å›ºæœ‰å€¤ã¨å›ºæœ‰ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹ã€‚
+    /// ä¸‹è¨˜ã®ãƒšãƒ¼ã‚¸ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’åˆ©ç”¨ã€‚
     /// </summary>
     /// http://www.slis.tsukuba.ac.jp/~fujisawa.makoto.fu/cgi-bin/wiki/index.php?%B8%C7%CD%AD%C3%CD/%B8%C7%CD%AD%A5%D9%A5%AF%A5%C8%A5%E
-    /// <param name="a">À‘ÎÌs—ñDŒvZŒãC‘ÎŠp—v‘f‚ÉŒÅ—L’l‚ª“ü‚é</param>
-    /// <param name="v">ŒÅ—LƒxƒNƒgƒ‹Ba‚Æ“¯‚¶ƒTƒCƒY</param>
-    /// <param name="eps">û‘©Œë·</param>
-    /// <param name="iter_max">”½•œ”‚ÌÅ‘å”</param>
+    /// <param name="a">å®Ÿå¯¾ç§°è¡Œåˆ—ï¼è¨ˆç®—å¾Œï¼Œå¯¾è§’è¦ç´ ã«å›ºæœ‰å€¤ãŒå…¥ã‚‹</param>
+    /// <param name="v">å›ºæœ‰ãƒ™ã‚¯ãƒˆãƒ«ã€‚aã¨åŒã˜ã‚µã‚¤ã‚º</param>
+    /// <param name="eps">åæŸèª¤å·®</param>
+    /// <param name="iter_max">åå¾©æ•°ã®æœ€å¤§æ•°</param>
     /// <returns></returns>
 #if 1
 #define   TOL     1.0e-10   
@@ -23,17 +23,17 @@ namespace nsK2EngineLow {
         float amax, amax0, theta, co, si, co2, si2, cosi, pi = 4.0f * atan(1.0f);
         float aii, aij, ajj, aik, ajk;
 
-        //   ‰Šú’lİ’è
+        //   åˆæœŸå€¤è¨­å®š
         for (i = 0; i < n; i++) {
             for (j = 0; j < n; j++) {
                 if (i == j)  x[n * i + j] = 1.0f; else  x[n * i + j] = 0.0f;
             }
         }
 
-        //   ”½•œŒvZ
+        //   åå¾©è¨ˆç®—
         count = 0;  status = 9;
         while (count <= MAX) {
-            //  ”ñ‘ÎŠp—v‘f‚ÌÅ‘å’l‚ğ’Tõ
+            //  éå¯¾è§’è¦ç´ ã®æœ€å¤§å€¤ã‚’æ¢ç´¢
             amax = 0.0;
             for (k = 0; k < n - 1; k++) {
                 for (m = k + 1; m < n; m++) {
@@ -41,11 +41,11 @@ namespace nsK2EngineLow {
                     if (amax0 > amax) { i = k;  j = m, amax = amax0; }
                 }
             }
-            //  û‘©”»’è
+            //  åæŸåˆ¤å®š
             if (amax <= TOL) { status = 0;   break; }
             else {
                 aii = a[n * i + i];   aij = a[n * i + j];   ajj = a[n * j + j];
-                //   ‰ñ“]Šp“xŒvZ
+                //   å›è»¢è§’åº¦è¨ˆç®—
                 if (fabs(aii - ajj) < TOL) {
                     theta = 0.25f * pi * aij / fabs(aij);
                 }
@@ -54,7 +54,7 @@ namespace nsK2EngineLow {
                 }
                 co = cos(theta); si = sin(theta); co2 = co * co; si2 = si * si; cosi = co * si;
 
-                //   ‘Š—•ÏŠ·s—ñ
+                //   ç›¸ä¼¼å¤‰æ›è¡Œåˆ—
                 a[n * i + i] = co2 * aii + 2.0f * cosi * aij + si2 * ajj;
                 a[n * j + j] = si2 * aii - 2.0f * cosi * aij + co2 * ajj;
                 a[n * i + j] = 0.0f;    a[n * j + i] = 0.0f;
@@ -66,7 +66,7 @@ namespace nsK2EngineLow {
                     }
                 }
 
-                //   ŒÅ—LƒxƒNƒgƒ‹
+                //   å›ºæœ‰ãƒ™ã‚¯ãƒˆãƒ«
                 for (k = 0; k < n; k++) {
                     aik = x[n * k + i];   ajk = x[n * k + j];
                     x[n * k + i] = co * aik + si * ajk;
@@ -117,10 +117,10 @@ namespace nsK2EngineLow {
             beta = sqrt(alpha * alpha + aij * aij);
 
             float st, ct;
-            ct = sqrt((1.0 + fabs(alpha) / beta) / 2.0);    // sinƒÆ
-            st = (((aii - ajj) >= 0.0) ? 1.0 : -1.0) * aij / (2.0 * beta * ct);    // cosƒÆ
+            ct = sqrt((1.0 + fabs(alpha) / beta) / 2.0);    // sinÎ¸
+            st = (((aii - ajj) >= 0.0) ? 1.0 : -1.0) * aij / (2.0 * beta * ct);    // cosÎ¸
 
-            // A = PAP‚ÌŒvZ
+            // A = PAPã®è¨ˆç®—
             for (int m = 0; m < n; ++m) {
                 if (m == i || m == j) continue;
 
@@ -146,7 +146,7 @@ namespace nsK2EngineLow {
             a[j * n + j] = bjj;
             a[j * n + i] = bji;
 
-            // V = PV‚ÌŒvZ
+            // V = PVã®è¨ˆç®—
             for (int m = 0; m < n; ++m) {
                 float vmi = v[m * n + i];
                 float vmj = v[m * n + j];
@@ -178,7 +178,7 @@ namespace nsK2EngineLow {
 #endif
     Vector3 BSP::CalcCenterPositionFromLeafList(const std::vector<SEntityPtr>& leafArray)
     {
-        // ‚Ü‚¸‚ÍAAABB‚Ì’†SÀ•W‚ğ‹‚ß‚éB
+        // ã¾ãšã¯ã€AABBã®ä¸­å¿ƒåº§æ¨™ã‚’æ±‚ã‚ã‚‹ã€‚
         Vector3 centerPos;
         for (const auto& leafPtr : leafArray) {
             auto leaf = static_cast<SLeaf*>(leafPtr.get());
@@ -193,11 +193,11 @@ namespace nsK2EngineLow {
         const Vector3& centerPos
     )
     {
-        // 0‚Å‰Šú‰»‚·‚éB
+        // 0ã§åˆæœŸåŒ–ã™ã‚‹ã€‚
         memset(covarianceMatrix, 0, sizeof(float[3][3]));
-        // ‹¤•ªUs—ñ‚ğŒvZ‚·‚éB
-        // ‹¤•ªU‚Æ‚ÍX‚ÆY‚ÆZ‚Ì—v‘f‚ª‚Ç‚ê‚­‚ç‚¢ŠÖ˜A‚Ã‚¢‚Ä•ªU‚µ‚Ä‚¢‚é‚©‚ğ•\‚·‚à‚ÌB
-        // ‹¤•ªUs—ñ‚ÍA‚»‚ê‚ğs—ñ‚Æ‚µ‚Ä‚Ü‚Æ‚ß‚½‚à‚ÌB
+        // å…±åˆ†æ•£è¡Œåˆ—ã‚’è¨ˆç®—ã™ã‚‹ã€‚
+        // å…±åˆ†æ•£ã¨ã¯Xã¨Yã¨Zã®è¦ç´ ãŒã©ã‚Œãã‚‰ã„é–¢é€£ã¥ã„ã¦åˆ†æ•£ã—ã¦ã„ã‚‹ã‹ã‚’è¡¨ã™ã‚‚ã®ã€‚
+        // å…±åˆ†æ•£è¡Œåˆ—ã¯ã€ãã‚Œã‚’è¡Œåˆ—ã¨ã—ã¦ã¾ã¨ã‚ãŸã‚‚ã®ã€‚
         for (const auto& leafPtr : leafNodeArray) {
             auto leaf = static_cast<SLeaf*>(leafPtr.get());
             const auto& aabbCenterPos = leaf->position;
@@ -228,14 +228,14 @@ namespace nsK2EngineLow {
     )
     {
 
-        // ‹¤•ªUs—ñ‚ªŒvZ‚Å‚«‚½‚Ì‚ÅAƒ„ƒRƒr–@‚ğ—p‚¢‚ÄŒÅ—L’l‚ÆŒÅ—LƒxƒNƒgƒ‹‚ğ‹‚ß‚éB
+        // å…±åˆ†æ•£è¡Œåˆ—ãŒè¨ˆç®—ã§ããŸã®ã§ã€ãƒ¤ã‚³ãƒ“æ³•ã‚’ç”¨ã„ã¦å›ºæœ‰å€¤ã¨å›ºæœ‰ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹ã€‚
         Vector3 eigenVector[3];
         EigenJacobiMethod<3>(
             reinterpret_cast<float*>(covarianceMatrix),
             reinterpret_cast<float*>(&eigenVector)
         );
 
-        // 1”Ô–Ú‘å‚«‚ÈŒÅ—L’l‚ÌŒÅ—LƒxƒNƒgƒ‹‚ğ•ªŠ„•½–Ê‚Ì–@ü‚Æ‚·‚éB
+        // 1ç•ªç›®å¤§ããªå›ºæœ‰å€¤ã®å›ºæœ‰ãƒ™ã‚¯ãƒˆãƒ«ã‚’åˆ†å‰²å¹³é¢ã®æ³•ç·šã¨ã™ã‚‹ã€‚
         float eigenScalar_0 = fabsf(covarianceMatrix[0][0]);
         float eigenScalar_1 = fabsf(covarianceMatrix[1][1]);
         float eigenScalar_2 = fabsf(covarianceMatrix[2][2]);
@@ -256,7 +256,7 @@ namespace nsK2EngineLow {
             plane.normal.z = eigenVector[2].z;
         }
         if (plane.normal.Length() < 0.1f) {
-            // ƒ„ƒRƒr–@‚Å–@ü‚ªŒvZ‚Å‚«‚È‚©‚Á‚½B
+            // ãƒ¤ã‚³ãƒ“æ³•ã§æ³•ç·šãŒè¨ˆç®—ã§ããªã‹ã£ãŸã€‚
             
             SLeaf* leafFront = static_cast<SLeaf*>(leafArray.front().get());
             SLeaf* leafBack = static_cast<SLeaf*>(leafArray.back().get());
@@ -265,7 +265,7 @@ namespace nsK2EngineLow {
             
             plane.normal.Normalize();
         }
-        // •ªŠ„•½–Ê‚Ü‚Å‚Ì‹——£‚Í’†SÀ•W‚Ü‚Å‚Ì‹——£‚Æ‚·‚éB
+        // åˆ†å‰²å¹³é¢ã¾ã§ã®è·é›¢ã¯ä¸­å¿ƒåº§æ¨™ã¾ã§ã®è·é›¢ã¨ã™ã‚‹ã€‚
         plane.distance = Dot(plane.normal, centerPos);
         if (plane.distance < 0.0f) {
             plane.normal *= -1.0f;
@@ -284,11 +284,11 @@ namespace nsK2EngineLow {
             float t = Dot(leaf->position, plane.normal);
 
             if (t < plane.distance) {
-                // ¶‘¤‚ÉŠ„‚èU‚éB
+                // å·¦å´ã«å‰²ã‚ŠæŒ¯ã‚‹ã€‚
                 leftLeafArray.emplace_back(leafPtr);
             }
             else {
-                // ‰E‘¤‚ÉŠ„‚èU‚éB
+                // å³å´ã«å‰²ã‚ŠæŒ¯ã‚‹ã€‚
                 rightLeafArray.emplace_back(leafPtr);
             }
 
@@ -305,59 +305,59 @@ namespace nsK2EngineLow {
     BSP::SEntityPtr BSP::CreateBSPTreeEntity(const std::vector<SEntityPtr>& leafArray)
     {
         if (leafArray.size() == 1) {
-            // ƒŠ[ƒtƒGƒ“ƒeƒBƒeƒB‚ğ•Ô‚·B
+            // ãƒªãƒ¼ãƒ•ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã‚’è¿”ã™ã€‚
             return leafArray.front();
         }
 
-        // å¬•ª•ªÍ‚ğs‚Á‚ÄA•ªŠ„•½–Ê‚ğ‹‚ß‚éB
-        // ‚Ü‚¸‚ÍAƒŠ[ƒtƒm[ƒh‚Ì’†SÀ•W‚ğŒvZ‚·‚éB
+        // ä¸»æˆåˆ†åˆ†æã‚’è¡Œã£ã¦ã€åˆ†å‰²å¹³é¢ã‚’æ±‚ã‚ã‚‹ã€‚
+        // ã¾ãšã¯ã€ãƒªãƒ¼ãƒ•ãƒãƒ¼ãƒ‰ã®ä¸­å¿ƒåº§æ¨™ã‚’è¨ˆç®—ã™ã‚‹ã€‚
         Vector3 centerPos = CalcCenterPositionFromLeafList(leafArray);
 
-        // ‘±‚¢‚Ä‹¤•ªUs—ñ‚ğŒvZ‚·‚é
+        // ç¶šã„ã¦å…±åˆ†æ•£è¡Œåˆ—ã‚’è¨ˆç®—ã™ã‚‹
         float covarianceMatrix[3][3];
         CalcCovarianceMatrixFromLeafNodeList(covarianceMatrix, leafArray, centerPos);
         
-        // Še‹¤•ªU‚Ì—v‘f‚ğˆø‚Á’£‚Á‚Ä‚­‚éB
+        // å„å…±åˆ†æ•£ã®è¦ç´ ã‚’å¼•ã£å¼µã£ã¦ãã‚‹ã€‚
         Vector3* v_0 = (Vector3*)covarianceMatrix[0];
         Vector3* v_1 = (Vector3*)covarianceMatrix[1];
         Vector3* v_2 = (Vector3*)covarianceMatrix[2];
         
         if (v_0->Length() < 0.1f && v_1->Length() < 0.1f && v_2->Length() < 0.1f) {
-            // •ªU‚µ‚Ä‚¢‚È‚¢‚Æ‚¢‚¤‚±‚Æ‚ÍA‚Ù‚Æ‚ñ‚Ç‚ÌƒŠ[ƒt‚ª”ñí‚É‹ß‚¢êŠ‚É‚ ‚é‚Æ‚¢‚¤‚±‚Æ‚È‚Ì‚ÅA
-            // ‚±‚êˆÈã‚Ì•ªŠ„‚Ís‚í‚È‚¢B
-            // BSP‚Ì––’[ƒm[ƒh‚Æ‚µ‚ÄAƒŠ[ƒt‚Ì”z—ñƒm[ƒh‚ğì¬‚·‚éB
+            // åˆ†æ•£ã—ã¦ã„ãªã„ã¨ã„ã†ã“ã¨ã¯ã€ã»ã¨ã‚“ã©ã®ãƒªãƒ¼ãƒ•ãŒéå¸¸ã«è¿‘ã„å ´æ‰€ã«ã‚ã‚‹ã¨ã„ã†ã“ã¨ãªã®ã§ã€
+            // ã“ã‚Œä»¥ä¸Šã®åˆ†å‰²ã¯è¡Œã‚ãªã„ã€‚
+            // BSPã®æœ«ç«¯ãƒãƒ¼ãƒ‰ã¨ã—ã¦ã€ãƒªãƒ¼ãƒ•ã®é…åˆ—ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã™ã‚‹ã€‚
             return CreateBSPTreeEntity_LeafList(leafArray);
         }
         
-        // V‚µ‚¢ƒm[ƒh‚ğì‚éB
+        // æ–°ã—ã„ãƒãƒ¼ãƒ‰ã‚’ä½œã‚‹ã€‚
         auto newNodePtr = std::make_shared<SNode>();
         newNodePtr->type = enEntityType_Node;
         newNodePtr->centerPos = centerPos;
         newNodePtr->leafArray = leafArray;
         auto newNode = static_cast<SNode*>(newNodePtr.get());
 
-        // •ªU‚µ‚Ä‚¢‚é‚Ì‚ÅA‹¤•ªUs—ñ‚ğ—˜—p‚µ‚Ä
-        // •ªŠ„•½–Ê‚ğŒvZ‚·‚éB
+        // åˆ†æ•£ã—ã¦ã„ã‚‹ã®ã§ã€å…±åˆ†æ•£è¡Œåˆ—ã‚’åˆ©ç”¨ã—ã¦
+        // åˆ†å‰²å¹³é¢ã‚’è¨ˆç®—ã™ã‚‹ã€‚
         CalcSplitPlaneFromCovarianceMatrix(newNode->plane, covarianceMatrix, centerPos, leafArray);
 
-        // •ªŠ„•½–Ê‚ª‹‚Ü‚Á‚½‚Ì‚ÅAƒŠ[ƒt‚ğ•½–Ê‚ÅU‚è•ª‚¯‚µ‚Ä‚¢‚­B
+        // åˆ†å‰²å¹³é¢ãŒæ±‚ã¾ã£ãŸã®ã§ã€ãƒªãƒ¼ãƒ•ã‚’å¹³é¢ã§æŒ¯ã‚Šåˆ†ã‘ã—ã¦ã„ãã€‚
         std::vector<SEntityPtr> leftLeafArray;
         std::vector<SEntityPtr> rightLeafArray;
         SplitLeafArray(leftLeafArray, rightLeafArray, newNode->plane, leafArray);
         
         
         if (leftLeafArray.empty() || rightLeafArray.empty()) {
-            // •Ğ•û‚Ì}‚ª‹ó‚É‚È‚Á‚½B
-            // •ªU‚µ‚Ä‚¢‚é‚Ì‚ÅA‚±‚É‚Í—ˆ‚È‚¢‚Í‚¸‚È‚ñ‚¾‚¯‚ÇA–œ‚ªˆê—ˆ‚Ä‚µ‚Ü‚¤‚ÆAÄ‹NŒÄ‚Ño‚µ‚ªI‚í‚ç‚¸‚É
-            // ƒXƒ^ƒbƒNƒI[ƒo[ƒtƒ[‚µ‚Ä‚µ‚Ü‚¤‚Ì‚ÅA•ÛŒ¯‚Æ‚µ‚ÄB
-            // •ªU‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅƒŠ[ƒt‚ÌƒŠƒXƒgƒm[ƒh‚ğì¬‚·‚éB
+            // ç‰‡æ–¹ã®æãŒç©ºã«ãªã£ãŸã€‚
+            // åˆ†æ•£ã—ã¦ã„ã‚‹ã®ã§ã€ã“ã«ã¯æ¥ãªã„ã¯ãšãªã‚“ã ã‘ã©ã€ä¸‡ãŒä¸€æ¥ã¦ã—ã¾ã†ã¨ã€å†èµ·å‘¼ã³å‡ºã—ãŒçµ‚ã‚ã‚‰ãšã«
+            // ã‚¹ã‚¿ãƒƒã‚¯ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã—ã¦ã—ã¾ã†ã®ã§ã€ä¿é™ºã¨ã—ã¦ã€‚
+            // åˆ†æ•£ã—ã¦ã„ãªã„ã®ã§ãƒªãƒ¼ãƒ•ã®ãƒªã‚¹ãƒˆãƒãƒ¼ãƒ‰ã‚’ä½œæˆã™ã‚‹ã€‚
             return CreateBSPTreeEntity_LeafList(leafArray);
         }
         
-        // ¶‚Ì}‚ğ\’z
+        // å·¦ã®æã‚’æ§‹ç¯‰
         newNode->leftEntity = CreateBSPTreeEntity(leftLeafArray);
         
-        // ‰E‚Ì}‚ğ\’zB
+        // å³ã®æã‚’æ§‹ç¯‰ã€‚
         newNode->rightEntity = CreateBSPTreeEntity(rightLeafArray);
         
         
@@ -366,28 +366,28 @@ namespace nsK2EngineLow {
     void BSP::WalkTree(SEntityPtr entityPtr, const Vector3& pos, std::function<void(SLeaf* leaf)> onEndWalk) const
     {
         if (entityPtr->type == enEntityType_Node) {
-            // ‚±‚ê‚Íƒm[ƒh‚È‚Ì‚Å‚³‚ç‚Éö‚éB
-            // ¶‚Éö‚éH‰E‚Éö‚éH
+            // ã“ã‚Œã¯ãƒãƒ¼ãƒ‰ãªã®ã§ã•ã‚‰ã«æ½œã‚‹ã€‚
+            // å·¦ã«æ½œã‚‹ï¼Ÿå³ã«æ½œã‚‹ï¼Ÿ
             SNode* node = static_cast<SNode*>(entityPtr.get());
             for (SEntityPtr& entity : node->leafArray) {
                  
             }
             float t = Dot(pos, node->plane.normal);
              if (t < node->plane.distance) {
-                // ¶‚Éö‚éB
+                // å·¦ã«æ½œã‚‹ã€‚
                 WalkTree(node->leftEntity, pos, onEndWalk);
             }
             else {
-                // ‰E‚Éö‚éB
+                // å³ã«æ½œã‚‹ã€‚
                 WalkTree(node->rightEntity, pos, onEndWalk);
             }
         }
         else if(entityPtr->type == enEntityType_Leaf ){
-            // ƒŠ[ƒt‚É“’B‚µ‚½B
+            // ãƒªãƒ¼ãƒ•ã«åˆ°é”ã—ãŸã€‚
             onEndWalk(static_cast<SLeaf*>(entityPtr.get()));
         }
         else if (entityPtr->type == enEntityType_LeafList) {
-            // ƒŠ[ƒt‚ÌƒŠƒXƒg‚É“’B‚µ‚½B
+            // ãƒªãƒ¼ãƒ•ã®ãƒªã‚¹ãƒˆã«åˆ°é”ã—ãŸã€‚
             auto leafList = static_cast<SLeafList*>(entityPtr.get());
             for (auto leaf : leafList->leafList) {
                 onEndWalk(static_cast<SLeaf*>(leaf.get()));
@@ -400,7 +400,7 @@ namespace nsK2EngineLow {
     }
 	void BSP::Build()
 	{
-		// ƒ‹[ƒgƒm[ƒh‚ğì¬B
+		// ãƒ«ãƒ¼ãƒˆãƒãƒ¼ãƒ‰ã‚’ä½œæˆã€‚
         m_rootNode = CreateBSPTreeEntity(m_leafArray);
 	}
 }

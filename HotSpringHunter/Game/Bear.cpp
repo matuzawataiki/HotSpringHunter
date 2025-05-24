@@ -1,42 +1,22 @@
 #include "stdafx.h"
 #include "Bear.h"
-
 #include "Game.h"
 #include "Player.h"
-
+#include "EnemySpawn.h"
+#include "EnemyBase.h"
 #include "collision/CollisionObject.h"
 
 namespace {
-	const Vector3 BACK_YARD_POS = { 100.0f,300.0f,500.0f };
-}
+	const float FIND_RANGE = 500.0f;			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆã‚‹è·é›¢
+	const float ATK_RANGE = 300.0f;				//è¿‘æ¥æ”»æ’ƒã®ãƒªãƒ¼ãƒ
+	const float MELEE_ATTACK_DAMAGE = 20.0f;	//è¿‘æ¥æ”»æ’ƒã®æ”»æ’ƒåŠ›
+	const float ATK_COOLTIME = 3.0f;			//è¿‘æ¥æ”»æ’ƒã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
+	const Vector3 NEW_POSITION = Vector3{ 0.0f,0.0f,500.0f };		//åˆæœŸä½ç½®
+};
 
 Bear::Bear()
 {
-	//ƒvƒŒƒCƒ„[
-	m_player = FindGO<Player>("player");
-
-	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒ[ƒh
-	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/bear/Idle.tka");
-	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Run].Load("Assets/animData/bear/Run.tka");
-	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Attack].Load("Assets/animData/bear/Attack.tka");
-	m_animationClips[enAnimationClip_Attack].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Hit].Load("Assets/animData/bear/Hit.tka");
-	m_animationClips[enAnimationClip_Hit].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Death].Load("Assets/animData/bear/Death.tka");
-	m_animationClips[enAnimationClip_Death].SetLoopFlag(true);
-
-	//ƒGƒlƒ~[ƒ‚ƒfƒ‹
-	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enAnimationClip_Num, enModelUpAxisZ);
-
-	m_position.y = 100.0f;
-	////‰Šú’l‚Ìƒ‰ƒ“ƒ_ƒ€”z’u
-	//ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[
-	m_characterController.Init(30.0f, 50.0f, m_position);
-	//m_modelRender.Update();
-
-	//physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
+	
 }
 
 Bear::~Bear()
@@ -44,251 +24,180 @@ Bear::~Bear()
 
 }
 
+bool Bear::Start()
+{
+	//ã‚¢ã‚»ãƒƒãƒˆèª­ã¿è¾¼ã¿
+	LoadAssets();
+
+	//åŸºåº•ã‚¯ãƒ©ã‚¹ç”Ÿæˆ
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ¢ã—
+	m_player = FindGO<Player>("player");
+
+	//ã‚¯ãƒã‚’åˆæœŸä½ç½®ã«
+	//m_position = NEW_POSITION;
+
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+	m_characterController.Init(80.0f, 80.0f, m_position);
+
+	return true;
+}
+
+
+/// <summary>
+/// ã‚¢ã‚»ãƒƒãƒˆã‚’èª­ã¿è¾¼ã‚€
+/// </summary>
+void Bear::LoadAssets()
+{
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³èª­ã¿è¾¼ã¿
+	m_animationClips[enBearAnimClip_Idle].Load("Assets/animData/bear/Idle.tka");
+	m_animationClips[enBearAnimClip_Idle].SetLoopFlag(true);
+	m_animationClips[enBearAnimClip_Run].Load("Assets/animData/bear/Run.tka");
+	m_animationClips[enBearAnimClip_Run].SetLoopFlag(true);
+	m_animationClips[enBearAnimClip_Attack].Load("Assets/animData/bear/Attack.tka");
+	m_animationClips[enBearAnimClip_Attack].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Hit].Load("Assets/animData/bear/Hit.tka");
+	m_animationClips[enBearAnimClip_Hit].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Death].Load("Assets/animData/bear/Death.tka");
+	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
+
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
+	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
+}
+
 void Bear::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		int a = 0;
-		a++;
-	}
-	if (m_isSpawn == true)
+	//ã‚¹ãƒãƒ¼ãƒ³ã—ã¦ã„ã‚‹ãªã‚‰
+	if (m_isSpawn)
 	{
-		if (m_isAlive == true) {
-			//ƒvƒŒƒCƒ„[‚Ì’Ç]
-			Tracking();
-			//ƒvƒŒƒCƒ„[‚ÉUŒ‚
-			SnakeAttack();
-		}
-		else {
-			//ƒGƒlƒ~[‚Ì‚Á”ò‚Ñ
-			EnemyDeath();
-		}
-
-		//“G‚ª‚Á”ò‚Ô‚Æ‚«‚ÉƒLƒƒƒ‰ƒRƒ“‚ğÁ‚µ‚Ä“§–¾‚È•Ç‚ğ‚·‚è”²‚¯‚é
-		if (m_isAlive) {
-			// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ª‚ ‚é‚ÍˆÚ“®ˆ—‚ÌŒ‹‰Ê‚ğó‚¯æ‚é‚¾‚¯
-			m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
-		}
-		else {
-			// ‚È‚¢‚Æ‚«‚Í©•ª‚ÅˆÚ“®Œ‹‰Ê‚ğŒvZ
-			const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
-			m_position.Add(move);
-		}
-	}
-	else
-	{
-		m_position = BACK_YARD_POS;
+		//ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†
+		ManageState();
+		//è¡Œå‹•å®Ÿè¡Œ
+		ExecuteAction();
 	}
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-	EnemyAnimation();
-	//ƒXƒe[ƒgŠÇ—
-	ManageState();
-	//ƒGƒlƒ~[‚ªƒvƒŒƒCƒ„[‚ÉŒü‚­
-	Rotation();
-
-	m_modelRender.SetPosition(m_position);
-
-	m_modelRender.Update();
-}
-
-//ƒGƒlƒ~[‚ªƒvƒŒƒCƒ„[‚ÉŒü‚­
-void Bear::Rotation()
-{
-	m_rotation.SetRotationYFromDirectionXZ(m_toPlayer);
-	m_modelRender.SetRotation(m_rotation);
-}
-
-//ƒvƒŒƒCƒ„[‚Æ“G‚Ì“–‚½‚è”»’è
-void Bear::SnakeAttack()
-{
-	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª200ˆÈ‰º‚Ìê‡
-	Vector3 diff = m_player->GetPlayerPos() - m_position;
-
-	if (diff.Length() < 200.0f && m_enemyATK == false)
-	{
-		//‘O•û‚ÉƒRƒŠƒWƒ‡ƒ“‚ğì‚é
-		EnemyAttackCollision();
-	}
-	else if (diff.Length() >= 220.0f)
-	{
-		m_enemyATK = false;
-	}
-
-	if (m_enemyHP <= 0.0f)
-	{
-		// €–S‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ğÁ‚µ‚Ä•ÇŠÑ’Ê‚·‚é‚æ‚¤‚É‚·‚é
-		m_characterController.RemoveRigidBoby();
-		m_isAlive = false;
-	}
-}
-
-//”ÍˆÍ“à‚ÌƒvƒŒƒCƒ„[‚ğ’Ç‚¢‚©‚¯‚é
-void Bear::Tracking()
-{
-	//ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚ÄL‚Ñ‚éƒxƒNƒgƒ‹‚ğŒvZ
-	m_toPlayer = m_player->GetPlayerPos() - m_position;
-	m_toPlayer.y = 0.0f;
-
-	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ğŒvZ‚·‚é
-	float distToPlayer = m_toPlayer.Length();
-
-	if (distToPlayer < 200.0f) {
-		m_moveSpeed.Set(Vector3::Zero);
-		m_moveStop = true;
-		MoveStop();
-	}
-	else if (distToPlayer < 1000.0f) {
-		//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª400ˆÈ‰º‚¾‚Á‚½‚ç’Ç‚¢‚©‚¯‚é
-		//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»B
-		Vector3 toPlayerDir = m_toPlayer;
-		toPlayerDir.Normalize();
-
-		//³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
-		m_moveSpeed = toPlayerDir * 100.0f;
-	}
-}
-
-//ˆê’â~
-void Bear::MoveStop()
-{
-	if (m_moveStop == true)
-	{
-		m_moveSpeed = toPlayerDir * 0.0f;
-		m_moveStop = false;
-
-		return;
-	}
-}
-
-void Bear::Hit(float takeDamage)
-{
-	m_enemyHP -= takeDamage;
-}
-
-//ƒvƒŒƒCƒ„[‚Æ‹t•ûŒü‚É”ò‚ñ‚Å‚¢‚­
-void Bear::EnemyDeath()
-{
-	if (enemyDead)
-	{
-		//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»
-		Vector3 toPlayerDir = m_toPlayer;
-		toPlayerDir.Normalize();
-		toPlayerDir *= -1.0f;
-
-		//³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
-		m_moveSpeed = toPlayerDir * 2000.0f;
-		m_moveSpeed.y = 800.0f;
-
-		//‚Á”ò‚ÔƒAƒjƒ[ƒVƒ‡ƒ“
-		m_animationState = enDeath;
-	}
-	enemyDead = true;
-}
-
-//ƒGƒlƒ~[‚ÌUŒ‚ƒRƒŠƒWƒ‡ƒ“
-void Bear::EnemyAttackCollision()
-{
-	//ƒRƒŠƒWƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğì¬
-	collisionObject = NewGO<CollisionObject>(0, "bear_atk");
-	Vector3 collisionPosition = Vector3::Zero;
-
-	//ƒGƒlƒ~[‚Ì­‚µ‘O‚Éİ’è
-	m_enemyDirection = m_toPlayer;
-	m_enemyDirection.Normalize();
-	m_enemyDirection *= 100.0f;
-	collisionPosition = m_position + m_enemyDirection;
-
-	//‹…ó‚ÌƒRƒŠƒWƒ‡ƒ“‚ğì¬
-	collisionObject->CreateSphere(
-		collisionPosition,
-		Quaternion::Identity,
-		100.0f
-	);
-
-	//ƒvƒŒƒCƒ„[‚ª“G‚É‚ ‚½‚é‚Æ-10
-	if (collisionObject->IsHit(m_player->m_playerCharaCon)) {
-		m_enemyHP -= 10;
-		//ƒmƒbƒNƒoƒbƒN
-		KnockBack();
-	}
-
-	DeleteGO(collisionObject);
-
-	m_enemyATK = true;
-}
-
-//ƒvƒŒƒCƒ„[‚ÉUŒ‚‚³‚ê‚½‚Æ‚«ƒmƒbƒNƒoƒbƒN‚·‚é
-void Bear::KnockBack()
-{
-	//// Œã‘Ş
-	////ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚éL‚Ñ‚éƒxƒNƒgƒ‹‚ğ³‹K‰»
-	//Vector3 toPlayerDir = m_toPlayer;
-	//toPlayerDir.Normalize();
-	//toPlayerDir.y = 0;
-	//toPlayerDir * -1.0f;
-
-	////³‹K‰»‚Å‹‚ß‚½ƒxƒNƒgƒ‹‚ğ—˜—p‚µ‚ÄAƒGƒlƒ~[‚ÌÀ•W‚ğ“®‚©‚·
-	//m_moveSpeed = toPlayerDir * -500.0f;
-
-	////ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“
-	//m_animationState = enHit;
+	//ã„ã‚ã„ã‚æ›´æ–°
+	VariousUpdate();
 }
 
 
-//ƒXƒe[ƒgŠÇ—
+/// <summary>
+/// ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†
+/// </summary>
 void Bear::ManageState()
 {
-	// €–S‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚Í–³‚­‚È‚é‚Ì‚Åˆ—‚µ‚È‚¢B
-	if (m_characterController.IsOnGround() == true)
-	{
-		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
-		{
-			//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enWalk;
+	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰ãˆã¦ã‚‚ã‚ˆã„ãªã‚‰
+	m_isCanStateChange = m_enemyBase->ChangeFlag();
+	if (!m_isCanStateChange) {
+		return;
+	}
+	//è¢«å¼¾ã—ãŸå ´åˆ
+	if (m_player->m_collision->IsHit(m_characterController)) {
+
+		//HPã‚’æ¸›ã‚‰ã™ã€‚
+		m_enemyHP -= m_player->m_attackPower;
+
+		//HPãŒã¾ã æ®‹ã£ã¦ã„ã‚‹ã€‚
+		if (m_enemyHP > 0.0f) {
+			//ãƒãƒƒã‚¯ãƒãƒƒã‚¯
+			m_bearState = enBearKnockBack;
 		}
-		else
-		{
-			//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enIdle;
+		//HPãŒãªããªã£ãŸ
+		else {
+			//æ­»äº¡
+			m_bearState = enBearDeath;
 		}
-		if (m_toPlayer.Length() <= 200.0f)
-		{
-			//UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enAttack;
-		}
-		//ƒvƒŒƒCƒ„[‚ª“G‚É‚ ‚½‚é‚Æ-
-		if (collisionObject->IsHit(m_player->m_playerCharaCon))
-		{
-			//ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“
-			m_animationState = enHit;
-		}
+		return;
+	}
+
+	//è¿‘æ¥æ”»æ’ƒ
+	//æ”»æ’ƒç¯„å›²ã¾ã§è¿‘ã¥ã„ãŸã‚‰
+	if (m_toPlayer.Length() < ATK_RANGE) {
+		m_bearState = enBearMeleeAttack;
+		return;
+	}
+	
+	//è¿½å¾“
+	//æ”»æ’ƒç¯„å›²å¤–ã¸å‡ºã¦ã„ã¦ã€ã‹ã¤ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆã¦ã„ãŸã‚‰
+	if ((m_toPlayer.Length() > ATK_RANGE) && (FindPlayer())) {
+		m_bearState = enBearTrack;
+		return;
+	}
+	
+	//å¾…æ©Ÿ
+	m_bearState = enBearIdle;
+}
+
+/// <summary>
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+/// </summary>
+bool Bear::FindPlayer()
+{
+	if (m_toPlayer.Length() < FIND_RANGE) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
-//ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
-void Bear::EnemyAnimation()
+
+/// <summary>
+/// è¡Œå‹•ã‚’å®Ÿè¡Œã€‚
+/// </summary>
+void Bear::ExecuteAction()
 {
-	//switch•¶
-	switch (m_animationState)
-	{
-	case enIdle:	//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Idle);
+	//ç§»å‹•é€Ÿåº¦ã‚’0ã™ã‚‹
+	m_moveSpeed = Vector3::Zero;
+	//è¿‘æ¥æ”»æ’ƒã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ã‚’è¨ˆç®—
+	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
+
+	switch (m_bearState) {
+
+		//ãƒãƒƒã‚¯ãƒãƒƒã‚¯
+	case enBearKnockBack:
+		m_moveSpeed = m_enemyBase->KnockBack(m_enemyDir);
+		//è¢«å¼¾ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		m_modelRender.PlayAnimation(enBearAnimClip_Hit);
 		break;
 
-	case enWalk:	//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Run);
+		//æ­»äº¡
+	case enBearDeath:
+		m_enemyBase->Death();
+		//æ­»äº¡ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		m_modelRender.PlayAnimation(enBearAnimClip_Death);
 		break;
 
-	case enAttack:	//UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Attack);
+		//è¿‘æ¥æ”»æ’ƒ
+	case enBearMeleeAttack:
+		//ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ãŒ0ã ã£ãŸã‚‰
+		if (m_ATKCoolTime <= 0.0f)
+		{
+			//è¿‘æ¥æ”»æ’ƒ
+			m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
+			//è¿‘æ¥æ”»æ’ƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+			m_modelRender.PlayAnimation(enBearAnimClip_Attack);
+			//ã‚¿ã‚¤ãƒãƒ¼ã‚’ã‚»ãƒƒãƒˆ
+			m_ATKCoolTime = ATK_COOLTIME;
+		}
+		//æ”»æ’ƒã—ãªã„ã¨ãã¯å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+		else if(!m_modelRender.IsPlayAnimation()){
+			m_modelRender.PlayAnimation(enBearAnimClip_Idle);
+		}		
 		break;
 
-	case enHit:   //ƒmƒbƒNƒoƒbƒNƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Hit);
+		//è¿½å¾“
+	case enBearTrack:
+		m_moveSpeed = m_enemyBase->Tracking(m_toPlayer);
+		//æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		m_modelRender.PlayAnimation(enBearAnimClip_Run);
 		break;
 
-	case enDeath:	//‚Á”ò‚ÔƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-		m_modelRender.PlayAnimation(enAnimationClip_Death);
+		//å¾…æ©Ÿ
+	case enBearIdle:
+		//å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+		m_modelRender.PlayAnimation(enBearAnimClip_Idle);
 		break;
 
 	default:
@@ -296,9 +205,54 @@ void Bear::EnemyAnimation()
 	}
 }
 
+/// <summary>
+/// ã„ã‚ã„ã‚æ›´æ–°ï¼ˆåº§æ¨™ã€å›è»¢ãªã©ï¼‰
+/// </summary>
+void Bear::VariousUpdate()
+{
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ›´æ–°
+	m_toPlayer = m_player->GetPlayerPos() - m_position;
+
+	//æ­»äº¡ã—ã¦ã„ãªã„ã¨ãã€ä¸”ã¤ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆã¦ã„ã‚‹ã¨ãã ã‘
+	//å‘ãã®æ›´æ–°ã‚’ã™ã‚‹
+	if ((m_bearState != enBearDeath) && (FindPlayer())) {
+		//å‘ãã®æ›´æ–°ã€‚
+		m_enemyDir = m_toPlayer;
+		m_enemyDir.Normalize();
+	}
+	
+	//é€Ÿåº¦ã‚’é©å¿œã€‚
+	ExecuteSpeed();
+
+	//å›è»¢ã®æ›´æ–°ã€‚
+	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
+	m_modelRender.SetRotation(m_rotation);
+
+	//åº§æ¨™ã®æ›´æ–°ã€‚
+	m_modelRender.SetPosition(m_position);
+
+	//ãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°ã€‚
+	m_modelRender.Update();
+}
+
+/// <summary>
+/// é€Ÿåº¦ã‚’é©å¿œã€‚
+/// </summary>
+void Bear::ExecuteSpeed()
+{
+	//æ•µãŒå¹ã£é£›ã¶ã¨ãã«ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’æ¶ˆã—ã¦é€æ˜ãªå£ã‚’ã™ã‚ŠæŠœã‘ã‚‹
+	if (m_isAlive) {
+		// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒã‚ã‚‹æ™‚ã¯ç§»å‹•å‡¦ç†ã®çµæœã‚’å—ã‘å–ã‚‹ã ã‘
+		m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
+	}
+	else {
+		// ãªã„ã¨ãã¯è‡ªåˆ†ã§ç§»å‹•çµæœã‚’è¨ˆç®—
+		const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
+		m_position.Add(move);
+	}
+}
 
 void Bear::Render(RenderContext& rc)
 {
-	//ƒ‚ƒfƒ‹
 	m_modelRender.Draw(rc);
 }

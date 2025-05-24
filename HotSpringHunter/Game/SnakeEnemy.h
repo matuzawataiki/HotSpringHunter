@@ -1,10 +1,28 @@
 #pragma once
 
 class Player;
-class PlayerAttack;
-class PlayerChargeAttack;
-class PlayerHealth;
 class EnemySpawn;
+class EnemyBase;
+
+//ãƒ˜ãƒ“ã®ã‚¹ãƒ†ãƒ¼ãƒˆã®ç¨®é¡
+enum EnSnakeState {
+	enSnakeIdle,
+	enSnakeTrack,
+	enSnakeAttack,
+	enSnakeKnockBack,
+	enSnakeDeath,
+};
+
+//ãƒ˜ãƒ“ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
+enum EnSnakeAnimClip
+{
+	enSnakeAnimClip_Idle,
+	enSnakeAnimClip_Walk,
+	enSnakeAnimClip_Attack,
+	enSnakeAnimClip_Hit,
+	enSnakeAnimClip_Death,
+	enSnakeAnimClip_Num,
+};
 
 class SnakeEnemy : public IGameObject
 {
@@ -12,82 +30,44 @@ public:
 	SnakeEnemy();
 	~SnakeEnemy();
 
-	void Rotation();				//‰ñ“]B
-	void SnakeAttack();
-	void Tracking();
-	void EnemyAnimation();
-	void MoveStop();
-	void EnemyDeath();
-	void Hit();
+	bool Start()override;
+	//ã‚¢ã‚»ãƒƒãƒˆèª­ã¿è¾¼ã¿
+	void LoadAsset();
+	void Update()override;
+	//ã‚¹ãƒ†ãƒ¼ãƒˆç®¡ç†ã€‚
 	void ManageState();
-	void EnemyAttackCollision();
-	void KnockBack();
-	void Update();
+	//è¡Œå‹•ã‚’å®Ÿè¡Œ
+	void ExecuteAction();
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+	bool FindPlayer();
+	//ã„ã‚ã„ã‚æ›´æ–°ã€‚
+	void VariousUpdate();
+	//é€Ÿåº¦ã‚’é©å¿œã€‚
+	void ExecuteSpeed();
+	void Render(RenderContext& rc)override;
 
-
-	void Render(RenderContext& rc);
-
-	enum EnAnimationClip
-	{
-		enAnimationClip_Idle,
-		enAnimationClip_Walk,
-		enAnimationClip_Attack,
-		enAnimationClip_Hit,
-		enAnimationClip_Death,
-		enAnimationClip_Num,
-	};
-
-	AnimationClip m_animationClips[enAnimationClip_Num];  //ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
-
-	CharacterController m_characterController;  //ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ^[
 	CollisionObject* collisionObject = nullptr;
-
 	Player* m_player = nullptr;
-	PlayerAttack* m_playerAttack = nullptr;
-	PlayerChargeAttack* m_playerCharAt = nullptr;
-	PlayerHealth* m_playerHealth = nullptr;
 	EnemySpawn* m_enemySpawn = nullptr;
-	
-	Vector3 m_position        = Vector3::Zero;		//À•W
-	Vector3 m_moveSpeed       = Vector3::Zero;		//“G‚Ì‘¬“x
-	Vector3 m_enemyDirection  = Vector3::Zero;		//ƒRƒŠƒWƒ‡ƒ“
-	Vector3 m_toPlayer        = Vector3::Zero;		//ƒxƒNƒgƒ‹
-	Quaternion m_rotation     = Quaternion::Identity;		//ƒNƒH[ƒ^ƒjƒIƒ“
+	EnemyBase* m_enemyBase = nullptr;
 
-	ModelRender m_modelRender;  //ƒ‚ƒfƒ‹ƒŒƒ“ƒ_[
-	PhysicsStaticObject physicsStaticObject;  //“–‚½‚è”»’è
+	AnimationClip m_animationClips[enSnakeAnimClip_Num];  //ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
+	CharacterController m_characterController;			//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼	
+	Quaternion m_rotation = Quaternion::Identity;		//å›è»¢
+	ModelRender m_modelRender;							//ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ¼
 
-	///
-	
+	Vector3 m_position        = Vector3::Zero;				//åº§æ¨™
+	Vector3 m_moveSpeed       = Vector3::Zero;				//é€Ÿåº¦
+	Vector3 m_enemyDir        = Vector3::Zero;				//å‘ã
+	Vector3 m_toPlayer        = Vector3::Zero;				//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®ãƒ™ã‚¯ãƒˆãƒ«
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg
-	enum AnimationState
-	{
-		enIdle,
-		enWalk,
-		enAttack,
-		enHit,
-		enDeath,
-		enNum,
-	};
-	int m_animationState = enNum;  //ƒGƒlƒ~[ƒXƒe[ƒg‚Ìó‘Ô‚ğ•\‚·•Ï”
+	float  m_enemyHP = 100.0f;		//æ•µã®HP
+	float m_ATKCoolTime = 0.0f;		//è¿‘æ¥æ”»æ’ƒã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
 
-	Vector3 toPlayerDir;		//ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚ÄL‚Ñ‚éƒxƒNƒgƒ‹
+	int m_snakeState = 0;				//ãƒ˜ãƒ“ã®ã‚¹ãƒ†ãƒ¼ãƒˆ
 
-	bool m_isSpawn  = false;	//“G‚ªoŒ»‚·‚é‚©
-	bool m_isAlive   = true;    //“G‚ª¶‚«‚Ä‚¢‚é‚©
-	bool m_enemyATK = false;    //“G‚ªUŒ‚‚µ‚½‚©
-	bool m_deathCount = false;
-
-	float  m_enemyHP  = 50.0f;		//“G‚ÌHP
-	bool m_moveStop = false;    //UŒ‚‚É~‚Ü‚é
-
-	int m_enemyDeathCuont = 0;  //“G‚ª‰½•C€‚ñ‚¾
-
-	float posX = 0.0f;
-	float posY = 0.0f; 
-
-	bool enemyDead = false; //€‚ñ‚¾ˆ—‚ğˆê‰ñ‚¾‚¯
+	bool m_isSpawn = true;	//æ•µãŒå‡ºç¾ã™ã‚‹ã‹
+	bool m_isAlive = true;    //æ•µãŒç”Ÿãã¦ã„ã‚‹ã‹
+	bool m_isFind = false;			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ‰ãˆãŸã‹
+	bool m_isCanStateChange = true;	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰ãˆã¦ã‚‚ã‚ˆã„ã‹
 };
-
-

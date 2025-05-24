@@ -39,9 +39,9 @@ namespace nsK2EngineLow {
 
 		void World::CommitRegistGeometry(RenderContext& rc)
 		{
-			//BLASを構築。
+			//BLAS繧呈ｧ狗ｯ峨�
 			m_blasBuffer.Init(rc, m_instances);
-			//TLASを構築。
+			//TLAS繧呈ｧ狗ｯ峨�
 			m_topLevelASBuffers.Init(rc, m_instances, m_blasBuffer.Get());
 		}
 	}//namespace raytracing

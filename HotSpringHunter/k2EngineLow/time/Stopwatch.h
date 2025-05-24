@@ -3,18 +3,18 @@
 namespace nsK2EngineLow {
 
 	/*!
-	 *@brief	ƒXƒgƒbƒvƒEƒHƒbƒ`ƒNƒ‰ƒXB
+	 *@brief	ã‚¹ãƒˆãƒƒãƒ—ã‚¦ã‚©ãƒƒãƒã‚¯ãƒ©ã‚¹ã€‚
 	 *@details
-	 * C#‚ÌStopwatch‚Ì‚æ‚¤‚Ég‚¦‚éB</br>
+	 * C#ã®Stopwatchã®ã‚ˆã†ã«ä½¿ãˆã‚‹ã€‚</br>
 	 *@code
-	   ƒTƒ“ƒvƒ‹ƒR[ƒh
+	   ã‚µãƒ³ãƒ—ãƒ«ã‚³ãƒ¼ãƒ‰
 	   Stopwatch sw;
-	   sw.Start();		//Œv‘ªŠJnB
+	   sw.Start();		//è¨ˆæ¸¬é–‹å§‹ã€‚
 	   for(int i = 0; i < 100; i++ ){
 	   }
-	   sw.Stop();		//Œv‘ªI—¹
-	   printf("Œo‰ßŠÔ = %lf(’PˆÊF•b)\n", sw.GetElapsed());
-	   printf("Œo‰ßŠÔ = %lf(’PˆÊFƒ~ƒŠ)\n", sw.GetElapsedMillisecond());
+	   sw.Stop();		//è¨ˆæ¸¬çµ‚äº†
+	   printf("çµŒéæ™‚é–“ = %lf(å˜ä½ï¼šç§’)\n", sw.GetElapsed());
+	   printf("çµŒéæ™‚é–“ = %lf(å˜ä½ï¼šãƒŸãƒª)\n", sw.GetElapsedMillisecond());
 	 *@endcode
 	 *
 	 */
@@ -23,7 +23,7 @@ namespace nsK2EngineLow {
 		
 
 		/// <summary>
-		/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		/// </summary>
 		Stopwatch()
 		{
@@ -37,14 +37,14 @@ namespace nsK2EngineLow {
 		
 
 		 /// <summary>
-		 /// ƒfƒXƒgƒ‰ƒNƒ^
+		 /// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 /// </summary>
 		~Stopwatch()
 		{
 		}
 		
 		/// <summary>
-		/// Œv‘ªŠJn
+		/// è¨ˆæ¸¬é–‹å§‹
 		/// </summary>
 		void Start()
 		{
@@ -52,7 +52,7 @@ namespace nsK2EngineLow {
 		}
 		
 		/// <summary>
-		/// Œv‘ªI—¹
+		/// è¨ˆæ¸¬çµ‚äº†
 		/// </summary>
 		void Stop()
 		{
@@ -65,7 +65,7 @@ namespace nsK2EngineLow {
 		
 
 		/// <summary>
-		/// Œo‰ßŠÔ‚ğæ“¾(’PˆÊ:•b)
+		/// çµŒéæ™‚é–“ã‚’å–å¾—(å˜ä½:ç§’)
 		/// </summary>
 		/// <returns></returns>
 		double GetElapsed() const
@@ -73,7 +73,7 @@ namespace nsK2EngineLow {
 			return elapsed;
 		}
 		/// <summary>
-		/// Œo‰ßŠÔ‚ğæ“¾(’PˆÊ:ƒ~ƒŠ•b)
+		/// çµŒéæ™‚é–“ã‚’å–å¾—(å˜ä½:ãƒŸãƒªç§’)
 		/// </summary>
 		/// <returns></returns>
 		double GetElapsedMillisecond() const
@@ -82,7 +82,7 @@ namespace nsK2EngineLow {
 		}
 
 		/// <summary>
-		/// Œo‰ßŠÔ‚ğæ“¾(’PˆÊ:ƒ}ƒCƒNƒ•b)
+		/// çµŒéæ™‚é–“ã‚’å–å¾—(å˜ä½:ãƒã‚¤ã‚¯ãƒ­ç§’)
 		/// </summary>
 		/// <returns></returns>
 		double GetElapsedMicrosecond() const
@@ -93,9 +93,9 @@ namespace nsK2EngineLow {
 		LONGLONG freq;
 		LONGLONG end;
 		LONGLONG begin;
-		double elapsed;			//Œo‰ßŠÔ(’PˆÊF•b)
-		double elapsedMill;		//Œo‰ßŠÔ(’PˆÊFƒ~ƒŠ•b)
-		double elapsedMicro;	//Œo‰ßŠÔ(’PˆÊFƒ}ƒCƒNƒ•b)
+		double elapsed;			//çµŒéæ™‚é–“(å˜ä½ï¼šç§’)
+		double elapsedMill;		//çµŒéæ™‚é–“(å˜ä½ï¼šãƒŸãƒªç§’)
+		double elapsedMicro;	//çµŒéæ™‚é–“(å˜ä½ï¼šãƒã‚¤ã‚¯ãƒ­ç§’)
 
 	};
 }

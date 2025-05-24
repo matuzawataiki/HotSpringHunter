@@ -1,25 +1,25 @@
 #include "stdafx.h"
 #include "EnemySpawn.h"
 #include "Result.h"
-
 #include "SnakeEnemy.h"
+#include "Bear.h"
 
 //#include <time.h>	//Random
 
-//’è”->–³–¼‹óŠÔ(namespace)‚Å’è‹`
+//å®šæ•°->ç„¡åç©ºé–“(namespace)ã§å®šç¾©
 namespace 
 {
-	//“G‚ÌÅ‘å”.10
+	//æ•µã®æœ€å¤§æ•°.10
 	const int MAX_ENEMY_NUM = 10;
 
-	//Å‰‚Ì“G‚ÌoŒ».4
+	//æœ€åˆã®æ•µã®å‡ºç¾.4
 	const int FAST_SNAKE_NUM = 4;
 	const int SECOND_SNAKE_NUM = 6;
 }
 
 EnemySpawn::EnemySpawn()
 {
-	//“G‚ğ10‘Ì¶¬
+	//æ•µã‚’10ä½“ç”Ÿæˆ
 	/*for (int i = 0; i < 10; i++)
 	{
 		m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeenemy");
@@ -35,11 +35,29 @@ EnemySpawn::~EnemySpawn()
 	//m_nowEnemyNum = ENEMY_SNAKE_NUM;
 }
 
+bool EnemySpawn::Start()
+{
+	CreateBear();
+
+	return true;
+}
+
+/// <summary>
+/// ã‚¯ãƒç”Ÿæˆï¼ˆä»®ï¼‰
+/// </summary>
+void EnemySpawn::CreateBear()
+{
+	for (int i = 0; i < 2; i++) {
+		m_bear[i] = NewGO<Bear>(0, "bear");
+		m_bear[i]->m_position = Vector3{ i * 200.0f,0.0f,500.0f };
+	}
+}
+
 void EnemySpawn::Update()
 {
-	//ƒEƒF[ƒu‚ÌØ‚è‘Ö‚í‚è
+	//ã‚¦ã‚§ãƒ¼ãƒ–ã®åˆ‡ã‚Šæ›¿ã‚ã‚Š
 	bool switchWave = false;
-	//“G‚ª€‚ñ‚Å‚¢‚é”
+	//æ•µãŒæ­»ã‚“ã§ã„ã‚‹æ•°
 	int enemyDeath = 0;
 
 	EnemyState();
@@ -58,14 +76,14 @@ void EnemySpawn::EnemyState()
 
 			m_snakeEnemy[i]->m_isSpawn = true;
 
-			//À•W
+			//åº§æ¨™
 			float destance = 0.0f;
 			destance = 100.0f * i;
 			m_snakeEnemy[i]->m_position = { destance,0.0f,m_zPos };
 			m_snakeEnemy[i]->m_characterController.SetPosition(m_snakeEnemy[i]->m_position);
 		}
 		m_enemyState = wave01;
-		//Œ»İ‚Ì“G‚Ì”
+		//ç¾åœ¨ã®æ•µã®æ•°
 		m_nowEnemyNum = FAST_SNAKE_NUM;
 		break;
 
@@ -83,13 +101,13 @@ void EnemySpawn::EnemyState()
 
 			m_snakeEnemy[i]->m_isSpawn = true;
 
-			//À•W
+			//åº§æ¨™
 			float destance = 0.0f;
 			destance = 100.0f * i;
 			m_snakeEnemy[i]->m_position = { destance,0.0f,m_zPos };
 			m_snakeEnemy[i]->m_characterController.SetPosition(m_snakeEnemy[i]->m_position);
 		}
-		//Œ»İ‚Ì“G‚Ì”
+		//ç¾åœ¨ã®æ•µã®æ•°
 		m_nowEnemyNum = SECOND_SNAKE_NUM;
 
 		m_enemyState = wave02;
@@ -106,13 +124,13 @@ void EnemySpawn::EnemyState()
 	}
 }
 
-//À•W
+//åº§æ¨™
 void EnemySpawn::EnemyPos()
 {
 	//float destance = 0.0f;
 	//for (int i = 0; i < MAX_ENEMY_NUM; i++)
 	//{
-	//	//ƒXƒ|[ƒ“êŠ‚ğì‚é
+	//	//ã‚¹ãƒãƒ¼ãƒ³å ´æ‰€ã‚’ä½œã‚‹
 	//	if (!m_snakeEnemy[i]->m_isSpawn) 
 	//	{
 	//		m_snakeEnemy[i]->m_isSpawn = true;

@@ -5,12 +5,12 @@ namespace nsTMEngine {
 	{
 	public:
 		/// <summary>
-		/// ‰Šú‰»
+		/// åˆæœŸåŒ–
 		/// </summary>
 		void Init();
 
 		/// <summary>
-		/// •`‰æ
+		/// æç”»
 		/// </summary>
 		/// <param name="rc"></param>
 		/// <param name="renderObjects"></param>

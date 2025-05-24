@@ -4,7 +4,7 @@ namespace nsK2EngineLow {
 	public:
 		virtual ~IUnorderAccessResrouce() {};
 		/// <summary>
-		/// UAV‚É“o˜^B
+		/// UAVã«ç™»éŒ²ã€‚
 		/// </summary>
 		/// <param name=""></param>
 		/// <param name="bufferNo"></param>

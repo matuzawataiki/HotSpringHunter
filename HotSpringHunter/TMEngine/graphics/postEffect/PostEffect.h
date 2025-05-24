@@ -6,7 +6,7 @@ namespace nsTMEngine {
 	{
 	public:
 		/// <summary>
-		/// ‰Šú‰»
+		/// åˆæœŸåŒ–
 		/// </summary>
 		/// <param name="mainRenderTarget"></param>
 		void Init(RenderTarget& mainRenderTarget);

@@ -894,14 +894,14 @@ struct btSingleRayCallback : public btBroadphaseRayCallback
 		//only perform raycast if filterMask matches
 		if(m_resultCallback.needsCollision(collisionObject->getBroadphaseHandle())) 
 		{
-			//RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
+			//RigidcollisionObject* m_enemyATCollision = ctrl->GetRigidcollisionObject();
 			//btVector3 collisionObjectAabbMin,collisionObjectAabbMax;
 #if 0
 #ifdef RECALCULATE_AABB
 			btVector3 collisionObjectAabbMin,collisionObjectAabbMax;
 			collisionObject->getCollisionShape()->getAabb(collisionObject->getWorldTransform(),collisionObjectAabbMin,collisionObjectAabbMax);
 #else
-			//getBroadphase()->getAabb(collisionObject->getBroadphaseHandle(),collisionObjectAabbMin,collisionObjectAabbMax);
+			//getBroadphase()->getAabb(m_enemyATCollision->getBroadphaseHandle(),collisionObjectAabbMin,collisionObjectAabbMax);
 			const btVector3& collisionObjectAabbMin = collisionObject->getBroadphaseHandle()->m_aabbMin;
 			const btVector3& collisionObjectAabbMax = collisionObject->getBroadphaseHandle()->m_aabbMax;
 #endif
@@ -984,7 +984,7 @@ struct btSingleSweepCallback : public btBroadphaseRayCallback
 
 		//only perform raycast if filterMask matches
 		if(m_resultCallback.needsCollision(collisionObject->getBroadphaseHandle())) {
-			//RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
+			//RigidcollisionObject* m_enemyATCollision = ctrl->GetRigidcollisionObject();
 			m_world->objectQuerySingle(m_castShape, m_convexFromTrans,m_convexToTrans,
 				collisionObject,
 				collisionObject->getCollisionShape(),
@@ -1040,7 +1040,7 @@ void	btCollisionWorld::convexSweepTest(const btConvexShape* castShape, const btT
 		btCollisionObject*	collisionObject= m_collisionObjects[i];
 		//only perform raycast if filterMask matches
 		if(resultCallback.needsCollision(collisionObject->getBroadphaseHandle())) {
-			//RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
+			//RigidcollisionObject* m_enemyATCollision = ctrl->GetRigidcollisionObject();
 			btVector3 collisionObjectAabbMin,collisionObjectAabbMax;
 			collisionObject->getCollisionShape()->getAabb(collisionObject->getWorldTransform(),collisionObjectAabbMin,collisionObjectAabbMax);
 			AabbExpand (collisionObjectAabbMin, collisionObjectAabbMax, castShapeAabbMin, castShapeAabbMax);

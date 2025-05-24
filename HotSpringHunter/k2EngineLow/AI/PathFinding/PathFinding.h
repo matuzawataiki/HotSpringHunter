@@ -6,29 +6,29 @@ namespace nsK2EngineLow {
 		class Cell;
 		class NaviMesh;
 		/// <summary>
-		/// ƒpƒXŒŸõˆ—B
+		/// ãƒ‘ã‚¹æ¤œç´¢å‡¦ç†ã€‚
 		/// </summary>
 		class PathFinding
 		{
 		public:
 			/// <summary>
-			/// ƒpƒX‚ÌŒŸõˆ—‚ðŽÀsB
+			/// ãƒ‘ã‚¹ã®æ¤œç´¢å‡¦ç†ã‚’å®Ÿè¡Œã€‚
 			/// </summary>
-			/// <param name="path">Œ©‚Â‚©‚Á‚½ƒpƒX</param>
-			/// <param name="naviMesh">ƒiƒrƒQ[ƒVƒ‡ƒ“ƒƒbƒVƒ…</param>
-			/// <param name="startPos">ŒŸõŠJŽnÀ•W</param>
-			/// <param name="endPos">ŒŸõI—¹À•W</param>
+			/// <param name="path">è¦‹ã¤ã‹ã£ãŸãƒ‘ã‚¹</param>
+			/// <param name="naviMesh">ãƒŠãƒ“ã‚²ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ãƒƒã‚·ãƒ¥</param>
+			/// <param name="startPos">æ¤œç´¢é–‹å§‹åº§æ¨™</param>
+			/// <param name="endPos">æ¤œç´¢çµ‚äº†åº§æ¨™</param>
 			/// <param name="physicsWorld">
-			/// •¨—ƒ[ƒ‹ƒhB
-			/// •¨—ƒ[ƒ‹ƒh‚ªŽw’è‚³‚ê‚Ä‚¢‚é‚ÆA•¨—ƒ[ƒ‹ƒh‚É”z’u‚³‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚Æ
-			/// Õ“Ë”»’è‚ðs‚¢AƒpƒX‚ÌƒXƒ€[ƒWƒ“ƒO‚ª‰ü‘P‚µ‚Ü‚·B
-			/// ‚±‚ÌÕ“Ë”»’è‚Å‚ÍAagentRadius‚ÆagentHeight‚Ìƒpƒ‰ƒ[ƒ^‚ªŽg—p‚³‚ê‚Ü‚·B
+			/// ç‰©ç†ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€‚
+			/// ç‰©ç†ãƒ¯ãƒ¼ãƒ«ãƒ‰ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹ã¨ã€ç‰©ç†ãƒ¯ãƒ¼ãƒ«ãƒ‰ã«é…ç½®ã•ã‚Œã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨
+			/// è¡çªåˆ¤å®šã‚’è¡Œã„ã€ãƒ‘ã‚¹ã®ã‚¹ãƒ ãƒ¼ã‚¸ãƒ³ã‚°ãŒæ”¹å–„ã—ã¾ã™ã€‚
+			/// ã“ã®è¡çªåˆ¤å®šã§ã¯ã€agentRadiusã¨agentHeightã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚
 			/// </param>
 			/// <param name="agentRadius">
-			/// AIƒG[ƒWƒFƒ“ƒg‚Ì”¼ŒaBƒG[ƒWƒFƒ“ƒg‚ÌƒJƒvƒZƒ‹ƒRƒ‰ƒCƒ_[‚ðì¬‚·‚é‚Ì‚É—˜—p‚³‚ê‚Ü‚·B
+			/// AIã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®åŠå¾„ã€‚ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®ã‚«ãƒ—ã‚»ãƒ«ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆã™ã‚‹ã®ã«åˆ©ç”¨ã•ã‚Œã¾ã™ã€‚
 			/// </param>
 			/// <param name="agentHeight">
-			/// AIƒG[ƒWƒFƒ“ƒg‚Ì‚‚³ƒG[ƒWƒFƒ“ƒg‚ÌƒJƒvƒZƒ‹ƒRƒ‰ƒCƒ_[‚ðì¬‚·‚é‚Ì‚É—˜—p‚³‚ê‚Ü‚·B
+			/// AIã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®é«˜ã•ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®ã‚«ãƒ—ã‚»ãƒ«ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆã™ã‚‹ã®ã«åˆ©ç”¨ã•ã‚Œã¾ã™ã€‚
 			/// </param>
 			void Execute(
 				Path& path, 
@@ -45,18 +45,18 @@ namespace nsK2EngineLow {
 				void Init(const Cell* cell);
 				
 				const Cell* cell;
-				CellWork* parentCell;	// e‚ÌƒZƒ‹B
+				CellWork* parentCell;	// è¦ªã®ã‚»ãƒ«ã€‚
 				float costFromStartCell;
 				Vector3 pathPoint;
-				float cost;				// ˆÚ“®ƒRƒXƒg
-				bool isOpend;			// ŠJ‚©‚ê‚½H
-				bool isClosed;			// •Â‚¶‚ç‚ê‚½H
-				bool isSmooth;			// ƒXƒ€[ƒX‚³‚ê‚éH
+				float cost;				// ç§»å‹•ã‚³ã‚¹ãƒˆ
+				bool isOpend;			// é–‹ã‹ã‚ŒãŸï¼Ÿ
+				bool isClosed;			// é–‰ã˜ã‚‰ã‚ŒãŸï¼Ÿ
+				bool isSmooth;			// ã‚¹ãƒ ãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼Ÿ
 			};
 		private:
 		
 			/// <summary>
-			/// ŽŸ‚ÌƒZƒ‹‚ÉˆÚ“®‚·‚éƒRƒXƒg‚ðŒvŽZ
+			/// æ¬¡ã®ã‚»ãƒ«ã«ç§»å‹•ã™ã‚‹ã‚³ã‚¹ãƒˆã‚’è¨ˆç®—
 			/// </summary>
 			/// <returns></returns>
 			void CalcCost(
@@ -66,7 +66,7 @@ namespace nsK2EngineLow {
 				const CellWork* prevCell, 
 				const Cell* endCell);
 			/// <summary>
-			/// ƒXƒ€[ƒWƒ“ƒO
+			/// ã‚¹ãƒ ãƒ¼ã‚¸ãƒ³ã‚°
 			/// </summary>
 			/// <param name="cellList"></param>
 			void Smoothing(
@@ -76,7 +76,7 @@ namespace nsK2EngineLow {
 				float agentHeight
 			);
 			/// <summary>
-			/// ƒŒƒC‚ÆƒZƒ‹‚ÌŒð·”»’è
+			/// ãƒ¬ã‚¤ã¨ã‚»ãƒ«ã®äº¤å·®åˆ¤å®š
 			/// </summary>
 			bool IsIntercetRayToCell(Vector3 rayStartPos, Vector3 rayEndPos, CellWork*) const;
 		private:

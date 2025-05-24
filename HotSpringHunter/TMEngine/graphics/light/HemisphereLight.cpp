@@ -5,7 +5,7 @@ namespace nsTMEngine
 {
 	HemisphereLight::HemisphereLight()
 	{
-		//”¼‹…ƒ‰ƒCƒg‚ðŽæ“¾
+		//åŠçƒãƒ©ã‚¤ãƒˆã‚’å–å¾—
 		m_hemisphereLight = g_sceneLight->GetHemisphereLight();
 	}
 	HemisphereLight::~HemisphereLight()

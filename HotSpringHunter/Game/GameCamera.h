@@ -9,13 +9,13 @@ public:
 	~GameCamera();
 	bool Start()override;
 	void Update()override;
-	//’Η]ƒJƒƒ‰B
+	//θΏ½εΎ“γ‚«γƒ΅γƒ©γ€‚
 	void FollowCamera();
-	//λαΥƒJƒƒ‰B
+	//δΏ―η°γ‚«γƒ΅γƒ©γ€‚
 	void LookDownCamera();
-	//ƒJƒƒ‰Ψ‚θ‘Φ‚¦B
+	//γ‚«γƒ΅γƒ©ε‡γ‚ζ›Ώγγ€‚
 	void CameraSwitch();
-	//ƒJƒƒ‰XVB
+	//γ‚«γƒ΅γƒ©ζ›΄ζ–°γ€‚
 	void CameraUpdate();
 
 	Vector3 GetPlaneToCameraPos() {
@@ -25,15 +25,15 @@ private:
 	Player* m_player = nullptr;
 	BackGround* m_backGround = nullptr;
 
-	Vector3 m_toCameraPos = Vector3::Zero;					//ƒJƒƒ‰ΐ•WB
-	Vector3 m_toCameraPosOld = Vector3::Zero;				//•ΟX‘OƒJƒƒ‰ΐ•WB
-	Vector3 m_target = Vector3::Zero;						//ƒJƒƒ‰’‹“_B
-	Vector3 m_followPos = Vector3{ 0.0f,250.0f,-400.0f };	//’Η]ƒJƒƒ‰ΐ•WB
-	Vector3 m_newFollowPos = Vector3{ 0.0f,250.0f,-400.0f };//’Η]ƒJƒƒ‰‰ϊ’lB
-	Vector3 m_lookDownPos = Vector3{ 0.0f,150.0f,-100.0f };	//λαΥƒJƒƒ‰ΐ•WB
+	Vector3 m_toCameraPos = Vector3::Zero;					//γ‚«γƒ΅γƒ©εΊ§ζ¨™γ€‚
+	Vector3 m_toCameraPosOld = Vector3::Zero;				//ε¤‰ζ›΄ε‰γ‚«γƒ΅γƒ©εΊ§ζ¨™γ€‚
+	Vector3 m_target = Vector3{ 0.0f,300.0f,0.0f };			//γ‚«γƒ΅γƒ©ζ³¨θ¦–η‚Ήγ€‚
+	Vector3 m_followPos = Vector3{ 0.0f,250.0f,-400.0f };	//θΏ½εΎ“γ‚«γƒ΅γƒ©εΊ§ζ¨™γ€‚
+	Vector3 m_newFollowPos = Vector3{ 0.0f,250.0f,-400.0f };//θΏ½εΎ“γ‚«γƒ΅γƒ©εζε€¤γ€‚
+	Vector3 m_lookDownPos = Vector3{ 0.0f,170.0f,-330.0f };	//δΏ―η°γ‚«γƒ΅γƒ©εΊ§ζ¨™γ€‚
 
 
-	int m_cameraState = 0;				//ƒJƒƒ‰‚Μσ‘ΤB
+	int m_cameraState = 0;				//γ‚«γƒ΅γƒ©γ®η¶ζ…‹γ€‚
 	enum EnCameraVar {
 		follow,
 		lookDown,

@@ -123,7 +123,7 @@ void	btGhostObject::convexSweepTest(const btConvexShape* castShape, const btTran
 		btCollisionObject*	collisionObject= m_overlappingObjects[i];
 		//only perform raycast if filterMask matches
 		if(resultCallback.needsCollision(collisionObject->getBroadphaseHandle())) {
-			//RigidcollisionObject* collisionObject = ctrl->GetRigidcollisionObject();
+			//RigidcollisionObject* m_enemyATCollision = ctrl->GetRigidcollisionObject();
 			btVector3 collisionObjectAabbMin,collisionObjectAabbMax;
 			collisionObject->getCollisionShape()->getAabb(collisionObject->getWorldTransform(),collisionObjectAabbMin,collisionObjectAabbMax);
 			AabbExpand (collisionObjectAabbMin, collisionObjectAabbMax, castShapeAabbMin, castShapeAabbMax);

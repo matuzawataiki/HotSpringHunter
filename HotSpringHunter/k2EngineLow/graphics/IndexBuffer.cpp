@@ -33,11 +33,11 @@ namespace nsK2EngineLow {
 			IID_PPV_ARGS(&m_indexBuffer));
 
 		
-		//ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ìƒrƒ…[‚ğì¬B
+		//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ãƒ“ãƒ¥ãƒ¼ã‚’ä½œæˆã€‚
 		m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
 
 
-		//ƒXƒgƒ‰ƒCƒh‚Í‚SƒoƒCƒgŒÅ’èB
+		//ã‚¹ãƒˆãƒ©ã‚¤ãƒ‰ã¯ï¼”ãƒã‚¤ãƒˆå›ºå®šã€‚
 		m_strideInBytes = 4;
 		m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 		m_indexBufferView.SizeInBytes = m_sizeInBytes;

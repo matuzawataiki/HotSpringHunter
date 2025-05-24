@@ -14,7 +14,7 @@ bool Test::Start()
 	//m_testImage.Init("Assets/modelData/testImage.DDS", 281.0f, 281.0f);
 	//m_testImage.SetPosition(470.0f, 240.0f);
 	//m_testImage.Update();
-	//m_testText.SetText(L"‰iŒ©ê£");
+	//m_testText.SetText(L"æ°¸è¦‹å‡œ");
 	//m_testText.SetPosition(500.0f, 500.0f);
 
 	m_pointLight.Init(

@@ -2,6 +2,7 @@
 
 class Game;
 class SnakeEnemy;
+class Bear;
 
 class EnemySpawn : public IGameObject
 {
@@ -9,22 +10,26 @@ public:
 	EnemySpawn();
 	~EnemySpawn();
 
+	bool Start()override;
+	//ã‚¯ãƒç”Ÿæˆï¼ˆä»®ï¼‰
+	void CreateBear();
 	void Update()override;
 	void EnemyState();
-	void EnemyPos();		//À•W
+	void EnemyPos();		//åº§æ¨™
 
 	void EnemyDecrease() {
 		m_nowEnemyNum--;
 	}
 
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 
-	//ƒCƒ“ƒXƒ^ƒ“ƒX
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 	SnakeEnemy* m_snakeEnemyClass;
 	SnakeEnemy* m_snakeEnemy[10];
+	Bear* m_bear[3];
 	
-	//•Ï”
-	int m_nowEnemyNum = 0;		//Œ»İ‚Ì“G‚Ì”
+	//å¤‰æ•°
+	int m_nowEnemyNum = 0;		//ç¾åœ¨ã®æ•µã®æ•°
 	float m_timeEnemy = 0.0f;   
 	float m_zPos = 500.0f;
 
@@ -33,7 +38,7 @@ public:
 
 	bool enemyDecrease = false;
 
-	//‹N“®’†‚©
+	//èµ·å‹•ä¸­ã‹
 	enum 
 	{
 		waveSpawn01,

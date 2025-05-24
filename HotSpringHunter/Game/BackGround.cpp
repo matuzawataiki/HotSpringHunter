@@ -15,7 +15,7 @@ bool BackGround::Start()
 	m_modelRender.Init("Assets/modelData/BackGround/miti.tkm");
 	m_modelRender.Update();
 	m_StageCollision.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }

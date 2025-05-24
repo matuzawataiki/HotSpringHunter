@@ -6,12 +6,12 @@ namespace nsK2EngineLow {
 		using ID3D12RootSignaturePtr = CComPtr<ID3D12RootSignature>;
 		class DescriptorHeaps;
 		/// <summary>
-		/// ƒŒƒCƒgƒŒ—p‚ÌƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒgB
+		/// ãƒ¬ã‚¤ãƒˆãƒ¬ç”¨ã®ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
 		/// </summary>
 		class PSO : public Noncopyable {
 		private:
 			/// <summary>
-			/// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ’è‹`B
+			/// ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£å®šç¾©ã€‚
 			/// </summary>
 			struct RootSignatureDesc
 			{
@@ -21,7 +21,7 @@ namespace nsK2EngineLow {
 			};
 		public:
 			/// <summary>
-			/// ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»B
+			/// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ–ã€‚
 			/// </summary>
 			void Init(const DescriptorHeaps& descriptorHeaps);
 			void QueryInterface(CComPtr< ID3D12StateObjectProperties >& props) const
@@ -29,7 +29,7 @@ namespace nsK2EngineLow {
 				m_pipelineState->QueryInterface(&props);
 			}
 			/// <summary>
-			/// ƒOƒ[ƒoƒ‹ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ğæ“¾B
+			/// ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã‚’å–å¾—ã€‚
 			/// </summary>
 			/// <returns></returns>
 			ID3D12RootSignaturePtr GetGlobalRootSignature()
@@ -44,8 +44,8 @@ namespace nsK2EngineLow {
 			RootSignatureDesc CreateRayGenRootSignatureesc();
 			RootSignatureDesc CreatePBRMatterialHitRootSignatureDesc();
 		private:
-			const DescriptorHeap* m_srvUavCbvHeap = nullptr;		//SRV_UAV_CBV—p‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒvB
-			ID3D12StateObjectPtr m_pipelineState;					//ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg
+			const DescriptorHeap* m_srvUavCbvHeap = nullptr;		//SRV_UAV_CBVç”¨ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã€‚
+			ID3D12StateObjectPtr m_pipelineState;					//ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
 			ID3D12RootSignaturePtr m_emptyRootSignature;
 		};
 	}

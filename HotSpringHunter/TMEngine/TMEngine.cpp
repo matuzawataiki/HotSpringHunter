@@ -1,4 +1,4 @@
-﻿#include "TMEnginePreCompile.h"
+#include "TMEnginePreCompile.h"
 #include "TMEngine.h"
 
 namespace nsTMEngine
@@ -26,8 +26,6 @@ namespace nsTMEngine
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
 
 		m_renderingEngine.Init();
-
-		
 
 	}
 

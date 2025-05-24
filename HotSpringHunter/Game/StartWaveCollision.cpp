@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "StartWaveCollision.h"
 #include "collision/CollisionObject.h"
-
 #include "Player.h"
 #include "EnemySpawn.h"
 
@@ -17,12 +16,9 @@ StartWaveCollision::~StartWaveCollision()
 
 bool StartWaveCollision::Start()
 {
-	//�v���C���[
+	//プレイヤー
 	m_player = FindGO<Player>("player");
 	m_enemySpawn = NewGO<EnemySpawn>(0, "enemySpawn");
-
-	//
-	//m_enemySpawn = FindGO<EnemySpawn>("enemyspawn");
 
 	MakeCollision();
 
@@ -32,14 +28,12 @@ bool StartWaveCollision::Start()
 void StartWaveCollision::Update()
 {
 	ChangePos();
-	MakeCollision();
-
-	
+	MakeCollision();	
 }
 
 void StartWaveCollision::MakeCollision()
 {
-	//�}�b�v�̐؂�ւ��ɂ���
+	//マップの切り替わりにおく
 	if (m_collision->IsHit(m_player->m_playerCharaCon))
 	{
 
@@ -78,12 +72,12 @@ void StartWaveCollision::SwitchState()
 void StartWaveCollision::ChangePos()
 {
 
-	//�R���W�����I�u�W�F�N�g���쐬
+	//コリジョンオブジェクトを作成
 	m_collision = NewGO<CollisionObject>(0, "m_stagePos");
 
-	//���u���̃{�b�N�X
+	//横置きのボックス
 	Vector3 collisionSizeA = Vector3{ 1500.0f,600.0f,500.0f };
-	//�c�u���̃{�b�N�X
+	//縦置きのボックス
 	Vector3 collisionSizeB = Vector3{ 500.0f,600.0f,1500.0f };
 
 
@@ -93,7 +87,7 @@ void StartWaveCollision::ChangePos()
 			
 			m_collisionPos = { 0.0f,0.0f,6250.0f };
 
-			//box�̃R���W�������쐬
+			//boxのコリジョンを作成
 			m_collision->CreateBox(
 				m_collisionPos,
 				Quaternion::Identity,
@@ -103,7 +97,7 @@ void StartWaveCollision::ChangePos()
 
 		case waveWall02:
 			m_collisionPos = { -6500.0f,0.0f,7500.0f };
-			//box�̃R���W�������쐬
+			//boxのコリジョンを作成
 			m_collision->CreateBox(
 				m_collisionPos,
 				Quaternion::Identity,
@@ -113,7 +107,7 @@ void StartWaveCollision::ChangePos()
 
 		//case waveWall03:
 		//	m_collisionPos = { -7500.0f,0.0f,13750.0f };
-		//	//box�̃R���W�������쐬
+		//	//boxのコリジョンを作成
 		//	m_collision->CreateBox(
 		//		m_collisionPos,
 		//		Quaternion::Identity,
