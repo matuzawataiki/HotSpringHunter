@@ -49,7 +49,7 @@ void EnemySpawn::CreateBear()
 {
 	for (int i = 0; i < 2; i++) {
 		m_bear[i] = NewGO<Bear>(0, "bear");
-		m_bear[i]->m_position = Vector3{ i * 200.0f,0.0f,500.0f };
+		m_bear[i]->SetBearPos({ i * 200.0f, 0.0f, 500.0f });
 	}
 }
 

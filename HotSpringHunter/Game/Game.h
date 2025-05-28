@@ -7,6 +7,7 @@ class EnemyBase;
 class StartWaveCollision;
 class UI;
 class WildBoar;
+class Bear;
 class StageManager;
 
 class Game : public IGameObject
@@ -23,7 +24,7 @@ public:
 	EnemyBase* m_enemyBase = nullptr;
 	StartWaveCollision* m_waveCollision = nullptr;
 	UI* m_ui = nullptr;
-
+	Bear* m_bear = nullptr;
 	WildBoar* m_wildBoar = nullptr;
 
 private:

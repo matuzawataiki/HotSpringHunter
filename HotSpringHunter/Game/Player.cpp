@@ -21,7 +21,7 @@ namespace {
 	const float DASH_AMOUNT = 3000.0f;			//移動：ダッシュ速度。
 
 	const float WEAK_COLLISION_DIS = 100.0f;	//弱攻撃：コリジョン位置。
-	const float WEAK_COLLISION_SIZE = 150.0f;	//弱攻撃：コリジョンサイズ。
+	const float WEAK_COLLISION_SIZE = 300.0f;	//弱攻撃：コリジョンサイズ。
 	const float WEAK_ATTACK_POWER = 50.0f;		//弱攻撃：攻撃力。
 
 	const float CHARGE_DECREASE = 0.5f;			//溜め攻撃：チャージ減少量。
@@ -94,6 +94,9 @@ bool Player::Start()
 
 	//ディレクションライトの位置に登録
 	g_sceneLight->SetLightPos(m_playerPos);
+
+	//プレイヤーのHPをセット
+	m_playerHP = MAX_PLAYER_HP;
 
 	AddList();
 	LoadAssets();
