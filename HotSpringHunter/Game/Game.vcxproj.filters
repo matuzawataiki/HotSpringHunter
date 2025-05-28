@@ -36,6 +36,8 @@
     <ClCompile Include="BackGround\HitObject\HitBoxRun.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxStart.cpp" />
     <ClCompile Include="BackGround\HitObjectBase.cpp" />
+    <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="EnemyHPBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />

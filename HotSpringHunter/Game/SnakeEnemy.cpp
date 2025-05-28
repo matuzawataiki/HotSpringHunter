@@ -26,7 +26,7 @@ SnakeEnemy::~SnakeEnemy()
 bool SnakeEnemy::Start()
 {
 	//アセット読み込み
-	LoadAsset();
+	LoadAssets();
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
@@ -39,28 +39,10 @@ bool SnakeEnemy::Start()
 	//キャラクターコントローラー
 	m_characterController.Init(30.0f, 50.0f, m_position);
 	
+	m_hpBar = NewGO<EnemyHPBar>(0, "hpBar");
+	m_hpBar->Init(m_enemyHP, m_position , m_player->GetPlayerPos());
+
 	return true;
-}
-
-/// <summary>
-/// アセットを読み込む
-/// </summary>
-void SnakeEnemy::LoadAsset()
-{
-	//アニメーション読み込み
-	m_animationClips[enSnakeAnimClip_Idle].Load("Assets/animData/snake/idle.tka");
-	m_animationClips[enSnakeAnimClip_Idle].SetLoopFlag(true);
-	m_animationClips[enSnakeAnimClip_Walk].Load("Assets/animData/snake/walk.tka");
-	m_animationClips[enSnakeAnimClip_Walk].SetLoopFlag(true);
-	m_animationClips[enSnakeAnimClip_Attack].Load("Assets/animData/snake/attack.tka");
-	m_animationClips[enSnakeAnimClip_Attack].SetLoopFlag(false);
-	m_animationClips[enSnakeAnimClip_Hit].Load("Assets/animData/snake/hit.tka");
-	m_animationClips[enSnakeAnimClip_Hit].SetLoopFlag(true);
-	m_animationClips[enSnakeAnimClip_Death].Load("Assets/animData/snake/death.tka");
-	m_animationClips[enSnakeAnimClip_Death].SetLoopFlag(true);
-
-	//モデル読み込み
-	m_modelRender.Init("Assets/modelData/snake/snake.tkm"/*, m_animationClips, enSnakeAnimClip_Num, enModelUpAxisY*/);
 }
 
 void SnakeEnemy::Update()
@@ -72,6 +54,8 @@ void SnakeEnemy::Update()
 		//行動を実行
 		ExecuteAction();
 	}
+
+	m_hpBar->SetHpBar(m_enemyHP, m_position, m_player->GetPlayerPos());
 
 	//いろいろ更新
 	VariousUpdate();
@@ -240,6 +224,27 @@ void SnakeEnemy::ExecuteSpeed()
 		const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
 		m_position.Add(move);
 	}
+}
+
+/// <summary>
+/// アセットを読み込む
+/// </summary>
+void SnakeEnemy::LoadAssets()
+{
+	//アニメーション読み込み
+	m_animationClips[enSnakeAnimClip_Idle].Load("Assets/animData/snake/idle.tka");
+	m_animationClips[enSnakeAnimClip_Idle].SetLoopFlag(true);
+	m_animationClips[enSnakeAnimClip_Walk].Load("Assets/animData/snake/walk.tka");
+	m_animationClips[enSnakeAnimClip_Walk].SetLoopFlag(true);
+	m_animationClips[enSnakeAnimClip_Attack].Load("Assets/animData/snake/attack.tka");
+	m_animationClips[enSnakeAnimClip_Attack].SetLoopFlag(false);
+	m_animationClips[enSnakeAnimClip_Hit].Load("Assets/animData/snake/hit.tka");
+	m_animationClips[enSnakeAnimClip_Hit].SetLoopFlag(true);
+	m_animationClips[enSnakeAnimClip_Death].Load("Assets/animData/snake/death.tka");
+	m_animationClips[enSnakeAnimClip_Death].SetLoopFlag(true);
+
+	//モデル読み込み
+	m_modelRender.Init("Assets/modelData/snake/snake.tkm"/*, m_animationClips, enSnakeAnimClip_Num, enModelUpAxisY*/);
 }
 
 void SnakeEnemy::Render(RenderContext& rc)

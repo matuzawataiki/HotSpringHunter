@@ -4,6 +4,7 @@ class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
 class GameCamera;
+class EnemyHPBar;
 
 //クマの行動状態
 enum EnBearState {
@@ -65,11 +66,7 @@ public:
 	//速度を適応
 	void ExecuteSpeed();
 	void Render(RenderContext& rc)override;
-
-	//セッター
-	//クマの位置を設定
-	void SetBearPos(Vector3 pos) { m_bearPos = pos; };
-
+  
 	//ゲッター
 	//クマのHPを取得
 	float GetBearHP() { return m_bearHP; };
@@ -83,6 +80,8 @@ private:
 	EnemyBase*			m_enemyBase			= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
+  	EnemyBase*          m_enemyBase		= nullptr;
+
 
 	std::vector<Vector3>m_summonPos;				//召喚する位置
 

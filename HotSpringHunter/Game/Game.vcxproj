@@ -234,6 +234,7 @@
     <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
+    <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -276,6 +277,7 @@
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
     <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="EnemyHPBar.h" />
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
