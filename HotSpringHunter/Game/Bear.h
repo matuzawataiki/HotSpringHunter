@@ -73,6 +73,10 @@ public:
 	//クマの座標を取得
 	Vector3 GetBearPos() { return m_bearPos; };
 
+	//セッター
+	//クマの位置を設定
+	void SetBearPos(Vector3 pos) { m_bearPos = pos; };
+
 private:
 	Player*				m_player			= nullptr;
 	SnakeEnemy*			m_snakeEnemy[4]		= {};
@@ -80,8 +84,6 @@ private:
 	EnemyBase*			m_enemyBase			= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
-  	EnemyBase*          m_enemyBase		= nullptr;
-
 
 	std::vector<Vector3>m_summonPos;				//召喚する位置
 
