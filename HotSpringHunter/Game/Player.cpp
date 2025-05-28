@@ -1,42 +1,43 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "Towel.h"
-#include "Bucket.h"
-
 #include "SnakeEnemy.h"
 
 namespace {
 
-	const Vector3 PLAYER_NEW_POSITION = Vector3{ 0.0f,300.0f,0.0f };	//player初期位置。
+	const Vector3 PLAYER_NEW_POSITION	= { 0.0f,300.0f,0.0f };	//player初期位置。
 
-	const float MAX_PLAYER_HP = 100.0f;
-	float GetPlayerMAXHP()
-	{
-		return MAX_PLAYER_HP;
-	}
+	const float MAX_PLAYER_HP			= 300.0f;		//最大HP。
+	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
+	const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
-	const float MOVE_AMOUNT = 120.0f;			//移動：移動量。
-	const float GRAVITY_AMOUNT = 10.0f;			//移動：重力量。
-	const float JUMP_AMOUNT = 700.0f;			//移動：ジャンプ力。
-	const float DASH_AMOUNT = 3000.0f;			//移動：ダッシュ速度。
+	const float MOVE_AMOUNT				= 120.0f;		//移動：移動量。
+	const float GRAVITY_AMOUNT			= 10.0f;		//移動：重力量。
+	const float JUMP_AMOUNT				= 700.0f;		//移動：ジャンプ力。
+	const float DASH_AMOUNT				= 1000.0f;		//移動：ダッシュ速度。
 
-	const float WEAK_COLLISION_DIS = 100.0f;	//弱攻撃：コリジョン位置。
-	const float WEAK_COLLISION_SIZE = 300.0f;	//弱攻撃：コリジョンサイズ。
-	const float WEAK_ATTACK_POWER = 50.0f;		//弱攻撃：攻撃力。
+	const float WEAK_COLLISION_DIS		= 100.0f;		//弱攻撃：コリジョン位置。
+	const float WEAK_COLLISION_SIZE		= 150.0f;		//弱攻撃：コリジョンサイズ。
+	const float WEAK_ATTACK_POWER		= 50.0f;		//弱攻撃：攻撃力。
 
-	const float CHARGE_DECREASE = 0.5f;			//溜め攻撃：チャージ減少量。
-	const float CHARGE_COLLISION_SIZE = 2.0f;	//溜め攻撃：コリジョンの大きさの倍率。
-	const float CHARGE_MAX = 100.0f;			//溜め攻撃：チャージ最大値。
-	const float CHARGE_POWER = 2.0f;			//溜め攻撃：攻撃力の倍率。
-	const float CHANGE_WEAK = 20.0f;			//溜め攻撃：弱攻撃になるチャージ
-	const float NEW_CHARGE = 5.0f;				//溜め攻撃：チャージの初期値。
+	const float CHARGE_DECREASE			= 0.5f;			//溜め攻撃：チャージ減少量。
+	const float CHARGE_ADD_VALUE		= 2.0f;			//溜め攻撃：チャージ増加量（倍率）。
+	const float CHARGE_COLLISION_SIZE	= 3.0f;			//溜め攻撃：コリジョンの大きさの倍率。
+	const float COLLISION_SIZE_LOWEST	= 150.0f;		//溜め攻撃：コリジョンの大きさの最低保証。
+	const float CHARGE_MAX				= 100.0f;		//溜め攻撃：チャージ最大値。
+	const float CHARGE_POWER			= 2.0f;			//溜め攻撃：攻撃力の倍率。
+	const float CHANGE_WEAK				= 20.0f;		//溜め攻撃：弱攻撃になるチャージ。
+	const float NEW_CHARGE				= 5.0f;			//溜め攻撃：チャージの初期値。
 
-	const float GUARD_TOLERANCE = 1.0f;			//ガード：ガード可能な角度。
+	const float GUARD_TOLERANCE			= 1.0f;			//ガード：ガード可能な角度。
 
-	const float HIT_RIGIDITY_TiME = 0.5f;		//被弾：硬直時間。
+	const float HIT_RIGIDITY_TiME		= 0.5f;			//被弾：硬直時間。
 
-	const float DEATH_MOTION_TIME = 3.0f;		//死亡：ゲームオーバーに移行するまでの時間。
+	const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
 
+	/// <summary>
+	///	Rスティックが入力されているか
+	/// </summary>
+	/// <returns>入力中ならならtrue,非入力中ならfalse</returns>
 	bool IsInputStickR()
 	{
 		if ((fabsf(g_pad[0]->GetRStickXF()) >= FLT_EPSILON) || (fabsf(g_pad[0]->GetRStickYF()) >= FLT_EPSILON)) {
@@ -46,6 +47,10 @@ namespace {
 		return false;
 	}
 
+	/// <summary>
+	/// Lスティックが入力されているか
+	/// </summary>
+	/// <returns>入力中ならならtrue,非入力中ならfalse</returns>
 	bool IsInputStickL()
 	{
 		if ((fabsf(g_pad[0]->GetLStickXF()) >= FLT_EPSILON) || (fabsf(g_pad[0]->GetLStickYF()) >= FLT_EPSILON)) {
@@ -67,6 +72,7 @@ Player::Player()
 Player::~Player()
 {
 	DeleteList();
+	DeleteGO(m_stateMachine);
 }
 
 /// <summary>
@@ -89,18 +95,14 @@ bool Player::Start()
 	m_playerPos = PLAYER_NEW_POSITION;
 	//playerキャラコン初期化
 	m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
-
-	m_stateMachine = NewGO<StateMachine>(0,"stateMachine");
-
-	//ディレクションライトの位置に登録
-	g_sceneLight->SetLightPos(m_playerPos);
-
-	//プレイヤーのHPをセット
+	//playerのHPをセット
 	m_playerHP = MAX_PLAYER_HP;
+	//ステートマシン生成
+	m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
 
 	AddList();
 	LoadAssets();
-	
+
 	return true;
 }
 
@@ -133,12 +135,8 @@ void Player::LoadAssets()
 	m_animationClips[enPlayerAnimClip_Walk].SetLoopFlag(true);
 	m_animationClips[enPlayerAnimClip_Run].Load("Assets/animData/player/run.tka");
 	m_animationClips[enPlayerAnimClip_Run].SetLoopFlag(true);
-	m_animationClips[enPlayerAnimClip_Jump].Load("Assets/animData/player/jump.tka");
-	m_animationClips[enPlayerAnimClip_Jump].SetLoopFlag(false);
 	m_animationClips[enPlayerAnimClip_GuardStart].Load("Assets/animData/player/guardStart.tka");
 	m_animationClips[enPlayerAnimClip_GuardStart].SetLoopFlag(false);
-	m_animationClips[enPlayerAnimClip_GuardEnd].Load("Assets/animData/player/guardEnd.tka");
-	m_animationClips[enPlayerAnimClip_GuardEnd].SetLoopFlag(false);
 	m_animationClips[enPlayerAnimClip_WeakAttack].Load("Assets/animData/player/weakAttack.tka");
 	m_animationClips[enPlayerAnimClip_WeakAttack].SetLoopFlag(false);
 	m_animationClips[enPlayerAnimClip_ChargeAttack].Load("Assets/animData/player/chargeAttack.tka");
@@ -150,20 +148,21 @@ void Player::LoadAssets()
 	m_animationClips[enPlayerAnimClip_Death].Load("Assets/animData/player/death.tka");
 	m_animationClips[enPlayerAnimClip_Death].SetLoopFlag(false);
 	//モデルロード。
-	m_playerModel.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enPlayerAnimClip_Num, enModelUpAxisY);
+	m_playerModel.Init("Assets/ModelData/player/playerModel.tkm", m_animationClips, enPlayerAnimClip_Num, enModelUpAxisZ);
 }
 
 void Player::Update()
 {
-	StateManage();	
+	StateManage();
 	BasicBehavior();
 	DisplayCharge();
+	PositionDraw();
 }
 
 /// <summary>
 /// playerの基本的な挙動。
 /// </summary>
-void Player::BasicBehavior() 
+void Player::BasicBehavior()
 {
 	//重力を発生させる。
 	if (!m_playerCharaCon.IsOnGround()) {
@@ -171,7 +170,7 @@ void Player::BasicBehavior()
 	}
 
 	//ポジションの更新。
-	m_playerPos = m_playerCharaCon.Execute(m_playerSpeed, 1.0f / 60.0f);
+	m_playerPos = m_playerCharaCon.Execute(m_playerSpeed, DELTA_TIME);
 	m_playerModel.SetPosition(m_playerPos);
 	//向きの更新。
 	if (m_currentState == enPlayerWalk) {
@@ -181,7 +180,7 @@ void Player::BasicBehavior()
 	m_playerRot.SetRotationYFromDirectionXZ(m_playerDir);
 	m_playerModel.SetRotation(m_playerRot);
 	//モデルの更新。
-	m_playerModel.Update();		
+	m_playerModel.Update();
 }
 
 /// <summary>
@@ -212,11 +211,6 @@ void Player::DirectionUpdate()
 		m_playerDir = forwardDir + rightDir;
 		m_playerDir.Normalize();
 	}
-
-	if (g_pad[0]->IsPress(enButtonA)) {
-		int hoge = 0;
-		hoge++;
-	}
 }
 
 /// <summary>
@@ -233,6 +227,12 @@ void Player::Hit(float reduce)
 	//HPを減らす。
 	m_playerHP -= reduce;
 
+	//攻撃フラッグが立っていたら降ろす
+	if (m_weakAtFlag) {
+		m_weakAtFlag = false;
+	}
+
+	//HPを0以下にしない。
 	if (m_playerHP < 0.0) {
 		m_playerHP = 0.0f;
 	}
@@ -242,7 +242,7 @@ void Player::Hit(float reduce)
 		m_hitFlag = true;
 	}
 	else {
-		m_deathFlag = true;
+		m_isDead = true;
 	}
 }
 
@@ -272,18 +272,36 @@ void Player::DisplayCharge()
 {
 	m_chargeRender.SetScale(1.2);
 	m_chargeRender.SetPosition({ 425.0f,475.0f,0.0f });
-	m_chargeRender.SetColor(g_vec4Black);
+	m_chargeRender.SetColor(g_vec4Red);
 
 	swprintf_s(m_chargeText, 100, L"チャージ %.1f", float(m_charge));
 	m_chargeRender.SetText(m_chargeText);
+}
+
+/// <summary>
+/// プレイヤーの位置を描画（仮）。
+/// </summary>
+void Player::PositionDraw()
+{
+	m_posRender.SetScale(1.2);
+	m_posRender.SetPosition({ -900.0f,425.0f,0.0f });
+	m_posRender.SetColor(g_vec4Red);
+
+	swprintf_s(m_posText, 100, L"Pos %.1f %.1f %.1f", float(m_playerPos.x), float(m_playerPos.y), float(m_playerPos.z));
+	m_posRender.SetText(m_posText);
 }
 
 void Player::Render(RenderContext& rc)
 {
 	m_playerModel.Draw(rc);
 	m_chargeRender.Draw(rc);
+	m_posRender.Draw(rc);
 }
 
+/// <summary>
+/// プレイヤーの最大HPを取得。
+/// </summary>
+/// <returns>最大HP</returns>
 float Player::GetPlayerMAXHP()
 {
 	return MAX_PLAYER_HP;
@@ -319,7 +337,7 @@ void StateMachine::StateManage()
 {
 	//死亡。
 	//・死亡していたら。
-	if (m_player->m_deathFlag) {
+	if (m_player->m_isDead) {
 		m_player->m_requestState = enPlayerDeath;
 		return;
 	}
@@ -378,7 +396,7 @@ PlayerIdle::~PlayerIdle()
 void PlayerIdle::Enter()
 {
 	//待機アニメーションを再生。
-	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Idle);
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 }
 
 void PlayerIdle::Update()
@@ -391,7 +409,7 @@ void PlayerIdle::Update()
 /// </summary>
 void PlayerIdle::idle()
 {
-	
+
 }
 
 void PlayerIdle::Exit()
@@ -417,7 +435,7 @@ void PlayerMove::Enter()
 
 void PlayerMove::Update()
 {
-	if (m_player->m_playerCharaCon.IsOnGround()) {		
+	if (m_player->m_playerCharaCon.IsOnGround()) {
 		//ダッシュ。
 		if (g_pad[0]->IsPress(enButtonB)) {
 			Dash();
@@ -426,10 +444,6 @@ void PlayerMove::Update()
 		else {
 			Walk();
 		}
-		//ジャンプ。
-		/*if (g_pad[0]->IsTrigger(enButtonA)) {
-			Jump();
-		}	*/	
 	}
 	AnimManage();
 }
@@ -439,14 +453,9 @@ void PlayerMove::Update()
 /// </summary>
 void PlayerMove::AnimManage()
 {
-	//ジャンプ。
-	/*if (!m_player->m_playerCharaCon.IsOnGround()) {
-		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Jump);
-		return;
-	}*/
 	//ダッシュ。
 	if (g_pad[0]->IsPress(enButtonB)) {
-		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run);
+		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run, ANIM_INTERPOLATE_TIME);
 		return;
 	}
 	//歩き。
@@ -490,7 +499,7 @@ void PlayerMove::Exit()
 
 PlayerWeakAttack::~PlayerWeakAttack()
 {
-	
+
 }
 
 void PlayerWeakAttack::Enter()
@@ -502,7 +511,7 @@ void PlayerWeakAttack::Enter()
 	//弱攻撃。
 	WeakAttack();
 	//弱攻撃アニメーションを再生。
-	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack);
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack, ANIM_INTERPOLATE_TIME);
 }
 
 void PlayerWeakAttack::Update()
@@ -510,7 +519,7 @@ void PlayerWeakAttack::Update()
 	ChangeState();
 
 	//弱攻撃アニメーション再生。
-	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack);
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack, ANIM_INTERPOLATE_TIME);
 }
 
 /// <summary>
@@ -595,7 +604,7 @@ void PlayerChargeAttack::Charging()
 	}
 
 	//チャージ中アニメーション再生。
-	m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging);
+	m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging, ANIM_INTERPOLATE_TIME);
 
 	Vector3 RStick = Vector3::Zero;				//Rスティック入力量。
 	float movePower = 0.0f;						//パワー（入力変動量）。
@@ -609,8 +618,12 @@ void PlayerChargeAttack::Charging()
 	if ((RStick.x == m_RStickOld.x) && (RStick.y == m_RStickOld.y)) {
 		movePower = 0.0f;
 	}
+	//movePowerを絶対値にする
+	movePower = fabsf(movePower);
+	//movePowerを増加させる
+	movePower *= CHARGE_ADD_VALUE;
 	//パワーをチャージに足す。
-	m_player->m_charge += fabsf(movePower);
+	m_player->m_charge += movePower;
 
 	//チャージを減少させる。
 	m_player->m_charge -= CHARGE_DECREASE;
@@ -631,7 +644,7 @@ void PlayerChargeAttack::Charging()
 	//スティックの入力をやめていたら。
 	if (!IsInputStickR()) {
 		//チャージが少なかったら弱攻撃に。
-		if(m_player->m_charge <= CHANGE_WEAK) {
+		if (m_player->m_charge <= CHANGE_WEAK) {
 			m_player->m_weakAtFlag = true;
 			m_player->m_chargeAtFlag = false;
 			return;
@@ -639,11 +652,11 @@ void PlayerChargeAttack::Charging()
 		if (!m_isStateChange) {
 			ChargeAttack();
 			//溜め攻撃アニメーションを再生。
-			m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_ChargeAttack);
+			m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_ChargeAttack, ANIM_INTERPOLATE_TIME);
 			//溜め攻撃をした。
 			m_isStateChange = true;
 		}
-		
+
 		m_isCharging = false;
 	}
 }
@@ -657,7 +670,7 @@ void PlayerChargeAttack::ChargeAttack()
 	//コリジョン生成。
 	MakeCollision();
 	//コリジョン削除。
-	DeleteGO(m_player->m_collision);	
+	DeleteGO(m_player->m_collision);
 }
 
 /// <summary>
@@ -668,7 +681,7 @@ void PlayerChargeAttack::MakeCollision()
 	//コリジョンオブジェクトを作成
 	m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
 	Vector3 collisionPosition = m_player->m_playerPos;
-	m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + 100.0f;
+	m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST;
 	//球状のコリジョンを作成
 	m_player->m_collision->CreateSphere(collisionPosition,
 		Quaternion::Identity,
@@ -685,7 +698,7 @@ void PlayerChargeAttack::ChangeState()
 {
 	//チャージ中の場合。
 	//チャージが0になったら。
-	if((m_isCharging) && (m_player->m_charge <= 0.0f)){
+	if ((m_isCharging) && (m_player->m_charge <= 0.0f)) {
 		m_player->m_chargeAtFlag = false;
 	}
 	//攻撃実行中の場合。
@@ -713,7 +726,9 @@ PlayerGuard::~PlayerGuard()
 void PlayerGuard::Enter()
 {
 	//ガードアニメーションを再生。
-	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_GuardStart);
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_GuardStart, ANIM_INTERPOLATE_TIME);
+	//ガードフラッグを立てる。
+	m_player->m_guardFlag = true;
 }
 
 void PlayerGuard::Update()
@@ -726,7 +741,6 @@ void PlayerGuard::Update()
 /// </summary>
 void PlayerGuard::GuardDirection()
 {
-	////ガードの相手指定どうすっかね
 	//Vector3 toEnemyDirection = m_player->m_playerPos - enemyPos;
 	//toEnemyDirection.Normalize();
 	//float guard = Dot(m_player->m_playerDir, toEnemyDirection);
@@ -741,7 +755,8 @@ void PlayerGuard::GuardDirection()
 
 void PlayerGuard::Exit()
 {
-
+	//ガードフラッグを下ろす。
+	m_player->m_guardFlag = false;
 }
 
 /*********************************************************************************/
@@ -756,12 +771,12 @@ PlayerHit::~PlayerHit()
 void PlayerHit::Enter()
 {
 	//被弾アニメーションを再生。
-	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Hit);
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Hit, ANIM_INTERPOLATE_TIME);
 }
 
 void PlayerHit::Update()
 {
-	ChangeState();	
+	ChangeState();
 }
 
 /// <summary>
@@ -791,23 +806,11 @@ PlayerDeath::~PlayerDeath()
 void PlayerDeath::Enter()
 {
 	//死亡アニメーションを再生。
-	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Death);
+	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Death, ANIM_INTERPOLATE_TIME);
 }
 
 void PlayerDeath::Update()
 {
-	ToGameOver();	
-}
-
-/// <summary>
-/// 死亡。
-/// </summary>
-void PlayerDeath::ToGameOver()
-{
-	//アニメーションが再生し終わったらゲームオーバーへ移行。
-	if (!m_player->m_playerModel.IsPlayAnimation()) {
-		
-	}
 }
 
 void PlayerDeath::Exit()
