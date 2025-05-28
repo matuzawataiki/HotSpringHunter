@@ -72,6 +72,7 @@ namespace nsTMEngine {
 				m_piv
 			);
 		}
+
 		/// <summary>
 		/// 描画処理
 		/// </summary>

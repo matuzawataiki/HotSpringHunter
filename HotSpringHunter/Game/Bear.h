@@ -2,6 +2,7 @@
 class Player;
 class EnemySpawn;
 class EnemyBase;
+class EnemyHPBar;
 
 //クマの行動状態
 enum EnBearState {
@@ -47,6 +48,7 @@ public:
 	Player*             m_player		= nullptr;
 	EnemySpawn*         m_enemySpawn	= nullptr;
 	EnemyBase*          m_enemyBase		= nullptr;
+	EnemyHPBar*			m_hpBar		= nullptr;
 
 	ModelRender m_modelRender;								//モデルレンダー
 	CharacterController m_characterController;				//キャラクターコントローラー
