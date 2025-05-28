@@ -44,6 +44,8 @@ public:
 	void Accumulate();
 	//突進攻撃
 	void Charge();
+	//idle状態に戻す条件
+	bool CanIdleState();
 	//ステート
 	void ManageState();
 	//プレイヤーを探す
@@ -63,9 +65,9 @@ public:
 	void Render(RenderContext& rc)override;
 
 	CollisionObject* collisionObject = nullptr;
-	Player*          m_player = nullptr;
-	EnemySpawn*      m_enemySpawn = nullptr;
-	EnemyBase*       m_enemyBase = nullptr;
+	Player* m_player = nullptr;
+	EnemySpawn* m_enemySpawn = nullptr;
+	EnemyBase* m_enemyBase = nullptr;
 
 	AnimationClip m_animationClips[enWildBoarAnimClip_Num];  //アニメーションクリップ
 	CharacterController m_characterController;               //キャラクターコントローラー
@@ -79,6 +81,7 @@ public:
 	Vector3 m_toPlayer = Vector3::Zero; //ベクトル
 	Vector3 m_toCharge = Vector3::Zero; //突進ベクトル
 	Vector3 m_chargeVec = Vector3::Zero;
+	Vector3 m_chargeOldPos = Vector3::Zero; //突進前の位置
 
 
 	float m_wildBoarHP = 200.0f; //イノシシのHP
