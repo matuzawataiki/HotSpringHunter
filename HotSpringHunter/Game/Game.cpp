@@ -7,7 +7,7 @@
 #include "StartWaveCollision.h"
 #include "UI.h"
 #include "BackGround/StageManager.h";
-
+#include "Bear.h"
 #include "WildBoar.h"
 
 Game::Game()
@@ -27,11 +27,15 @@ bool Game::Start()
 	//m_backGround = NewGO<BackGround>(0, "backGround");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
 	m_player = NewGO<Player>(0, "player");
+
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
-	
-	m_wildBoar = NewGO<WildBoar>(0, "wildboar");
+	m_bear = NewGO<Bear>(0, "bear");
+	//m_wildBoar = NewGO<WildBoar>(0, "wildboar");
 
 	m_ui = NewGO<UI>(0, "ui");
+
+	//当たり判定を可視化する。
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }
