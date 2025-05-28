@@ -16,12 +16,12 @@ namespace
 	const float ATK_CHARGE_RANGE = 600.0f;      //突進攻撃
 	const float ATK_CHARGE_TIME = 3.0f;         //突進攻撃のクールタイム 
 	const float ATK_CHARGE_SPEED = 1000.0f;	    //突進攻撃のスピード 
-	const float CHARGE_COOL_TIME = 3.0f;       //次の突進攻撃するまでのクールタイム
+	const float CHARGE_COOL_TIME = 15.0f;       //次の突進攻撃するまでのクールタイム
 
 	const float IDLE_TIME = 3.0f;				//Idleの時間 
 
-	const Vector3 NEW_POSITION = Vector3{ 0.0f,0.0f,500.0f };		//初期位置
-	const Vector3 SET_SCALE = Vector3{ 1.5f,1.5f,1.5f }; //いのししのおおきさ
+	const Vector3 NEW_POSITION = { 0.0f,0.0f,500.0f };		//初期位置
+	const Vector3 SET_SCALE = { 1.5f,1.5f,1.5f };            //イノシシの大きさ
 }
 
 WildBoar::WildBoar()
@@ -49,7 +49,7 @@ bool WildBoar::Start()
 	m_characterController.Init(50.0f, 50.0f, m_position);
 
 	m_position = NEW_POSITION;
-	//いのししをおおきくする
+	//イノシシの大きさ
 	m_wildBoarModel.SetScale(Vector3(SET_SCALE));
 
 	return true;
@@ -80,7 +80,7 @@ void WildBoar::LoadAssets()
 	m_wildBoarModel.Init("Assets/modelData/wildBoar/wildBoar.tkm", m_animationClips, enWildBoarAnimClip_Num, enModelUpAxisZ);
 
 	//警告表示
-	m_chargeCaveat.Init("Assets/modelData/wildBoar/ChargeCaveat.tkm");	
+	m_chargeCaveat.Init("Assets/modelData/wildBoar/ChargeCaveat.tkm");
 }
 
 void WildBoar::Update()
@@ -143,16 +143,18 @@ void WildBoar::Accumulate()
 void WildBoar::Charge()
 {
 	//イノシシからプレイヤーまでのベクトルを求める
-	Vector3 chargeVec = m_toCharge - m_position;
-	
+	m_chargeVec = m_toCharge - m_position;
+
 	//突進する方向を求める
 	m_moveSpeed = m_chargeVec;
 	m_moveSpeed.Normalize();
 	//突進する速度を定数で入れる
 	m_moveSpeed *= ATK_CHARGE_SPEED;
 
+
+
 	//突進のコリジョンを移動させる
-	collisionObject->SetPosition(m_position);	
+	collisionObject->SetPosition(m_position);
 
 	//ダメージ判定
 	if (collisionObject->IsHit(m_player->m_playerCharaCon) == true)
@@ -168,10 +170,11 @@ void WildBoar::Charge()
 	}
 
 	//走り終わったらIdleにもどす
-	if (chargeVec.Length() <= 50.0f || collisionObject->IsHit(m_player->m_playerCharaCon) == true)
+	if (CanIdleState())
 	{
 		//コリジョンを消す
 		DeleteGO(collisionObject);
+
 		//イノシシが待機する
 		m_wildBoarState = enWildBoarIdle;
 
@@ -180,8 +183,34 @@ void WildBoar::Charge()
 
 		m_chargeCaveat.SetScale(1.0f, 1.0f, 1.0f);
 	}
+
+	//移動前の座標を更新する
+	m_chargeOldPos = m_position;
 	//チャージタイムリセット
 	m_chargeTime = 0.0f;
+}
+
+/// <summary>
+/// アイドル状態に戻していいか
+/// </summary>
+bool WildBoar::CanIdleState()
+{
+	if (m_chargeVec.Length() <= 50.0f)
+	{
+		return true;
+	}
+	else if (collisionObject->IsHit(m_player->m_playerCharaCon) == true)
+	{
+		return true;
+	}
+	else if (m_chargeOldPos.x - m_position.x == 0.0f || m_chargeOldPos.z - m_position.z == 0.0f)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void WildBoar::ManageState()
@@ -234,7 +263,7 @@ void WildBoar::ManageState()
 	if ((m_toPlayer.Length() > ATK_RANGE) && (FindPlayer())) {
 		m_wildBoarState = enWildBoarTrack;
 		return;
-	}	
+	}
 
 	//待機
 	m_wildBoarState = enWildBoarIdle;
@@ -381,7 +410,7 @@ void WildBoar::ExecuteSpeed()
 void WildBoar::ChargeCollision()
 {
 	//コリジョンオブジェクトを作成
-	collisionObject = NewGO<CollisionObject>(0,"chargeCollision");
+	collisionObject = NewGO<CollisionObject>(0, "chargeCollision");
 	Vector3 collisionPos = m_position;
 	//球状のコリジョンを作成
 	collisionObject->CreateSphere(collisionPos,
@@ -400,7 +429,7 @@ void WildBoar::ChargeCaveat()
 	m_chargeCaveat.SetRotation(m_rotation);
 
 	//警告表示の長さ
-	m_chargeCaveat.SetScale(1.0f, 1.0f, m_chargeVec.Length()/100.0f);
+	m_chargeCaveat.SetScale(1.0f, 1.0f, m_chargeVec.Length() / 100.0f);
 
 	m_chargeCaveat.Update();
 }

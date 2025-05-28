@@ -65,6 +65,8 @@ public:
 	void DirUpdate();
 	//速度を適応
 	void ExecuteSpeed();
+	//クマのHPのゲッター
+	float GetBearMAXHP();
 	void Render(RenderContext& rc)override;
   
 	//ゲッター
@@ -89,7 +91,7 @@ private:
 
 	ModelRender				m_bearModel;							//モデルレンダー
 	ModelRender				m_stoneModel;							//投石攻撃の岩のモデル
-	CharacterController		m_bearController;					//キャラクターコントローラー
+	CharacterController		m_bearController;						//キャラクターコントローラー
 	AnimationClip			m_animationClips[enBearAnimClip_Num];	//アニメーションクリップ
 	Quaternion				m_bearRot	= Quaternion::Identity;		//回転
 	Quaternion				m_stoneRot	= Quaternion::Identity;		//岩の回転
