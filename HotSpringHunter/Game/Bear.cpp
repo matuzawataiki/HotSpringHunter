@@ -10,7 +10,7 @@
 
 
 namespace {
-	const float BEAR_MAX_HP				= 5.0f;			//クマの最大HP
+	const float BEAR_MAX_HP				= 500.0f;			//クマの最大HP
 	const float FIND_RANGE				= 1500.0f;		//プレイヤーを捉える距離
 	const float PI						= 3.14;			//円周率
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
@@ -580,27 +580,6 @@ void Bear::ExecuteSpeed()
 		const Vector3 move = m_bearSpeed * DELTA_TIME;
 		m_bearPos.Add(move);
 	//}
-}
-
-/// <summary>
-/// アセットを読み込む
-/// </summary>
-void Bear::LoadAssets()
-{
-	//アニメーション読み込み
-	m_animationClips[enBearAnimClip_Idle].Load("Assets/animData/bear/Idle.tka");
-	m_animationClips[enBearAnimClip_Idle].SetLoopFlag(true);
-	m_animationClips[enBearAnimClip_Run].Load("Assets/animData/bear/Run.tka");
-	m_animationClips[enBearAnimClip_Run].SetLoopFlag(true);
-	m_animationClips[enBearAnimClip_Attack].Load("Assets/animData/bear/Attack.tka");
-	m_animationClips[enBearAnimClip_Attack].SetLoopFlag(false);
-	m_animationClips[enBearAnimClip_Hit].Load("Assets/animData/bear/Hit.tka");
-	m_animationClips[enBearAnimClip_Hit].SetLoopFlag(false);
-	m_animationClips[enBearAnimClip_Death].Load("Assets/animData/bear/Death.tka");
-	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
-
-	//モデル読み込み
-	m_modelRender.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
 }
 
 void Bear::Render(RenderContext& rc)
