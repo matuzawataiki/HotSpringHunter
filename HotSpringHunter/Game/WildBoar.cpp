@@ -8,20 +8,23 @@
 
 namespace
 {
-	const float FIND_RANGE = 3000.0f;			//プレイヤーを捉える距離
-	const float ATK_RANGE = 300.0f;				//近接攻撃のリーチ kaeru
-	const float MELEE_ATTACK_DAMAGE = 20.0f;	//近接攻撃の攻撃力 kaeru
-	const float ATK_COOLTIME = 3.0f;			//近接攻撃のクールタイム kaeru
+	const float MAX_WILD_BOAR_HP	= 150.0f;				//イノシシのHP
+	const float DELTA_TIME			= 1.0f / 60.0f;			//フレームレート
 
-	const float ATK_CHARGE_RANGE = 600.0f;      //突進攻撃
-	const float ATK_CHARGE_TIME = 3.0f;         //突進攻撃のクールタイム 
-	const float ATK_CHARGE_SPEED = 1000.0f;	    //突進攻撃のスピード 
-	const float CHARGE_COOL_TIME = 15.0f;       //次の突進攻撃するまでのクールタイム
+	const float FIND_RANGE			= 3000.0f;				//プレイヤーを捉える距離
+	const float ATK_RANGE			= 300.0f;				//近接攻撃のリーチ kaeru
+	const float MELEE_ATTACK_DAMAGE = 20.0f;				//近接攻撃の攻撃力 kaeru
+	const float ATK_COOLTIME		= 3.0f;					//近接攻撃のクールタイム kaeru
 
-	const float IDLE_TIME = 3.0f;				//Idleの時間 
+	const float ATK_CHARGE_RANGE	= 600.0f;				//突進攻撃
+	const float ATK_CHARGE_TIME		= 3.0f;					//突進攻撃のクールタイム 
+	const float ATK_CHARGE_SPEED	= 1000.0f;				//突進攻撃のスピード 
+	const float CHARGE_COOL_TIME	= 15.0f;				//次の突進攻撃するまでのクールタイム
 
-	const Vector3 NEW_POSITION = { 0.0f,0.0f,500.0f };		//初期位置
-	const Vector3 SET_SCALE = { 1.5f,1.5f,1.5f };            //イノシシの大きさ
+	const float IDLE_TIME			= 3.0f;					//Idleの時間 
+
+	const Vector3 NEW_POSITION		= { 0.0f,0.0f,500.0f };		//初期位置
+	const Vector3 SET_SCALE			= { 1.5f,1.5f,1.5f };       //イノシシの大きさ
 }
 
 WildBoar::WildBoar()
@@ -45,10 +48,13 @@ bool WildBoar::Start()
 	//インスタンス探し
 	m_player = FindGO<Player>("player");
 
-	//キャラクターコントローラー
-	m_characterController.Init(50.0f, 50.0f, m_position);
+	//イノシシのHPをセット
+	m_wildBoarHP = MAX_WILD_BOAR_HP;
 
-	m_position = NEW_POSITION;
+	//キャラクターコントローラー
+	m_wildBoarController.Init(50.0f, 50.0f, m_wildBoarPos);
+
+	m_wildBoarPos = NEW_POSITION;
 	//イノシシの大きさ
 	m_wildBoarModel.SetScale(Vector3(SET_SCALE));
 
@@ -104,7 +110,7 @@ void WildBoar::Update()
 void WildBoar::Accumulate()
 {
 	//エネミーベースのステート変えたらダメな場合
-	m_enemyBase->m_isCanChange = false;
+	m_enemyBase->SetChangeFlag(false);
 
 	ChargeCaveat();
 
@@ -116,7 +122,7 @@ void WildBoar::Accumulate()
 
 	//終着点までのベクトルを求める
 	//イノシシからプレイヤーまでのベクトルを求める
-	Vector3 chargeOverVec = m_toCharge - m_position;
+	Vector3 chargeOverVec = m_toCharge - m_wildBoarPos;
 
 	//突進する方向を求める
 	chargeOverVec.Normalize();
@@ -124,7 +130,7 @@ void WildBoar::Accumulate()
 	chargeOverVec *= 100.0f;
 	m_toCharge += chargeOverVec;
 	//突進する距離を求める
-	m_chargeVec = m_toCharge - m_position;
+	m_chargeVec = m_toCharge - m_wildBoarPos;
 
 	//3.0f経ったら突進するようにする
 	if (m_chargeTime >= ATK_CHARGE_TIME)
@@ -138,23 +144,38 @@ void WildBoar::Accumulate()
 }
 
 /// <summary>
+/// イノシシの突進警告を表示および更新
+/// </summary>
+void WildBoar::ChargeCaveat()
+{
+	//警告表示する場所
+	m_chargeCaveat.SetPosition(m_wildBoarPos);
+
+	//回転の更新。
+	m_wildBoarRot.SetRotationYFromDirectionXZ(m_wildBoarDir);
+	m_chargeCaveat.SetRotation(m_wildBoarRot);
+
+	//警告表示の長さ
+	m_chargeCaveat.SetScale(1.0f, 1.0f, m_chargeVec.Length() / 100.0f);
+
+	m_chargeCaveat.Update();
+}
+/// <summary>
 /// 突進攻撃
 /// </summary>
 void WildBoar::Charge()
 {
 	//イノシシからプレイヤーまでのベクトルを求める
-	m_chargeVec = m_toCharge - m_position;
+	m_chargeVec = m_toCharge - m_wildBoarPos;
 
 	//突進する方向を求める
-	m_moveSpeed = m_chargeVec;
-	m_moveSpeed.Normalize();
+	m_wildBoarSpeed = m_chargeVec;
+	m_wildBoarSpeed.Normalize();
 	//突進する速度を定数で入れる
-	m_moveSpeed *= ATK_CHARGE_SPEED;
-
-
+	m_wildBoarSpeed *= ATK_CHARGE_SPEED;
 
 	//突進のコリジョンを移動させる
-	collisionObject->SetPosition(m_position);
+	collisionObject->SetPosition(m_wildBoarPos);
 
 	//ダメージ判定
 	if (collisionObject->IsHit(m_player->m_playerCharaCon) == true)
@@ -185,9 +206,24 @@ void WildBoar::Charge()
 	}
 
 	//移動前の座標を更新する
-	m_chargeOldPos = m_position;
+	m_chargeOldPos = m_wildBoarPos;
 	//チャージタイムリセット
 	m_chargeTime = 0.0f;
+}
+
+/// <summary>
+/// イノシシの突進攻撃用のコリジョンオブジェクトを作成
+/// </summary>
+void WildBoar::ChargeCollision()
+{
+	//コリジョンオブジェクトを作成
+	collisionObject = NewGO<CollisionObject>(0, "chargeCollision");
+	Vector3 collisionPos = m_wildBoarPos;
+	//球状のコリジョンを作成
+	collisionObject->CreateSphere(collisionPos,
+		Quaternion::Identity,
+		90.0f);
+	collisionObject->SetIsEnableAutoDelete(false);
 }
 
 /// <summary>
@@ -203,7 +239,7 @@ bool WildBoar::CanIdleState()
 	{
 		return true;
 	}
-	else if (m_chargeOldPos.x - m_position.x == 0.0f || m_chargeOldPos.z - m_position.z == 0.0f)
+	else if (m_chargeOldPos.x - m_wildBoarPos.x == 0.0f || m_chargeOldPos.z - m_wildBoarPos.z == 0.0f)
 	{
 		return true;
 	}
@@ -213,11 +249,14 @@ bool WildBoar::CanIdleState()
 	}
 }
 
+/// <summary>
+/// イノシシの状態を管理し、ダメージ、攻撃、追従、待機などの行動を切り替える
+/// </summary>
 void WildBoar::ManageState()
 {
 	//ダメージリアクションは最優先で
 	//被弾した場合
-	if (m_player->m_collision->IsHit(m_characterController)) {
+	if (m_player->m_collision->IsHit(m_wildBoarController)) {
 
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
@@ -252,7 +291,7 @@ void WildBoar::ManageState()
 	}
 
 	//近接攻撃
-		//攻撃範囲まで近づいたら
+	//攻撃範囲まで近づいたら
 	if (m_toPlayer.Length() < ATK_RANGE) {
 		m_wildBoarState = enWildBoarAttack;
 		return;
@@ -269,7 +308,10 @@ void WildBoar::ManageState()
 	m_wildBoarState = enWildBoarIdle;
 }
 
-/// <returns></returns>
+/// <summary>
+/// プレイヤーが発見範囲内にいるかどうかを判定
+/// </summary>
+/// <returns>プレイヤーが発見範囲内にいる場合は true、そうでない場合は false を返す</returns>
 bool WildBoar::FindPlayer()
 {
 	if (m_toPlayer.Length() < FIND_RANGE) {
@@ -280,34 +322,42 @@ bool WildBoar::FindPlayer()
 	}
 }
 
+/// <summary>
+/// 野生のイノシシの行動を現在の状態に応じて実行
+/// </summary>
 void WildBoar::ExecuteAction()
 {
 	//移動速度を0する
-	m_moveSpeed = Vector3::Zero;
+	m_wildBoarSpeed = Vector3::Zero;
 	//近接攻撃のクールタイムを計算
 	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
 
 	m_chargeCoolTime += g_gameTime->GetFrameDeltaTime();
 
-
 	switch (m_wildBoarState) {
 
 		//ノックバック
 	case enWildBoarKnockBack:
-		m_moveSpeed = m_enemyBase->KnockBack(m_enemyDir);
+		m_wildBoarSpeed = m_enemyBase->KnockBack(m_wildBoarDir);
 		//被弾アニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Hit);
 		break;
 
 		//死亡
 	case enWildBoarDeath:
-		m_moveSpeed = m_enemyBase->DeathBlown(m_enemyDir);
+		m_wildBoarSpeed = m_enemyBase->DeathBlown(m_wildBoarDir);
 		//死亡アニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimcClip_Death);
+		//キャラコンを削除
+		if (!m_isRemoveController) {
+			m_wildBoarController.RemoveRigidBoby();
+			m_isRemoveController = true;
+		}
 		break;
 
 		//突進チャージ
 	case enWildBoarAccum:
+		//突進のチャージ
 		Accumulate();
 		//突進チャージのアニメーション再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Charge);
@@ -315,6 +365,7 @@ void WildBoar::ExecuteAction()
 
 		//突進攻撃
 	case enWildBoarCharge:
+		//突進させる
 		Charge();
 		//突進攻撃のアニメーション再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Run);
@@ -326,7 +377,7 @@ void WildBoar::ExecuteAction()
 		if (m_ATKCoolTime <= 0.0f)
 		{
 			//近接攻撃
-			m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
+			m_enemyBase->MeleeAttack(m_wildBoarPos, m_wildBoarDir, MELEE_ATTACK_DAMAGE);
 			//近接攻撃アニメーションを再生
 			m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Attack);
 			//タイマーをセット
@@ -340,7 +391,7 @@ void WildBoar::ExecuteAction()
 
 		//追従
 	case enWildBoarTrack:
-		m_moveSpeed = m_enemyBase->Tracking(m_toPlayer);
+		m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Walk);
 		break;
@@ -349,11 +400,11 @@ void WildBoar::ExecuteAction()
 	case enWildBoarIdle:
 		//待機アニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Idle);
-		//3秒立ったらステートがtrueになる
-		m_enemyBase->m_isCanChange = false;
+		//3秒立ったらステートをtrueにする
+		m_enemyBase->SetChangeFlag(false);
 		if (m_idleTime >= IDLE_TIME)
 		{
-			m_enemyBase->m_isCanChange = true;
+			m_enemyBase->SetChangeFlag(true);
 			m_idleTime = 0.0f;
 		}
 
@@ -365,85 +416,70 @@ void WildBoar::ExecuteAction()
 	}
 }
 
+/// <summary>
+/// イノシシの状態やプレイヤーの位置に基づいて、向き、速度、位置、回転などを更新
+/// </summary>
 void WildBoar::VariousUpdate()
 {
 	//プレイヤーへのベクトルを更新
-	m_toPlayer = m_player->GetPlayerPos() - m_position;
+	m_toPlayer = m_player->GetPlayerPos() - m_wildBoarPos;
 
 	//死亡していないとき、且つプレイヤーを捉えているときだけ
 	//向きの更新をする
 	if ((m_wildBoarState != enWildBoarDeath) && (m_wildBoarState != enWildBoarCharge) && (FindPlayer())) {
 		//向きの更新。
-		m_enemyDir = m_toPlayer;
-		m_enemyDir.Normalize();
+		m_wildBoarDir = m_toPlayer;
+		m_wildBoarDir.Normalize();
 	}
 
 	//速度を適応。
 	ExecuteSpeed();
 
+	m_wildBoarPos.y = 0.0f;
+
 	//回転の更新。
-	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
-	m_wildBoarModel.SetRotation(m_rotation);
+	m_wildBoarRot.SetRotationYFromDirectionXZ(m_wildBoarDir);
+	m_wildBoarModel.SetRotation(m_wildBoarRot);
 
 	//座標の更新。
-	m_wildBoarModel.SetPosition(m_position);
+	m_wildBoarModel.SetPosition(m_wildBoarPos);
 
 	//モデルの更新。
 	m_wildBoarModel.Update();
 }
 
+/// <summary>
+/// イノシシの移動速度を適用し、位置を更新
+/// </summary>
 void WildBoar::ExecuteSpeed()
 {
-
-	//敵が吹っ飛ぶときにキャラコンを消して透明な壁をすり抜ける
-	if (m_isAlive) {
-		// キャラクターコントローラーがある時は移動処理の結果を受け取るだけ
-		m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
+	//キャラコンがまだあるとき
+	if(!m_isRemoveController)
+	{
+		m_wildBoarPos = m_wildBoarController.Execute(m_wildBoarSpeed, DELTA_TIME);
 	}
-	else {
-		// ないときは自分で移動結果を計算
-		const Vector3 move = m_moveSpeed * 1.0f / 60.0f;
-		m_position.Add(move);
+	//キャラコンが削除されているとき
+	else
+	{
+		const Vector3 moveAmount = m_wildBoarSpeed * DELTA_TIME;
+		m_wildBoarPos.Add(moveAmount);
 	}
-}
-
-void WildBoar::ChargeCollision()
-{
-	//コリジョンオブジェクトを作成
-	collisionObject = NewGO<CollisionObject>(0, "chargeCollision");
-	Vector3 collisionPos = m_position;
-	//球状のコリジョンを作成
-	collisionObject->CreateSphere(collisionPos,
-		Quaternion::Identity,
-		90.0f);
-	collisionObject->SetIsEnableAutoDelete(false);
-}
-
-void WildBoar::ChargeCaveat()
-{
-	//警告表示する場所
-	m_chargeCaveat.SetPosition(m_position);
-
-	//回転の更新。
-	m_rotation.SetRotationYFromDirectionXZ(m_enemyDir);
-	m_chargeCaveat.SetRotation(m_rotation);
-
-	//警告表示の長さ
-	m_chargeCaveat.SetScale(1.0f, 1.0f, m_chargeVec.Length() / 100.0f);
-
-	m_chargeCaveat.Update();
 }
 
 void WildBoar::Render(RenderContext& rc)
 {
-	//イノシシの表示
-	m_wildBoarModel.Draw(rc);
-
+	//死亡時以外は通常表示
+	if (m_wildBoarState != enWildBoarDeath) {
+		m_wildBoarModel.Draw(rc);
+	}
+	//死亡時は点滅表示を行う
+	else if (m_enemyBase->IsBlinkRender()) {
+		m_wildBoarModel.Draw(rc);
+	}
+	
+	//突進中もしくは、突進チャージ中なら
 	if (m_wildBoarState == enWildBoarAccum || m_wildBoarState == enWildBoarCharge)
 	{
-		//突進チャージの警告を表示する
-		m_chargeCaveat.SetPosition(m_position);
-
 		//警告を描画する
 		m_chargeCaveat.Draw(rc);
 	}

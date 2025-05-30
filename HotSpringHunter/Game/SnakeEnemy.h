@@ -6,11 +6,11 @@ class EnemyBase;
 
 //ヘビのステートの種類
 enum EnSnakeState {
-	enSnakeIdle,
-	enSnakeTrack,
-	enSnakeAttack,
-	enSnakeKnockBack,
-	enSnakeDeath,
+	enSnakeIdle,		//待機
+	enSnakeTrack,		//追従
+	enSnakeAttack,		//近接攻撃
+	enSnakeKnockBack,	//ノックバック
+	enSnakeDeath,		//死亡
 };
 
 //ヘビのアニメーションクリップ
@@ -32,7 +32,7 @@ public:
 
 	bool Start()override;
 	//アセット読み込み
-	void LoadAssets();
+	void LoadAsset();
 	void Update()override;
 	//ステート管理。
 	void ManageState();
@@ -46,30 +46,36 @@ public:
 	void ExecuteSpeed();
 	void Render(RenderContext& rc)override;
 
-	CollisionObject*	collisionObject		= nullptr;
-	Player*				m_player			= nullptr;
-	EnemySpawn*			m_enemySpawn		= nullptr;
-	EnemyBase*			m_enemyBase			= nullptr;
-	EnemyHPBar*			m_hpBar		= nullptr;
+	//セッター
+	//ヘビの座標を設定
+	void SetSnakePos(const Vector3& pos) { m_snakePos = pos; };
+	//ヘビの出現状態を設定
+	void SetIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
 
-	AnimationClip		m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
-	CharacterController m_characterController;					//キャラクターコントローラー	
-	ModelRender			m_modelRender;							//モデルレンダー
+private:
 
-	Quaternion			m_rotation = Quaternion::Identity;		//回転
+	CollisionObject*		collisionObject		= nullptr;
+	Player*					m_player			= nullptr;
+	EnemySpawn*				m_enemySpawn		= nullptr;
+	EnemyBase*				m_enemyBase			= nullptr;
 
-	Vector3 m_position        = Vector3::Zero;				//座標
-	Vector3 m_moveSpeed       = Vector3::Zero;				//速度
-	Vector3 m_enemyDir        = Vector3::Zero;				//向き
-	Vector3 m_toPlayer        = Vector3::Zero;				//プレイヤーへのベクトル
+	AnimationClip			m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
+	CharacterController		m_snakeController;						//キャラクターコントローラー	
+	Quaternion				m_snakeRot = Quaternion::Identity;		//回転
+	ModelRender				m_snakeModel;							//モデルレンダー
 
-	float  m_enemyHP = 100.0f;		//敵のHP
-	float m_ATKCoolTime = 0.0f;		//近接攻撃のクールタイム
+	Vector3 m_snakePos			= Vector3::Zero;			//座標
+	Vector3 m_snakeSpeed		= Vector3::Zero;			//速度
+	Vector3 m_snakeDir			= Vector3::Zero;			//向き
+	Vector3 m_toPlayer			= Vector3::Zero;			//プレイヤーへのベクトル
 
-	int m_snakeState = 0;			//ヘビのステート
+	float m_snakeHP				= 0.0f;			//敵のHP
+	float m_ATKCoolTime			= 0.0f;			//近接攻撃：クールタイム
 
-	bool m_isSpawn = true;			//敵が出現するか
-	bool m_isAlive = true;			//敵が生きているか
-	bool m_isFind = false;			//プレイヤーを捉えたか
-	bool m_isCanStateChange = true;	//ステートを変えてもよいか
+	int m_snakeState			= 0;			//ヘビのステート
+
+	bool m_isCanStateChange		= true;			//ステートを変えてもよいか
+	bool m_isSpawn				= true;			//敵が出現するか
+	bool m_isAlive				= true;			//敵が生きているか
+	bool m_isRemoveController	= false;		//キャラコンを削除したか
 };

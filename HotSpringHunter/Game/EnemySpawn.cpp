@@ -74,13 +74,12 @@ void EnemySpawn::EnemyState()
 		{
 			m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
 
-			m_snakeEnemy[i]->m_isSpawn = true;
+			m_snakeEnemy[i]->SetIsSpawn(true);
 
 			//座標
-			float destance = 0.0f;
-			destance = 100.0f * i;
-			m_snakeEnemy[i]->m_position = { destance,0.0f,m_zPos };
-			m_snakeEnemy[i]->m_characterController.SetPosition(m_snakeEnemy[i]->m_position);
+			float distance = 0.0f;
+			distance = 100.0f * i;
+			m_snakeEnemy[i]->SetSnakePos({ distance,0.0f,m_zPos });
 		}
 		m_enemyState = wave01;
 		//現在の敵の数
@@ -99,13 +98,12 @@ void EnemySpawn::EnemyState()
 		{
 			m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
 
-			m_snakeEnemy[i]->m_isSpawn = true;
+			m_snakeEnemy[i]->SetIsSpawn(true);
 
 			//座標
-			float destance = 0.0f;
-			destance = 100.0f * i;
-			m_snakeEnemy[i]->m_position = { destance,0.0f,m_zPos };
-			m_snakeEnemy[i]->m_characterController.SetPosition(m_snakeEnemy[i]->m_position);
+			float distance = 0.0f;
+			distance = 100.0f * i;
+			m_snakeEnemy[i]->SetSnakePos({ distance,0.0f,m_zPos });
 		}
 		//現在の敵の数
 		m_nowEnemyNum = SECOND_SNAKE_NUM;
@@ -127,16 +125,16 @@ void EnemySpawn::EnemyState()
 //座標
 void EnemySpawn::EnemyPos()
 {
-	//float destance = 0.0f;
+	//float distance = 0.0f;
 	//for (int i = 0; i < MAX_ENEMY_NUM; i++)
 	//{
 	//	//スポーン場所を作る
 	//	if (!m_snakeEnemy[i]->m_isSpawn) 
 	//	{
 	//		m_snakeEnemy[i]->m_isSpawn = true;
-	//		destance = 100.0f * i;
-	//		m_snakeEnemy[i]->m_position = { destance ,0.0f,500.0f };
-	//		m_snakeEnemy[i]->m_characterController->SetPosition(m_snakeEnemy[i]->m_position);
+	//		distance = 100.0f * i;
+	//		m_snakeEnemy[i]->m_snakePos = { distance ,0.0f,500.0f };
+	//		m_snakeEnemy[i]->m_snakeController->SetPosition(m_snakeEnemy[i]->m_snakePos);
 	//	}
 	//}
 }
