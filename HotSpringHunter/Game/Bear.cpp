@@ -10,8 +10,7 @@
 
 
 namespace {
-	const float BEAR_MAX_HP				= 500.0f;		//クマの最大HP
-	const float MAX_BOSS_HP				= 500.0f;		//ボスの最大HP
+	const float MAX_BEAR_HP				= 50.0f;		//クマの最大HP
 	const float FIND_RANGE				= 1500.0f;		//プレイヤーを捉える距離
 	const float PI						= 3.14;			//円周率
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
@@ -75,7 +74,7 @@ bool Bear::Start()
 	m_bearController.Init(80.0f, 80.0f, m_bearPos);
 
 	//クマのHPをセット
-	m_bearHP = BEAR_MAX_HP;
+	m_bearHP = MAX_BEAR_HP;
 
 	return true;
 }
@@ -220,7 +219,7 @@ void Bear::GoNewPos()
 	Vector3 toNewPos = NEW_POSITION - m_bearPos;
 
 	//ステートを変更不能に
-	m_enemyBase->m_isCanChange = false;
+	m_enemyBase->SetChangeFlag(false);
 	//クマの位置を初期位置に移動させる
 	m_bearSpeed = toNewPos;
 	m_bearSpeed.Normalize();
@@ -248,7 +247,7 @@ void Bear::SummonMinions()
 		//雑魚を生成
 		m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
 		//雑魚の初期位置をセット
-		m_snakeEnemy[i]->m_position = m_summonPos[0];
+		m_snakeEnemy[i]->SetSnakePos(m_summonPos[0]);
 		//配列の頭から消す
 		m_summonPos.erase(m_summonPos.begin());
 	}
@@ -275,6 +274,7 @@ void Bear::SinkIntoGround()
 	//キャラコンを消す
 	m_bearController.RemoveRigidBoby();
 
+	//地面に沈ませる
 	m_bearPos.y -= SINKING_TIME;
 }
 
@@ -311,7 +311,7 @@ void Bear::ManageState()
 	//召喚
 	//クマのHPが30％以下、
 	//且つ召喚をまだしていないなら
-	if (m_bearHP < BEAR_MAX_HP * SUMMON_PCT && !m_isSummon) {
+	if (m_bearHP < MAX_BEAR_HP * SUMMON_PCT && !m_isSummon) {
 		//まずは召喚位置へ移動
 		m_bearState = enBearGoNewPos;
 		//召喚を行った状態にする
@@ -360,7 +360,7 @@ void Bear::FindPlayer()
 		//クマを認識状態にする
 		m_bearState = enbearContact;
 		//ステート変更を不可に
-		m_enemyBase->m_isCanChange = false;
+		m_enemyBase->SetChangeFlag(false);
 	}
 }
 
@@ -427,7 +427,7 @@ void Bear::ExecuteAction()
 		//アニメーションを再生し終わったらステート変更
 		if (!m_bearModel.IsPlayAnimation()) {
 			//ステート変更を可能にする
-			m_enemyBase->m_isCanChange = true;
+			m_enemyBase->SetChangeFlag(true);
 			//未召喚にする
 			m_isSummonEnd = false;
 		}
@@ -469,14 +469,14 @@ void Bear::ExecuteAction()
 			//投石アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_SlowStone, ANIM_INTERPOLATE_TIME);
 			//ステート変更を不可にする
-			m_enemyBase->m_isCanChange = false;
+			m_enemyBase->SetChangeFlag(false);
 			//クールタイムをセット
 			m_ATKCoolTime = ATK_COOLTIME;
 		}
 		//アニメーションが終わったら
 		else if (!m_bearModel.IsPlayAnimation()) {
 			//ステート変更を可能にする
-			m_enemyBase->m_isCanChange = true;
+			m_enemyBase->SetChangeFlag(true);
 			//待機アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 		}
@@ -570,26 +570,25 @@ void Bear::DirUpdate()
 /// 速度を適応。
 /// </summary>
 void Bear::ExecuteSpeed()
-{
-	//敵が吹っ飛ぶときにキャラコンを消して透明な壁をすり抜ける
-	//if (m_isAlive) {
-	//	// キャラクターコントローラーがある時は移動処理の結果を受け取るだけ
-	//	m_bearPos = m_bearController.Execute(m_bearSpeed, 1.0f / 60.0f);
-	//}
-	//else {
-		// ないときは自分で移動結果を計算
-		const Vector3 move = m_bearSpeed * DELTA_TIME;
-		m_bearPos.Add(move);
-	//}
+{	
+	//キャラコンが削除されていないとき
+	if (!m_isRemoveController) {
+		m_bearPos = m_bearController.Execute(m_bearSpeed, DELTA_TIME);
+	}
+	//キャラコンが削除されているとき
+	else {
+		const Vector3 moveAmount = m_bearSpeed * DELTA_TIME;
+		m_bearPos.Add(moveAmount);
+	}
 }
 
 /// <summary>
 /// クマの最大HPを取得
 /// </summary>
-/// <returns></returns>
+/// <returns>クマの最大HP</returns>
 float Bear::GetBearMAXHP()
 {
-	return MAX_BOSS_HP;
+	return MAX_BEAR_HP;
 }
 
 void Bear::Render(RenderContext& rc)

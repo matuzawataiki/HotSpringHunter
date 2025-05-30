@@ -1,7 +1,6 @@
 #pragma once
 
 class GameCamera;
-class BackGround;
 class Player;
 class EnemyBase;
 class StartWaveCollision;
@@ -18,16 +17,15 @@ public:
 	bool Start()override;
 	void Update()override;
 
-	GameCamera* m_gameCamera = nullptr;
-	BackGround* m_backGround = nullptr;
-	Player* m_player = nullptr;
-	EnemyBase* m_enemyBase = nullptr;
-	StartWaveCollision* m_waveCollision = nullptr;
-	UI* m_ui = nullptr;
-	Bear* m_bear = nullptr;
-	WildBoar* m_wildBoar = nullptr;
-
 private:
-	StageManager* m_stageManager = nullptr;
+
+	GameCamera*			m_gameCamera	= nullptr;
+	Player*				m_player		= nullptr;
+	EnemyBase*			m_enemyBase		= nullptr;
+	StartWaveCollision* m_waveCollision = nullptr;
+	UI*					m_ui			= nullptr;
+	Bear*				m_bear			= nullptr;
+	WildBoar*			m_wildBoar		= nullptr;
+	StageManager*		m_stageManager	= nullptr;
 };
 

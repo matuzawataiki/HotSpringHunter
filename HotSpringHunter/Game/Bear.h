@@ -96,31 +96,32 @@ private:
 	Quaternion				m_bearRot	= Quaternion::Identity;		//回転
 	Quaternion				m_stoneRot	= Quaternion::Identity;		//岩の回転
 
-	Vector3 m_bearPos		= Vector3::Zero;		//座標
-	Vector3 m_bearSpeed		= Vector3::Zero;		//敵の速度
-	Vector3 m_bearDir		= Vector3::Zero;		//向き
-	Vector3 m_toPlayer		= Vector3::Zero;		//ベクトル
-	Vector3 m_stonePos		= Vector3::Zero;		//岩の位置
-	Vector3 m_stoneSpeed	= Vector3::Zero;		//岩の速度
-	Vector3 m_stoneDir		= Vector3::Zero;		//岩の向き
-	Vector3 m_toSlowPos		= Vector3::Zero;		//投石の目標位置
+	Vector3 m_bearPos			= Vector3::Zero;		//座標
+	Vector3 m_bearSpeed			= Vector3::Zero;		//敵の速度
+	Vector3 m_bearDir			= Vector3::Zero;		//向き
+	Vector3 m_toPlayer			= Vector3::Zero;		//ベクトル
+	Vector3 m_stonePos			= Vector3::Zero;		//岩の位置
+	Vector3 m_stoneSpeed		= Vector3::Zero;		//岩の速度
+	Vector3 m_stoneDir			= Vector3::Zero;		//岩の向き
+	Vector3 m_toSlowPos			= Vector3::Zero;		//投石の目標位置
 
-	float m_bearHP			= 0.0f;		//敵のHP
-	float m_ATKCoolTime		= 0.0f;		//攻撃のクールタイム
-	float m_slowCoolTime	= 0.0f;		//投石攻撃のクールタイム
-	float m_contactTime		= 0.0f;		//プレイヤー認識時のイベント時間
-	float m_setStoneTime	= 0.0f;		//投石攻撃の準備時間
+	float m_bearHP				= 0.0f;		//敵のHP
+	float m_ATKCoolTime			= 0.0f;		//攻撃のクールタイム
+	float m_slowCoolTime		= 0.0f;		//投石攻撃のクールタイム
+	float m_contactTime			= 0.0f;		//プレイヤー認識時のイベント時間
+	float m_setStoneTime		= 0.0f;		//投石攻撃の準備時間
 
-	int m_bearState			= 0;		//クマの行動状態
+	int m_bearState				= 0;		//クマの行動状態
 
-	bool m_isCanStateChange = true;		//ステート変更を受け付けているか
-	bool m_isSpawn			= true;		//敵が出現するか
-	bool m_isAlive			= true;		//敵が生きているか
-	bool m_isFind			= false;	//プレイヤーを発見したか
-	bool m_isSetStone		= false;	//投石攻撃：岩の準備をしたか
-	bool m_isStoneSlowing	= false;	//岩が飛ばされているか
-	bool m_isSummon			= false;	//雑魚を召喚したか
-	bool m_isSummonEnd		= false;	//雑魚召喚が終わったか
-	bool m_isContact		= false;	//プレイヤーを認識したか
-	bool m_isPlayDeadAnim	= false;	//死亡アニメーションを再生したか
+	bool m_isCanStateChange		= true;		//ステート変更を受け付けているか
+	bool m_isSpawn				= true;		//敵が出現するか
+	bool m_isAlive				= true;		//敵が生きているか
+	bool m_isFind				= false;	//プレイヤーを発見したか
+	bool m_isSetStone			= false;	//投石攻撃：岩の準備をしたか
+	bool m_isStoneSlowing		= false;	//岩が飛ばされているか
+	bool m_isSummon				= false;	//雑魚を召喚したか
+	bool m_isSummonEnd			= false;	//雑魚召喚が終わったか
+	bool m_isContact			= false;	//プレイヤーを認識したか
+	bool m_isPlayDeadAnim		= false;	//死亡アニメーションを再生したか
+	bool m_isRemoveController	= false;	//キャラコンを削除したか
 };

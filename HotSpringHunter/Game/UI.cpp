@@ -37,7 +37,7 @@ bool UI::Start()
 	//プレイヤーのUI
 	NewGO<PlayerHPUI>(0, "playerHPUI");
 	//ボスのUI
-	NewGO<BossHPUI>(0, "bossHPUI");
+	//NewGO<BossHPUI>(0, "bossHPUI");
 	return true;
 }
 

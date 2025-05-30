@@ -1,7 +1,6 @@
 #pragma once
 
 class Player;
-class PlayerChargeAttack;
 class EnemySpawn;
 
 class EnemyBase : public IGameObject
@@ -23,16 +22,24 @@ public:
 	void Death();
 	//死亡時の吹っ飛び
 	Vector3 DeathBlown(Vector3 enemyDir);
+	//点滅表示
+	bool IsBlinkRender();
 	//ステート変更のフラッグを返す
 	bool ChangeFlag();
 
-	CollisionObject* m_enemyATCollision = nullptr;
-	Player* m_player = nullptr;
+	//セッター
+	//ステート変更フラッグを設定
+	void SetChangeFlag(bool isChange) { m_isCanChange = isChange; };
 
-	bool m_isCanChange = true;						//ステートを変えてもいいか
-	bool m_isKnockSetFlag = false;					//ノックバックをセットしたか
+private:
+	CollisionObject*	m_enemyATCollision	= nullptr;
+	Player*				m_player			= nullptr;
 
-	float m_knockDecreased = 1.0f;					//ノックバックの減速量
+	bool m_isCanChange		= true;					//ステートを変えてもいいか
+	bool m_isKnockSetFlag	= false;				//ノックバックをセットしたか
+
+	float m_knockDecreased	= 1.0f;					//ノックバックの減速量
+	float m_renderTime		= 0.0f;					//点滅表示の時間
 
 	Vector3 m_knockBackVec = Vector3::Zero;			//ノックバックのベクトル
 };
