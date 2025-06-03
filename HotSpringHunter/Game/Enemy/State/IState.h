@@ -8,11 +8,6 @@
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
-namespace nsK2Engine
-{
-	class CollisionObject;
-}
-
 namespace Enemy
 {
 	/// <summary>
@@ -245,9 +240,6 @@ namespace Enemy
 		virtual bool RequestState(uint32_t& request) override;
 	private:
 		PoisonSnakeStateMachine* m_owner;
-		Vector3 m_atkDrection;
-
-		CollisionObject* m_collisionObject;
 
 		bool m_isAttack = false;	//攻撃していいか
 

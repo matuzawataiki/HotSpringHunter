@@ -40,6 +40,7 @@
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonSnake.cpp" />
+    <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -80,5 +81,6 @@
     <ClInclude Include="Enemy\State\IState.h" />
     <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
+    <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
   </ItemGroup>
 </Project>

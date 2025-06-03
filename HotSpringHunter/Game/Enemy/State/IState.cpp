@@ -2,6 +2,8 @@
 #include "IState.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"
+#include "Enemy/PoisonSnake/PoisonBall.h"
+
 
 namespace Enemy
 {
@@ -108,7 +110,7 @@ namespace Enemy
 	void PoisonSnakeAtkState::Update()
 	{
 		if (m_isAttack) {
-
+			return;
 		}
 		else {
 			if (!m_owner->GetIsAttack()) {
@@ -116,20 +118,15 @@ namespace Enemy
 			}
 
 			m_isAttack = true;
-			m_owner->AttackOff();
 
-			m_atkDrection = m_owner->GetTarget()->GetPlayerPos() - m_owner->GetPosition();
-			m_atkDrection.Normalize();
-			
-			m_collisionObject = NewGO<CollisionObject>(0);
-			m_collisionObject->
+			NewGO<PoisonBall>(0, "poisonBall");
 
 		}
 	}
 
 	void PoisonSnakeAtkState::Exit()
 	{
-
+		m_owner->AttackOff();
 	}
 
 	bool PoisonSnakeAtkState::RequestState(uint32_t& request)
