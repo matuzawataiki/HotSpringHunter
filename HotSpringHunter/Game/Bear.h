@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/glm.hpp"
 class Player;
 class SnakeEnemy;
 class EnemySpawn;
@@ -43,6 +44,12 @@ public:
 	void Update()override;
 	//投石攻撃
 	void StoneThrow();
+	//投石のベクトルを計算
+	Vector3 CalcStoneVec(Vector3 start, Vector3 target);
+	// Vector3 から glm::vec3 に変換
+	glm::vec3 ConvertToGlmVec3(const Vector3& v);
+	// glm::vec3 を Vector3 に変換
+	Vector3 ConvertToVector3(const glm::vec3& v);
 	//岩のコリジョンを作る
 	void StoneCollision();
 	//クマを初期位置に移動(召喚用)
@@ -77,7 +84,7 @@ public:
 
 	//セッター
 	//クマの位置を設定
-	void SetBearPos(Vector3 pos) { m_bearPos = pos; };
+	void SetBearPos(const Vector3& pos) { m_bearPos = pos; };
 
 private:
 	Player*				m_player			= nullptr;
@@ -103,7 +110,9 @@ private:
 	Vector3 m_stonePos			= Vector3::Zero;		//岩の位置
 	Vector3 m_stoneSpeed		= Vector3::Zero;		//岩の速度
 	Vector3 m_stoneDir			= Vector3::Zero;		//岩の向き
+	Vector3 m_newStonePos		= Vector3::Zero;		//投石をセットする位置
 	Vector3 m_toSlowPos			= Vector3::Zero;		//投石の目標位置
+	Vector3 m_fastVelocityVec = { 0.0f,1.0f,1.0f };		//最初の速度
 
 	float m_bearHP				= 0.0f;		//敵のHP
 	float m_ATKCoolTime			= 0.0f;		//攻撃のクールタイム
