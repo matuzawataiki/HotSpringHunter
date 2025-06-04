@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "glm/glm.hpp"
 #include "Bear.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
@@ -25,15 +26,16 @@ namespace {
 	const float FOLLOW_RANGE			= 1000.0f;		//追従：追従する距離
 
 	const float SLOW_RANGE				= 1500.0f;		//投石：投石攻撃ができる距離
+	const float SLOW_COOLTIME			= 3.0f;			//投石：投石のクールタイム
 	const float SET_STONE_POS_DIS		= 160.0f;		//投石：岩をセットする位置（どれだけ前に出すか）
-	const float STONE_YPOS				= 50.0f;		//投石：岩の高さ
 	const float SET_STONE_TIME			= 0.3f;			//投石：岩をセットする時間
-	const float SLOW_SPEED				= 1000.0f;		//投石：投球速度
+	const float SLOW_SPEED				= 500.0f;		//投石：投球速度
 	const float STONE_COL_SIZE			= 60.0f;		//投石：岩の当たり判定の大きさ
 	const float STONE_REMOVE_DIS		= 10.0f;		//投石：岩を非投擲状態とする距離
 	const float STONE_DAMAGE			= 30.0f;		//投石：投石のダメージ
 	const float STONE_ROT_AMOUNT		= 20.0f;		//投石：岩が回転する量
-	const float SLOW_COOLTIME			= 15.0f;		//投石：投石のクールタイム
+	const float STONE_SPEED				= 700.0f;		//投石：岩の速さ
+	const float GRAVITY					= -9.8f;		//投石：重力加速度
 
 	const float GO_NEW_POS_SPEED		= 500.0f;		//召喚：初期位置に移動する速さ
 	const float MOVE_STOP_DIS			= 100.0f;		//召喚：初期位置への移動をやめる距離
@@ -127,8 +129,6 @@ void Bear::Update()
 /// </summary>
 void Bear::StoneThrow()
 {
-	Vector3 slowVec		= Vector3::Zero;			//投石のベクトル
-	Vector3 newStonePos = Vector3::Zero;			//岩の初期位置
 
 	//岩が飛んでいないなら実行しない
 	if (!m_isStoneSlowing) {
@@ -143,14 +143,11 @@ void Bear::StoneThrow()
 	//初めにいろいろセット
 	if (!m_isSetStone) {
 		//岩をクマのちょっと前にセット
-		newStonePos = m_bearDir * SET_STONE_POS_DIS;
-		newStonePos += m_bearPos;
-		newStonePos.y = STONE_YPOS;
-		m_stonePos = newStonePos;
+		m_newStonePos = m_bearDir * SET_STONE_POS_DIS;
+		m_newStonePos += m_bearPos;
+		m_stonePos = m_newStonePos;
 		//岩の目標位置をセット
 		m_toSlowPos = m_player->GetPlayerPos();
-		//ちょっと高さを付ける
-		m_toSlowPos.y = STONE_YPOS;
 		//コリジョンを生成
 		StoneCollision();
 		//セット済みにする
@@ -158,14 +155,10 @@ void Bear::StoneThrow()
 	}
 
 	if (m_setStoneTime > SET_STONE_TIME) {
-		//投石のベクトルを計算
-		slowVec = m_toSlowPos - m_stonePos;
-		//このベクトルを岩の移動速度にする
-		m_stoneSpeed = slowVec;
-		//ベクトルを正規化
-		m_stoneSpeed.Normalize();
-		//ベクトルに速さを付ける
-		m_stoneSpeed *= SLOW_SPEED;
+		//投石の距離ベクトルを計算
+		Vector3 slowVec = m_toSlowPos - m_stonePos;
+		//投石のベクトルを計算（放物線）
+		m_stoneSpeed = CalcStoneVec(m_newStonePos, m_toSlowPos);
 
 		//5°ずつ回転させる
 		m_stoneRot.AddRotationDegX(STONE_ROT_AMOUNT);
@@ -193,12 +186,58 @@ void Bear::StoneThrow()
 	//岩のモデルを更新
 	m_stoneModel.Update();
 	//速度で位置を動かす
-	m_stoneSpeed = m_stoneSpeed * DELTA_TIME;
-	m_stonePos.Add(m_stoneSpeed);
+	const Vector3 moveAmount = m_stoneSpeed * DELTA_TIME;
+	m_stonePos.Add(moveAmount);
 	//位置更新
 	m_stoneModel.SetPosition(m_stonePos);
 	//回転更新
 	m_stoneModel.SetRotation(m_stoneRot);
+}
+
+/// <summary>
+/// 始点から終点まで、指定した水平速度で物体を投射するための初速度ベクトルを計算
+/// </summary>
+/// <param name="start">投射の開始位置</param>
+/// <param name="target">投射の目標位置</param>
+/// <returns>指定した条件で投射するための初速度ベクトル。距離が極端に近い場合はゼロベクトルを返す</returns>
+Vector3 Bear::CalcStoneVec(Vector3 start, Vector3 target)
+{
+	//Vector3型の値を glm::vec3型に変換
+	glm::vec3 startPos = ConvertToGlmVec3(start);
+	glm::vec3 targetPos = ConvertToGlmVec3(target);
+
+	glm::vec3 displacement = targetPos - startPos;
+
+	//時間を計算
+	float flightTime = glm::length(displacement) / SLOW_SPEED;
+
+	// 水平方向（XZ平面）の成分    
+	glm::vec3 horizontal = glm::vec3(displacement.x, 0.0f, displacement.z);
+	glm::vec3 velocityXZ = horizontal / flightTime;
+
+	// 垂直方向（Y成分）：y = y0 + v0y*flightTime + 0.5*a*flightTime^2 を逆算 
+	float velocityY = (displacement.y - 0.5f * GRAVITY * flightTime * flightTime) / flightTime;
+
+	glm::vec3 finalVec = glm::vec3(velocityXZ.x, velocityY, velocityXZ.z);
+	return ConvertToVector3(finalVec);
+}
+
+/// <summary>
+/// Vector3型の値を glm::vec3型に変換
+/// </summary>
+/// <param name="v">変換する Vector3型の値</param>
+/// <returns>変換後の glm::vec3型の値</returns>
+glm::vec3 Bear::ConvertToGlmVec3(const Vector3& v) {
+	return glm::vec3(v.x, v.y, v.z);
+}
+
+/// <summary>
+/// glm::vec3型のベクトルをVector3型に変換
+/// </summary>
+/// <param name="v">変換する glm::vec3型のベクトル</param>
+/// <returns>変換後の Vector3型のベクトル</returns>
+Vector3 Bear::ConvertToVector3(const glm::vec3& v) {
+	return Vector3{ v.x, v.y, v.z };
 }
 
 /// <summary>
