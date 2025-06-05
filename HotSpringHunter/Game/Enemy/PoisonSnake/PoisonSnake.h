@@ -14,9 +14,10 @@ namespace Enemy
 
 	class PoisonSnake : public EnemyBase
 	{
-	private:
-		bool Start();
-
+	public:
+		bool Start() override;
+		void Update() override;
+		void Render(RenderContext& rc) override;
 	public:
 		~PoisonSnake();
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);

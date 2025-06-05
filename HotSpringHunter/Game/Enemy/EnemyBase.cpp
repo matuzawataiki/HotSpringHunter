@@ -4,7 +4,7 @@
 namespace Enemy {
 	bool EnemyBase::Start()
 	{
-
+		return true;
 	}
 
 	void EnemyBase::Update()

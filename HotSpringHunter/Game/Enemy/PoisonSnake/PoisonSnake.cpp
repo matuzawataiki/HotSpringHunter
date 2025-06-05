@@ -14,6 +14,16 @@ namespace Enemy
 		return true;
 	}
 
+	void PoisonSnake::Update()
+	{
+
+	}
+
+	void PoisonSnake::Render(RenderContext& rc)
+	{
+
+	}
+
 	void PoisonSnake::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 	{
 		if (wcscmp(eventName, L"attack") == 0)

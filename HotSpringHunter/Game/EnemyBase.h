@@ -30,6 +30,12 @@ public:
 	//ステート変更のフラッグを返す
 	bool ChangeFlag();
 
+	//セッター
+	//ステート変更フラッグを設定
+	void SetChangeFlag(bool isChange) {
+		m_isCanChange = isChange;
+	}
+
 	CollisionObject* m_enemyATCollision = nullptr;
 	Character::Player* m_player = nullptr;
 
