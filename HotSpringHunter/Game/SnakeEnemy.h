@@ -1,6 +1,8 @@
 #pragma once
 
-class Player;
+namespace Character {
+	class Player;
+}
 class EnemySpawn;
 class EnemyBase;
 
@@ -47,7 +49,7 @@ public:
 	void Render(RenderContext& rc)override;
 
 	CollisionObject* collisionObject = nullptr;
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 	EnemySpawn* m_enemySpawn = nullptr;
 	EnemyBase* m_enemyBase = nullptr;
 

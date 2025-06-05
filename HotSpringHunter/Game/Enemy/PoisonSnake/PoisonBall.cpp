@@ -9,7 +9,7 @@ namespace {
 }
 
 namespace Enemy {
-	PoisonBall::PoisonBall(Vector3& position, Vector3& targetPosition)
+	PoisonBall::PoisonBall(const Vector3& position, const Vector3& targetPosition)
 	{
 		m_position = position;
 		m_targetPosition = targetPosition;

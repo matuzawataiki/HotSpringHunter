@@ -218,7 +218,9 @@ namespace Enemy
 		float m_moveTime = 0.0f;			//移動時間
 		float m_idleTime = 0.0f;			//待機時間
 
-		bool m_isIdle = false;				//止まるかどうか
+		bool m_isIdle		= false;		//止まるかどうか
+		bool m_isIdleAnim	= true;			//待機アニメーションを再生するかどうか
+		bool m_isMoveAnim	= true;			//移動アニメーションを再生するかどうか
 
 	};
 
@@ -241,10 +243,80 @@ namespace Enemy
 	private:
 		PoisonSnakeStateMachine* m_owner;
 
-		bool m_isAttack = false;	//攻撃していいか
+		bool m_isAttack = false;	//攻撃していいかどうか
 
 
 	};
 
+	//////////////////////////////////////////////////////////////////////////////
+	// 追従ステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	class PoisonSnakeTrackState : public IState
+	{
+		appState(PoisonSnakeTrackState);
+	public:
+		PoisonSnakeTrackState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
+		virtual ~PoisonSnakeTrackState() {}
+
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+
+		virtual bool RequestState(uint32_t& request) override;
+	private:
+		PoisonSnakeStateMachine* m_owner;
+
+		float m_isMove = 1.0f; //手前と奥どちらのポイントに移動するか
+
+	};
+
+	//////////////////////////////////////////////////////////////////////////////
+	// ノックバックステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	class PoisonSnakeKnockBackState : public IState
+	{
+		appState(PoisonSnakeKnockBackState);
+	public:
+		PoisonSnakeKnockBackState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
+		virtual ~PoisonSnakeKnockBackState() {}
+
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+
+		virtual bool RequestState(uint32_t& request) override;
+	private:
+		PoisonSnakeStateMachine* m_owner;
+
+		Vector3	m_moveSpeed = Vector3::Zero;	//移動速度
+
+		float m_isMove			= 1.0f;		//手前と奥どちらのポイントに移動するか
+		float m_knockDecreased	= 1.0f;		//減衰率
+	};
+
+	//////////////////////////////////////////////////////////////////////////////
+	//デスステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	class PoisonSnakeDeathState : public IState
+	{
+		appState(PoisonSnakeDeathState);
+	public:
+		PoisonSnakeDeathState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
+		virtual ~PoisonSnakeDeathState() {}
+
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+
+		virtual bool RequestState(uint32_t& request) override;
+	private:
+		PoisonSnakeStateMachine* m_owner;
+
+		float m_isMove = 1.0f;	//手前と奥どちらのポイントに移動するか
+
+	};
 
 }

@@ -18,7 +18,7 @@ GameCamera::~GameCamera()
 
 bool GameCamera::Start()
 {
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Character::Player>("player");
 	m_backGround = FindGO<BackGround>("backGround");
 
 	m_cameraState = EnCameraVar::lookDown;

@@ -29,9 +29,9 @@ namespace Enemy
 		}
 	}
 
-	///////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
-	///////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 
 	namespace {
 		const float MOVE_SPEED_OFFSET = 10.0f;
@@ -73,14 +73,26 @@ namespace Enemy
 		//待機状態なら止まる
 		if(m_isIdle)
 		{
+			if (m_isIdleAnim) {
+				m_owner->GetModelRender()->PlayAnimation(enAnimClip_Idle);
+			}
 			m_owner->SetOwnerMoveSpeed(Vector3::Zero);
+
+			m_isIdleAnim = false;
+			m_isMoveAnim = true;
 		}
 		else
 		{
+			if (m_isMoveAnim) {
+				m_owner->GetModelRender()->PlayAnimation(enAnimClip_Idle);
+			}
 			//移動方向の設定
 			Vector3 moveDirection = Vector3::Zero;
 			moveDirection.x = MOVE_SPEED_OFFSET * m_moveDirection;
 			m_owner->SetOwnerMoveSpeed(moveDirection);
+
+			m_isIdleAnim = true;
+			m_isMoveAnim = false;
 		}
 
 		m_moveTime -= g_gameTime->GetFrameDeltaTime();
@@ -97,9 +109,9 @@ namespace Enemy
 		return true;
 	}
 
-	///////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	// 攻撃ステート
-	///////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 
 	void PoisonSnakeAtkState::Enter()
 	{
@@ -119,7 +131,8 @@ namespace Enemy
 
 			m_isAttack = true;
 
-			NewGO<PoisonBall>(0, "poisonBall");
+			PoisonBall* poisonBall = new PoisonBall(m_owner->GetPosition(), m_owner->GetTarget()->GetPlayerPos());
+			AddGo(poisonBall, 0, "poisonBall");
 
 		}
 	}
@@ -132,6 +145,117 @@ namespace Enemy
 	bool PoisonSnakeAtkState::RequestState(uint32_t& request)
 	{
 
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	// 追従ステート
+	//////////////////////////////////////////////////////////////////////////////
+	namespace {
+		const float MOVEPOINT_FAR = 600.0f;
+		const float MOVE_SPEED = 50.0f;
+	}
+
+	void PoisonSnakeTrackState::Enter()
+	{
+		m_owner->GetModelRender()->PlayAnimation(enAnimClip_Run);
+
+		Vector3 moveDirection = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
+		float length =  moveDirection.Length();
+
+		if (length >= MOVEPOINT_FAR) {
+			m_isMove = 1.0f;
+		}
+		else
+		{
+			m_isMove = -1.0f;
+		}
+
+		Vector3 moveSpeed = moveDirection * MOVE_SPEED * m_isMove;
+		m_owner->SetOwnerMoveSpeed(moveSpeed);
+	}
+
+	void PoisonSnakeTrackState::Update()
+	{
+
+	}
+
+	void PoisonSnakeTrackState::Exit()
+	{
+		m_owner->SetOwnerMoveSpeed(Vector3::Zero);
+	}
+
+	bool PoisonSnakeTrackState::RequestState(uint32_t& request)
+	{
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	// ノックバックステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	namespace {
+		const float KNOCK_BACK_SPEED = 60.0f;
+		const float KNOCK_BACK_DECREASE = 0.02;
+	}
+
+	void PoisonSnakeKnockBackState::Enter()
+	{
+		m_owner->GetModelRender()->PlayAnimation(enAnimClip_Hit);
+
+		m_moveSpeed = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
+		m_moveSpeed.Normalize();
+		m_moveSpeed *= KNOCK_BACK_SPEED;
+		m_owner->SetOwnerMoveSpeed(m_moveSpeed);
+	}
+
+	void PoisonSnakeKnockBackState::Update()
+	{
+		m_knockDecreased -= KNOCK_BACK_DECREASE;
+		m_moveSpeed *= m_knockDecreased;
+
+		m_owner->SetOwnerMoveSpeed(m_moveSpeed);
+	}
+
+	void PoisonSnakeKnockBackState::Exit()
+	{
+		m_owner->SetOwnerMoveSpeed(Vector3::Zero);
+	}
+
+	bool PoisonSnakeKnockBackState::RequestState(uint32_t& request)
+	{
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	//デスステート
+	//////////////////////////////////////////////////////////////////////////////
+
+
+	void PoisonSnakeDeathState::Enter()
+	{
+		m_owner->GetModelRender()->PlayAnimation(enAnimClip_Death);
+
+		Vector3 moveDirection = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
+		moveDirection.y = 0;
+		moveDirection.Normalize();
+
+		Vector3 moveSpeed = moveDirection * 200;
+		moveSpeed.y = 500;
+		m_owner->SetOwnerMoveSpeed(moveSpeed);
+	}
+
+	void PoisonSnakeDeathState::Update()
+	{
+	}
+
+	void PoisonSnakeDeathState::Exit()
+	{
+		m_owner->SetOwnerMoveSpeed(Vector3::Zero);
+	}
+
+	bool PoisonSnakeDeathState::RequestState(uint32_t& request)
+	{
 		return false;
 	}
 

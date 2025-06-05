@@ -1,6 +1,8 @@
 #pragma once
 
-class Player;
+namespace Character {
+	class Player;
+}
 class PlayerChargeAttack;
 class EnemySpawn;
 
@@ -27,7 +29,7 @@ public:
 	bool ChangeFlag();
 
 	CollisionObject* m_enemyATCollision = nullptr;
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 
 	bool m_isCanChange = true;						//ステートを変えてもいいか
 	bool m_isKnockSetFlag = false;					//ノックバックをセットしたか

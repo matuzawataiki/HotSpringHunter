@@ -1,8 +1,11 @@
 #pragma once
 
+namespace Character {
+	class Player;
+}
+
 class GameCamera;
 class BackGround;
-class Player;
 class EnemyBase;
 class Bear;
 class StartWaveCollision;
@@ -18,7 +21,7 @@ public:
 
 	GameCamera* m_gameCamera = nullptr;
 	BackGround* m_backGround = nullptr;
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 	EnemyBase* m_enemyBase = nullptr;
 	StartWaveCollision* m_waveCollision = nullptr;
 	Bear* m_bear = nullptr;

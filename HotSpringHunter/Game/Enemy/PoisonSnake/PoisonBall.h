@@ -8,7 +8,7 @@ namespace Enemy{
 	class PoisonBall:public IGameObject
 	{
 	public:
-		PoisonBall(Vector3& position, Vector3& targetPosition);
+		PoisonBall(const Vector3& position, const Vector3& targetPosition);
 		~PoisonBall();
 		void Update();
 		void Render(RenderContext& rc);
