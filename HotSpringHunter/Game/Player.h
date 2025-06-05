@@ -1,6 +1,5 @@
 #pragma once
-class IState;
-class StateMachine;
+
 class SnakeEnemy;
 
 namespace Character {
@@ -30,6 +29,9 @@ namespace Character {
 		enPlayerAnimClip_Death,
 		enPlayerAnimClip_Num,
 	};
+
+	class IState;
+	class StateMachine;
 
 	class Player :public IGameObject
 	{
@@ -81,7 +83,7 @@ namespace Character {
 		FontRender m_posRender;
 		wchar_t m_posText[256];
 
-		std::vector<IState*>m_stateList;			//各ステートクラスのリスト。
+		std::vector<IState*> m_stateList;			//各ステートクラスのリスト。
 		int m_currentState = 0;						//現在のステート。
 		int m_requestState = 0;						//変更したいステート。
 
