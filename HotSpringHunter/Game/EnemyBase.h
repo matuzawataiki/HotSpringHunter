@@ -1,6 +1,9 @@
 #pragma once
 
-class Player;
+namespace Character {
+	class Player;
+}
+class PlayerChargeAttack;
 class EnemySpawn;
 
 class EnemyBase : public IGameObject
@@ -29,11 +32,12 @@ public:
 
 	//セッター
 	//ステート変更フラッグを設定
-	void SetChangeFlag(bool isChange) { m_isCanChange = isChange; };
+	void SetChangeFlag(bool isChange) {
+		m_isCanChange = isChange;
+	}
 
-private:
-	CollisionObject*	m_enemyATCollision	= nullptr;
-	Player*				m_player			= nullptr;
+	CollisionObject* m_enemyATCollision = nullptr;
+	Character::Player* m_player = nullptr;
 
 	bool m_isCanChange		= true;					//ステートを変えてもいいか
 	bool m_isKnockSetFlag	= false;				//ノックバックをセットしたか

@@ -1,6 +1,8 @@
 #pragma once
 #include "glm/glm.hpp"
-class Player;
+namespace Character {
+	class Player;
+}
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
@@ -87,7 +89,7 @@ public:
 	void SetBearPos(const Vector3& pos) { m_bearPos = pos; };
 
 private:
-	Player*				m_player			= nullptr;
+	Character::Player*	m_player			= nullptr;
 	SnakeEnemy*			m_snakeEnemy[4]		= {};
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;

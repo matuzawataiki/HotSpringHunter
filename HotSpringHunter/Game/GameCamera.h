@@ -1,6 +1,8 @@
 #pragma once
 
-class Player;
+namespace Character {
+	class Player;
+}
 class BackGround;
 class GameCamera :public IGameObject
 {
@@ -22,7 +24,7 @@ public:
 		return m_toCameraPos;
 	}
 private:
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 	BackGround* m_backGround = nullptr;
 
 	Vector3 m_toCameraPos = Vector3::Zero;					//カメラ座標。
