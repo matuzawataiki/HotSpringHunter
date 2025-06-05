@@ -1,6 +1,7 @@
 #pragma once
 
 class Player;
+class Bear;
 
 class UI : public IGameObject
 {
@@ -54,7 +55,16 @@ public:
 
 	bool Start()override;
 	void Update()override;
-
+	void UpdateBarWidth();
 	void Render(RenderContext& rc)override;
+
+	Bear* m_bear = nullptr;
+	Player* m_player = nullptr;
+
+	SpriteRender m_BearHPFrame;
+	SpriteRender m_BearHPBar;
+	SpriteRender m_BearHPBack;
+
+	float m_BearHPBarWidth = 0.0f;
 };
 

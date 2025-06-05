@@ -25,16 +25,19 @@ public:
 	void Death();
 	//死亡時の吹っ飛び
 	Vector3 DeathBlown(Vector3 enemyDir);
+	//点滅表示
+	bool IsBlinkRender();
 	//ステート変更のフラッグを返す
 	bool ChangeFlag();
 
 	CollisionObject* m_enemyATCollision = nullptr;
 	Character::Player* m_player = nullptr;
 
-	bool m_isCanChange = true;						//ステートを変えてもいいか
-	bool m_isKnockSetFlag = false;					//ノックバックをセットしたか
+	bool m_isCanChange		= true;					//ステートを変えてもいいか
+	bool m_isKnockSetFlag	= false;				//ノックバックをセットしたか
 
-	float m_knockDecreased = 1.0f;					//ノックバックの減速量
+	float m_knockDecreased	= 1.0f;					//ノックバックの減速量
+	float m_renderTime		= 0.0f;					//点滅表示の時間
 
 	Vector3 m_knockBackVec = Vector3::Zero;			//ノックバックのベクトル
 };

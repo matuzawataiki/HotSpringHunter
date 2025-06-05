@@ -131,7 +131,7 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
 float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, float3 normal, float3 worldPos);
 
 //シャドウマップの計算
-int CalcShadowMap(SPSIn psIn);
+float CalcShadowMap(SPSIn psIn);
 
 ////////////////////////////////////////////////
 // 関数定義。
@@ -225,7 +225,7 @@ float3 CalcRimLight(SPSIn psIn, float3 lig, DirectionLig directionLig)
     float power2 = 1.0f - max(0.0f, psIn.normalInView.z * -1.0f);
     
     float rimPower = power1 * power2;
-    rimPower = pow(rimPower, 1.0f);
+    rimPower = pow(rimPower, 2.0f);
     
     float3 rimColor = rimPower * lig;
     
@@ -292,11 +292,12 @@ float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, f
 }
 
 /// <summary>
-/// シャドウマップの計算
+/// 光の遮蔽率を計算する
 /// </summary>
-int CalcShadowMap(SPSIn psIn)
+float CalcShadowMap(SPSIn psIn)
 {
     float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+    float2 shadowIntensity = normalize(shadowMapUV);
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;
     
@@ -304,12 +305,13 @@ int CalcShadowMap(SPSIn psIn)
         && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
     {
         float zInShadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
+        
         float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
         if (zInLVP > zInShadowMap + 0.001f)
         {
-            return 1;
+            return 1.0f;/* * (1.0f - length(shadowIntensity));*/
         }
-        return 0;
+        return 0.0;
     }
     
     return 0;    
@@ -441,14 +443,11 @@ float4 PSMain( SPSIn psIn) : SV_Target0
     //半球ライトの設定
     //finalLig += CalcHemisphereLight(psIn, m_hemisphereLig);
     
-    int onShadow = CalcShadowMap(psIn);
-	
+    float shadowAttn = CalcShadowMap(psIn);
     //最終合成
     float4 finalColor = g_albedo.Sample(g_sampler, psIn.uv);
-    if(onShadow)
-    {
-        finalColor.xyz *= 0.5;
-    }
+    
+    finalColor.xyz = lerp(finalColor, finalColor * 0.5, shadowAttn);
     finalColor.xyz *= finalLig;
 
 	return finalColor;

@@ -48,7 +48,7 @@ namespace nsTMEngine
 	void SceneLight::Init()
 	{
 		//ディレクションライトの設定
-		m_light.m_drectionLight.SetDirection(0.0f, -1.0f, 1.0f);
+		m_light.m_drectionLight.SetDirection(1.0f, -1.0f, 1.0f);
 		m_light.m_drectionLight.SetColor(0.7f, 0.7f, 0.7f);
 		//カメラの位置の登録
 		m_light.m_cameraPos = g_camera3D->GetPosition();
@@ -76,12 +76,14 @@ namespace nsTMEngine
 		Vector3 upAxis = { 0.0f,1.0f,0.0f };
 		// ライトをカメラと見立てたビュー行列を計算する
 		Matrix viewMatrix;
-		viewMatrix.MakeLookAt(g_camera3D->GetPosition(), g_camera3D->GetTarget(), upAxis);
+		Vector3 lightPos = *m_lightPos;
+		Vector3 lightTarget = m_light.m_drectionLight.m_direction + lightPos;
+		viewMatrix.MakeLookAt(lightPos, lightTarget, upAxis);
 		// プロジェクション行列を計算する
 		Matrix projMatrix;
 		float shadowNear = g_camera3D->GetNear() - 4000;
 		float shadowFar = g_camera3D->GetFar() + 6000;
-		projMatrix.MakeOrthoProjectionMatrix(6000, 3000, shadowNear, shadowFar);
+		projMatrix.MakeOrthoProjectionMatrix(4000, 4000, shadowNear, shadowFar);
 		LVP = viewMatrix * projMatrix;
 		m_light.m_drectionLight.UpdateLVP(LVP);
 		

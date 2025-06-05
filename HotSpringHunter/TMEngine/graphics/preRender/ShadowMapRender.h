@@ -5,19 +5,19 @@ namespace nsTMEngine {
 	{
 	public:
 		/// <summary>
-		/// 初期化
+		/// 蛻晄悄蛹・
 		/// </summary>
 		void Init();
 
 		/// <summary>
-		/// 描画
+		/// 謠冗判
 		/// </summary>
 		/// <param name="rc"></param>
 		/// <param name="renderObjects"></param>
 		void Render(RenderContext& rc, std::vector<IRenderer*>& renderObjects);	
 
 		/// <summary>
-		/// �e�N�X�`���̎擾
+		/// テクスチャの取得
 		/// </summary>
 		/// <returns></returns>
 		Texture& GetTexture()
