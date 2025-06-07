@@ -23,7 +23,7 @@ bool Game::Start()
 {
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
-	m_player = NewGO<Player>(0, "player");
+	m_player = NewGO<Character::Player>(0, "player");
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 	m_bear = NewGO<Bear>(0, "bear");
 	//m_wildBoar = NewGO<WildBoar>(0, "wildBoar");

@@ -46,7 +46,7 @@ bool WildBoar::Start()
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
 
 	//インスタンス探し
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Character::Player>("player");
 
 	//イノシシのHPをセット
 	m_wildBoarHP = MAX_WILD_BOAR_HP;

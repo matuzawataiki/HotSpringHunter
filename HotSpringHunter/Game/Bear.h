@@ -1,4 +1,8 @@
 #pragma once
+
+namespace Character {
+	class Player;
+}
 class Player;
 class SnakeEnemy;
 class EnemySpawn;
@@ -94,7 +98,7 @@ public:
 	bool GetIsBearSpawn() const { return m_isSpawn; };
 
 private:
-	Player*				m_player			= nullptr;
+	Character::Player*	m_player			= nullptr;
 	SnakeEnemy*			m_snakeEnemy[4]		= {};
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
