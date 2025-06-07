@@ -1,8 +1,9 @@
 #pragma once
-#include "glm/glm.hpp"
+
 namespace Character {
 	class Player;
 }
+class Player;
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
@@ -47,11 +48,7 @@ public:
 	//投石攻撃
 	void StoneThrow();
 	//投石のベクトルを計算
-	Vector3 CalcStoneVec(Vector3 start, Vector3 target);
-	// Vector3 から glm::vec3 に変換
-	glm::vec3 ConvertToGlmVec3(const Vector3& v);
-	// glm::vec3 を Vector3 に変換
-	Vector3 ConvertToVector3(const glm::vec3& v);
+	Vector3 CalcStoneVec(Vector3 start, Vector3 target, float t);
 	//岩のコリジョンを作る
 	void StoneCollision();
 	//クマを初期位置に移動(召喚用)
@@ -77,16 +74,28 @@ public:
 	//クマのHPのゲッター
 	float GetBearMAXHP();
 	void Render(RenderContext& rc)override;
-  
-	//ゲッター
-	//クマのHPを取得
-	float GetBearHP() { return m_bearHP; };
-	//クマの座標を取得
-	Vector3 GetBearPos() { return m_bearPos; };
 
 	//セッター
-	//クマの位置を設定
+	//位置を設定
 	void SetBearPos(const Vector3& pos) { m_bearPos = pos; };
+	//向きを設定
+	void SetBearDir(const Vector3& dir) { m_bearDir = dir; };
+	//回転を設定
+	void SetBearRot(const Quaternion& rot) { m_bearRot = rot; };
+	//スポーン状態を設定
+	void SetBearIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	//キャラコンの位置を設定
+	void SetBearCharaConPos(const Vector3& pos) { m_bearController.SetPosition(pos); };
+	//スポーン位置を設定
+	void SetBearNewPos(const Vector3& pos) { m_bearNewPos = pos; };
+
+	//ゲッター	
+	//位置を取得
+	Vector3 GetBearPos() const { return m_bearPos; };
+	//HPを取得
+	float GetBearHP() const { return m_bearHP; };
+	//スポーン状態を取得
+	bool GetIsBearSpawn() const { return m_isSpawn; };
 
 private:
 	Character::Player*	m_player			= nullptr;
@@ -119,20 +128,20 @@ private:
 	float m_bearHP				= 0.0f;		//敵のHP
 	float m_ATKCoolTime			= 0.0f;		//攻撃のクールタイム
 	float m_slowCoolTime		= 0.0f;		//投石攻撃のクールタイム
-	float m_contactTime			= 0.0f;		//プレイヤー認識時のイベント時間
 	float m_setStoneTime		= 0.0f;		//投石攻撃の準備時間
+	float m_flightTime			= 0.0f;		//投石の飛行経過時間
 
 	int m_bearState				= 0;		//クマの行動状態
 
 	bool m_isCanStateChange		= true;		//ステート変更を受け付けているか
-	bool m_isSpawn				= true;		//敵が出現するか
-	bool m_isAlive				= true;		//敵が生きているか
-	bool m_isFind				= false;	//プレイヤーを発見したか
-	bool m_isSetStone			= false;	//投石攻撃：岩の準備をしたか
-	bool m_isStoneSlowing		= false;	//岩が飛ばされているか
-	bool m_isSummon				= false;	//雑魚を召喚したか
-	bool m_isSummonEnd			= false;	//雑魚召喚が終わったか
+	bool m_isSpawn				= false;	//敵がスポーンしているか
 	bool m_isContact			= false;	//プレイヤーを認識したか
 	bool m_isPlayDeadAnim		= false;	//死亡アニメーションを再生したか
 	bool m_isRemoveController	= false;	//キャラコンを削除したか
+	bool m_isSetStone			= false;	//投石：岩の準備をしたか
+	bool m_isStoneSlowing		= false;	//投石：岩が飛ばされているか
+	bool m_isStoneDraw			= false;	//投石：岩を描画するか
+	bool m_isSummon				= false;	//召喚：雑魚を召喚したか
+	bool m_isSummonEnd			= false;	//召喚：雑魚召喚が終わったか
+	bool m_isPlayRoar			= false;	//咆哮アニメーションを再生したか
 };
