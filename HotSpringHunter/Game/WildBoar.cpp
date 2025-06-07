@@ -23,6 +23,8 @@ namespace
 
 	const float IDLE_TIME			= 3.0f;					//Idleの時間 
 
+	const float TO_NOT_SPAWNED_TIME = 5.0f;					//死亡してから非スポーン状態とする時間
+
 	const Vector3 NEW_POSITION		= { 0.0f,0.0f,500.0f };		//初期位置
 	const Vector3 SET_SCALE			= { 1.5f,1.5f,1.5f };       //イノシシの大きさ
 }
@@ -91,15 +93,14 @@ void WildBoar::LoadAssets()
 
 void WildBoar::Update()
 {
-	//スポーンしているなら
-	if (m_isSpawn)
-	{
-		//ステート管理
-		ManageState();
-		//行動実行
-		ExecuteAction();
+	//スポーンしていないときは実行しない
+	if (!m_isSpawn) {
+		return;
 	}
-
+	//ステート管理
+	ManageState();
+	//行動実行
+	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
 }
@@ -199,7 +200,7 @@ void WildBoar::Charge()
 		//イノシシが待機する
 		m_wildBoarState = enWildBoarIdle;
 
-		//当たった判定をfalseにする
+		//当たった判定を false にする
 		m_isHitCollision = false;
 
 		m_chargeCaveat.SetScale(1.0f, 1.0f, 1.0f);
@@ -329,9 +330,9 @@ void WildBoar::ExecuteAction()
 {
 	//移動速度を0する
 	m_wildBoarSpeed = Vector3::Zero;
-	//近接攻撃のクールタイムを計算
+	//攻撃のクールタイムを計算
 	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
-
+	//突進のクールタイムを計算
 	m_chargeCoolTime += g_gameTime->GetFrameDeltaTime();
 
 	switch (m_wildBoarState) {
@@ -345,6 +346,9 @@ void WildBoar::ExecuteAction()
 
 		//死亡
 	case enWildBoarDeath:
+		//死亡経過時間を計算
+		m_elapsedTime += g_gameTime->GetFrameDeltaTime();
+		//吹っ飛ばす
 		m_wildBoarSpeed = m_enemyBase->DeathBlown(m_wildBoarDir);
 		//死亡アニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimcClip_Death);
@@ -353,6 +357,15 @@ void WildBoar::ExecuteAction()
 			m_wildBoarController.RemoveRigidBoby();
 			m_isRemoveController = true;
 		}
+
+		//一定時間がたったら
+		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
+			//時間をリセット
+			m_elapsedTime = 0.0f;
+			//非スポーン状態にする
+			m_isSpawn = false;
+		}
+
 		break;
 
 		//突進チャージ
@@ -468,6 +481,11 @@ void WildBoar::ExecuteSpeed()
 
 void WildBoar::Render(RenderContext& rc)
 {
+	//スポーンしていないなら実行しない
+	if (!m_isSpawn) {
+		return;
+	}
+
 	//死亡時以外は通常表示
 	if (m_wildBoarState != enWildBoarDeath) {
 		m_wildBoarModel.Draw(rc);

@@ -14,6 +14,12 @@ public:
 	void Update()override;
 
 	void Render(RenderContext& rc)override;
+
+private:
+
+	Bear* m_bear = nullptr;
+
+	bool m_isBearHPBarCreated = false;			//クマのHPバーを描画したか
 };
 
 class PlayerHPUI : public IGameObject
@@ -59,6 +65,7 @@ public:
 	void UpdateBarWidth();
 	void Render(RenderContext& rc)override;
 
+private:
 	Bear* m_bear = nullptr;
 	Character::Player* m_player = nullptr;
 

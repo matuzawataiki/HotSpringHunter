@@ -36,13 +36,19 @@ bool UI::Start()
 {
 	//プレイヤーのUI
 	NewGO<PlayerHPUI>(0, "playerHPUI");
-	//ボスのUI
-	//NewGO<BossHPUI>(0, "bossHPUI");
+	m_bear = FindGO<Bear>("bear");
+
+	
 	return true;
 }
 
 void UI::Update()
 {
+	if (!m_isBearHPBarCreated && m_bear->GetIsBearSpawn()) {
+		//ボスのUI
+		NewGO<BossHPUI>(0, "bossHPUI");
+		m_isBearHPBarCreated = true;
+	}
 }
 
 void UI::Render(RenderContext& rc)

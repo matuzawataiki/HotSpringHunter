@@ -15,6 +15,8 @@ namespace {
 	const float ATK_RANGE				= 100.0f;			//近接攻撃のリーチ
 	const float MELEE_ATTACK_DAMAGE		= 20.0f;			//近接攻撃のダメージ
 	const float ATK_COOLTIME			= 3.0f;				//近接攻撃のクールタイム
+
+	const float TO_NOT_SPAWNED_TIME = 5.0f;					//死亡してから非スポーン状態とする時間
 };
 
 SnakeEnemy::SnakeEnemy()
@@ -37,7 +39,6 @@ bool SnakeEnemy::Start()
 
 	//インスタンス探し
 	m_player	 = FindGO<Character::Player>("player");
-	m_enemySpawn = FindGO<EnemySpawn>("enemySpawn");
 
 	//キャラクターコントローラー
 	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
@@ -72,13 +73,14 @@ void SnakeEnemy::LoadAsset()
 void SnakeEnemy::Update()
 {
 	//スポーンしているなら
-	if (m_isSpawn) {
-		//ステート管理
-		ManageState();
-		//行動を実行
-		ExecuteAction();
+	if (!m_isSpawn) {
+		return;
 	}
 
+	//ステート管理
+	ManageState();
+	//行動を実行
+	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
 }
@@ -99,7 +101,6 @@ void SnakeEnemy::ManageState()
 
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
-
 		//HPがまだ残っている
 		if (m_snakeHP > 0.0f) {
 			//ノックバック
@@ -167,7 +168,9 @@ void SnakeEnemy::ExecuteAction()
 
 		//死亡
 	case enSnakeDeath:
-		//吹っ飛ばせる
+		//死亡経過時間を計算
+		m_elapsedTime += g_gameTime->GetFrameDeltaTime();
+		//吹っ飛ばす
 		m_snakeSpeed = m_enemyBase->DeathBlown(m_snakeDir);
 		//死亡アニメーション（ふっとび）を再生
 		m_snakeModel.PlayAnimation(enSnakeAnimClip_Death, ANIM_INTERPOLATE_TIME);
@@ -176,6 +179,14 @@ void SnakeEnemy::ExecuteAction()
 			m_snakeController.RemoveRigidBoby();
 			m_isRemoveController = true;
 		}
+		//一定時間がたったら
+		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
+			//時間をリセット
+			m_elapsedTime = 0.0f;
+			//非スポーン状態にする
+			m_isSpawn = false;
+		}
+
 		break;
 
 		//近接攻撃
@@ -259,6 +270,11 @@ void SnakeEnemy::ExecuteSpeed()
 
 void SnakeEnemy::Render(RenderContext& rc)
 {
+	//スポーンしていないなら実行しない
+	if (!m_isSpawn) {
+		return;
+	}
+
 	//死亡時は点滅表示を行う
 	if ((m_snakeState == enSnakeDeath) && (m_enemyBase->IsBlinkRender())) {
 		m_snakeModel.Draw(rc);

@@ -74,7 +74,7 @@ void EnemySpawn::EnemyState()
 		{
 			m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
 
-			m_snakeEnemy[i]->SetIsSpawn(true);
+			m_snakeEnemy[i]->SetSnakeIsSpawn(true);
 
 			//座標
 			float distance = 0.0f;
@@ -98,7 +98,7 @@ void EnemySpawn::EnemyState()
 		{
 			m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
 
-			m_snakeEnemy[i]->SetIsSpawn(true);
+			m_snakeEnemy[i]->SetSnakeIsSpawn(true);
 
 			//座標
 			float distance = 0.0f;

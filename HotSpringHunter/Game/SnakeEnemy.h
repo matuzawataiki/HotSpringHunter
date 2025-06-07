@@ -49,11 +49,22 @@ public:
 	void Render(RenderContext& rc)override;
 
 	//セッター
-	//ヘビの座標を設定
+	//座標を設定
 	void SetSnakePos(const Vector3& pos) { m_snakePos = pos; };
-	//ヘビの出現状態を設定
-	void SetIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	//向きを設定
+	void SetSnakeDir(const Vector3& dir) { m_snakeDir = dir; };
+	//回転を設定
+	void SetSnakeRot(const Quaternion& rot) { m_snakeRot = rot; };
+	//スポーン状態を設定
+	void SetSnakeIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	//キャラコンの位置を設定
+	void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController.SetPosition(pos); };
 
+	//ゲッター
+	//位置を取得
+	Vector3 GetSnakePos() const { return m_snakePos; };
+	//スポーン状態を取得
+	bool GetIsSnakeSpawn() const { return m_isSpawn; };
 private:
 
 	CollisionObject*		collisionObject		= nullptr;
@@ -73,11 +84,11 @@ private:
 
 	float m_snakeHP				= 0.0f;			//敵のHP
 	float m_ATKCoolTime			= 0.0f;			//近接攻撃：クールタイム
+	float m_elapsedTime			= 0.0f;			//死亡経過時間
 
 	int m_snakeState			= 0;			//ヘビのステート
 
 	bool m_isCanStateChange		= true;			//ステートを変えてもよいか
-	bool m_isSpawn				= true;			//敵が出現するか
-	bool m_isAlive				= true;			//敵が生きているか
+	bool m_isSpawn				= false;			//敵が出現するか
 	bool m_isRemoveController	= false;		//キャラコンを削除したか
 };
