@@ -64,6 +64,24 @@ public:
 	//モデル
 	void Render(RenderContext& rc)override;
 
+	//セッター
+	//位置を設定
+	void SetWildBoarPos(const Vector3& pos) { m_wildBoarPos = pos; };
+	//向きを設定
+	void SetWildBoarDir(const Vector3& dir) { m_wildBoarDir = dir; };
+	//回転を設定
+	void SetWildBoarRot(const Quaternion& rot) { m_wildBoarRot = rot; };
+	//スポーン状態を設定
+	void SetWildBoarIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	//キャラコンの位置を設定
+	void SetWildBoarCharaConPos(const Vector3& pos) { m_wildBoarController.SetPosition(pos); };
+
+	//ゲッター
+	//位置を取得
+	Vector3 GetWildBoarPos() const { return m_wildBoarPos; };
+	//スポーン状態を取得
+	bool GetIsWildBoarIsSpawn() const { return m_isSpawn; };
+
 private:
 
 	CollisionObject*		collisionObject		= nullptr;
@@ -86,15 +104,16 @@ private:
 	Vector3 m_chargeOldPos		= Vector3::Zero;		//突進前の位置
 
 	float m_wildBoarHP			= 0.0f;				//イノシシのHP
-	float m_ATKCoolTime			= 0.0f;				//近接攻撃のクールタイム
-	float m_chargeTime			= 0.0f;				//突進攻撃のクールタイム
+	float m_ATKCoolTime			= 0.0f;				//攻撃のクールタイム
+	float m_chargeTime			= 0.0f;				//突進のチャージ時間
 	float m_idleTime			= 0.0f;				//待機時間
 	float m_chargeCoolTime		= 0.0f;				//突進クールタイム
+	float m_elapsedTime			= 0.0f;				//死亡経過時間
+
 
 	int m_wildBoarState			= 0;				//イノシシの行動状態
 
-	bool m_isSpawn				= true;				//敵が出現するか
-	bool m_isAlive				= true;				//敵が生きているか
+	bool m_isSpawn				= false;			//敵が出現するか
 	bool m_isFind				= false;			//プレイヤーを捉えたか
 	bool m_isCanStateChange		= true;				//ステートを変えてもよいか
 	bool m_isHitCollision		= false;			//コリジョン当たったか

@@ -7,6 +7,7 @@ class Player;
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
+class EnemyManager;
 class GameCamera;
 class EnemyHPBar;
 
@@ -102,6 +103,7 @@ private:
 	SnakeEnemy*			m_snakeEnemy[4]		= {};
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
+	EnemyManager*		m_enemyManager		= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
 
@@ -123,7 +125,7 @@ private:
 	Vector3 m_stoneDir			= Vector3::Zero;		//岩の向き
 	Vector3 m_newStonePos		= Vector3::Zero;		//投石をセットする位置
 	Vector3 m_toSlowPos			= Vector3::Zero;		//投石の目標位置
-	Vector3 m_fastVelocityVec = { 0.0f,1.0f,1.0f };		//最初の速度
+	Vector3 m_bearNewPos		= Vector3::Zero;		//クマのスポーン位置
 
 	float m_bearHP				= 0.0f;		//敵のHP
 	float m_ATKCoolTime			= 0.0f;		//攻撃のクールタイム

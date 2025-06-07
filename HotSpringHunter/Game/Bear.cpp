@@ -4,6 +4,7 @@
 #include "SnakeEnemy.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyManager.h"
 #include "GameCamera.h"
 #include "collision/CollisionObject.h"
 #include "EnemyHPBar.h"
@@ -85,9 +86,10 @@ bool Bear::Start()
 	m_player		= FindGO<Character::Player>("player");
 	m_enemySpawn	= FindGO<EnemySpawn>("enemySpawn");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
+	m_enemyManager	= FindGO<EnemyManager>("enemyManager");
 
 	//クマを初期位置に
-	m_bearPos = NEW_POSITION;
+	//m_bearPos = NEW_POSITION;
 
 	//キャラクターコントローラー
 	m_bearController.Init(80.0f, 80.0f, m_bearPos);
@@ -259,7 +261,7 @@ void Bear::StoneCollision()
 /// </summary>
 void Bear::GoNewPos()
 {
-	Vector3 toNewPos = NEW_POSITION - m_bearPos;
+	Vector3 toNewPos = m_bearNewPos - m_bearPos;
 
 	//ステートを変更不能に
 	m_enemyBase->SetChangeFlag(false);
@@ -287,12 +289,7 @@ void Bear::SummonMinions()
 
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
-		//雑魚を生成
-		m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
-		//雑魚の初期位置をセット
-		m_snakeEnemy[i]->SetSnakePos(m_summonPos[0]);
-		//配列の頭から消す
-		m_summonPos.erase(m_summonPos.begin());
+		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, m_summonPos[i], Quaternion::Identity);
 	}
 }
 
@@ -402,6 +399,8 @@ void Bear::FindPlayer()
 		m_isContact = true;
 		//クマを認識状態にする
 		m_bearState = enbearContact;
+		//接触時のイベントカメラにする
+		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
 		//ステート変更を不可に
 		m_enemyBase->SetChangeFlag(false);
 	}
@@ -534,22 +533,20 @@ void Bear::ExecuteAction()
 		//クマ登場のイベント
 	case enbearContact:
 
-		//クマがプレイヤーを認識したら
-		//イベントタイムを数える
-		m_contactTime += g_gameTime->GetFrameDeltaTime();
+		if (!m_isPlayRoar) {
+			//咆哮アニメーションを再生
+			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+			m_isPlayRoar = true;
+		}		
 
-		//咆哮アニメーションを再生
-		m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+		//アニメーションが再生し終わったら待機アニメーション
+		if (!m_bearModel.IsPlayAnimation()) {
+			m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 
-		////登場イベントが終わっていないなら
-		if (m_contactTime <= CONTACT_TIME) {
-			//カメラをイベントカメラにする
-			//m_gameCamera->SetCameraState(enLookDown);
 		}
-		//イベント時間が終わったら
-		else {
-			//イベントカメラをやめる
-			//m_gameCamera->SetCameraState(enLookDown);
+
+		//登場イベントが終わったら
+		if (m_gameCamera->GetCameraState() != EnCameraVar::enBearContact) {
 			//召喚状態へ
 			m_bearState = enBearGoNewPos;
 		}

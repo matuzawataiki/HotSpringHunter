@@ -3,11 +3,14 @@
 #include "GameCamera.h"
 #include "Player.h"
 #include "EnemyBase.h"
+#include "EnemyManager.h"
+#include "EnemyHPBar.h"
 #include "StartWaveCollision.h"
 #include "UI.h"
 #include "BackGround/StageManager.h";
 #include "Bear.h"
 #include "WildBoar.h"
+#include "SnakeEnemy.h"
 
 Game::Game()
 {
@@ -25,8 +28,12 @@ bool Game::Start()
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
 	m_player = NewGO<Character::Player>(0, "player");
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
-	m_bear = NewGO<Bear>(0, "bear");
+	//m_bear = NewGO<Bear>(0, "bear");
 	//m_wildBoar = NewGO<WildBoar>(0, "wildBoar");
+
+	//m_wildBoar = NewGO<WildBoar>(0, "wildBoar");
+	m_enemyManager = NewGO<EnemyManager>(0, "enemyManager");
+	//m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
 
 	m_ui = NewGO<UI>(0, "ui");
 
