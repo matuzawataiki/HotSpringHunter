@@ -5,16 +5,16 @@ namespace Character {
 
 namespace Enemy
 {
-	class EnemyBase : public IGameObject
+	class IEnemy : public IGameObject
 	{
 	public:
+		IEnemy() {}
+		virtual ~IEnemy() {}
 		bool Start() override;
 		void Update() override;
 		void Render(RenderContext& rc) override;
 
-		///////////////////////////////////////////////
-		// ゲッター
-		///////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>
 		/// 位置の取得
@@ -59,9 +59,7 @@ namespace Enemy
 			return &m_enemyModel;
 		}
 
-		///////////////////////////////////////////////
-		// セッター
-		///////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>
 		/// 位置の設定
@@ -95,6 +93,37 @@ namespace Enemy
 			m_rotation = rotetion;
 		}
 
+		//////////////////////////////////////////////////////////////////////////////
+
+		/// <summary>
+		/// 攻撃できるかどうか
+		/// </summary>
+		/// <returns>攻撃可能ならture、不可能ならfalse</returns>
+		inline bool IsAttack() {
+			return m_isAttack;
+		 }
+
+		/// <summary>
+		/// 自分に攻撃がヒットしたかどうか
+		/// </summary>
+		/// <returns>ヒットしたならture、してないならfalse</returns>
+		inline bool IsHit() {
+			return m_isHit;
+		}
+
+		/// <summary>
+		/// 死んでいるかどうか
+		/// </summary>
+		/// <returns>死んでいるならture、生きているならfalse</returns>
+		inline bool IsDeath() {
+			return m_isDeath;
+		}
+
+		//////////////////////////////////////////////////////////////////////////////
+
+		inline void AddDamage(float damage) {
+			m_hp -= damage;
+		}
 
 	protected:
 		Character::Player* m_target = nullptr;		//ターゲットのインスタン
@@ -108,6 +137,12 @@ namespace Enemy
 
 		CharacterController m_characterController;
 
+		float m_hp;				//体力
+		float m_hpMax;			//最大体力
+
+		bool m_isAttack = false;	//攻撃フラグ
+		bool m_isHit	= false;	//ヒットフラグ
+		bool m_isDeath	= false;	//死亡フラグ
 
 	};
 }

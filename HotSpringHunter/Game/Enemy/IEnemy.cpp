@@ -1,21 +1,19 @@
 #include "stdafx.h"
-#include "EnemyBase.h"
+#include "IEnemy.h"
 #include "Player.h"
 namespace Enemy {
-	bool EnemyBase::Start()
+	bool IEnemy::Start()
 	{
 		return true;
 	}
 
-	void EnemyBase::Update()
+	void IEnemy::Update()
 	{
 		m_target = FindGO<Character::Player>("player");		//不正アクセス防止のためUpdateでまわす。
-
 	}
 
-	void EnemyBase::Render(RenderContext& rc)
+	void IEnemy::Render(RenderContext& rc)
 	{
-
 	}
 }
 

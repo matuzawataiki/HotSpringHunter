@@ -1,5 +1,10 @@
 #pragma once
-#include "Enemy/EnemyBase.h"
+#include "Enemy/IEnemy.h"
+
+namespace Character
+{
+	class Player;
+}
 
 namespace Enemy
 {
@@ -12,14 +17,18 @@ namespace Enemy
 		enAnimClip_Num,
 	};
 
-	class PoisonSnake : public EnemyBase
+	class PoisonSnakeStateMachine;
+	class PoisonSnake : public IEnemy
 	{
 	public:
+		PoisonSnake();
+		virtual ~PoisonSnake();
+
 		bool Start() override;
 		void Update() override;
+		void ActivateStart() override;
 		void Render(RenderContext& rc) override;
-	public:
-		~PoisonSnake();
+
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 
 		/// <summary>
@@ -38,7 +47,18 @@ namespace Enemy
 		}
 
 	private:
+		void LoadAssets();
+
+		void InitStateMachine();
+
+	private:
+		PoisonSnakeStateMachine* m_stateMachine;
+		Character::Player* m_target = nullptr;
+
+		AnimationClip m_animationClip[enAnimClip_Num];
+
 		bool m_isAttack = false;	//攻撃していいかどうか
+
 	};
 
 }

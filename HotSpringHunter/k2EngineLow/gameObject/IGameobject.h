@@ -45,6 +45,16 @@ namespace nsK2EngineLow {
 			(void)renderContext;
 		}
 
+		/// <summary>
+		/// オブジェクトをアクティブにしたときに実行
+		/// </summary>
+		virtual void ActivateStart(){}
+
+		/// <summary>
+		/// オブジェクトを非アクティブにしたときに実行
+		/// </summary>
+		virtual void DeactivateStart(){}
+
 	public:
 		/*!
 		*@brief Start関数が完了した？
@@ -65,6 +75,7 @@ namespace nsK2EngineLow {
 		/// </summary>
 		void Activate()
 		{
+			ActivateStart();
 			m_isActive = true;
 		}
 		/// <summary>
@@ -72,6 +83,7 @@ namespace nsK2EngineLow {
 		/// </summary>
 		void Deactivate()
 		{
+			DeactivateStart();
 			m_isActive = false;
 		}
 
