@@ -22,7 +22,6 @@ Game::Game()
 Game::~Game()
 {
 	DeleteGO(m_gameCamera);
-	DeleteGO(m_backGround);
 	DeleteGO(m_stageManager);
 	DeleteGO(m_player);
 	DeleteGO(m_bear);

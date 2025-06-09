@@ -321,9 +321,6 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Game.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
