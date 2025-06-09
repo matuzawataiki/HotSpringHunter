@@ -238,6 +238,7 @@
     <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundGool.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxBattle.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="BackGround\ObjectBase.h" />
     <ClInclude Include="BackGround\MapObject\GroundGool.h" />

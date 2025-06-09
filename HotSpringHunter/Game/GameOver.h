@@ -1,5 +1,7 @@
 #pragma once
 class Title;
+class Result;
+
 class GameOver:public IGameObject
 {
 public:
@@ -7,11 +9,11 @@ public:
 	~GameOver();
 	bool Start()override;
 	void Update()override;
-	void SwitchTitle();
+	void SwitchResult();
 	void Render(RenderContext& rc)override;
 
 private:
-	Title* m_title = nullptr;
+	Result* m_result = nullptr;
 
 	SpriteRender m_overModel;
 };

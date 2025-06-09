@@ -2,6 +2,8 @@
 #include "GameOver.h"
 #include "GameOver.h"
 #include "Title.h"
+#include "Result.h"
+#include "Game.h"
 
 GameOver::GameOver()
 {
@@ -21,14 +23,16 @@ bool GameOver::Start()
 
 void GameOver::Update()
 {
-	SwitchTitle();
+	SwitchResult();
 }
 
-void GameOver::SwitchTitle()
+void GameOver::SwitchResult()
 {
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		m_title = NewGO<Title>(0, "title");
+		m_result = NewGO<Result>(0, "Result");
+		Game*game = FindGO<Game>("game");
 		DeleteGO(this);
+		DeleteGO(game);
 	}
 }
 

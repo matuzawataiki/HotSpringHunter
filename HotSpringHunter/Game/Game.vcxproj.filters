@@ -39,6 +39,7 @@
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="GameClear.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -77,6 +78,7 @@
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="GameClear.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

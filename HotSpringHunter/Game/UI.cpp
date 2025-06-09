@@ -30,6 +30,8 @@ UI::UI()
 
 UI::~UI()
 {
+	DeleteGO(FindGO<PlayerHPUI>("playerHPUI"));
+	DeleteGO(FindGO<BossHPUI>("bossHPUI"));
 }
 
 bool UI::Start()

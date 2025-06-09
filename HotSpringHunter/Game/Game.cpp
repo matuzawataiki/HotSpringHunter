@@ -10,6 +10,8 @@
 #include "Bear.h"
 #include "WildBoar.h"
 #include "SoundEffect.h"
+#include "GameOver.h"
+#include "GameClear.h"
 
 Game::Game()
 {
@@ -19,7 +21,11 @@ Game::~Game()
 {
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_backGround);
+	DeleteGO(m_stageManager);
 	DeleteGO(m_player);
+	DeleteGO(m_bear);
+	DeleteGO(m_ui);
+	DeleteGO(m_soundEffect);
 }
 
 bool Game::Start()
@@ -45,5 +51,19 @@ bool Game::Start()
 
 void Game::Update()
 {
-
+	if (m_player->GetPlayerHP() == 0.0f)
+	{
+		if (m_gameOver == nullptr)
+		{
+			m_gameOver = NewGO<GameOver>(0, "gameOver");
+		}
+	}
+	//テスト確認用のクリア処理です
+	if (g_pad[0]->IsTrigger(enButtonUp))
+	{
+		if (m_gameClear == nullptr)
+		{
+			m_gameClear = NewGO<GameClear>(0, "GameClear");
+		}
+	}
 }
