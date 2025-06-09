@@ -92,6 +92,7 @@ namespace Character {
 		StateMachine* m_stateMachine = nullptr;
 		SnakeEnemy* m_snakeEnemy = nullptr;
 		CollisionObject* m_collision = nullptr;
+		SoundEffect* m_soundEffect = nullptr;
 
 		AnimationClip		m_animationClips[enPlayerAnimClip_Num];	//アニメーションクリップ。	
 		CharacterController m_playerCharaCon;						//キャラコン。
@@ -141,7 +142,7 @@ namespace Character {
 		void StateManage();
 	private:
 		Player* m_player = nullptr;
-    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
     
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
 	};
@@ -159,6 +160,8 @@ namespace Character {
 		//待機。
 		void idle();
 		void Exit()override;
+	private:
+		SoundEffect* m_soundEffect = nullptr;
 	};
 
 	/// <summary>
@@ -184,7 +187,7 @@ namespace Character {
 		void Jump();
 		void Exit()override;
 	private:
-    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -209,7 +212,7 @@ namespace Character {
 		void MakeCollision();
 		void Exit()override;
 	private:
-    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -237,7 +240,7 @@ namespace Character {
 		void Exit()override;
 
 	private:
-  SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
   
 		Vector3 m_RStickOld = Vector3::Zero;				//Rスティックの入力量（変更前）。
 		float m_collisionSize = 0.0f;							//コリジョンサイズ。
@@ -289,7 +292,7 @@ private:
 		void ChangeState();
 		void Exit()override;
 	private:
-    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -309,6 +312,6 @@ private:
 		void Update()override;
 		void Exit()override;
 	private:
-    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 }

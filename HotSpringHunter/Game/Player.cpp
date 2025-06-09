@@ -103,6 +103,8 @@ namespace Character {
 		//ステートマシン生成
 		m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
 
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 		AddList();
 		LoadAssets();
 
@@ -399,7 +401,7 @@ namespace Character {
 
 	void PlayerIdle::Enter()
 	{
-    m_soundEffect = FindGO<SoundEffect>("soundEffect");
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
 		//待機アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 	}
@@ -435,6 +437,7 @@ namespace Character {
 
 	void PlayerMove::Enter()
 	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	}
 
@@ -509,6 +512,8 @@ namespace Character {
 
 	void PlayerWeakAttack::Enter()
 	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 		//弱攻撃のフラッグを立てる。
 		m_player->m_weakAtFlag = true;
 		//攻撃力を設定。
@@ -584,6 +589,8 @@ namespace Character {
 
 	void PlayerChargeAttack::Enter()
 	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 		//溜め攻撃のフラッグを立てる。
 		m_player->m_chargeAtFlag = true;
 		//チャージ中。
@@ -747,6 +754,8 @@ namespace Character {
 
 	void PlayerGuard::Enter()
 	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 		//ガードアニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_GuardStart, ANIM_INTERPOLATE_TIME);
 		//ガードフラッグを立てる。
@@ -792,10 +801,12 @@ namespace Character {
 
 	void PlayerHit::Enter()
 	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 		//被弾アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Hit, ANIM_INTERPOLATE_TIME);
-    //被弾のSE
-	  m_soundEffect->Play(enPlayerHitSE, false);
+		//被弾のSE
+		m_soundEffect->Play(enPlayerHitSE, false);
 	}
 
 	void PlayerHit::Update()
@@ -829,10 +840,12 @@ namespace Character {
 
 	void PlayerDeath::Enter()
 	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 		//死亡アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Death, ANIM_INTERPOLATE_TIME);
-    //死亡SE
-	  m_soundEffect->Play(enPlayerDeathSE, false);
+		//死亡SE
+		m_soundEffect->Play(enPlayerDeathSE, false);
 	}
 
 	void PlayerDeath::Update()

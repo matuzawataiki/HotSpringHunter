@@ -66,7 +66,7 @@
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
-    <ClInclude Include="BackGround\MapObject\Tree.h" />    
+    <ClInclude Include="BackGround\MapObject\Tree.h" />
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
@@ -90,5 +90,6 @@
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
+    <ClInclude Include="SoundEffect.h" />
   </ItemGroup>
 </Project>
