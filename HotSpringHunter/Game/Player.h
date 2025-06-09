@@ -3,6 +3,8 @@ class IState;
 class StateMachine;
 class SnakeEnemy;
 
+class SoundEffect;
+
 //現在アクティブなステート。
 //順番気をつけようね。
 enum EnPlayerActiveState {
@@ -97,6 +99,8 @@ public:
 	Vector3 m_playerSpeed	= Vector3::Zero;		//移動スピード。
 	Vector3 m_playerDir		= Vector3::Zero;		//向き。
 
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+
 	float m_playerHP	= 0.0f;			//体力。
 	float m_dashState	= 1.0f;			//ダッシュ：走り状態の移動管理。
 	float m_guardState	= 1.0f;			//ガード：ガード状態の移動管理。
@@ -123,6 +127,7 @@ public:
 
 protected:
 	Player* m_player = nullptr;
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 };
 
 class StateMachine :public IGameObject
@@ -137,6 +142,7 @@ public:
 private:
 	Player* m_player = nullptr;
 	float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 };
 
 class PlayerIdle :public IState
@@ -177,6 +183,7 @@ public:
 	void Jump();
 	void Exit()override;
 private:
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 };
 
 /// <summary>
@@ -201,7 +208,7 @@ public:
 	void MakeCollision();
 	void Exit()override;
 private:
-
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 };
 
 /// <summary>
@@ -229,6 +236,8 @@ public:
 	void Exit()override;
 
 private:
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+
 	Vector3 m_RStickOld		= Vector3::Zero;				//Rスティックの入力量（変更前）。
 	float m_collisionSize	= 0.0f;							//コリジョンサイズ。
 	bool m_isCharging		= true;							//チャージ中？
@@ -255,6 +264,8 @@ public:
 	void Exit()override;
 
 private:
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+
 	Vector3 m_directionGap = Vector3::Zero;				//向きの差分。
 };
 
@@ -278,6 +289,7 @@ public:
 	void ChangeState();
 	void Exit()override;
 private:
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 };
 
 /// <summary>
@@ -297,4 +309,5 @@ public:
 	void Update()override;
 	void Exit()override;
 private:
+	   SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 };

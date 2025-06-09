@@ -3,6 +3,7 @@
 class Player;
 class EnemySpawn;
 class EnemyBase;
+class SoundEffect;
 
 //イノシシのステート
 enum EnWildBoarState
@@ -68,18 +69,22 @@ public:
 	Player* m_player = nullptr;
 	EnemySpawn* m_enemySpawn = nullptr;
 	EnemyBase* m_enemyBase = nullptr;
+	SoundEffect* m_soundEffect = nullptr; //サウンドエフェクト
+	SoundSource* m_chargeSound = nullptr; //突進サウンド
+	SoundSource* m_runSound = nullptr;    //突進攻撃サウンド
+
 
 	AnimationClip m_animationClips[enWildBoarAnimClip_Num];  //アニメーションクリップ
 	CharacterController m_characterController;               //キャラクターコントローラー
 	Quaternion m_rotation = Quaternion::Identity;            //回転
-	ModelRender m_wildBoarModel;                                  //モデルレンダー
-	ModelRender m_chargeCaveat;			                    //突進警告モデルレンダー
+	ModelRender m_wildBoarModel;                             //モデルレンダー
+	ModelRender m_chargeCaveat;			                     //突進警告モデルレンダー
 
-	Vector3 m_position = Vector3::Zero; //座標
+	Vector3 m_position = Vector3::Zero;  //座標
 	Vector3 m_moveSpeed = Vector3::Zero; //速度
-	Vector3 m_enemyDir = Vector3::Zero; //向き
-	Vector3 m_toPlayer = Vector3::Zero; //ベクトル
-	Vector3 m_toCharge = Vector3::Zero; //突進ベクトル
+	Vector3 m_enemyDir = Vector3::Zero;  //向き
+	Vector3 m_toPlayer = Vector3::Zero;  //ベクトル
+	Vector3 m_toCharge = Vector3::Zero;  //突進ベクトル
 	Vector3 m_chargeVec = Vector3::Zero;
 	Vector3 m_chargeOldPos = Vector3::Zero; //突進前の位置
 
@@ -89,13 +94,15 @@ public:
 	float m_chargeTime = 0.0f;			//突進攻撃のクールタイム
 	float m_idleTime = 0.0f;            //待機時間
 	float m_chargeCoolTime = 0.0f;      //突進クールタイム
+	
 
 	//行動状態
 	int m_wildBoarState = 0;
 
-	bool m_isSpawn = true;	//敵が出現するか
-	bool m_isAlive = true;    //敵が生きているか
-	bool m_isFind = false;			//プレイヤーを捉えたか
-	bool m_isCanStateChange = true;	//ステートを変えてもよいか
-	bool m_isHitCollision = false;    //コリジョンにあたったか
+	bool m_isSpawn = true;	            //敵が出現するか
+	bool m_isAlive = true;              //敵が生きているか
+	bool m_isFind = false;			    //プレイヤーを捉えたか
+	bool m_isCanStateChange = true; 	//ステートを変えてもよいか
+	bool m_isHitCollision = false;      //コリジョンにあたったか
+	bool m_isChargeSoundPlay = true;    //突進中か
 };

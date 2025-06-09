@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"
+#include "SoundEffect.h"
 
 namespace {
 	const float FIND_RANGE = 500.0f;			//プレイヤーを捉える距離
@@ -27,6 +28,9 @@ bool SnakeEnemy::Start()
 {
 	//アセット読み込み
 	LoadAssets();
+
+	//サウンドエフェクト
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
@@ -82,11 +86,15 @@ void SnakeEnemy::ManageState()
 		if (m_enemyHP > 0.0f) {
 			//ノックバック
 			m_snakeState = enSnakeKnockBack;
+			//被弾の効果音
+			m_soundEffect->Play(enSnakeHitSE, false);
 		}
 		//HPがなくなった
 		else {
 			//死亡（吹っ飛び）
 			m_snakeState = enSnakeDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enSnakeDeathSE, false);
 		}
 		return;
 	}
@@ -149,6 +157,7 @@ void SnakeEnemy::ExecuteAction()
 		m_moveSpeed = m_enemyBase->DeathBlown(m_enemyDir);
 		//死亡アニメーション（ふっとび）を再生
 		//m_modelRender.PlayAnimation(enSnakeAnimClip_Death);
+		
 		break;
 
 		//近接攻撃
@@ -158,6 +167,8 @@ void SnakeEnemy::ExecuteAction()
 			m_enemyBase->MeleeAttack(m_position, m_enemyDir, MELEE_ATTACK_DAMAGE);
 			//近接攻撃アニメーションを再生
 			//m_modelRender.PlayAnimation(enSnakeAnimClip_Attack);
+			//近接攻撃の効果音
+			m_soundEffect->Play(enSnakeAttackSE, false);
 			//タイマーをセット
 			m_ATKCoolTime = ATK_COOLTIME;
 		}		

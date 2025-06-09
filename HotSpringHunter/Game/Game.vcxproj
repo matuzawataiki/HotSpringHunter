@@ -254,6 +254,7 @@
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="BackGround\StageManager.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
+    <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="StartWaveCollision.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -291,17 +292,22 @@
     <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
     <ClInclude Include="BackGround\HitObjectBase.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="BackGround\MapObject\GroundRun.h" />
     <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="BackGround\StageManager.h" />
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
+    <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="StartWaveCollision.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Towel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,7 @@ class EnemySpawn;
 class EnemyBase;
 class GameCamera;
 class EnemyHPBar;
+class SoundEffect;
 
 //クマの行動状態
 enum EnBearState {
@@ -86,6 +87,7 @@ private:
 	EnemyBase*			m_enemyBase			= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
+	SoundEffect*        m_soundEffect       = nullptr;
 
 	std::vector<Vector3>m_summonPos;				//召喚する位置
 

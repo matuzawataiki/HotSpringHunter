@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "SnakeEnemy.h"
 
+#include "SoundEffect.h"
+
 namespace {
 
 	const Vector3 PLAYER_NEW_POSITION	= { 0.0f,300.0f,0.0f };	//player初期位置。
@@ -99,6 +101,8 @@ bool Player::Start()
 	m_playerHP = MAX_PLAYER_HP;
 	//ステートマシン生成
 	m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
+	//サウンドエフェクト
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	AddList();
 	LoadAssets();
@@ -219,6 +223,9 @@ void Player::DirectionUpdate()
 /// <param name="reduce"></param>体力減少量。
 void Player::Hit(float reduce)
 {
+	//被弾SE
+	m_soundEffect->Play(enPlayerHitSE,false);
+
 	//ガードができていないなら。
 	if (m_guardFlag == true) {
 		return;
@@ -430,7 +437,7 @@ PlayerMove::~PlayerMove()
 
 void PlayerMove::Enter()
 {
-
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 }
 
 void PlayerMove::Update()
@@ -504,6 +511,8 @@ PlayerWeakAttack::~PlayerWeakAttack()
 
 void PlayerWeakAttack::Enter()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//弱攻撃のフラッグを立てる。
 	m_player->m_weakAtFlag = true;
 	//攻撃力を設定。
@@ -512,6 +521,9 @@ void PlayerWeakAttack::Enter()
 	WeakAttack();
 	//弱攻撃アニメーションを再生。
 	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack, ANIM_INTERPOLATE_TIME);
+
+	//サウンドソース
+	m_soundEffect->Play(enPlayerAttackSE, false);
 }
 
 void PlayerWeakAttack::Update()
@@ -577,6 +589,8 @@ PlayerChargeAttack::~PlayerChargeAttack()
 
 void PlayerChargeAttack::Enter()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//溜め攻撃のフラッグを立てる。
 	m_player->m_chargeAtFlag = true;
 	//チャージ中。
@@ -625,6 +639,20 @@ void PlayerChargeAttack::Charging()
 	//パワーをチャージに足す。
 	m_player->m_charge += movePower;
 
+	//チャージが増加しているなら、溜め攻撃1アニメーションを再生。
+	if (m_player->m_charge >= 30.0f)
+	{
+		m_soundEffect->Play(enPlayerCharge1SE, false);
+	}
+	if (m_player->m_charge >= 60.0f)
+	{
+		m_soundEffect->Play(enPlayerCharge2SE, false);
+	}
+	if (m_player->m_charge >= 100.0f)
+	{
+		m_soundEffect->Play(enPlayerCharge3SE, false);
+	}
+
 	//チャージを減少させる。
 	m_player->m_charge -= CHARGE_DECREASE;
 
@@ -651,6 +679,8 @@ void PlayerChargeAttack::Charging()
 		}
 		if (!m_isStateChange) {
 			ChargeAttack();
+			//溜め攻撃SE
+			m_soundEffect->Play(enPlayerDamageSE, false);
 			//溜め攻撃アニメーションを再生。
 			m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_ChargeAttack, ANIM_INTERPOLATE_TIME);
 			//溜め攻撃をした。
@@ -725,6 +755,8 @@ PlayerGuard::~PlayerGuard()
 
 void PlayerGuard::Enter()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//ガードアニメーションを再生。
 	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_GuardStart, ANIM_INTERPOLATE_TIME);
 	//ガードフラッグを立てる。
@@ -770,8 +802,12 @@ PlayerHit::~PlayerHit()
 
 void PlayerHit::Enter()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//被弾アニメーションを再生。
 	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Hit, ANIM_INTERPOLATE_TIME);
+	//被弾のSE
+	m_soundEffect->Play(enPlayerHitSE, false);
 }
 
 void PlayerHit::Update()
@@ -805,8 +841,12 @@ PlayerDeath::~PlayerDeath()
 
 void PlayerDeath::Enter()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//死亡アニメーションを再生。
 	m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Death, ANIM_INTERPOLATE_TIME);
+	//死亡SE
+	m_soundEffect->Play(enPlayerDeathSE, false);
 }
 
 void PlayerDeath::Update()

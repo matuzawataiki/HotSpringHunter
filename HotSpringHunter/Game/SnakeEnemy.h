@@ -3,6 +3,7 @@
 class Player;
 class EnemySpawn;
 class EnemyBase;
+class SoundEffect;
 
 //ヘビのステートの種類
 enum EnSnakeState {
@@ -51,6 +52,7 @@ public:
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
 	EnemyHPBar*			m_hpBar		= nullptr;
+	SoundEffect*        m_soundEffect = nullptr;	//サウンドエフェクト 
 
 	AnimationClip		m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
 	CharacterController m_characterController;					//キャラクターコントローラー	

@@ -10,6 +10,8 @@ class WildBoar;
 class Bear;
 class StageManager;
 
+class SoundEffect;
+
 class Game : public IGameObject
 {
 public:
@@ -26,6 +28,8 @@ public:
 	UI* m_ui = nullptr;
 	Bear* m_bear = nullptr;
 	WildBoar* m_wildBoar = nullptr;
+
+	SoundEffect* m_soundEffect = nullptr;
 
 private:
 	StageManager* m_stageManager = nullptr;
