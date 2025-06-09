@@ -1,8 +1,13 @@
 #pragma once
+
+namespace Character {
+	class Player;
+}
 class Player;
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
+class EnemyManager;
 class GameCamera;
 class EnemyHPBar;
 class SoundEffect;
@@ -44,6 +49,8 @@ public:
 	void Update()override;
 	//投石攻撃
 	void StoneThrow();
+	//投石のベクトルを計算
+	Vector3 CalcStoneVec(Vector3 start, Vector3 target, float t);
 	//岩のコリジョンを作る
 	void StoneCollision();
 	//クマを初期位置に移動(召喚用)
@@ -69,22 +76,35 @@ public:
 	//クマのHPのゲッター
 	float GetBearMAXHP();
 	void Render(RenderContext& rc)override;
-  
-	//ゲッター
-	//クマのHPを取得
-	float GetBearHP() { return m_bearHP; };
-	//クマの座標を取得
-	Vector3 GetBearPos() { return m_bearPos; };
 
 	//セッター
-	//クマの位置を設定
-	void SetBearPos(Vector3 pos) { m_bearPos = pos; };
+	//位置を設定
+	void SetBearPos(const Vector3& pos) { m_bearPos = pos; };
+	//向きを設定
+	void SetBearDir(const Vector3& dir) { m_bearDir = dir; };
+	//回転を設定
+	void SetBearRot(const Quaternion& rot) { m_bearRot = rot; };
+	//スポーン状態を設定
+	void SetBearIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	//キャラコンの位置を設定
+	void SetBearCharaConPos(const Vector3& pos) { m_bearController.SetPosition(pos); };
+	//スポーン位置を設定
+	void SetBearNewPos(const Vector3& pos) { m_bearNewPos = pos; };
+
+	//ゲッター	
+	//位置を取得
+	Vector3 GetBearPos() const { return m_bearPos; };
+	//HPを取得
+	float GetBearHP() const { return m_bearHP; };
+	//スポーン状態を取得
+	bool GetIsBearSpawn() const { return m_isSpawn; };
 
 private:
-	Player*				m_player			= nullptr;
+	Character::Player*	m_player			= nullptr;
 	SnakeEnemy*			m_snakeEnemy[4]		= {};
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
+	EnemyManager*		m_enemyManager		= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
 	SoundEffect*        m_soundEffect       = nullptr;
@@ -98,31 +118,34 @@ private:
 	Quaternion				m_bearRot	= Quaternion::Identity;		//回転
 	Quaternion				m_stoneRot	= Quaternion::Identity;		//岩の回転
 
-	Vector3 m_bearPos		= Vector3::Zero;		//座標
-	Vector3 m_bearSpeed		= Vector3::Zero;		//敵の速度
-	Vector3 m_bearDir		= Vector3::Zero;		//向き
-	Vector3 m_toPlayer		= Vector3::Zero;		//ベクトル
-	Vector3 m_stonePos		= Vector3::Zero;		//岩の位置
-	Vector3 m_stoneSpeed	= Vector3::Zero;		//岩の速度
-	Vector3 m_stoneDir		= Vector3::Zero;		//岩の向き
-	Vector3 m_toSlowPos		= Vector3::Zero;		//投石の目標位置
+	Vector3 m_bearPos			= Vector3::Zero;		//座標
+	Vector3 m_bearSpeed			= Vector3::Zero;		//敵の速度
+	Vector3 m_bearDir			= Vector3::Zero;		//向き
+	Vector3 m_toPlayer			= Vector3::Zero;		//ベクトル
+	Vector3 m_stonePos			= Vector3::Zero;		//岩の位置
+	Vector3 m_stoneSpeed		= Vector3::Zero;		//岩の速度
+	Vector3 m_stoneDir			= Vector3::Zero;		//岩の向き
+	Vector3 m_newStonePos		= Vector3::Zero;		//投石をセットする位置
+	Vector3 m_toSlowPos			= Vector3::Zero;		//投石の目標位置
+	Vector3 m_bearNewPos		= Vector3::Zero;		//クマのスポーン位置
 
-	float m_bearHP			= 0.0f;		//敵のHP
-	float m_ATKCoolTime		= 0.0f;		//攻撃のクールタイム
-	float m_slowCoolTime	= 0.0f;		//投石攻撃のクールタイム
-	float m_contactTime		= 0.0f;		//プレイヤー認識時のイベント時間
-	float m_setStoneTime	= 0.0f;		//投石攻撃の準備時間
+	float m_bearHP				= 0.0f;		//敵のHP
+	float m_ATKCoolTime			= 0.0f;		//攻撃のクールタイム
+	float m_slowCoolTime		= 0.0f;		//投石攻撃のクールタイム
+	float m_setStoneTime		= 0.0f;		//投石攻撃の準備時間
+	float m_flightTime			= 0.0f;		//投石の飛行経過時間
 
-	int m_bearState			= 0;		//クマの行動状態
+	int m_bearState				= 0;		//クマの行動状態
 
-	bool m_isCanStateChange = true;		//ステート変更を受け付けているか
-	bool m_isSpawn			= true;		//敵が出現するか
-	bool m_isAlive			= true;		//敵が生きているか
-	bool m_isFind			= false;	//プレイヤーを発見したか
-	bool m_isSetStone		= false;	//投石攻撃：岩の準備をしたか
-	bool m_isStoneSlowing	= false;	//岩が飛ばされているか
-	bool m_isSummon			= false;	//雑魚を召喚したか
-	bool m_isSummonEnd		= false;	//雑魚召喚が終わったか
-	bool m_isContact		= false;	//プレイヤーを認識したか
-	bool m_isPlayDeadAnim	= false;	//死亡アニメーションを再生したか
+	bool m_isCanStateChange		= true;		//ステート変更を受け付けているか
+	bool m_isSpawn				= false;	//敵がスポーンしているか
+	bool m_isContact			= false;	//プレイヤーを認識したか
+	bool m_isPlayDeadAnim		= false;	//死亡アニメーションを再生したか
+	bool m_isRemoveController	= false;	//キャラコンを削除したか
+	bool m_isSetStone			= false;	//投石：岩の準備をしたか
+	bool m_isStoneSlowing		= false;	//投石：岩が飛ばされているか
+	bool m_isStoneDraw			= false;	//投石：岩を描画するか
+	bool m_isSummon				= false;	//召喚：雑魚を召喚したか
+	bool m_isSummonEnd			= false;	//召喚：雑魚召喚が終わったか
+	bool m_isPlayRoar			= false;	//咆哮アニメーションを再生したか
 };

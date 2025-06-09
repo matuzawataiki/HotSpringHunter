@@ -1,6 +1,8 @@
 #pragma once
 
-class Player;
+namespace Character {
+	class Player;
+}
 class EnemySpawn;
 
 class StartWaveCollision : public IGameObject
@@ -18,7 +20,7 @@ public:
 
 private:
 	CollisionObject* m_collision = nullptr;
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 	EnemySpawn* m_enemySpawn = nullptr;
 
 	Vector3 m_collisionPos = Vector3::Zero;		

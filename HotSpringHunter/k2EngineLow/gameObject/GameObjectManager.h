@@ -81,6 +81,24 @@ namespace nsK2EngineLow {
 			m_gameObjectListArray.at(prio).push_back(newObject);
 			return newObject;
 		}
+
+		/// <summary>
+		/// IGameObjectのインスタンスを登録
+		/// </summary>
+		/// <param name="prio">実行優先順位</param>
+		/// <param name="objectName">オブジェクト名</param>
+		/// <param name="gameObject">IGameObject</param>
+		void AddGameObject(IGameObject* gameObject,int prio, const char* objectName) {
+			if (m_isActive == false)
+			{
+				K2_ASSERT(false,"GameObjectManagerが無効です");
+				return ;
+			}
+
+			gameObject->SetName(objectName);
+			m_gameObjectListArray.at(prio).push_back(gameObject);
+		}
+
 		/*!
 			*@brief	ゲームオブジェクトの削除。
 			*/
@@ -230,6 +248,16 @@ namespace nsK2EngineLow {
 	static inline T* NewGO(int priority, const char* objectName = nullptr)
 	{
 		return GameObjectManager::GetInstance()->NewGameObject<T>(priority, objectName);
+	}
+
+	/// <summary>
+	/// IGameObjectのインスタンスをGameObjectManagerに登録
+	/// </summary>
+	/// <param name="priority">プライオリティ</param>
+	/// <param name="objectName"オブジェクト名></param>
+	/// <param name="gameObject">IGameObject</param>
+	static inline void AddGo(IGameObject* gameObject, int priority, const char* objectName = nullptr) {
+		GameObjectManager::GetInstance()->AddGameObject(gameObject,priority, objectName);
 	}
 
 	/*!

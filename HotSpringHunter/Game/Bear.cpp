@@ -4,6 +4,7 @@
 #include "SnakeEnemy.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyManager.h"
 #include "GameCamera.h"
 #include "collision/CollisionObject.h"
 #include "EnemyHPBar.h"
@@ -11,14 +12,12 @@
 
 
 namespace {
-	const float BEAR_MAX_HP				= 500.0f;		//クマの最大HP
-	const float MAX_BOSS_HP				= 500.0f;		//ボスの最大HP
+	const float MAX_BEAR_HP				= 500.0f;		//クマの最大HP
 	const float FIND_RANGE				= 1500.0f;		//プレイヤーを捉える距離
 	const float PI						= 3.14;			//円周率
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 	const float CONTACT_TIME			= 4.0f;			//クマ登場のイベント時間
 	const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
-	const Vector3 NEW_POSITION			= { -100.0f,0.0f,3000.0f };	//初期位置
 
 	const float ATK_RANGE				= 300.0f;		//近接攻撃：リーチ
 	const float MELEE_ATTACK_DAMAGE		= 20.0f;		//近接攻撃：攻撃力
@@ -27,15 +26,16 @@ namespace {
 	const float FOLLOW_RANGE			= 1000.0f;		//追従：追従する距離
 
 	const float SLOW_RANGE				= 1500.0f;		//投石：投石攻撃ができる距離
+	const float SLOW_COOLTIME			= 3.0f;			//投石：投石のクールタイム
 	const float SET_STONE_POS_DIS		= 160.0f;		//投石：岩をセットする位置（どれだけ前に出すか）
-	const float STONE_YPOS				= 50.0f;		//投石：岩の高さ
 	const float SET_STONE_TIME			= 0.3f;			//投石：岩をセットする時間
-	const float SLOW_SPEED				= 1000.0f;		//投石：投球速度
+	const float SLOW_SPEED				= 500.0f;		//投石：投球速度
 	const float STONE_COL_SIZE			= 60.0f;		//投石：岩の当たり判定の大きさ
 	const float STONE_REMOVE_DIS		= 10.0f;		//投石：岩を非投擲状態とする距離
 	const float STONE_DAMAGE			= 30.0f;		//投石：投石のダメージ
 	const float STONE_ROT_AMOUNT		= 20.0f;		//投石：岩が回転する量
-	const float SLOW_COOLTIME			= 15.0f;		//投石：投石のクールタイム
+	const float SLOW_HIGHT				= 250.0f;		//投石：投石時の岩の最高度
+	const float VEC_DIVIDE				= 1000.0f;		//投石：投石の距離の長さベクトルを割る数
 
 	const float GO_NEW_POS_SPEED		= 500.0f;		//召喚：初期位置に移動する速さ
 	const float MOVE_STOP_DIS			= 100.0f;		//召喚：初期位置への移動をやめる距離
@@ -45,6 +45,25 @@ namespace {
 	const int SUMMON_NUM				= 4;			//召喚：雑魚を召喚する数
 
 	const float SINKING_TIME			= 0.05f;		//死亡：下に沈む速さ
+
+	/// <summary>
+	/// 渡された値を設定した最小、最大の範囲内に設定して返す
+	/// </summary>
+	/// <param name="value">設定する値</param>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <returns>設定後の値</returns>
+	float Clamp(float value, float min, float max) 
+	{
+		if (value < min) {
+			value = min;
+		}
+		if (value > max) {
+			value = max;
+		}
+
+		return value;
+	}
 };
 
 Bear::Bear()
@@ -68,18 +87,19 @@ bool Bear::Start()
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//インスタンス探し
-	m_player		= FindGO<Player>("player");
+	m_player		= FindGO<Character::Player>("player");
 	m_enemySpawn	= FindGO<EnemySpawn>("enemySpawn");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
+	m_enemyManager	= FindGO<EnemyManager>("enemyManager");
 
 	//クマを初期位置に
-	m_bearPos = NEW_POSITION;
+	//m_bearPos = NEW_POSITION;
 
 	//キャラクターコントローラー
 	m_bearController.Init(80.0f, 80.0f, m_bearPos);
 
 	//クマのHPをセット
-	m_bearHP = BEAR_MAX_HP;
+	m_bearHP = MAX_BEAR_HP;
 
 	return true;
 }
@@ -112,15 +132,16 @@ void Bear::LoadAssets()
 
 void Bear::Update()
 {
-	//スポーンしているなら
-	if (m_isSpawn) {
-		//投石
-		StoneThrow();
-		//ステート管理
-		ManageState();
-		//行動実行
-		ExecuteAction();
+	//スポーンしていないときは実行しない
+	if (!m_isSpawn) {
+		return;
 	}
+	//投石
+	StoneThrow();
+	//ステート管理
+	ManageState();
+	//行動実行
+	ExecuteAction();	
 	//いろいろ更新
 	VariousUpdate();
 	//プレイヤーを探す
@@ -132,9 +153,6 @@ void Bear::Update()
 /// </summary>
 void Bear::StoneThrow()
 {
-	Vector3 slowVec		= Vector3::Zero;			//投石のベクトル
-	Vector3 newStonePos = Vector3::Zero;			//岩の初期位置
-
 	//岩が飛んでいないなら実行しない
 	if (!m_isStoneSlowing) {
 		//岩を未セットにする
@@ -148,29 +166,30 @@ void Bear::StoneThrow()
 	//初めにいろいろセット
 	if (!m_isSetStone) {
 		//岩をクマのちょっと前にセット
-		newStonePos = m_bearDir * SET_STONE_POS_DIS;
-		newStonePos += m_bearPos;
-		newStonePos.y = STONE_YPOS;
-		m_stonePos = newStonePos;
+		m_newStonePos = m_bearDir * SET_STONE_POS_DIS;
+		m_newStonePos += m_bearPos;
+		m_stonePos = m_newStonePos;
 		//岩の目標位置をセット
 		m_toSlowPos = m_player->GetPlayerPos();
-		//ちょっと高さを付ける
-		m_toSlowPos.y = STONE_YPOS;
 		//コリジョンを生成
 		StoneCollision();
 		//セット済みにする
 		m_isSetStone = true;
+		//岩を描画する
+		m_isStoneDraw = true;
 	}
 
 	if (m_setStoneTime > SET_STONE_TIME) {
-		//投石のベクトルを計算
-		slowVec = m_toSlowPos - m_stonePos;
-		//このベクトルを岩の移動速度にする
-		m_stoneSpeed = slowVec;
-		//ベクトルを正規化
-		m_stoneSpeed.Normalize();
-		//ベクトルに速さを付ける
-		m_stoneSpeed *= SLOW_SPEED;
+		
+		//投石の開始位置から目標位置への距離を計算
+		Vector3 slowVec = m_toSlowPos - m_newStonePos;
+		//投石のベクトルを計算（放物線）
+		m_flightTime += g_gameTime->GetFrameDeltaTime();
+		//岩を投げてからの経過時間を計算
+		float elapsedTime = m_flightTime / (slowVec.Length() / VEC_DIVIDE);
+		elapsedTime = Clamp(elapsedTime, 0.0f, 1.0f);
+		//岩を放物線で動かす
+		m_stonePos = CalcStoneVec(m_newStonePos, m_toSlowPos, elapsedTime);
 
 		//5°ずつ回転させる
 		m_stoneRot.AddRotationDegX(STONE_ROT_AMOUNT);
@@ -186,24 +205,49 @@ void Bear::StoneThrow()
 		//プレイヤーが岩にぶつかった、
 		//もしくは岩が目標位置にたどり着いたら
 		if ((m_stoneCollision->IsHit(m_player->m_playerCharaCon)) ||
-			(slowVec.Length() <= STONE_REMOVE_DIS)) {
+			(elapsedTime >= 1.0f) ){
 			//非投擲状態にする
 			m_isStoneSlowing = false;
+			//岩の描画をやめる
+			m_isStoneDraw = false;
 			//コリジョンを消す
 			DeleteGO(m_stoneCollision);
 			//岩のセット時間をリセット
 			m_setStoneTime = 0.0f;
+			//経過時間をリセット
+			m_flightTime = 0.0f;
 		}
 	}
-	//岩のモデルを更新
-	m_stoneModel.Update();
+	
 	//速度で位置を動かす
-	m_stoneSpeed = m_stoneSpeed * DELTA_TIME;
-	m_stonePos.Add(m_stoneSpeed);
+	const Vector3 moveAmount = m_stoneSpeed * DELTA_TIME;
+	m_stonePos.Add(moveAmount);
 	//位置更新
 	m_stoneModel.SetPosition(m_stonePos);
 	//回転更新
 	m_stoneModel.SetRotation(m_stoneRot);
+	//岩のモデルを更新
+	m_stoneModel.Update();
+}
+
+/// <summary>
+/// 投石を放物線で飛ばす
+/// </summary>
+/// <param name="start">投石の開始位置</param>
+/// <param name="target">投石の目標位置</param>
+/// <param name="t">投石が目標位置に到達するまでの時間</param>
+/// <returns>岩の位置</returns>
+Vector3 Bear::CalcStoneVec(Vector3 start, Vector3 target, float t)
+{
+	// 線形補間    
+	Vector3 flatPos = start + (target - start) * t;
+
+	// 放物線によるY補正
+	float yOffset = SLOW_HIGHT * (1 - 4 * (t - 0.5f) * (t - 0.5f));
+
+	flatPos.y += yOffset;
+
+	return flatPos;
 }
 
 /// <summary>
@@ -221,10 +265,10 @@ void Bear::StoneCollision()
 /// </summary>
 void Bear::GoNewPos()
 {
-	Vector3 toNewPos = NEW_POSITION - m_bearPos;
+	Vector3 toNewPos = m_bearNewPos - m_bearPos;
 
 	//ステートを変更不能に
-	m_enemyBase->m_isCanChange = false;
+	m_enemyBase->SetChangeFlag(false);
 	//クマの位置を初期位置に移動させる
 	m_bearSpeed = toNewPos;
 	m_bearSpeed.Normalize();
@@ -249,12 +293,7 @@ void Bear::SummonMinions()
 
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
-		//雑魚を生成
-		m_snakeEnemy[i] = NewGO<SnakeEnemy>(0, "snakeEnemy");
-		//雑魚の初期位置をセット
-		m_snakeEnemy[i]->m_position = m_summonPos[0];
-		//配列の頭から消す
-		m_summonPos.erase(m_summonPos.begin());
+		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, m_summonPos[i], Quaternion::Identity);
 	}
 }
 
@@ -279,6 +318,7 @@ void Bear::SinkIntoGround()
 	//キャラコンを消す
 	m_bearController.RemoveRigidBoby();
 
+	//地面に沈ませる
 	m_bearPos.y -= SINKING_TIME;
 }
 
@@ -319,7 +359,7 @@ void Bear::ManageState()
 	//召喚
 	//クマのHPが30％以下、
 	//且つ召喚をまだしていないなら
-	if (m_bearHP < BEAR_MAX_HP * SUMMON_PCT && !m_isSummon) {
+	if (m_bearHP < MAX_BEAR_HP * SUMMON_PCT && !m_isSummon) {
 		//まずは召喚位置へ移動
 		m_bearState = enBearGoNewPos;
 		//召喚を行った状態にする
@@ -367,10 +407,12 @@ void Bear::FindPlayer()
 		m_isContact = true;
 		//クマを認識状態にする
 		m_bearState = enbearContact;
-		//咆哮の効果音
+    //咆哮の効果音
 		m_soundEffect->Play(enBearRoarSE, false);
+		//接触時のイベントカメラにする
+		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
 		//ステート変更を不可に
-		m_enemyBase->m_isCanChange = false;
+		m_enemyBase->SetChangeFlag(false);
 	}
 }
 
@@ -437,7 +479,7 @@ void Bear::ExecuteAction()
 		//アニメーションを再生し終わったらステート変更
 		if (!m_bearModel.IsPlayAnimation()) {
 			//ステート変更を可能にする
-			m_enemyBase->m_isCanChange = true;
+			m_enemyBase->SetChangeFlag(true);
 			//未召喚にする
 			m_isSummonEnd = false;
 		}
@@ -483,14 +525,14 @@ void Bear::ExecuteAction()
 			//投石の効果音
 			m_soundEffect->Play(enBearStoneAttackSE, false);
 			//ステート変更を不可にする
-			m_enemyBase->m_isCanChange = false;
+			m_enemyBase->SetChangeFlag(false);
 			//クールタイムをセット
 			m_ATKCoolTime = ATK_COOLTIME;
 		}
 		//アニメーションが終わったら
 		else if (!m_bearModel.IsPlayAnimation()) {
 			//ステート変更を可能にする
-			m_enemyBase->m_isCanChange = true;
+			m_enemyBase->SetChangeFlag(true);
 			//待機アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 		}
@@ -505,23 +547,18 @@ void Bear::ExecuteAction()
 		//クマ登場のイベント
 	case enbearContact:
 
-		//クマがプレイヤーを認識したら
-		//イベントタイムを数える
-		m_contactTime += g_gameTime->GetFrameDeltaTime();
-
-		//咆哮アニメーションを再生
-		m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
-		
-
-		////登場イベントが終わっていないなら
-		if (m_contactTime <= CONTACT_TIME) {
-			//カメラをイベントカメラにする
-			//m_gameCamera->SetCameraState(enLookDown);
+		if (!m_isPlayRoar) {
+			//咆哮アニメーションを再生
+			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+			m_isPlayRoar = true;
+		}		
+		//アニメーションが再生し終わったら待機アニメーション
+		if (!m_bearModel.IsPlayAnimation()) {
+			m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 		}
-		//イベント時間が終わったら
-		else {
-			//イベントカメラをやめる
-			//m_gameCamera->SetCameraState(enLookDown);
+
+		//登場イベントが終わったら
+		if (m_gameCamera->GetCameraState() != EnCameraVar::enBearContact) {
 			//召喚状態へ
 			m_bearState = enBearGoNewPos;
 		}
@@ -585,35 +622,36 @@ void Bear::DirUpdate()
 /// 速度を適応。
 /// </summary>
 void Bear::ExecuteSpeed()
-{
-	//敵が吹っ飛ぶときにキャラコンを消して透明な壁をすり抜ける
-	//if (m_isAlive) {
-	//	// キャラクターコントローラーがある時は移動処理の結果を受け取るだけ
-	//	m_bearPos = m_bearController.Execute(m_bearSpeed, 1.0f / 60.0f);
-	//}
-	//else {
-		// ないときは自分で移動結果を計算
-		const Vector3 move = m_bearSpeed * DELTA_TIME;
-		m_bearPos.Add(move);
-	//}
+{	
+	//キャラコンが削除されていないとき
+	if (!m_isRemoveController) {
+		m_bearPos = m_bearController.Execute(m_bearSpeed, DELTA_TIME);
+	}
+	//キャラコンが削除されているとき
+	else {
+		const Vector3 moveAmount = m_bearSpeed * DELTA_TIME;
+		m_bearPos.Add(moveAmount);
+	}
 }
 
 /// <summary>
 /// クマの最大HPを取得
 /// </summary>
-/// <returns></returns>
+/// <returns>クマの最大HP</returns>
 float Bear::GetBearMAXHP()
 {
-	return MAX_BOSS_HP;
+	return MAX_BEAR_HP;
 }
 
 void Bear::Render(RenderContext& rc)
 {
-	//クマ描画
-	m_bearModel.Draw(rc);
+	//クマ描画（スポーンしているときだけ）
+	if (m_isSpawn) {
+		m_bearModel.Draw(rc);
+	}
 
 	//岩描画（岩が飛んでいるときだけ）
-	if (m_isStoneSlowing) {
+	if (m_isStoneDraw) {
 		m_stoneModel.Draw(rc);
 	}
 }

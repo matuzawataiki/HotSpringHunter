@@ -38,13 +38,19 @@ bool UI::Start()
 {
 	//プレイヤーのUI
 	NewGO<PlayerHPUI>(0, "playerHPUI");
-	//ボスのUI
-	NewGO<BossHPUI>(0, "bossHPUI");
+	m_bear = FindGO<Bear>("bear");
+
+	
 	return true;
 }
 
 void UI::Update()
 {
+	if (!m_isBearHPBarCreated && m_bear->GetIsBearSpawn()) {
+		//ボスのUI
+		NewGO<BossHPUI>(0, "bossHPUI");
+		m_isBearHPBarCreated = true;
+	}
 }
 
 void UI::Render(RenderContext& rc)
@@ -65,7 +71,7 @@ PlayerHPUI::~PlayerHPUI()
 
 bool PlayerHPUI::Start()
 {
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Character::Player>("player");
 
 	m_playerHPBack.Init("Assets/modelData/UI/playerHPBack.dds", PLAYER_HP_FRAME_WIDTH, PLAYER_HP_FRAME_HEIGHT);
 	m_playerHPBack.SetPosition(PLAYER_HP_FRAME_POS);
@@ -142,7 +148,7 @@ BossHPUI::~BossHPUI()
 bool BossHPUI::Start()
 {
 	m_bear = FindGO<Bear>("bear");
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Character::Player>("player");
 
 	m_BearHPBack.Init("Assets/modelData/UI/BossHPBack.dds", BOSS_HP_FRAME_WIDTH, BOSS_HP_FRAME_HEIGHT);
 	m_BearHPBack.SetPosition(BOSS_HP_FRAME_POS);
