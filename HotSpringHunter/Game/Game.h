@@ -15,6 +15,8 @@ class Bear;
 class SnakeEnemy;
 class StageManager;
 
+class SoundEffect;
+
 class Game : public IGameObject
 {
 public:
@@ -36,5 +38,6 @@ private:
 	WildBoar*			m_wildBoar		= nullptr;
 	SnakeEnemy*			m_snakeEnemy	= nullptr;
 	StageManager*		m_stageManager	= nullptr;
+  SoundEffect* m_soundEffect = nullptr;
 };
 

@@ -5,6 +5,7 @@
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "collision/CollisionObject.h"
+#include "SoundEffect.h"
 
 namespace
 {
@@ -41,6 +42,9 @@ WildBoar::~WildBoar()
 
 bool WildBoar::Start()
 {
+	//エフェクト
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//アセット読み込み
 	LoadAssets();
 
@@ -113,6 +117,7 @@ void WildBoar::Accumulate()
 	//エネミーベースのステート変えたらダメな場合
 	m_enemyBase->SetChangeFlag(false);
 
+	//突進チャージのコリジョンを作成
 	ChargeCaveat();
 
 	//突進する前のチャージ時間 3.0f
@@ -141,6 +146,12 @@ void WildBoar::Accumulate()
 
 		//突進コリジョン
 		ChargeCollision();
+
+		//イノシシの突進攻撃の効果音を止める
+		m_soundEffect->Stop(m_runSound);
+		m_runSound = nullptr;
+		m_soundEffect->Stop(m_chargeSound);
+		m_chargeSound = nullptr;
 	}
 }
 
@@ -166,6 +177,13 @@ void WildBoar::ChargeCaveat()
 /// </summary>
 void WildBoar::Charge()
 {
+	
+	if (m_isChargeSoundPlay)
+	{
+		//突進の効果音
+		m_runSound=m_soundEffect->Play(emWildBoarRunSE, true);
+		m_isChargeSoundPlay = false;
+	}
 	//イノシシからプレイヤーまでのベクトルを求める
 	m_chargeVec = m_toCharge - m_wildBoarPos;
 
@@ -186,8 +204,18 @@ void WildBoar::Charge()
 		{
 			//プレイヤーにダメージを与える
 			m_player->Hit(20.0f);
+			//プレイヤーにあたった効果音
+			m_soundEffect->Play(enwildBoarCahrgeAttackSE, false);
 			//一度当たったら判定をtrueにする
 			m_isHitCollision = true;
+
+			//イノシシの突進攻撃の効果音を止める
+			m_soundEffect->Stop(m_runSound);
+			m_runSound = nullptr;
+			m_soundEffect->Stop(m_chargeSound);
+			m_chargeSound = nullptr;
+
+			m_isChargeSoundPlay = true;
 		}
 	}
 
@@ -202,6 +230,14 @@ void WildBoar::Charge()
 
 		//当たった判定を false にする
 		m_isHitCollision = false;
+
+		//イノシシの突進攻撃の効果音を止める
+		m_soundEffect->Stop(m_runSound);
+		m_runSound = nullptr;
+		m_soundEffect->Stop(m_chargeSound);
+		m_chargeSound = nullptr;
+
+		m_isChargeSoundPlay = true;
 
 		m_chargeCaveat.SetScale(1.0f, 1.0f, 1.0f);
 	}
@@ -266,12 +302,16 @@ void WildBoar::ManageState()
 		if (m_wildBoarHP > 0.0f) {
 			//ノックバック
 			m_wildBoarState = enWildBoarKnockBack;
+			//被弾の効果音
+			m_soundEffect->Play(enWildBoarHitSE, false);
 			DeleteGO(collisionObject);
 		}
 		//HPがなくなった
 		else {
 			//死亡
 			m_wildBoarState = enWildBoarDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enWildBoarDeathSE, false);
 			DeleteGO(collisionObject);
 		}
 		return;
@@ -287,6 +327,10 @@ void WildBoar::ManageState()
 	if (m_chargeCoolTime >= CHARGE_COOL_TIME)
 	{
 		m_wildBoarState = enWildBoarAccum;
+
+		//突進チャージの効果音
+		m_chargeSound=m_soundEffect->Play(enWildBoarChargeSE, true);
+		
 		m_chargeCoolTime = 0.0f;
 		return;
 	}
@@ -357,7 +401,6 @@ void WildBoar::ExecuteAction()
 			m_wildBoarController.RemoveRigidBoby();
 			m_isRemoveController = true;
 		}
-
 		//一定時間がたったら
 		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
 			//時間をリセット
@@ -374,6 +417,7 @@ void WildBoar::ExecuteAction()
 		Accumulate();
 		//突進チャージのアニメーション再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Charge);
+
 		break;
 
 		//突進攻撃
@@ -382,6 +426,7 @@ void WildBoar::ExecuteAction()
 		Charge();
 		//突進攻撃のアニメーション再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Run);
+	
 		break;
 
 		//近接攻撃
@@ -393,6 +438,8 @@ void WildBoar::ExecuteAction()
 			m_enemyBase->MeleeAttack(m_wildBoarPos, m_wildBoarDir, MELEE_ATTACK_DAMAGE);
 			//近接攻撃アニメーションを再生
 			m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Attack);
+			//近接攻撃の効果音
+			m_soundEffect->Play(enWildBoarAttackSE, false);
 			//タイマーをセット
 			m_ATKCoolTime = ATK_COOLTIME;
 		}

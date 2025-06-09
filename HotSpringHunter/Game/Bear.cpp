@@ -8,6 +8,7 @@
 #include "GameCamera.h"
 #include "collision/CollisionObject.h"
 #include "EnemyHPBar.h"
+#include "SoundEffect.h"
 
 
 namespace {
@@ -81,6 +82,9 @@ bool Bear::Start()
 	LoadAssets();
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+
+	//サウンドエフェクト
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//インスタンス探し
 	m_player		= FindGO<Character::Player>("player");
@@ -333,11 +337,15 @@ void Bear::ManageState()
 		if (m_bearHP > 0.0f) {
 			//ノックバック
 			m_bearState = enBearKnockBack;
+			//被弾の効果音
+			m_soundEffect->Play(enBearHitSE, false);
 		}
 		//HPがなくなった
 		else {
 			//死亡
 			m_bearState = enBearDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enBearDeathSE, false);
 		}
 		return;
 	}
@@ -399,6 +407,8 @@ void Bear::FindPlayer()
 		m_isContact = true;
 		//クマを認識状態にする
 		m_bearState = enbearContact;
+  //咆哮の効果音
+		m_soundEffect->Play(enBearRoarSE, false);
 		//接触時のイベントカメラにする
 		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
 		//ステート変更を不可に
@@ -484,6 +494,8 @@ void Bear::ExecuteAction()
 			m_enemyBase->MeleeAttack(m_bearPos, m_bearDir, MELEE_ATTACK_DAMAGE);
 			//近接攻撃アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_NeleeAttack, ANIM_INTERPOLATE_TIME);
+			//近接攻撃の効果音
+			m_soundEffect->Play(enBearAttackSE, false);
 			//タイマーをセット
 			m_ATKCoolTime = ATK_COOLTIME;
 		}
@@ -510,6 +522,8 @@ void Bear::ExecuteAction()
 			m_isStoneSlowing = true;
 			//投石アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_SlowStone, ANIM_INTERPOLATE_TIME);
+			//投石の効果音
+			m_soundEffect->Play(enBearStoneAttackSE, false);
 			//ステート変更を不可にする
 			m_enemyBase->SetChangeFlag(false);
 			//クールタイムをセット
@@ -538,7 +552,6 @@ void Bear::ExecuteAction()
 			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
 			m_isPlayRoar = true;
 		}		
-
 		//アニメーションが再生し終わったら待機アニメーション
 		if (!m_bearModel.IsPlayAnimation()) {
 			m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);

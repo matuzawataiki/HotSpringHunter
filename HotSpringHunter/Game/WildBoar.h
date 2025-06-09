@@ -1,9 +1,11 @@
 #pragma once
+
 namespace Character {
 	class Player;
 }
 class EnemySpawn;
 class EnemyBase;
+class SoundEffect;
 
 //イノシシのステート
 enum EnWildBoarState
@@ -88,6 +90,9 @@ private:
 	Character::Player*					m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+  SoundEffect* m_soundEffect = nullptr; //サウンドエフェクト
+	SoundSource* m_chargeSound = nullptr; //突進サウンド
+	SoundSource* m_runSound = nullptr;    //突進攻撃サウンド
 
 	AnimationClip			m_animationClips[enWildBoarAnimClip_Num];  //アニメーションクリップ
 	CharacterController		m_wildBoarController;					   //キャラクターコントローラー
@@ -110,7 +115,6 @@ private:
 	float m_chargeCoolTime		= 0.0f;				//突進クールタイム
 	float m_elapsedTime			= 0.0f;				//死亡経過時間
 
-
 	int m_wildBoarState			= 0;				//イノシシの行動状態
 
 	bool m_isSpawn				= false;			//敵が出現するか
@@ -118,4 +122,5 @@ private:
 	bool m_isCanStateChange		= true;				//ステートを変えてもよいか
 	bool m_isHitCollision		= false;			//コリジョン当たったか
 	bool m_isRemoveController	= false;			//キャラコンを消したか
+  bool m_isChargeSoundPlay = true;    //突進中か
 };

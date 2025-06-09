@@ -5,6 +5,7 @@ namespace Character {
 }
 class EnemySpawn;
 class EnemyBase;
+class SoundEffect;
 
 //ヘビのステートの種類
 enum EnSnakeState {
@@ -71,6 +72,7 @@ private:
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+  SoundEffect*        m_soundEffect = nullptr;	//サウンドエフェクト 
 
 	AnimationClip			m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
 	CharacterController		m_snakeController;						//キャラクターコントローラー	

@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"
+#include "SoundEffect.h"
 
 namespace {
 	const float DELTA_TIME				= 1.0f / 60.0f;		//フレームレート
@@ -33,6 +34,9 @@ bool SnakeEnemy::Start()
 {
 	//アセット読み込み
 	LoadAsset();
+
+	//サウンドエフェクト
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
@@ -105,11 +109,15 @@ void SnakeEnemy::ManageState()
 		if (m_snakeHP > 0.0f) {
 			//ノックバック
 			m_snakeState = enSnakeKnockBack;
+			//被弾の効果音
+			m_soundEffect->Play(enSnakeHitSE, false);
 		}
 		//HPがなくなった
 		else {
 			//死亡（吹っ飛び）
 			m_snakeState = enSnakeDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enSnakeDeathSE, false);
 		}
 		return;
 	}
@@ -196,6 +204,8 @@ void SnakeEnemy::ExecuteAction()
 			m_enemyBase->MeleeAttack(m_snakePos, m_snakeDir, MELEE_ATTACK_DAMAGE);
 			//近接攻撃アニメーションを再生
 			m_snakeModel.PlayAnimation(enSnakeAnimClip_Attack, ANIM_INTERPOLATE_TIME);
+      //近接攻撃の効果音
+      m_soundEffect->Play(enSnakeAttackSE, false);
 			//タイマーをセット
 			m_ATKCoolTime = ATK_COOLTIME;
 		}

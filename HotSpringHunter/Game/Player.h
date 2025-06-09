@@ -1,6 +1,8 @@
 #pragma once
 
 class SnakeEnemy;
+class SoundEffect;
+
 
 namespace Character {
 	//現在アクティブなステート。
@@ -139,6 +141,8 @@ namespace Character {
 		void StateManage();
 	private:
 		Player* m_player = nullptr;
+    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+    
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
 	};
 
@@ -180,6 +184,7 @@ namespace Character {
 		void Jump();
 		void Exit()override;
 	private:
+    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -204,7 +209,7 @@ namespace Character {
 		void MakeCollision();
 		void Exit()override;
 	private:
-
+    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -232,6 +237,8 @@ namespace Character {
 		void Exit()override;
 
 	private:
+  SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+  
 		Vector3 m_RStickOld = Vector3::Zero;				//Rスティックの入力量（変更前）。
 		float m_collisionSize = 0.0f;							//コリジョンサイズ。
 		bool m_isCharging = true;							//チャージ中？
@@ -257,10 +264,11 @@ namespace Character {
 		void GuardDirection();
 		void Exit()override;
 
-	private:
-		Vector3 m_directionGap = Vector3::Zero;				//向きの差分。
-	};
+private:
+	SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 
+	Vector3 m_directionGap = Vector3::Zero;				//向きの差分。
+};
 
 	/// <summary>
 	/// 被弾。
@@ -281,6 +289,7 @@ namespace Character {
 		void ChangeState();
 		void Exit()override;
 	private:
+    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -300,5 +309,6 @@ namespace Character {
 		void Update()override;
 		void Exit()override;
 	private:
+    SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 }

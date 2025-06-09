@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
+#include "SoundEffect.h"
+
 
 namespace Character {
 	namespace {
@@ -220,6 +222,8 @@ namespace Character {
 	/// <param name="reduce"></param>体力減少量。
 	void Player::Hit(float reduce)
 	{
+    //被弾SE
+	  m_soundEffect->Play(enPlayerHitSE,false);
 		//ガードができていないなら。
 		if (m_guardFlag == true) {
 			return;
@@ -233,11 +237,10 @@ namespace Character {
 			m_weakAtFlag = false;
 		}
 
-		//HPを0以下にしない。
+    //HPを0以下にしない。
 		if (m_playerHP < 0.0) {
 			m_playerHP = 0.0f;
 		}
-
 		//HPの残量でステートを変える。
 		if (m_playerHP > 0.0f) {
 			m_hitFlag = true;
@@ -396,6 +399,7 @@ namespace Character {
 
 	void PlayerIdle::Enter()
 	{
+    m_soundEffect = FindGO<SoundEffect>("soundEffect");
 		//待機アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 	}
@@ -513,6 +517,8 @@ namespace Character {
 		WeakAttack();
 		//弱攻撃アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack, ANIM_INTERPOLATE_TIME);
+    //サウンドソース
+	  m_soundEffect->Play(enPlayerAttackSE, false);
 	}
 
 	void PlayerWeakAttack::Update()
@@ -604,6 +610,7 @@ namespace Character {
 			return;
 		}
 
+
 		//チャージ中アニメーション再生。
 		m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging, ANIM_INTERPOLATE_TIME);
 
@@ -625,6 +632,20 @@ namespace Character {
 		movePower *= CHARGE_ADD_VALUE;
 		//パワーをチャージに足す。
 		m_player->m_charge += movePower;
+  
+  //チャージが増加しているなら、溜め攻撃1アニメーションを再生。
+	if (m_player->m_charge >= 30.0f)
+	{
+		m_soundEffect->Play(enPlayerCharge1SE, false);
+	}
+	if (m_player->m_charge >= 60.0f)
+	{
+		m_soundEffect->Play(enPlayerCharge2SE, false);
+	}
+	if (m_player->m_charge >= 100.0f)
+	{
+		m_soundEffect->Play(enPlayerCharge3SE, false);
+	}
 
 		//チャージを減少させる。
 		m_player->m_charge -= CHARGE_DECREASE;
@@ -773,6 +794,8 @@ namespace Character {
 	{
 		//被弾アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Hit, ANIM_INTERPOLATE_TIME);
+    //被弾のSE
+	  m_soundEffect->Play(enPlayerHitSE, false);
 	}
 
 	void PlayerHit::Update()
@@ -808,6 +831,8 @@ namespace Character {
 	{
 		//死亡アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Death, ANIM_INTERPOLATE_TIME);
+    //死亡SE
+	  m_soundEffect->Play(enPlayerDeathSE, false);
 	}
 
 	void PlayerDeath::Update()

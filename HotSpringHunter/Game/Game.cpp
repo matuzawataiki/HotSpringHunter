@@ -10,6 +10,7 @@
 #include "BackGround/StageManager.h";
 #include "Bear.h"
 #include "WildBoar.h"
+#include "SoundEffect.h"
 #include "SnakeEnemy.h"
 
 Game::Game()
@@ -36,6 +37,8 @@ bool Game::Start()
 	//m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
 
 	m_ui = NewGO<UI>(0, "ui");
+
+	m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
 
 	//当たり判定を可視化する。
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
