@@ -16,7 +16,7 @@ bool Towel::Start()
 {
 	LoadModel();
 
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Character::Player>("player");
 
 	return true;
 }

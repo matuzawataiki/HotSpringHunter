@@ -16,7 +16,7 @@ bool Bucket::Start()
 {
 	LoadAssets();
 
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Character::Player>("player");
 
 	return true;
 }

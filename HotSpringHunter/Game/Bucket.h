@@ -1,5 +1,7 @@
 #pragma once
-class Player;
+namespace Character {
+	class Player;
+}
 class Bucket:public IGameObject
 {
 public:
@@ -14,7 +16,7 @@ public:
 	void Render(RenderContext& rc)override;
 
 private:
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 
 	ModelRender m_bucketModel;
 	Quaternion m_bucketRot = Quaternion::Identity;
