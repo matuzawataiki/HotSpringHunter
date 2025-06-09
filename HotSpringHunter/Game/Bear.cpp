@@ -407,7 +407,7 @@ void Bear::FindPlayer()
 		m_isContact = true;
 		//クマを認識状態にする
 		m_bearState = enbearContact;
-  //咆哮の効果音
+    //咆哮の効果音
 		m_soundEffect->Play(enBearRoarSE, false);
 		//接触時のイベントカメラにする
 		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
@@ -555,7 +555,6 @@ void Bear::ExecuteAction()
 		//アニメーションが再生し終わったら待機アニメーション
 		if (!m_bearModel.IsPlayAnimation()) {
 			m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);
-
 		}
 
 		//登場イベントが終わったら

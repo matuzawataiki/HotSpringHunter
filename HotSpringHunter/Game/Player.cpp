@@ -3,7 +3,6 @@
 #include "SnakeEnemy.h"
 #include "SoundEffect.h"
 
-
 namespace Character {
 	namespace {
 
@@ -571,52 +570,6 @@ namespace Character {
 			m_player->m_weakAtFlag = false;
 		}
 	}
-
-	void PlayerWeakAttack::Exit()
-	{
-		//攻撃力をリセット。
-		m_player->m_attackPower = 0.0f;
-	}
-
-	/*********************************************************************************/
-	//溜め攻撃用クラス。
-	/*********************************************************************************/
-
-	PlayerChargeAttack::~PlayerChargeAttack()
-	{
-
-	}
-
-	void PlayerChargeAttack::Enter()
-	{
-		m_soundEffect = FindGO<SoundEffect>("soundEffect");
-
-		//溜め攻撃のフラッグを立てる。
-		m_player->m_chargeAtFlag = true;
-		//チャージ中。
-		m_isCharging = true;
-		//まだステートを切り替えていない。
-		m_isStateChange = false;
-		//チャージの初期値。
-		m_player->m_charge = NEW_CHARGE;
-	}
-
-	void PlayerChargeAttack::Update()
-	{
-		Charging();
-		ChangeState();
-	}
-
-	/// <summary>
-	/// チャージを溜める。
-	/// </summary>
-	void PlayerChargeAttack::Charging()
-	{
-		//チャージ中ではないなら実行しない。
-		if (!m_isCharging) {
-			return;
-		}
-
 
 		//チャージ中アニメーション再生。
 		m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging, ANIM_INTERPOLATE_TIME);

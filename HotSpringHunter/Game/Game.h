@@ -14,6 +14,9 @@ class WildBoar;
 class Bear;
 class SnakeEnemy;
 class StageManager;
+class GameOver;
+class GameClear;
+class SoundEffect;
 
 class SoundEffect;
 
@@ -39,5 +42,7 @@ private:
 	SnakeEnemy*			m_snakeEnemy	= nullptr;
 	StageManager*		m_stageManager	= nullptr;
   SoundEffect* m_soundEffect = nullptr;
+  GameOver* m_gameOver = nullptr;
+	GameClear* m_gameClear = nullptr;
 };
 

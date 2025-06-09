@@ -39,6 +39,7 @@
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
@@ -91,5 +92,6 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
     <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="GameClear.h" />
   </ItemGroup>
 </Project>

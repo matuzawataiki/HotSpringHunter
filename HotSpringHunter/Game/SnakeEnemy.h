@@ -48,7 +48,7 @@ public:
 	//速度を適応。
 	void ExecuteSpeed();
 	void Render(RenderContext& rc)override;
-
+  
 	//セッター
 	//座標を設定
 	void SetSnakePos(const Vector3& pos) { m_snakePos = pos; };

@@ -38,6 +38,9 @@ bool SnakeEnemy::Start()
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
+	//サウンドエフェクト
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
 

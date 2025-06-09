@@ -241,6 +241,7 @@
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundGool.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxBattle.cpp" />
@@ -292,6 +293,7 @@
     <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="BackGround\ObjectBase.h" />
     <ClInclude Include="BackGround\MapObject\GroundGool.h" />
@@ -318,6 +320,9 @@
     <ClInclude Include="Towel.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

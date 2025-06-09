@@ -278,6 +278,7 @@ private:
 	/// </summary>
 	class PlayerHit :public IState
 	{
+
 	public:
 		PlayerHit(Player* player)
 			: IState(player)
