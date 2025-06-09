@@ -3,6 +3,7 @@
 #include "SnakeEnemy.h"
 #include "SoundEffect.h"
 
+
 namespace Character {
 	namespace {
 
@@ -223,8 +224,8 @@ namespace Character {
 	/// <param name="reduce"></param>体力減少量。
 	void Player::Hit(float reduce)
 	{
-    //被弾SE
-	  m_soundEffect->Play(enPlayerHitSE,false);
+		//被弾SE
+		m_soundEffect->Play(enPlayerHitSE, false);
 		//ガードができていないなら。
 		if (m_guardFlag == true) {
 			return;
@@ -238,7 +239,7 @@ namespace Character {
 			m_weakAtFlag = false;
 		}
 
-    //HPを0以下にしない。
+		//HPを0以下にしない。
 		if (m_playerHP < 0.0) {
 			m_playerHP = 0.0f;
 		}
@@ -521,8 +522,8 @@ namespace Character {
 		WeakAttack();
 		//弱攻撃アニメーションを再生。
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_WeakAttack, ANIM_INTERPOLATE_TIME);
-    //サウンドソース
-	  m_soundEffect->Play(enPlayerAttackSE, false);
+		//サウンドソース
+		m_soundEffect->Play(enPlayerAttackSE, false);
 	}
 
 	void PlayerWeakAttack::Update()
@@ -571,6 +572,52 @@ namespace Character {
 		}
 	}
 
+	void PlayerWeakAttack::Exit()
+	{
+		//攻撃力をリセット。
+		m_player->m_attackPower = 0.0f;
+	}
+
+	/*********************************************************************************/
+	//溜め攻撃用クラス。
+	/*********************************************************************************/
+
+	PlayerChargeAttack::~PlayerChargeAttack()
+	{
+
+	}
+
+	void PlayerChargeAttack::Enter()
+	{
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
+		//溜め攻撃のフラッグを立てる。
+		m_player->m_chargeAtFlag = true;
+		//チャージ中。
+		m_isCharging = true;
+		//まだステートを切り替えていない。
+		m_isStateChange = false;
+		//チャージの初期値。
+		m_player->m_charge = NEW_CHARGE;
+	}
+
+	void PlayerChargeAttack::Update()
+	{
+		Charging();
+		ChangeState();
+	}
+
+	/// <summary>
+	/// チャージを溜める。
+	/// </summary>
+	void PlayerChargeAttack::Charging()
+	{
+		//チャージ中ではないなら実行しない。
+		if (!m_isCharging) {
+			return;
+		}
+
+
 		//チャージ中アニメーション再生。
 		m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging, ANIM_INTERPOLATE_TIME);
 
@@ -592,20 +639,20 @@ namespace Character {
 		movePower *= CHARGE_ADD_VALUE;
 		//パワーをチャージに足す。
 		m_player->m_charge += movePower;
-  
-  //チャージが増加しているなら、溜め攻撃1アニメーションを再生。
-	if (m_player->m_charge >= 30.0f)
-	{
-		m_soundEffect->Play(enPlayerCharge1SE, false);
-	}
-	if (m_player->m_charge >= 60.0f)
-	{
-		m_soundEffect->Play(enPlayerCharge2SE, false);
-	}
-	if (m_player->m_charge >= 100.0f)
-	{
-		m_soundEffect->Play(enPlayerCharge3SE, false);
-	}
+
+		//チャージが増加しているなら、溜め攻撃1アニメーションを再生。
+		if (m_player->m_charge >= 30.0f)
+		{
+			m_soundEffect->Play(enPlayerCharge1SE, false);
+		}
+		if (m_player->m_charge >= 60.0f)
+		{
+			m_soundEffect->Play(enPlayerCharge2SE, false);
+		}
+		if (m_player->m_charge >= 100.0f)
+		{
+			m_soundEffect->Play(enPlayerCharge3SE, false);
+		}
 
 		//チャージを減少させる。
 		m_player->m_charge -= CHARGE_DECREASE;
