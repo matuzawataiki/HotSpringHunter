@@ -1,8 +1,9 @@
 #pragma once
 #include "BackGround/ObjectBase.h"
-class BushSmall: public ObjectBase
+
+class Fence:public ObjectBase
 {
 public:
-	BushSmall();
+	Fence();
 };
 

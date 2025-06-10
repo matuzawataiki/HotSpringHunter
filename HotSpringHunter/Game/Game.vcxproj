@@ -240,6 +240,7 @@
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
+    <ClCompile Include="BackGround\MapObject\Fence.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
@@ -251,6 +252,7 @@
     <ClCompile Include="BackGround\HitObject\HitBoxRun.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxStart.cpp" />
     <ClCompile Include="BackGround\HitObjectBase.cpp" />
+    <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="BackGround\ObjectBase.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -293,6 +295,7 @@
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
     <ClInclude Include="Enemy\State\Util\CRC32.h" />
+    <ClInclude Include="BackGround\MapObject\Fence.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />
@@ -305,6 +308,7 @@
     <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
     <ClInclude Include="BackGround\HitObjectBase.h" />
+    <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />

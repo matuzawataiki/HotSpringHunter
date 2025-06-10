@@ -47,6 +47,8 @@
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
+    <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
+    <ClCompile Include="BackGround\MapObject\Fence.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -95,5 +97,7 @@
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="EnemySpawner.h" />
+    <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
+    <ClInclude Include="BackGround\MapObject\Fence.h" />
   </ItemGroup>
 </Project>
