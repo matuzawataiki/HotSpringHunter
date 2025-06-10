@@ -30,13 +30,37 @@ namespace Enemy {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
+	// スポーンステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	void PoisonSnakeSpawnState::Enter()
+	{
+
+	}
+
+	void PoisonSnakeSpawnState::Update()
+	{
+
+	}
+
+	void PoisonSnakeSpawnState::Exit()
+	{
+
+	}
+
+	bool PoisonSnakeSpawnState::RequestState(uint32_t& request)
+	{
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
 
 	namespace {
 		static const float MOVE_SPEED_OFFSET = 10.0f;
-		static const float IDEL_RANGE_FAR = 600.0f;
-		static const float IDEL_RANGE_NIAR = 150.0f;
+		static const float IDEL_RANGE_FAR = 1000.0f;
+		static const float IDEL_RANGE_NIAR = 500.0f;
 
 	}
 
@@ -127,8 +151,9 @@ namespace Enemy {
 		Vector3 enemyToPlayer = m_owner->GetTarget()->GetPlayerPos() - m_owner->GetPosition();
 		float length = enemyToPlayer.Length();
 
-		if (length > IDEL_RANGE_FAR && IDEL_RANGE_NIAR > length) {
+		if (length > IDEL_RANGE_FAR || IDEL_RANGE_NIAR > length) {
 			request = PoisonSnakeTrackState::ID();
+			return true;
 		}
 
 		return false;
@@ -156,9 +181,8 @@ namespace Enemy {
 
 			m_isAttack = true;
 
-			PoisonBall* poisonBall = new PoisonBall(m_owner->GetPosition(), m_owner->GetTarget()->GetPlayerPos());
+			PoisonBall* poisonBall = new PoisonBall(m_owner->GetPosition(), m_owner->GetTarget()->GetPlayerPos(),*m_owner->GetTarget());
 			AddGo(poisonBall, 0, "poisonBall");
-
 		}
 	}
 

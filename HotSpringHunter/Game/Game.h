@@ -4,6 +4,9 @@ namespace Character {
 	class Player;
 }
 
+namespace Enemy {
+	class PoisonSnake;
+}
 class GameCamera;
 class EnemyBase;
 class StartWaveCollision;
@@ -22,6 +25,7 @@ public:
 
 private:
 
+	Enemy::PoisonSnake*	m_poisonSnake	= nullptr;
 	GameCamera*			m_gameCamera	= nullptr;
 	Character::Player*	m_player		= nullptr;
 	EnemyBase*			m_enemyBase		= nullptr;

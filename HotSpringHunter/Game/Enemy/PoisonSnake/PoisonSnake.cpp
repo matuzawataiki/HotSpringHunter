@@ -4,7 +4,9 @@
 #include "Enemy/State/PoisonSnakeState.h"
 
 namespace {
-	static float HP = 100.0f;
+	static const float HP = 100.0f;
+	static const float ATTACK_TIME = 10.0f;
+
 }
 
 
@@ -20,6 +22,7 @@ namespace Enemy
 		LoadAssets();
 		InitStateMachine();
 
+		m_position.z += 500.0f;
 		m_characterController.Init(30.0f, 50.0f, m_position);
 
 	}
@@ -38,6 +41,14 @@ namespace Enemy
 	void PoisonSnake::Update()
 	{
 
+		ActivateStart();
+		m_stateMachine->Update();
+
+		m_position = m_characterController.Execute(m_moveSpeed, 1.0f);
+
+		m_enemyModel.SetPosition(m_position);
+		m_enemyModel.SetRotation(m_rotation);
+		m_enemyModel.Update();
 	}
 
 	void PoisonSnake::ActivateStart()
@@ -47,14 +58,27 @@ namespace Enemy
 
 	void PoisonSnake::Render(RenderContext& rc)
 	{
-
+		m_enemyModel.Draw(rc);
 	}
 
 	void PoisonSnake::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 	{
-		if (wcscmp(eventName, L"attack") == 0)
+		if (wcscmp(eventName, L"Attack") == 0)
 		{
 			m_isAttack = true;
+		}
+	}
+
+	void PoisonSnake::AttackOff()
+	{
+		m_isAttack = false;
+		m_attackTime = ATTACK_TIME;
+	}
+
+	void PoisonSnake::AttackState()
+	{
+		if (!m_isAttack) {
+			m_attackTime -= g_gameTime->GetFrameDeltaTime();
 		}
 	}
 
@@ -69,21 +93,24 @@ namespace Enemy
 		m_animationClip[enAnimClip_Attack].SetLoopFlag(false);
 		m_animationClip[enAnimClip_Hit].Load("Assets/animData/snake/hit.tka");
 		m_animationClip[enAnimClip_Hit].SetLoopFlag(false);
-		m_animationClip[enAnimClip_Death].Load("Assets/animData/poisonSnake/attackAnimation.tka");
+		m_animationClip[enAnimClip_Death].Load("Assets/animData/snake/poisonSnake/attackAnimation.tka");
 		m_animationClip[enAnimClip_Death].SetLoopFlag(true);
 
 		//モデル読み込み
-		m_enemyModel.Init("Assets/modelData/snake/poisonSnake/poisonSnake.tkm", m_animationClip, enAnimClip_Num, enModelUpAxisY);
+		m_enemyModel.Init("Assets/modelData/snake/poisonSnake/poisonSnake.tkm", m_animationClip, enAnimClip_Num, enModelUpAxisZ);
 	}
 
 	void PoisonSnake::InitStateMachine()
 	{
+		m_stateMachine = new PoisonSnakeStateMachine;
+
 		m_stateMachine->Init(this, m_target);
 		m_stateMachine->RegisterState<PoisonSnakeIdleState>();
 		m_stateMachine->RegisterState<PoisonSnakeAtkState>();
 		m_stateMachine->RegisterState<PoisonSnakeDeathState>();
 		m_stateMachine->RegisterState<PoisonSnakeKnockBackState>();
 		m_stateMachine->RegisterState<PoisonSnakeTrackState>();
+		m_stateMachine->InitializeState<PoisonSnakeIdleState>();
 	}
 
 }

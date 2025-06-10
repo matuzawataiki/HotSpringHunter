@@ -8,7 +8,7 @@ namespace Enemy
 	class IEnemy : public IGameObject
 	{
 	public:
-		IEnemy() {}
+		IEnemy();
 		virtual ~IEnemy() {}
 		bool Start() override;
 		void Update() override;
@@ -128,17 +128,18 @@ namespace Enemy
 	protected:
 		Character::Player* m_target = nullptr;		//ターゲットのインスタン
 
-		Vector3			m_moveSpeed;		//移動ベクトル
-		Vector3			m_position;			//位置
-		Vector3			m_scale;			//拡大率
-		Quaternion		m_rotation;			//向き
+		Vector3			m_moveSpeed	= Vector3::Zero;		//移動ベクトル
+		Vector3			m_position	= Vector3::Zero;		//位置
+		Vector3			m_scale		= Vector3::Zero;		//拡大率
+		Quaternion		m_rotation	= Quaternion::Identity;	//向き
 
-		ModelRender		m_enemyModel;		//モデル描画用
+		ModelRender		m_enemyModel;	//モデル描画用
 
 		CharacterController m_characterController;
 
-		float m_hp;				//体力
-		float m_hpMax;			//最大体力
+		float m_hp		= 1.0f;				//体力
+		float m_hpMax	= 1.0f;				//最大体力
+		float m_attackTime = 0.0f;			//攻撃のクールタイム
 
 		bool m_isAttack = false;	//攻撃フラグ
 		bool m_isHit	= false;	//ヒットフラグ

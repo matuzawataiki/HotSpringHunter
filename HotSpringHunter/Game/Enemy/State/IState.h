@@ -28,7 +28,7 @@ class StateMachineBase
 
 protected:
 	StateMap m_stateMap;
-	IState* m_currentState;
+	IState* m_currentState = nullptr;
 
 public:
 	StateMachineBase()
@@ -58,7 +58,7 @@ public:
 	template<typename T>
 	inline void InitializeState()
 	{
-		//m_currentState = FindState
+		m_currentState = FindState(T::ID());
 	}
 
 protected:

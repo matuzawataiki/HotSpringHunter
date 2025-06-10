@@ -42,22 +42,23 @@ namespace Enemy
 		/// <summary>
 		/// 攻撃判定をオフにする
 		/// </summary>
-		inline void AttackOff() {
-			m_isAttack = false;
-		}
+		void AttackOff();
 
 	private:
+		/// <summary>
+		/// 攻撃の状態の管理
+		/// </summary>
+		void AttackState();
+
 		void LoadAssets();
 
 		void InitStateMachine();
 
 	private:
-		PoisonSnakeStateMachine* m_stateMachine;
+		PoisonSnakeStateMachine* m_stateMachine = nullptr;
 		Character::Player* m_target = nullptr;
 
 		AnimationClip m_animationClip[enAnimClip_Num];
-
-		bool m_isAttack = false;	//攻撃していいかどうか
 
 	};
 

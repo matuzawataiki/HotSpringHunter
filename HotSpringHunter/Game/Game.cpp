@@ -8,6 +8,7 @@
 #include "BackGround/StageManager.h";
 #include "Bear.h"
 #include "WildBoar.h"
+#include "Enemy/PoisonSnake/PoisonSnake.h"
 
 Game::Game()
 {
@@ -27,8 +28,9 @@ bool Game::Start()
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 	m_bear = NewGO<Bear>(0, "bear");
 	//m_wildBoar = NewGO<WildBoar>(0, "wildBoar");
-
+	m_poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
 	m_ui = NewGO<UI>(0, "ui");
+
 
 	//当たり判定を可視化する。
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();

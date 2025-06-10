@@ -217,7 +217,7 @@ namespace Character {
 	/// <summary>
 	/// 被弾。
 	/// </summary>
-	/// <param name="reduce"></param>体力減少量。
+	/// <param name="reduce">体力減少量</param>
 	void Player::Hit(float reduce)
 	{
 		//ガードができていないなら。

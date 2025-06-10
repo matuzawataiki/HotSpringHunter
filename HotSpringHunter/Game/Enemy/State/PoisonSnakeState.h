@@ -23,6 +23,12 @@ namespace Enemy {
 			m_stateMap.emplace(T::ID(), new T(this));
 		}
 
+		template<typename T>
+		inline void InitializeState()
+		{
+			m_currentState = FindState(T::ID());
+		}
+
 		virtual void Update() override;
 
 		/// <summary>
@@ -164,6 +170,27 @@ namespace Enemy {
 	};
 
 	//////////////////////////////////////////////////////////////////////////////
+	// スポーンステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	class PoisonSnakeSpawnState : public IState
+	{
+		appState(PoisonSnakeSpawnState);
+	public:
+		PoisonSnakeSpawnState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
+		virtual ~PoisonSnakeSpawnState() {}
+
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+
+		virtual bool RequestState(uint32_t& request) override;
+	private:
+		PoisonSnakeStateMachine* m_owner = nullptr;
+
+	};
+
+	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
 
@@ -180,7 +207,7 @@ namespace Enemy {
 
 		virtual bool RequestState(uint32_t& request) override;
 	private:
-		PoisonSnakeStateMachine* m_owner;
+		PoisonSnakeStateMachine* m_owner = nullptr;
 
 		float m_moveDirection = 1.0f;		//移動方向
 		float m_moveTime = 0.0f;			//移動時間
@@ -209,7 +236,7 @@ namespace Enemy {
 
 		virtual bool RequestState(uint32_t& request) override;
 	private:
-		PoisonSnakeStateMachine* m_owner;
+		PoisonSnakeStateMachine* m_owner = nullptr;
 
 		bool m_isAttack = false;	//攻撃していいかどうか
 
@@ -233,7 +260,7 @@ namespace Enemy {
 
 		virtual bool RequestState(uint32_t& request) override;
 	private:
-		PoisonSnakeStateMachine* m_owner;
+		PoisonSnakeStateMachine* m_owner = nullptr;
 
 		float m_isMove = 1.0f; //手前と奥どちらのポイントに移動するか
 
@@ -256,7 +283,7 @@ namespace Enemy {
 
 		virtual bool RequestState(uint32_t& request) override;
 	private:
-		PoisonSnakeStateMachine* m_owner;
+		PoisonSnakeStateMachine* m_owner = nullptr;
 
 		Vector3	m_moveSpeed = Vector3::Zero;	//移動速度
 
@@ -281,7 +308,7 @@ namespace Enemy {
 
 		virtual bool RequestState(uint32_t& request) override;
 	private:
-		PoisonSnakeStateMachine* m_owner;
+		PoisonSnakeStateMachine* m_owner = nullptr;
 
 		float m_isMove = 1.0f;	//手前と奥どちらのポイントに移動するか
 
