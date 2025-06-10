@@ -40,6 +40,8 @@
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="Smoke.cpp" />
+    <ClCompile Include="SmokeEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -79,8 +81,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="GameClear.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Game.rc" />
+    <ClInclude Include="Smoke.h" />
+    <ClInclude Include="SmokeEmitter.h" />
   </ItemGroup>
 </Project>

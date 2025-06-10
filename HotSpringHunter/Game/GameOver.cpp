@@ -17,7 +17,7 @@ GameOver::~GameOver()
 
 bool GameOver::Start()
 {
-	m_overModel.Init("Assets/modelData/image/gameOver.dds", 1920.0f, 1080.0f);
+	m_overModel.Init("Assets/modelData/image/gameover_2.dds", 1920.0f, 1080.0f);
 	return true;
 }
 

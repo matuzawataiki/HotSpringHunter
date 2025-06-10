@@ -252,6 +252,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundRun.cpp" />
+    <ClCompile Include="Smoke.cpp" />
+    <ClCompile Include="SmokeEmitter.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="BackGround\StageManager.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
@@ -297,6 +299,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="BackGround\MapObject\GroundRun.h" />
+    <ClInclude Include="Smoke.h" />
+    <ClInclude Include="SmokeEmitter.h" />
     <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="BackGround\StageManager.h" />
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
@@ -307,9 +311,6 @@
     <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Towel.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Game.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
