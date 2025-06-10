@@ -17,8 +17,8 @@ class StageManager;
 class GameOver;
 class GameClear;
 class SoundEffect;
-
 class SoundEffect;
+
 
 class Game : public IGameObject
 {

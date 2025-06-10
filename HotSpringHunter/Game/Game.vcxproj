@@ -260,6 +260,8 @@
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundRun.cpp" />
+    <ClCompile Include="Smoke.cpp" />
+    <ClCompile Include="SmokeEmitter.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="BackGround\StageManager.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
@@ -314,6 +316,8 @@
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="BackGround\MapObject\GroundRun.h" />
+    <ClInclude Include="Smoke.h" />
+    <ClInclude Include="SmokeEmitter.h" />
     <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="BackGround\StageManager.h" />
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />

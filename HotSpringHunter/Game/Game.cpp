@@ -15,6 +15,7 @@
 #include "GameClear.h"
 #include "SnakeEnemy.h"
 
+
 Game::Game()
 {
 }
@@ -47,7 +48,7 @@ bool Game::Start()
 	m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
 
 	//当たり判定を可視化する。
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }

@@ -546,7 +546,6 @@ void Bear::ExecuteAction()
 
 		//クマ登場のイベント
 	case enbearContact:
-
 		if (!m_isPlayRoar) {
 			//咆哮アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);

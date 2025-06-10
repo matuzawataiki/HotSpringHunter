@@ -1,5 +1,6 @@
 #pragma once
 
+
 class SnakeEnemy;
 class SoundEffect;
 class EnemyManager;
@@ -141,6 +142,7 @@ namespace Character {
 
 	class StateMachine :public IGameObject
 	{
+
 	public:
 		StateMachine();
 		~StateMachine();
@@ -293,7 +295,6 @@ private:
 	/// </summary>
 	class PlayerHit :public IState
 	{
-
 	public:
 		PlayerHit(Player* player)
 			: IState(player)

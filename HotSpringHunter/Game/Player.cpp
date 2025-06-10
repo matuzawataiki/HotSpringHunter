@@ -4,7 +4,9 @@
 #include "SoundEffect.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
+#include "SoundEffect.h"
 
+namespace {
 
 namespace Character {
 	namespace {
@@ -117,6 +119,7 @@ namespace Character {
 	/// <summary>
 	/// リスト追加。
 	/// </summary>
+
 	void Player::AddList()
 	{
 		//m_stateListを初期化。
@@ -450,6 +453,7 @@ namespace Character {
 		m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run, ANIM_INTERPOLATE_TIME);
+
 	}
 
 	void PlayerMove::Update()
@@ -651,7 +655,6 @@ namespace Character {
 		if (!m_isCharging) {
 			return;
 		}
-
 
 		//チャージ中アニメーション再生。
 		m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Charging, ANIM_INTERPOLATE_TIME);

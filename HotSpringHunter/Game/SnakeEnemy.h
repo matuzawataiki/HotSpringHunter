@@ -68,7 +68,6 @@ public:
 	inline bool GetIsSnakeSpawn() const { return m_isSpawn; };
 
 private:
-
 	CollisionObject*		collisionObject		= nullptr;
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
