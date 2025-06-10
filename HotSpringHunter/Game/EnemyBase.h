@@ -32,7 +32,7 @@ public:
 
 	//セッター
 	//ステート変更フラッグを設定
-	void SetChangeFlag(bool isChange) {
+	void SetChangeFlag(const bool isChange) {
 		m_isCanChange = isChange;
 	}
 
@@ -45,5 +45,5 @@ public:
 	float m_knockDecreased	= 1.0f;					//ノックバックの減速量
 	float m_renderTime		= 0.0f;					//点滅表示の時間
 
-	Vector3 m_knockBackVec = Vector3::Zero;			//ノックバックのベクトル
+	Vector3 m_knockBackVec	= Vector3::Zero;			//ノックバックのベクトル
 };

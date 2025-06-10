@@ -33,11 +33,11 @@ public:
 
 	//セッター
 	//カメラ状態を設定
-	void SetCameraState(const EnCameraVar& var) { m_cameraState = var; };
+	inline void SetCameraState(const EnCameraVar var) { m_cameraState = var; };
 
 	//ゲッター
 	//カメラ状態を取得
-	int GetCameraState() { return m_cameraState; };
+	inline int GetCameraState() const { return m_cameraState; };
 private:
 	Character::Player*m_player			= nullptr;
 	Bear*			m_bear				= nullptr;
@@ -46,7 +46,7 @@ private:
 	Vector3			m_cameraPos			= Vector3::Zero;		//カメラ座標
 	Vector3			m_cameraTarget		= Vector3::Zero;		//カメラ注視点
 
-	float			m_eventTimeLapse = 0.0f;					//イベントカメラの経過時間
+	float			m_eventTimeLapse	= 0.0f;					//イベントカメラの経過時間
 
 	int				m_cameraState		= 0;					//カメラの状態
 	

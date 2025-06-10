@@ -51,28 +51,29 @@ public:
   
 	//セッター
 	//座標を設定
-	void SetSnakePos(const Vector3& pos) { m_snakePos = pos; };
+	inline void SetSnakePos(const Vector3& pos) { m_snakePos = pos; };
 	//向きを設定
-	void SetSnakeDir(const Vector3& dir) { m_snakeDir = dir; };
+	inline void SetSnakeDir(const Vector3& dir) { m_snakeDir = dir; };
 	//回転を設定
-	void SetSnakeRot(const Quaternion& rot) { m_snakeRot = rot; };
+	inline void SetSnakeRot(const Quaternion& rot) { m_snakeRot = rot; };
 	//スポーン状態を設定
-	void SetSnakeIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	inline void SetSnakeIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
-	void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController.SetPosition(pos); };
+	inline void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController.SetPosition(pos); };
 
 	//ゲッター
 	//位置を取得
-	Vector3 GetSnakePos() const { return m_snakePos; };
+	inline Vector3 GetSnakePos() const { return m_snakePos; };
 	//スポーン状態を取得
-	bool GetIsSnakeSpawn() const { return m_isSpawn; };
+	inline bool GetIsSnakeSpawn() const { return m_isSpawn; };
+
 private:
 
 	CollisionObject*		collisionObject		= nullptr;
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
-  SoundEffect*        m_soundEffect = nullptr;	//サウンドエフェクト 
+	SoundEffect*			m_soundEffect		= nullptr;	//サウンドエフェクト 
 
 	AnimationClip			m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
 	CharacterController		m_snakeController;						//キャラクターコントローラー	
