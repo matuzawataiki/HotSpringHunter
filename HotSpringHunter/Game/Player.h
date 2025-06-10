@@ -46,7 +46,6 @@ namespace Character {
 		//リスト削除。
 		void DeleteList();
 		bool Start()override;
-
 		//リスト追加。
 		void AddList();
 		//アセットロード。

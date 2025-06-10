@@ -4,9 +4,6 @@
 #include "SoundEffect.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
-#include "SoundEffect.h"
-
-namespace {
 
 namespace Character {
 	namespace {

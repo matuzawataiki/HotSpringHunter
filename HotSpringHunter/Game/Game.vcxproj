@@ -241,6 +241,7 @@
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="BackGround\MapObject\Fence.cpp" />
+    <ClCompile Include="FenceManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="Enemy\State\IState.h" />
     <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="BackGround\MapObject\Fence.h" />
+    <ClInclude Include="FenceManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />

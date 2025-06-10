@@ -6,7 +6,7 @@
 
 namespace {
 	const float		CAMERA_NEAR					= 1.0f;						//カメラ近平面
-	const float		CAMERA_FAR					= 10000.0f;					//カメラ遠平面
+	const float		CAMERA_FAR					= 30000.0f;					//カメラ遠平面
 	const float		CAMERA_LEFT_LIMIT_POS		= -800.0f;					//カメラの左方向の限界値
 	const float		CAMERA_RIGHT_LIMIT_POS		= 800.0f;					//カメラの右方向の限界値
 

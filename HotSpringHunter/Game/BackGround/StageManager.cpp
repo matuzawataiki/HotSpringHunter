@@ -150,11 +150,11 @@ bool StageManager::Start()
 		}
 
 		////フェンスの設置
-		//if (objData.EqualObjectName(L"fence") == true) {
-		//	auto fence = NewGO<Fence>(0, "fence");
-		//	fence->Init(objData.position, objData.rotation, objData.scale);
-		//	return true;
-		//}
+		if (objData.EqualObjectName(L"fence") == true) {
+			auto fence = NewGO<Fence>(0, "fence");
+			fence->Init(objData.position, objData.rotation, objData.scale);
+			return true;
+		}
 
 		//フェンス当たり判定の設置
 		if (objData.EqualObjectName(L"FenceHitBox") == true) {
