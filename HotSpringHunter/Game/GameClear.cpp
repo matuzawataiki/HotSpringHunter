@@ -17,6 +17,7 @@ namespace
 	const float DELETE_SMOKE_TIME = 6.0f;
 }
 
+
 GameClear::GameClear()
 {
 }
@@ -24,16 +25,18 @@ GameClear::GameClear()
 GameClear::~GameClear()
 {
 	DeleteGO(this);
+
 }
 
 bool GameClear::Start()
 {
+
 	m_gameClearModel = new SpriteRender();
 	m_gameClearModel->Init("Assets/modelData/image/gameclear.dds", 384.0f, 216.0f);
 	m_gameClearSize = GAME_CLEAR_SCALE_BASE;
 	m_gameClearModel->SetScale(m_gameClearSize);
 
-	
+
 
 	return true;
 }
@@ -97,6 +100,7 @@ void GameClear::Update()
 		break;
 
 	case enResult:
+
 		m_result = NewGO<Result>(0, "Result");
 		Game* game = FindGO<Game>("game");
 		DeleteGO(this);
@@ -105,6 +109,7 @@ void GameClear::Update()
 		delete m_resultModel;
 		m_resultModel = nullptr;
 		break;
+
 	}
 }
 
@@ -119,5 +124,6 @@ void GameClear::Render(RenderContext&rc)
 		m_gameClearModel->Draw(rc);
 	}
 	
+
 }
 

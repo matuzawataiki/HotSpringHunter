@@ -1,6 +1,7 @@
 #pragma once
-
-class Player;
+namespace Character {
+	class Player;
+}
 class Bear;
 
 class UI : public IGameObject
@@ -13,6 +14,12 @@ public:
 	void Update()override;
 
 	void Render(RenderContext& rc)override;
+
+private:
+
+	Bear* m_bear = nullptr;
+
+	bool m_isBearHPBarCreated = false;			//クマのHPバーを描画したか
 };
 
 class PlayerHPUI : public IGameObject
@@ -27,7 +34,7 @@ public:
 
 	void Render(RenderContext& rc)override;
 
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 	SpriteRender m_playerHPFrame;
 	SpriteRender m_playerHPBar;
 	SpriteRender m_playerHPBack;
@@ -58,8 +65,9 @@ public:
 	void UpdateBarWidth();
 	void Render(RenderContext& rc)override;
 
+private:
 	Bear* m_bear = nullptr;
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 
 	SpriteRender m_BearHPFrame;
 	SpriteRender m_BearHPBar;

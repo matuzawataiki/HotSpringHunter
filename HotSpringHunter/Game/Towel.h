@@ -1,5 +1,7 @@
 #pragma once
-class Player;
+namespace Character {
+	class Player;
+}
 class PlayerChargeAttack;
 class Towel:public IGameObject
 {
@@ -15,7 +17,7 @@ public:
 	void DisplayManage();		//表示状態切り替え。
 	void Render(RenderContext& rc)override;
 private:
-	Player* m_player = nullptr;
+	Character::Player* m_player = nullptr;
 	PlayerChargeAttack* m_playerCharAt = nullptr;
 
 	ModelRender m_towelModel;

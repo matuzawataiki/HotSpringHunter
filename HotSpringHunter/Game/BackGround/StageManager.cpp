@@ -1,21 +1,23 @@
 #include "stdafx.h"
 #include "StageManager.h";
 
-#include "BackGround/MapObject/BushBig.h";
-#include "BackGround/MapObject/BushSmall.h";
-#include "BackGround/MapObject/Tree.h";
+#include "BackGround/MapObject/BushBig.h"
+#include "BackGround/MapObject/BushSmall.h"
+#include "BackGround/MapObject/Tree.h"
+#include "BackGround/MapObject/Fence.h"
 
-#include "BackGround/MapObject/GroundStart.h";
-#include "BackGround/MapObject/GroundRun.h";
-#include "BackGround/MapObject/GroundBattle.h";
-#include "BackGround/MapObject/GroundBossBattle.h";
-#include "BackGround/MapObject/GroundGool.h";
+#include "BackGround/MapObject/GroundStart.h"
+#include "BackGround/MapObject/GroundRun.h"
+#include "BackGround/MapObject/GroundBattle.h"
+#include "BackGround/MapObject/GroundBossBattle.h"
+#include "BackGround/MapObject/GroundGool.h"
 
-#include "BackGround/HitObject/HitBoxStart.h";
-#include "BackGround/HitObject/HitBoxRun.h";
-#include "BackGround/HitObject/HitBoxBattle.h";
-#include "BackGround/HitObject/HitBoxBossBattle.h";
-#include "BackGround/HitObject/HitBoxGool.h";
+#include "BackGround/HitObject/HitBoxStart.h"
+#include "BackGround/HitObject/HitBoxRun.h"
+#include "BackGround/HitObject/HitBoxBattle.h"
+#include "BackGround/HitObject/HitBoxBossBattle.h"
+#include "BackGround/HitObject/HitBoxGool.h"
+#include "BackGround/HitObject/HitBoxFence.h"
 
 StageManager::StageManager()
 {
@@ -110,7 +112,7 @@ bool StageManager::Start()
 		});
 
 	//戦闘エリア
-	m_BattleLevel_1.Init("Assets/stage/LevelBattle1.tkl", [&](LevelObjectData& objData) {
+	m_BattleLevel_1.Init("Assets/stage/LevelBattle2.tkl", [&](LevelObjectData& objData) {
 		//大型ブッシュの配置
 		if (objData.EqualObjectName(L"bush1") == true) {
 			auto bush1 = NewGO<BushBig>(0, "bush1");
@@ -144,6 +146,21 @@ bool StageManager::Start()
 			auto hitBoxBattle = NewGO<HitBoxBattle>(0, "hitBoxBattle");
 			hitBoxBattle->Init(objData.position, objData.rotation, objData.scale);
 			hitBoxBattle->CreatePhysicsObject();
+			return true;
+		}
+
+		////フェンスの設置
+		//if (objData.EqualObjectName(L"fence") == true) {
+		//	auto fence = NewGO<Fence>(0, "fence");
+		//	fence->Init(objData.position, objData.rotation, objData.scale);
+		//	return true;
+		//}
+
+		//フェンス当たり判定の設置
+		if (objData.EqualObjectName(L"FenceHitBox") == true) {
+			auto hitBoxFence = NewGO<HItBoxFence>(0, "hitBoxFence");
+			hitBoxFence->Init(objData.position, objData.rotation, objData.scale);
+			hitBoxFence->CreatePhysicsObject();	//当たり判定の作成
 			return true;
 		}
 
