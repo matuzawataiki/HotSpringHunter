@@ -7,6 +7,8 @@
 namespace {
 	const float		CAMERA_NEAR					= 1.0f;						//カメラ近平面
 	const float		CAMERA_FAR					= 10000.0f;					//カメラ遠平面
+	const float		CAMERA_LEFT_LIMIT_POS		= -800.0f;					//カメラの左方向の限界値
+	const float		CAMERA_RIGHT_LIMIT_POS		= 800.0f;					//カメラの右方向の限界値
 
 	const float		CAMERA_TARGET_HEIGHT		= 100.0f;					//追従カメラ：注視点を高くする量
 	const Vector3	FOLLOW_CAMERA_POS			= { 0.0f,175.0f,-300.0f };	//追従カメラ：カメラ座標
@@ -14,6 +16,25 @@ namespace {
 	const float		CONTACT_EVENT_TIME			= 4.0f;						//クマ接触イベントカメラ：時間
 	const Vector3	CONTACT_BASE_CAMERA_POS		= { 0.0f,200.0f,-400.0f };	//クマ接触イベントカメラ：基点のカメラ座標
 	const float		AMOUNT_MOVE_XPOS			= 200.0f;					//クマ接触イベントカメラ：x座標を動かす量
+
+	/// <summary>
+	/// 渡された値を設定した最小、最大の範囲内に設定して返す
+	/// </summary>
+	/// <param name="value">設定する値</param>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <returns>設定後の値</returns>
+	inline float Clamp(float value, const float min, const float max)
+	{
+		if (value < min) {
+			value = min;
+		}
+		if (value > max) {
+			value = max;
+		}
+
+		return value;
+	}
 };
 
 GameCamera::GameCamera()
@@ -147,6 +168,11 @@ void GameCamera::BearContactCamera()
 /// </summary>
 void GameCamera::CameraUpdate()
 {
+	//カメラがステージの端に寄りすぎないようにする
+	m_cameraPos.x = Clamp(m_cameraPos.x, CAMERA_LEFT_LIMIT_POS, CAMERA_RIGHT_LIMIT_POS);
+	m_cameraTarget.x = Clamp(m_cameraTarget.x, CAMERA_LEFT_LIMIT_POS, CAMERA_RIGHT_LIMIT_POS);
+
+
 	//カメラに視点と注視点を設定
 	g_camera3D->SetPosition(m_cameraPos);
 	g_camera3D->SetTarget(m_cameraTarget);

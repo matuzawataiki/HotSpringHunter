@@ -3,6 +3,7 @@
 class SnakeEnemy;
 class SoundEffect;
 class EnemyManager;
+class GameCamera;
 
 namespace Character {
 	//現在アクティブなステート。
@@ -150,6 +151,8 @@ namespace Character {
 	private:
 		Player*			m_player	  = nullptr;
 		SoundEffect*	m_soundEffect = nullptr;	//サウンドソース。
+		GameCamera*		m_gameCamera  = nullptr;
+
     
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
 	};
@@ -184,14 +187,8 @@ namespace Character {
 		~PlayerMove();
 		void Enter()override;
 		void Update()override;
-		//移動
-		void AnimManage();
-		//歩き。
-		void Walk();
 		//ダッシュ。
 		void Dash();
-		//ジャンプ。
-		void Jump();
 		void Exit()override;
 	private:
 		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。

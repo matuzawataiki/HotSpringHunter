@@ -3,6 +3,7 @@
 #include "SnakeEnemy.h"
 #include "SoundEffect.h"
 #include "EnemyManager.h"
+#include "GameCamera.h"
 
 
 namespace Character {
@@ -14,10 +15,8 @@ namespace Character {
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
-		const float MOVE_AMOUNT				= 120.0f;		//移動：移動量。
+		const float MOVE_AMOUNT				= 2000.0f;		//移動：移動量。
 		const float GRAVITY_AMOUNT			= 10.0f;		//移動：重力量。
-		const float JUMP_AMOUNT				= 700.0f;		//移動：ジャンプ力。
-		const float DASH_AMOUNT				= 1000.0f;		//移動：ダッシュ速度。
 
 		const float WEAK_COLLISION_DIS		= 100.0f;		//弱攻撃：コリジョン位置。
 		const float WEAK_COLLISION_SIZE		= 250.0f;		//弱攻撃：コリジョンサイズ。
@@ -337,6 +336,13 @@ namespace Character {
 
 	void StateMachine::Update()
 	{
+		//イベントカメラ中なら実行しない
+		m_gameCamera = FindGO<GameCamera>("gameCamera");
+		if (m_gameCamera->GetCameraState() == EnCameraVar::enBearContact) {
+			m_player->m_requestState = enPlayerIdle;
+			return;
+		}
+
 		StateManage();
 	}
 
@@ -443,44 +449,14 @@ namespace Character {
 	{
 		m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
+		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run, ANIM_INTERPOLATE_TIME);
 	}
 
 	void PlayerMove::Update()
 	{
 		if (m_player->m_playerCharaCon.IsOnGround()) {
-			//ダッシュ。
-			if (g_pad[0]->IsPress(enButtonB)) {
-				Dash();
-			}
-			//歩き。
-			else {
-				Walk();
-			}
+			Dash();
 		}
-		AnimManage();
-	}
-
-	/// <summary>
-	///アニメーション。
-	/// </summary>
-	void PlayerMove::AnimManage()
-	{
-		//ダッシュ。
-		if (g_pad[0]->IsPress(enButtonB)) {
-			m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run, ANIM_INTERPOLATE_TIME);
-			return;
-		}
-		//歩き。
-		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Walk);
-	}
-
-	/// <summary>
-	/// 歩き。
-	/// </summary>
-	void PlayerMove::Walk()
-	{
-		m_player->m_playerSpeed.x = m_player->m_playerDir.x * MOVE_AMOUNT;
-		m_player->m_playerSpeed.z = m_player->m_playerDir.z * MOVE_AMOUNT;
 	}
 
 	/// <summary>
@@ -488,16 +464,8 @@ namespace Character {
 	/// </summary>
 	void PlayerMove::Dash()
 	{
-		m_player->m_playerSpeed.x = m_player->m_playerDir.x * DASH_AMOUNT;
-		m_player->m_playerSpeed.z = m_player->m_playerDir.z * DASH_AMOUNT;
-	}
-
-	/// <summary>
-	/// ジャンプ。
-	/// </summary>
-	void PlayerMove::Jump()
-	{
-		m_player->m_playerSpeed.y = JUMP_AMOUNT;
+		m_player->m_playerSpeed.x = m_player->m_playerDir.x * MOVE_AMOUNT;
+		m_player->m_playerSpeed.z = m_player->m_playerDir.z * MOVE_AMOUNT;
 	}
 
 	void PlayerMove::Exit()
