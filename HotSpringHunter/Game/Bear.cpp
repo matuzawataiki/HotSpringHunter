@@ -53,7 +53,7 @@ namespace {
 	/// <param name="min">最小値</param>
 	/// <param name="max">最大値</param>
 	/// <returns>設定後の値</returns>
-	float Clamp(float value, float min, float max) 
+	inline float Clamp(float value, float min, float max) 
 	{
 		if (value < min) {
 			value = min;
@@ -237,7 +237,7 @@ void Bear::StoneThrow()
 /// <param name="target">投石の目標位置</param>
 /// <param name="t">投石が目標位置に到達するまでの時間</param>
 /// <returns>岩の位置</returns>
-Vector3 Bear::CalcStoneVec(Vector3 start, Vector3 target, float t)
+Vector3 Bear::CalcStoneVec(Vector3& start, Vector3& target, const float t)
 {
 	// 線形補間    
 	Vector3 flatPos = start + (target - start) * t;

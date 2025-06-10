@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
+#include "EnemySpawner.h"
 #include "SnakeEnemy.h"
 #include "WildBoar.h"
 #include "Bear.h"
@@ -20,6 +21,9 @@ EnemyManager::~EnemyManager()
 
 bool EnemyManager::Start()
 {  
+	//スポナーを生成
+	m_enemySpawner = NewGO<EnemySpawner>(0, "enemySpawner");
+
 	AddEnemy();
 
 	m_player = FindGO<Character::Player>("player");
@@ -39,12 +43,10 @@ void EnemyManager::AddEnemy()
 		auto* snake = NewGO<SnakeEnemy>(0, "snakeEnemy");
 		snake->SetSnakePos(OFF_SCREEN_POS);
 		m_snakes.push_back(snake);
-		m_snakeNumber++;
 
-		auto* wildBoar = NewGO<WildBoar>(m_wildBoarNumber, "wildBoar");
+		auto* wildBoar = NewGO<WildBoar>(0, "wildBoar");
 		wildBoar->SetWildBoarPos(OFF_SCREEN_POS);
 		m_wildBoars.push_back(wildBoar);
-		m_wildBoarNumber++;
 	}
 
 	//クマは1体だけ
@@ -54,34 +56,6 @@ void EnemyManager::AddEnemy()
 
 void EnemyManager::Update()
 {
-	TriggerEnemySpawn();
-}
-
-/// <summary>
-/// エネミーを出す指示を出す
-/// </summary>
-void EnemyManager::TriggerEnemySpawn()
-{
-	//一旦は一定位置に到達したら
-	if (m_player->GetPlayerPos().z >= 900.0f && !m_isArea01Spawned) {
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(-400.0f, 30.0f, 3000.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(-600.0f, 30.0f, 3000.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(400.0f, 30.0f, 5000.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(600.0f, 30.0f, 5000.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(-200.0f, 30.0f, 7000.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(0.0f, 30.0f, 7000.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enSnake, Vector3(200.0f, 30.0f, 7000.0f), Quaternion::Identity);
-		
-		m_isArea01Spawned = true;
-	}
-	
-	if (m_player->GetPlayerPos().z >= 9000.0f && !m_isArea02Spawned) {
-		EnemyArrangement(EnEnemyType::enWildBoar, Vector3(800.0f, 30.0f, 10500.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enWildBoar, Vector3(-800.0f, 30.0f, 10500.0f), Quaternion::Identity);
-		EnemyArrangement(EnEnemyType::enBear, Vector3(0.0f, 30.0f, 11000.0f), Quaternion::Identity);
-
-		m_isArea02Spawned = true;
-	}
 }
 
 /// <summary>
@@ -90,10 +64,10 @@ void EnemyManager::TriggerEnemySpawn()
 /// <param name="type">配置する敵の種類</param>
 /// <param name="pos">敵を配置する位置</param>
 /// <param name="rot">敵の回転</param>
-void EnemyManager::EnemyArrangement(EnEnemyType type, Vector3 pos, Quaternion rot)
+void EnemyManager::EnemyArrangement(const EnEnemyType type, const Vector3& pos, const Quaternion& rot)
 {
-	SnakeEnemy* arrangeSnake = nullptr;
-	WildBoar* arrangeWildBoar = nullptr;
+	SnakeEnemy* arrangeSnake	= nullptr;
+	WildBoar*	arrangeWildBoar = nullptr;
 
 	//敵の種類を判定し、出番が来ていない個体を探す
 	switch (type) {
@@ -111,6 +85,7 @@ void EnemyManager::EnemyArrangement(EnEnemyType type, Vector3 pos, Quaternion ro
 			}
 		}
 
+		//arrangeSnake = CreateNewEnemy(EnEnemyType::enSnake);
 		//エネミーを配置
 		arrangeSnake->SetSnakePos(pos);
 		arrangeSnake->SetSnakeCharaConPos(pos);
@@ -163,10 +138,9 @@ void EnemyManager::EnemyArrangement(EnEnemyType type, Vector3 pos, Quaternion ro
 //		//新しいヘビを追加
 //	case EnEnemyType::enSnake:
 //
-//		SnakeEnemy* snake = NewGO<SnakeEnemy>(m_snakeNumber, "snakeEnemy");
+//		SnakeEnemy* snake = NewGO<SnakeEnemy>(0, "snakeEnemy");
 //		snake->SetSnakePos(OFF_SCREEN_POS);
 //		m_snakes.push_back(snake);
-//		m_snakeNumber++;
 //
 //		//追加したエネミーを配置対象にする
 //		return snake;
@@ -176,10 +150,9 @@ void EnemyManager::EnemyArrangement(EnEnemyType type, Vector3 pos, Quaternion ro
 //		//新しいイノシシを追加
 //	case EnEnemyType::enWildBoar:
 //
-//		auto* wildBoar = NewGO<WildBoar>(m_wildBoarNumber, "wildBoar");
+//		auto* wildBoar = NewGO<WildBoar>(0, "wildBoar");
 //		wildBoar->SetWildBoarPos(OFF_SCREEN_POS);
 //		m_wildBoars.push_back(wildBoar);
-//		m_wildBoarNumber++;
 //
 //		return wildBoar;
 //
@@ -190,3 +163,53 @@ void EnemyManager::EnemyArrangement(EnEnemyType type, Vector3 pos, Quaternion ro
 //		break;
 //	}
 //}
+
+/// <summary>
+/// プレイヤーの位置から最も近い敵の位置を返す
+/// </summary>
+/// <param name="playerPos">プレイヤーの現在位置を表すベクトル</param>
+/// <returns>最も近い敵の位置</returns>
+Vector3 EnemyManager::CalcToNearestEnemyVec(const Vector3& playerPos)
+{
+	Vector3 toNearestEnemyVec = Vector3{ 10000.0f,0.0f,10000.0f };			//一番近い敵に向かって伸びるベクトル
+	Vector3 toEnemyVec			= Vector3::Zero;			//敵に向かって伸びるベクトル（暫定）
+	Vector3 nearestEnemyPos		= Vector3::Zero;			//一番近い敵の位置
+
+	//ヘビ
+	for (auto snakesIt = m_snakes.begin(); snakesIt != m_snakes.end(); ++snakesIt) {
+		//スポーンしている敵を見つける
+		if ((*snakesIt)->GetIsSnakeSpawn()) {
+			//見つけた敵へのベクトルを計算
+			toEnemyVec = (*snakesIt)->GetSnakePos() - m_player->GetPlayerPos();
+			//一番近いなら更新
+			if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+				toNearestEnemyVec = toEnemyVec;
+				nearestEnemyPos = (*snakesIt)->GetSnakePos();
+			}
+		}
+	}
+
+	//イノシシ
+	for (auto wildBoarIt = m_wildBoars.begin(); wildBoarIt != m_wildBoars.end(); ++wildBoarIt) {
+		if ((*wildBoarIt)->GetIsWildBoarIsSpawn()) {
+			toEnemyVec = (*wildBoarIt)->GetWildBoarPos() - m_player->GetPlayerPos();
+			if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+				toNearestEnemyVec = toEnemyVec;
+				nearestEnemyPos = (*wildBoarIt)->GetWildBoarPos();
+			}
+		}
+	}
+
+	//クマ
+	if (m_bear->GetIsBearSpawn()) {
+		toEnemyVec = m_bear->GetBearPos() - m_player->GetPlayerPos();
+		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+			toNearestEnemyVec = toEnemyVec;
+			nearestEnemyPos = m_bear->GetBearPos();
+		}
+	}
+
+	nearestEnemyPos.y = 0.0f;
+
+	return nearestEnemyPos;
+}

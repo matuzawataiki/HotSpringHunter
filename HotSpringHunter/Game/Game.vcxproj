@@ -237,6 +237,7 @@
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -288,6 +289,7 @@
     <ClInclude Include="EnemyHPBar.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemySpawn.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
     <ClInclude Include="Enemy\State\Util\CRC32.h" />

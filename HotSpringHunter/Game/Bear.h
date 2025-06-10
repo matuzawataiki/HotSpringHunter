@@ -50,7 +50,7 @@ public:
 	//投石攻撃
 	void StoneThrow();
 	//投石のベクトルを計算
-	Vector3 CalcStoneVec(Vector3 start, Vector3 target, float t);
+	Vector3 CalcStoneVec( Vector3& start,  Vector3& target, const float t);
 	//岩のコリジョンを作る
 	void StoneCollision();
 	//クマを初期位置に移動(召喚用)
@@ -79,25 +79,25 @@ public:
 
 	//セッター
 	//位置を設定
-	void SetBearPos(const Vector3& pos) { m_bearPos = pos; };
+	inline void SetBearPos(const Vector3& pos) { m_bearPos = pos; };
 	//向きを設定
-	void SetBearDir(const Vector3& dir) { m_bearDir = dir; };
+	inline void SetBearDir(const Vector3& dir) { m_bearDir = dir; };
 	//回転を設定
-	void SetBearRot(const Quaternion& rot) { m_bearRot = rot; };
+	inline void SetBearRot(const Quaternion& rot) { m_bearRot = rot; };
 	//スポーン状態を設定
-	void SetBearIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	inline void SetBearIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
-	void SetBearCharaConPos(const Vector3& pos) { m_bearController.SetPosition(pos); };
+	inline void SetBearCharaConPos(const Vector3& pos) { m_bearController.SetPosition(pos); };
 	//スポーン位置を設定
-	void SetBearNewPos(const Vector3& pos) { m_bearNewPos = pos; };
+	inline void SetBearNewPos(const Vector3& pos) { m_bearNewPos = pos; };
 
 	//ゲッター	
 	//位置を取得
-	Vector3 GetBearPos() const { return m_bearPos; };
+	inline Vector3 GetBearPos() const { return m_bearPos; };
 	//HPを取得
-	float GetBearHP() const { return m_bearHP; };
+	inline float GetBearHP() const { return m_bearHP; };
 	//スポーン状態を取得
-	bool GetIsBearSpawn() const { return m_isSpawn; };
+	inline bool GetIsBearSpawn() const { return m_isSpawn; };
 
 private:
 	Character::Player*	m_player			= nullptr;

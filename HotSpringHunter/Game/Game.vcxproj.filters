@@ -46,6 +46,7 @@
     <ClCompile Include="Enemy\PoisonSnake\PoisonSnake.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -93,5 +94,6 @@
     <ClInclude Include="WildBoar.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="EnemySpawner.h" />
   </ItemGroup>
 </Project>

@@ -68,31 +68,31 @@ public:
 
 	//セッター
 	//位置を設定
-	void SetWildBoarPos(const Vector3& pos) { m_wildBoarPos = pos; };
+	inline void SetWildBoarPos(const Vector3& pos) { m_wildBoarPos = pos; };
 	//向きを設定
-	void SetWildBoarDir(const Vector3& dir) { m_wildBoarDir = dir; };
+	inline void SetWildBoarDir(const Vector3& dir) { m_wildBoarDir = dir; };
 	//回転を設定
-	void SetWildBoarRot(const Quaternion& rot) { m_wildBoarRot = rot; };
+	inline void SetWildBoarRot(const Quaternion& rot) { m_wildBoarRot = rot; };
 	//スポーン状態を設定
-	void SetWildBoarIsSpawn(const bool& isSpawn) { m_isSpawn = isSpawn; };
+	inline void SetWildBoarIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
-	void SetWildBoarCharaConPos(const Vector3& pos) { m_wildBoarController.SetPosition(pos); };
+	inline void SetWildBoarCharaConPos(const Vector3& pos) { m_wildBoarController.SetPosition(pos); };
 
 	//ゲッター
 	//位置を取得
-	Vector3 GetWildBoarPos() const { return m_wildBoarPos; };
+	inline Vector3 GetWildBoarPos() const { return m_wildBoarPos; };
 	//スポーン状態を取得
-	bool GetIsWildBoarIsSpawn() const { return m_isSpawn; };
+	inline bool GetIsWildBoarIsSpawn() const { return m_isSpawn; };
 
 private:
 
 	CollisionObject*		collisionObject		= nullptr;
-	Character::Player*					m_player			= nullptr;
+	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
-  SoundEffect* m_soundEffect = nullptr; //サウンドエフェクト
-	SoundSource* m_chargeSound = nullptr; //突進サウンド
-	SoundSource* m_runSound = nullptr;    //突進攻撃サウンド
+	SoundEffect*			m_soundEffect		= nullptr; //サウンドエフェクト
+	SoundSource*			m_chargeSound		= nullptr; //突進サウンド
+	SoundSource*			m_runSound			= nullptr;    //突進攻撃サウンド
 
 	AnimationClip			m_animationClips[enWildBoarAnimClip_Num];  //アニメーションクリップ
 	CharacterController		m_wildBoarController;					   //キャラクターコントローラー
@@ -122,5 +122,5 @@ private:
 	bool m_isCanStateChange		= true;				//ステートを変えてもよいか
 	bool m_isHitCollision		= false;			//コリジョン当たったか
 	bool m_isRemoveController	= false;			//キャラコンを消したか
-  bool m_isChargeSoundPlay = true;    //突進中か
+	bool m_isChargeSoundPlay	= true;				//突進中か
 };
