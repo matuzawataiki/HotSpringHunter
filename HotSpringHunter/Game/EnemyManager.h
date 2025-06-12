@@ -19,6 +19,8 @@ class EnemyManager:public IGameObject
 public:
 	EnemyManager();
 	~EnemyManager();
+	//エネミーを削除
+	void DeleteEnemy();
 	bool Start()override;
 	//エネミーをリストに登録
 	void AddEnemy();

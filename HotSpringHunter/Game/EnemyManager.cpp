@@ -19,6 +19,25 @@ EnemyManager::EnemyManager()
 
 EnemyManager::~EnemyManager()
 {
+	DeleteEnemy();
+}
+
+/// <summary>
+/// エネミーを削除
+/// </summary>
+void EnemyManager::DeleteEnemy()
+{
+	for (auto* snake : m_snakes) {
+		DeleteGO(snake);
+	}
+	m_snakes.clear();
+	
+	for (auto* boar : m_wildBoars) {
+		DeleteGO(boar);
+	}
+	m_wildBoars.clear();
+	
+	DeleteGO(m_bear);
 }
 
 bool EnemyManager::Start()

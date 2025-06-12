@@ -13,7 +13,7 @@
 
 
 namespace {
-	const float MAX_BEAR_HP				= 500.0f;		//クマの最大HP
+	const float MAX_BEAR_HP				= 5.0f;		//クマの最大HP
 	const float FIND_RANGE				= 1500.0f;		//プレイヤーを捉える距離
 	const float PI						= 3.14;			//円周率
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間

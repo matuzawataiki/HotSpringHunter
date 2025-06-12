@@ -28,7 +28,7 @@ SnakeEnemy::SnakeEnemy()
 
 SnakeEnemy::~SnakeEnemy()
 {
-
+	//m_snakeController.RemoveRigidBoby();
 }
 
 bool SnakeEnemy::Start()

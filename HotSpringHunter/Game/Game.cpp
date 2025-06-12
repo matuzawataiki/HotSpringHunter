@@ -23,6 +23,7 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_sceneManager);
 	DeleteGO(m_stageManager);
+	DeleteGO(m_enemyManager);
 	DeleteGO(m_player);
 	DeleteGO(m_ui);
 	DeleteGO(m_soundEffect);
