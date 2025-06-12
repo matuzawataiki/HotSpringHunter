@@ -23,7 +23,7 @@ class GameClear:public IGameObject
 	//void SwitchGame() override;
 	void Render(RenderContext&rc) override;
 public:
-	Result*       m_result = nullptr;
+	Result* m_clearResultModel = nullptr;
 	SmokeEmitter* m_smokeEmitter;
 
 	Vector2 m_gameClearSize = Vector2(1.0f, 1.0f);

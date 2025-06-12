@@ -29,7 +29,7 @@ void GameOver::Update()
 void GameOver::SwitchResult()
 {
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		m_result = NewGO<Result>(0, "Result");
+		m_overResult = NewGO<GameOverResult>(0, "GameOverResult");
 		Game*game = FindGO<Game>("game");
 		DeleteGO(this);
 		DeleteGO(game);

@@ -10,7 +10,7 @@ namespace
 	const Vector2 GAME_CLEAR_SCALE_MAX = Vector2(5.0f, 5.0f);
 
 	//何秒かけておっきくする
-	const float GAME_CLEAR_SCALE_TIME = 1.0f;
+	const float GAME_CLEAR_SCALE_TIME = 1.5f;
 	//埋めつくす時間
 	const float GAME_CLEAR_SMOKE_TIME = 5.0f;
 	//消える時間
@@ -82,10 +82,11 @@ void GameClear::Update()
 		if (m_resultModel == nullptr)
 		{
 			m_resultModel = new SpriteRender();
-			m_resultModel->Init("Assets/modelData/image/result.dds", 1920.0f, 1080.0f);
+			m_resultModel->Init("Assets/modelData/image/gameclear_result.dds", 1920.0f, 1080.0f);
 			delete m_gameClearModel;
 			m_gameClearModel = nullptr;
 			m_smokeEmitter->DeactiveEmitter();
+
 		}
 		m_elapsedTime = 0.0f;
 		m_resultState = enSmokeStep4;
@@ -101,7 +102,7 @@ void GameClear::Update()
 
 	case enResult:
 
-		m_result = NewGO<Result>(0, "Result");
+		m_clearResultModel = NewGO<Result>(0, "Result");
 		Game* game = FindGO<Game>("game");
 		DeleteGO(this);
 		DeleteGO(game);
@@ -109,7 +110,6 @@ void GameClear::Update()
 		delete m_resultModel;
 		m_resultModel = nullptr;
 		break;
-
 	}
 }
 

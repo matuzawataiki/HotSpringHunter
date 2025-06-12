@@ -1,6 +1,6 @@
 #pragma once
 class Title;
-class Result;
+class GameOverResult;
 
 class GameOver:public IGameObject
 {
@@ -13,7 +13,7 @@ public:
 	void Render(RenderContext& rc)override;
 
 private:
-	Result* m_result = nullptr;
+	GameOverResult* m_overResult = nullptr;
 
 	SpriteRender m_overModel;
 };
