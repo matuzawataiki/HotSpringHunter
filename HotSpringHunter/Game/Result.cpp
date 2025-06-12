@@ -103,25 +103,6 @@ void Result::NextButton()
 	m_nextButtonRen.SetPosition(NEXT_BUTTON_POS);
 	m_nextButtonRen.SetScale(1.0f);
 
-	//if (m_isMaxTime == true)
-	//{
-	//	m_nextButtonElapsed += buttonDeltaTime;
-	//	m_nextButtonColor.Lerp(m_nextButtonElapsed /*/ NEXT_BUTTON_COLOR_TIME*/, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
-	//	if (m_nextButtonElapsed >= 1.0f)
-	//	{
-	//		m_isMaxTime = false;
-	//	}
-	//}
-	//if (m_isMaxTime == false)
-	//{
-	//	m_nextButtonElapsed -= buttonDeltaTime;
-	//	m_nextButtonColor.Lerp(m_nextButtonElapsed /NEXT_BUTTON_COLOR_TIME, Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f), Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f));
-	//	if (m_nextButtonElapsed <= 0.0f)
-	//	{
-	//		m_isMaxTime = true;
-	//	}
-	//}
-
 	//あたらしい
 	m_nextButtonElapsed += buttonDeltaTime;
 	const float NEXT_BUTTON_COLOR_PARCENT = m_nextButtonElapsed / NEXT_BUTTON_COLOR_TIME;
@@ -187,6 +168,85 @@ void GameOverResult::Update()
 		m_title = NewGO<Title>(0, "title");
 		DeleteGO(this);
 	}
+}
+
+void GameOverResult::OverSwitchTitle()
+{
+	if (g_pad[0]->IsTrigger(enButtonA))
+	{
+		m_title = NewGO<Title>(0, "title");
+		DeleteGO(this);
+	}
+}
+
+void GameOverResult::OverEvaluation()
+{
+
+	wchar_t evaluation[256];
+	swprintf_s(evaluation, 256, L"評価 : %d", int(m_evaluation));
+	m_overEvaluationFontRen.SetText(evaluation);
+	m_overEvaluationFontRen.SetPosition(EVALUATION_FONT_POS);
+	m_overEvaluationFontRen.SetScale(2.5f);
+	m_overEvaluationFontRen.SetColor(g_vec4Black);
+}
+
+void GameOverResult::OverScore()
+{
+	wchar_t score[256];
+	swprintf_s(score, 256, L"スコア : %d", int(m_finelScore));
+
+	m_overScoreFontRen.SetText(score);
+	m_overScoreFontRen.SetPosition(SCORE_FONT_POS);
+	m_overScoreFontRen.SetScale(2.0f);
+	m_overScoreFontRen.SetColor(g_vec4Black);
+}
+
+void GameOverResult::OverTime()
+{
+	wchar_t time[256];
+	swprintf_s(time, 256, L"クリアタイム : %d", int(m_gameClearTime));
+
+	m_overoverTimeFontRen.SetText(time);
+	m_overoverTimeFontRen.SetPosition(CLEAR_TIME_POS);
+	m_overoverTimeFontRen.SetScale(2.0f);
+	m_overoverTimeFontRen.SetColor(g_vec4Black);
+}
+
+void GameOverResult::NextButton()
+{
+	const float buttonDeltaTime = g_gameTime->GetFrameDeltaTime();
+
+	m_overNextButtonRen.SetText(L"タイトルに戻る");
+	m_overNextButtonRen.SetPosition(NEXT_BUTTON_POS);
+	m_overNextButtonRen.SetScale(1.0f);
+
+	//あたらしい
+	m_nextButtonElapsed += buttonDeltaTime;
+	const float NEXT_BUTTON_COLOR_PARCENT = m_nextButtonElapsed / NEXT_BUTTON_COLOR_TIME;
+	if (m_isMaxTime == true)
+	{
+		m_buttonColor = 1.0f - NEXT_BUTTON_COLOR_PARCENT;
+		if (m_buttonColor <= 0.0f)
+		{
+			m_buttonColor = 0.0f;
+			m_nextButtonElapsed = 0.0f;
+			m_isMaxTime = false;
+		}
+	}
+	else
+	{
+		m_buttonColor = NEXT_BUTTON_COLOR_PARCENT;
+		if (m_buttonColor >= 1.0f)
+		{
+			m_buttonColor = 1.0f;
+			m_nextButtonElapsed = 0.0f;
+			m_isMaxTime = true;
+		}
+	}
+	m_nextButtonColor.Lerp(m_buttonColor, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
+
+
+	m_overNextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_nextButtonColor.x);
 }
 
 void GameOverResult::Render(RenderContext& rc)
