@@ -46,11 +46,7 @@ bool UI::Start()
 
 void UI::Update()
 {
-	if (!m_isBearHPBarCreated && m_bear->GetIsBearSpawn()) {
-		//ボスのUI
-		NewGO<BossHPUI>(0, "bossHPUI");
-		m_isBearHPBarCreated = true;
-	}
+	
 }
 
 void UI::Render(RenderContext& rc)
@@ -169,12 +165,20 @@ bool BossHPUI::Start()
 void BossHPUI::Update()
 {
 	UpdateBarWidth();
+	DeleteUI();
 }
 
 void BossHPUI::UpdateBarWidth()
 {
 	m_BearHPBar.SetScale(Vector2{ m_bear->GetBearHP() / m_bear->GetBearMAXHP(),1.0f });
 	m_BearHPBar.Update();
+}
+
+void BossHPUI::DeleteUI()
+{
+	if (m_bear->GetBearHP() <= 0.0f) {
+		DeleteGO(this);
+	}
 }
 
 void BossHPUI::Render(RenderContext& rc)

@@ -47,7 +47,12 @@ public:
 	void VariousUpdate();
 	//速度を適応。
 	void ExecuteSpeed();
+	//スポーンした時の処理
+	void Spawned();
 	void Render(RenderContext& rc)override;
+
+	//ヘビの移動速度を取得
+	float GetSnakeSpeed()const;
   
 	//セッター
 	//座標を設定
@@ -56,6 +61,8 @@ public:
 	inline void SetSnakeDir(const Vector3& dir) { m_snakeDir = dir; };
 	//回転を設定
 	inline void SetSnakeRot(const Quaternion& rot) { m_snakeRot = rot; };
+	//移動速度を設定
+	inline void SetSnakeSpeed(const Vector3& speed) { m_snakeSpeed = speed; };
 	//スポーン状態を設定
 	inline void SetSnakeIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
@@ -66,6 +73,8 @@ public:
 	inline Vector3 GetSnakePos() const { return m_snakePos; };
 	//スポーン状態を取得
 	inline bool GetIsSnakeSpawn() const { return m_isSpawn; };
+	//ステートを取得
+	inline int GetSnakeState() const { return m_snakeState; };
 
 private:
 	CollisionObject*		collisionObject		= nullptr;

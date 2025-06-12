@@ -2,6 +2,7 @@
 #include "Bear.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
+#include "UI.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "EnemyManager.h"
@@ -558,6 +559,8 @@ void Bear::ExecuteAction()
 
 		//登場イベントが終わったら
 		if (m_gameCamera->GetCameraState() != EnCameraVar::enBearContact) {
+			//ボスのHPを生成
+			NewGO<BossHPUI>(0, "bossHPUI");
 			//召喚状態へ
 			m_bearState = enBearGoNewPos;
 		}

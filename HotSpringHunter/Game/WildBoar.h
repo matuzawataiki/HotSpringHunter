@@ -66,6 +66,9 @@ public:
 	//モデル
 	void Render(RenderContext& rc)override;
 
+	//移動速度を取得
+	float GetWildBoarSpeed()const;
+
 	//セッター
 	//位置を設定
 	inline void SetWildBoarPos(const Vector3& pos) { m_wildBoarPos = pos; };
@@ -73,6 +76,8 @@ public:
 	inline void SetWildBoarDir(const Vector3& dir) { m_wildBoarDir = dir; };
 	//回転を設定
 	inline void SetWildBoarRot(const Quaternion& rot) { m_wildBoarRot = rot; };
+	//移動速度を設定
+	inline void SetWildBoarSpeed(const Vector3& speed) { m_wildBoarSpeed = speed; };
 	//スポーン状態を設定
 	inline void SetWildBoarIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
@@ -83,6 +88,8 @@ public:
 	inline Vector3 GetWildBoarPos() const { return m_wildBoarPos; };
 	//スポーン状態を取得
 	inline bool GetIsWildBoarIsSpawn() const { return m_isSpawn; };
+	//ステートを取得
+	inline int GetWildBoarState() const { return m_wildBoarState; };
 
 private:
 

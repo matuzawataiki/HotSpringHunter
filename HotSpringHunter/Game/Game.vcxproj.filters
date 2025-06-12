@@ -52,6 +52,7 @@
     <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
     <ClCompile Include="BackGround\MapObject\Fence.cpp" />
     <ClCompile Include="FenceManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -106,5 +107,6 @@
     <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
     <ClInclude Include="BackGround\MapObject\Fence.h" />
     <ClInclude Include="FenceManager.h" />
+    <ClInclude Include="SceneManager.h" />
   </ItemGroup>
 </Project>

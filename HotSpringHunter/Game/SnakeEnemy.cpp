@@ -11,13 +11,14 @@ namespace {
 	const float DELTA_TIME				= 1.0f / 60.0f;		//フレームレート
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;				//アニメーションの補間時間
 	const float MAX_SNAKE_HP			= 100.0f;			//ヘビの最大HP
-	const float FIND_RANGE				= 1000.0f;			//プレイヤーを捉える距離
+	const float FIND_RANGE				= 9000.0f;			//プレイヤーを捉える距離
+	const float SNAKE_SPEED				= 300.0f;			//ヘビの移動速度
 
-	const float ATK_RANGE				= 100.0f;			//近接攻撃のリーチ
+	const float ATK_RANGE				= 300.0f;			//近接攻撃のリーチ
 	const float MELEE_ATTACK_DAMAGE		= 20.0f;			//近接攻撃のダメージ
 	const float ATK_COOLTIME			= 3.0f;				//近接攻撃のクールタイム
 
-	const float TO_NOT_SPAWNED_TIME = 5.0f;					//死亡してから非スポーン状態とする時間
+	const float TO_NOT_SPAWNED_TIME		= 5.0f;				//死亡してから非スポーン状態とする時間
 };
 
 SnakeEnemy::SnakeEnemy()
@@ -38,12 +39,6 @@ bool SnakeEnemy::Start()
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
-	//サウンドエフェクト
-	m_soundEffect = FindGO<SoundEffect>("soundEffect");
-
-	//サウンドエフェクト
-	m_soundEffect = FindGO<SoundEffect>("soundEffect");
-
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
 
@@ -51,7 +46,7 @@ bool SnakeEnemy::Start()
 	m_player	 = FindGO<Character::Player>("player");
 
 	//キャラクターコントローラー
-	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
+	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
 
 	//HPをセット
 	m_snakeHP = MAX_SNAKE_HP;
@@ -166,7 +161,7 @@ bool SnakeEnemy::FindPlayer()
 void SnakeEnemy::ExecuteAction()
 {
 	//移動速度を0する
-	m_snakeSpeed = Vector3::Zero;
+	//m_snakeSpeed = Vector3::Zero;
 	//近接攻撃のクールタイムを計算
 	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
 
@@ -223,7 +218,7 @@ void SnakeEnemy::ExecuteAction()
 
 		//追従
 	case enSnakeTrack:
-		m_snakeSpeed = m_enemyBase->Tracking(m_toPlayer);
+		//m_snakeSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_snakeModel.PlayAnimation(enSnakeAnimClip_Walk, ANIM_INTERPOLATE_TIME);
 		break;
@@ -284,6 +279,24 @@ void SnakeEnemy::ExecuteSpeed()
 	}
 }
 
+
+/// <summary>
+/// スポーンした時の処理。
+/// </summary>
+void SnakeEnemy::Spawned()
+{
+	//キャラクターコントローラー
+	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
+	//HPをセット
+	m_snakeHP = MAX_SNAKE_HP;
+	//スポーン状態に
+	m_isSpawn = true;
+	//待機状態に
+	m_snakeState = EnSnakeState::enSnakeIdle;
+	//ステート変更可能に
+	m_isCanStateChange = true;
+}
+
 void SnakeEnemy::Render(RenderContext& rc)
 {
 	//スポーンしていないなら実行しない
@@ -299,4 +312,13 @@ void SnakeEnemy::Render(RenderContext& rc)
 	if (m_snakeState != enSnakeDeath) {
 		m_snakeModel.Draw(rc);
 	}
+}
+
+/// <summary>
+/// ヘビの移動速度を取得
+/// </summary>
+/// <returns>ヘビの移動速度</returns>
+float SnakeEnemy::GetSnakeSpeed() const
+{
+	return SNAKE_SPEED;
 }

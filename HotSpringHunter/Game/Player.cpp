@@ -4,21 +4,22 @@
 #include "SoundEffect.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
+#include "SceneManager.h"
 
 namespace Character {
 	namespace {
 
-		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,300.0f,0.0f };	//player初期位置。
+		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,50.0f,0.0f };	//player初期位置。
 
-		const float MAX_PLAYER_HP			= 300.0f;		//最大HP。
+		const float MAX_PLAYER_HP			= 3000.0f;		//最大HP。
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
-		const float MOVE_AMOUNT				= 2000.0f;		//移動：移動量。
+		const float MOVE_AMOUNT				= 1700.0f;		//移動：移動量。
 		const float GRAVITY_AMOUNT			= 10.0f;		//移動：重力量。
 
 		const float WEAK_COLLISION_DIS		= 100.0f;		//弱攻撃：コリジョン位置。
-		const float WEAK_COLLISION_SIZE		= 250.0f;		//弱攻撃：コリジョンサイズ。
+		const float WEAK_COLLISION_SIZE		= 400.0f;		//弱攻撃：コリジョンサイズ。
 		const float WEAK_ATTACK_POWER		= 50.0f;		//弱攻撃：攻撃力。
 		const float SUCTION_CONDITION_DIS	= 500.0f;		//弱攻撃：吸いつきを行う条件の距離
 		const float SUCTION_TARGET_POS_DIS	= 10.0f;		//弱攻撃：攻撃吸いつきの位置の距離
@@ -38,6 +39,9 @@ namespace Character {
 		const float HIT_RIGIDITY_TiME		= 0.5f;			//被弾：硬直時間。
 
 		const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
+
+		const float TO_GOAL_TIME			= 4.0f;			//ゴール地点に到達するまでの時間
+		const Vector3 GOAL_POS				= { 0.0f,0.0f,13500.0f };//ゴール地点
 
 		/// <summary>
 		///	Rスティックが入力されているか
@@ -129,6 +133,7 @@ namespace Character {
 		m_stateList.push_back(new PlayerGuard(this));
 		m_stateList.push_back(new PlayerHit(this));
 		m_stateList.push_back(new PlayerDeath(this));
+		m_stateList.push_back(new PlayerToGoal(this));
 	}
 
 	/// <summary>
@@ -343,6 +348,13 @@ namespace Character {
 			return;
 		}
 
+		//ゴールに移動中なら実行しない
+		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		if (m_sceneManager->GetIsToGoal() == true) {
+			m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
+			return;
+		}
+
 		StateManage();
 	}
 
@@ -485,8 +497,8 @@ namespace Character {
 
 	void PlayerWeakAttack::Enter()
 	{
-		m_soundEffect	= FindGO<SoundEffect>("soundEffect");
-		m_enemyManager	= FindGO<EnemyManager>("enemyManager");
+		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+		m_enemyManager = FindGO<EnemyManager>("enemyManager");
 
 		//弱攻撃のフラッグを立てる。
 		m_player->m_weakAtFlag = true;
@@ -557,7 +569,7 @@ namespace Character {
 		if (m_isSuctionDecide) {
 			SuctionEnemy();
 		}
-		
+
 		ChangeState();
 
 		//弱攻撃アニメーション再生。
@@ -888,6 +900,72 @@ namespace Character {
 	}
 
 	void PlayerDeath::Exit()
+	{
+
+	}
+
+	/*********************************************************************************/
+	//ゴール地点移動用クラス。
+	/*********************************************************************************/
+
+	PlayerToGoal::~PlayerToGoal()
+	{
+	}
+
+	void PlayerToGoal::Enter()
+	{
+		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run, ANIM_INTERPOLATE_TIME);
+		CalcMoveAmount();
+	}
+
+	void PlayerToGoal::Update() 
+	{
+		MoveToGoalPos();
+	}
+
+	/// <summary>
+	/// プレイヤーがゴールに移動する量を計算
+	/// </summary>
+	void PlayerToGoal::CalcMoveAmount()
+	{
+		//ゴールまでの距離を計算
+		Vector3 toGoalDis = GOAL_POS - m_player->m_playerPos;
+		toGoalDis.y = 0.0f;
+		m_moveAmount = toGoalDis / TO_GOAL_TIME;
+		m_moveAmount *= DELTA_TIME;
+	}
+
+	/// <summary>
+	/// プレイヤーを指定した時間でゴール位置に移動させる
+	/// </summary>
+	void PlayerToGoal::MoveToGoalPos()
+	{
+		//時間が経っているなら
+		if (m_clearElapsedTime >= TO_GOAL_TIME) {
+			//待機アニメーションに
+			m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Idle, ANIM_INTERPOLATE_TIME);
+			//プレイヤーを正面に向かせる
+			m_player->SetPlayerDir(Vector3::Zero);
+			//クリア演出をだす
+			m_sceneManager->SetIsClearFrag(true);
+			return;
+		}
+		//時間を計算
+		m_clearElapsedTime += g_gameTime->GetFrameDeltaTime();
+		
+		//位置を設定する
+		m_player->SetPlayerPos(m_player->GetPlayerPos() + m_moveAmount);
+		m_player->SetPlayerControllerPos(m_player->GetPlayerPos());
+		//向きを設定する
+		Vector3 nowDir = m_moveAmount;
+		nowDir.Normalize();
+		m_player->SetPlayerDir(nowDir);
+
+		
+	}
+
+	void PlayerToGoal::Exit()
 	{
 
 	}

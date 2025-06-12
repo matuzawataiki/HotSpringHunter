@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneManager.h"
 
 namespace Character {
 	class Player;
@@ -14,14 +15,11 @@ public:
 	bool Start()override;
 	void Update()override;
 	//エネミーを出す指示を出す
-	void TriggerEnemySpawn();
+	void TriggerEnemySpawn(EnGameScene Scene);
 
 private:
 
 	EnemyManager*		m_enemyManager		= nullptr;
 	Character::Player*	m_player			= nullptr;
-
-	bool m_isArea01Spawned = false;				//ウェーブ01の敵をを出現させたか
-	bool m_isArea02Spawned = false;				//ウェーブ02の敵をを出現させたか
 };
 
