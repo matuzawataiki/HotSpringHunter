@@ -16,6 +16,7 @@ namespace
 	const float ATK_RANGE			= 300.0f;				//近接攻撃のリーチ kaeru
 	const float MELEE_ATTACK_DAMAGE = 20.0f;				//近接攻撃の攻撃力 kaeru
 	const float ATK_COOLTIME		= 3.0f;					//近接攻撃のクールタイム kaeru
+	const float TRACK_SPEED			= 25.0f;				//追従の移動速度
 
 	const float ATK_CHARGE_RANGE	= 600.0f;				//突進攻撃
 	const float ATK_CHARGE_TIME		= 3.0f;					//突進攻撃のクールタイム 
@@ -451,7 +452,7 @@ void WildBoar::ExecuteAction()
 
 		//追従
 	case enWildBoarTrack:
-		m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
+		//m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Walk);
 		break;
@@ -548,4 +549,13 @@ void WildBoar::Render(RenderContext& rc)
 		//警告を描画する
 		m_chargeCaveat.Draw(rc);
 	}
+}
+
+/// <summary>
+/// イノシシの移動速度を取得
+/// </summary>
+/// <returns>イノシシの移動速度</returns>
+float WildBoar::GetWildBoarSpeed()const
+{
+	return TRACK_SPEED;
 }

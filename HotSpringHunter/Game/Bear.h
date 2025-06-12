@@ -11,6 +11,7 @@ class EnemyManager;
 class GameCamera;
 class EnemyHPBar;
 class SoundEffect;
+class BossHPUI;
 
 //クマの行動状態
 enum EnBearState {
@@ -101,13 +102,13 @@ public:
 
 private:
 	Character::Player*	m_player			= nullptr;
-	SnakeEnemy*			m_snakeEnemy[4]		= {};
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
 	EnemyManager*		m_enemyManager		= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
 	SoundEffect*        m_soundEffect       = nullptr;
+	BossHPUI*			m_bossHPUI			= nullptr;
 
 	std::vector<Vector3>m_summonPos;				//召喚する位置
 

@@ -5,6 +5,7 @@ class SnakeEnemy;
 class SoundEffect;
 class EnemyManager;
 class GameCamera;
+class SceneManager;
 
 namespace Character {
 	//現在アクティブなステート。
@@ -17,6 +18,7 @@ namespace Character {
 		enPlayerGuard,				//ガード。
 		enPlayerHit,				//被弾。
 		enPlayerDeath,				//死亡。
+		enPlayerToGoal,				//ゴール地点へ向かう
 	};
 
 	//アニメーションクリップ。
@@ -67,25 +69,29 @@ namespace Character {
 		//プレイヤーの最大HPを取得。
 		float GetPlayerMAXHP();
 
-		////セッター
-		////リクエストステートを設定
-		//inline void SetRequestState
-
 		//ゲッター
-		//player座標を取得
+		//座標を取得
 		inline Vector3 GetPlayerPos() const { return m_playerPos; };
-		//playerの向きを取得
+		//向きを取得
 		inline Vector3 GetPlayerDir() const { return m_playerDir; };
-		//攻撃力のを取得
+		//攻撃力を取得
 		inline float GetAttackPower() const { return m_attackPower; };
-		//チャージのを取得
+		//チャージ量を取得
 		inline float GetCharge() const { return m_charge; };
-		//HPのを取得
+		//現在のHPを取得
 		inline float GetPlayerHP() const { return m_playerHP; };
+		//行動状態を取得
+		inline int GetPlayerState() const { return m_currentState; };
 
 		//セッター
 		//位置を設定
 		inline void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; };
+		//キャラコンの位置を設定
+		inline void SetPlayerControllerPos(const Vector3& pos) { m_playerCharaCon.SetPosition(pos); };
+		//向きを設定
+		inline void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
+		//行動状態を設定
+		inline void SetRequestState(const int state) { m_requestState = state; };
 	//private:
 		//チャージ量表示（仮）
 		FontRender m_chargeRender;
@@ -150,11 +156,11 @@ namespace Character {
 		//ステート遷移（仮）。
 		void StateManage();
 	private:
-		Player*			m_player	  = nullptr;
-		SoundEffect*	m_soundEffect = nullptr;	//サウンドソース。
-		GameCamera*		m_gameCamera  = nullptr;
+		Player*			m_player		= nullptr;
+		SoundEffect*	m_soundEffect	= nullptr;	//サウンドソース。
+		GameCamera*		m_gameCamera	= nullptr;
+		SceneManager*	m_sceneManager	= nullptr;
 
-    
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
 	};
 
@@ -329,5 +335,31 @@ private:
 		void Exit()override;
 	private:
 		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+	};
+
+	class PlayerToGoal :public IState
+	{
+	public:
+		PlayerToGoal(Player* player)
+			: IState(player)
+		{
+
+		}
+		~PlayerToGoal();
+		void Enter()override;
+		void Update()override;
+		//移動量を計算
+		void CalcMoveAmount();
+		//プレイヤーをゴール地点へ移動させる
+		void MoveToGoalPos();
+		
+		void Exit()override;
+
+	private:
+		SceneManager*	m_sceneManager	= nullptr;
+
+		Vector3		m_moveAmount		= Vector3::Zero;		//1フレームで移動する量
+
+		float		m_clearElapsedTime	= 0.0f;			//ゴールへの強制移動を始めてからの経過時間
 	};
 }

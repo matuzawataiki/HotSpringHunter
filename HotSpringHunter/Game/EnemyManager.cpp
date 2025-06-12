@@ -7,7 +7,9 @@
 #include "Player.h"
 
 namespace {
-	const int ENEMY_NUM = 15;		//エネミーの数
+	const int ENEMY_NUM				= 15;				//エネミーの数
+	const float PI					= 3.1415;			//円周率
+	const float TRACK_TARGET_RADIUS = 200.0f;			//追従の目標位置のプレイヤーからの半径
 	const Vector3 OFF_SCREEN_POS = { 0.0f,3000.0f,500.0f };		//出番が来てないときの敵を格納する位置
 }
 
@@ -21,10 +23,10 @@ EnemyManager::~EnemyManager()
 
 bool EnemyManager::Start()
 {  
+	AddEnemy();
+
 	//スポナーを生成
 	m_enemySpawner = NewGO<EnemySpawner>(0, "enemySpawner");
-
-	AddEnemy();
 
 	m_player = FindGO<Character::Player>("player");
 
@@ -56,6 +58,8 @@ void EnemyManager::AddEnemy()
 
 void EnemyManager::Update()
 {
+	//敵の囲い込み
+	EnemyFormation();
 }
 
 /// <summary>
@@ -87,6 +91,7 @@ void EnemyManager::EnemyArrangement(const EnEnemyType type, const Vector3& pos, 
 
 		//arrangeSnake = CreateNewEnemy(EnEnemyType::enSnake);
 		//エネミーを配置
+		arrangeSnake->Spawned();
 		arrangeSnake->SetSnakePos(pos);
 		arrangeSnake->SetSnakeCharaConPos(pos);
 		arrangeSnake->SetSnakeRot(rot);
@@ -212,4 +217,63 @@ Vector3 EnemyManager::CalcToNearestEnemyVec(const Vector3& playerPos)
 	nearestEnemyPos.y = 0.0f;
 
 	return nearestEnemyPos;
+}
+
+/// <summary>
+/// エネミーが囲い込むような挙動をするように、移動速度を調整
+/// </summary>
+void EnemyManager::EnemyFormation()
+{
+	std::vector<SnakeEnemy*>trackingSnakes;			//追従しているヘビ
+	std::vector<WildBoar*>trackingWildBoars;		//追従しているイノシシ
+	std::vector<Vector3>trackTargetPos;				//追従の目標位置
+	Vector3 speed = Vector3::Zero;					//追従の移動ベクトル
+
+
+	//ヘビ
+	for (auto snakesIt = m_snakes.begin(); snakesIt != m_snakes.end(); ++snakesIt) {
+		//追従状態のヘビを見つける
+		if ((*snakesIt)->GetSnakeState() == EnSnakeState::enSnakeTrack) {
+			//見つけたら配列に入れる
+			trackingSnakes.push_back((*snakesIt));
+		}
+	}
+
+	//イノシシ
+	for (auto wildBoarIt = m_wildBoars.begin(); wildBoarIt != m_wildBoars.end(); ++wildBoarIt) {
+		if ((*wildBoarIt)->GetWildBoarState() == EnWildBoarState::enWildBoarTrack) {
+			trackingWildBoars.push_back((*wildBoarIt));
+		}
+	}
+
+	//追従しているエネミーの総数を数える
+	int trackingEnemies = trackingSnakes.size() + trackingWildBoars.size();
+
+	//追従の目標位置を計算
+	for (int i = 0; i < trackingEnemies; i++) {
+		float angle = 2.0f * PI * i / trackingEnemies;
+		float x = m_player->GetPlayerPos().x + TRACK_TARGET_RADIUS * std::cos(angle);
+		float z = m_player->GetPlayerPos().z + TRACK_TARGET_RADIUS * std::sin(angle);
+		trackTargetPos.emplace_back(Vector3{ x,0.0f,z });
+	}
+
+	//計算した位置目標位置に各エネミーを動かす
+
+	for (auto trackSnakesIt = trackingSnakes.begin(); trackSnakesIt != trackingSnakes.end(); ++trackSnakesIt) {
+		speed = trackTargetPos.front() - (*trackSnakesIt)->GetSnakePos();
+		speed.y = 0.0f;
+		speed.Normalize();
+		speed *= (*trackSnakesIt)->GetSnakeSpeed();
+		(*trackSnakesIt)->SetSnakeSpeed(speed);
+		trackTargetPos.erase(trackTargetPos.begin());
+	}
+
+	for (auto trackWildBoarIt = trackingWildBoars.begin(); trackWildBoarIt != trackingWildBoars.end(); ++trackWildBoarIt) {
+		speed = trackTargetPos.front() - (*trackWildBoarIt)->GetWildBoarPos();
+		speed.y = 0.0f;
+		speed.Normalize();
+		speed *= (*trackWildBoarIt)->GetWildBoarSpeed();
+		(*trackWildBoarIt)->SetWildBoarSpeed(speed);
+		trackTargetPos.erase(trackTargetPos.begin());
+	}
 }

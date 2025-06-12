@@ -10,13 +10,9 @@ class EnemyManager;
 class EnemyHPBar;
 class StartWaveCollision;
 class UI;
-class WildBoar;
-class Bear;
-class SnakeEnemy;
 class StageManager;
+class SceneManager;
 class GameOver;
-class GameClear;
-class SoundEffect;
 class SoundEffect;
 
 
@@ -37,12 +33,9 @@ private:
 	EnemyHPBar*			m_enemyHPBar	= nullptr;
 	StartWaveCollision* m_waveCollision = nullptr;
 	UI*					m_ui			= nullptr;
-	Bear*				m_bear			= nullptr;
-	WildBoar*			m_wildBoar		= nullptr;
-	SnakeEnemy*			m_snakeEnemy	= nullptr;
 	StageManager*		m_stageManager	= nullptr;
-  SoundEffect* m_soundEffect = nullptr;
-  GameOver* m_gameOver = nullptr;
-	GameClear* m_gameClear = nullptr;
+	SceneManager*		m_sceneManager	= nullptr;
+	SoundEffect*		m_soundEffect	= nullptr;
+	GameOver*			m_gameOver		= nullptr;
 };
 

@@ -63,6 +63,7 @@ public:
 	bool Start()override;
 	void Update()override;
 	void UpdateBarWidth();
+	void DeleteUI();
 	void Render(RenderContext& rc)override;
 
 private:

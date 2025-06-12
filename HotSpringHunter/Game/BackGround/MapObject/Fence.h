@@ -1,9 +1,14 @@
 #pragma once
 #include "BackGround/ObjectBase.h"
 
-class Fence:public ObjectBase
+class FenceManager;
+class Fence :public ObjectBase
 {
 public:
 	Fence();
+	void Render(RenderContext& rc)override;
+
+private:
+	FenceManager* m_fenceManager = nullptr;
 };
 

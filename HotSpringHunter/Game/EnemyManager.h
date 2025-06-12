@@ -27,8 +27,10 @@ public:
 	void EnemyArrangement(const EnEnemyType tipe, const Vector3& pos, const Quaternion& rot);
 	//エネミーが足りないときに追加
 	auto CreateNewEnemy(const EnEnemyType type);
-	/// プレイヤーと最も近い敵を検索し、その方向ベクトルを計算
+	//プレイヤーと最も近い敵を検索し、その方向ベクトルを計算
 	Vector3 CalcToNearestEnemyVec(const Vector3& playerPos);
+	//エネミーのフォーメーション
+	void EnemyFormation();
 	
 
 private:
@@ -39,8 +41,5 @@ private:
 	EnemySpawner*m_enemySpawner = nullptr;
 	Bear*		 m_bear			= nullptr;
 	Character::Player* m_player = nullptr;
-
-	bool m_isArea01Spawned		= false;				//ウェーブ01の敵をを出現させたか
-	bool m_isArea02Spawned		= false;				//ウェーブ02の敵をを出現させたか
 };
 
