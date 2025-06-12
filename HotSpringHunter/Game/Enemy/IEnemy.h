@@ -96,11 +96,11 @@ namespace Enemy
 		//////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>
-		/// 攻撃できるかどうか
+		/// 攻撃のクールタイムが明けているかどうか
 		/// </summary>
 		/// <returns>攻撃可能ならture、不可能ならfalse</returns>
-		inline bool IsAttack() {
-			return m_isAttack;
+		inline bool IsAttackCooldown() {
+			return m_isAttackCooldown;
 		 }
 
 		/// <summary>
@@ -125,6 +125,13 @@ namespace Enemy
 			m_hp -= damage;
 		}
 
+		/// <summary>
+		/// ヒットフラグを変更する
+		/// </summary>
+		inline void ChangeHitFlag() {
+			m_isHit = !m_isHit;
+		}
+
 	protected:
 		Character::Player* m_target = nullptr;		//ターゲットのインスタン
 
@@ -139,11 +146,11 @@ namespace Enemy
 
 		float m_hp		= 1.0f;				//体力
 		float m_hpMax	= 1.0f;				//最大体力
-		float m_attackTime = 0.0f;			//攻撃のクールタイム
+		float m_attackTime = 10.0f;			//攻撃のクールタイム
 
-		bool m_isAttack = false;	//攻撃フラグ
-		bool m_isHit	= false;	//ヒットフラグ
-		bool m_isDeath	= false;	//死亡フラグ
+		bool m_isAttackCooldown = false;	//攻撃フラグ
+		bool m_isHit			= false;	//ヒットフラグ
+		bool m_isDeath			= false;	//死亡フラグ
 
 	};
 }

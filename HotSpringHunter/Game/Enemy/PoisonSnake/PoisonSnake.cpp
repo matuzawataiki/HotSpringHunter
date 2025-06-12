@@ -32,16 +32,15 @@ namespace Enemy
 
 	bool PoisonSnake::Start()
 	{
-		m_enemyModel.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
-			OnAnimationEvent(clipName, eventName);
-			});
 		return true;
 	}
 
 	void PoisonSnake::Update()
 	{
-
-		ActivateStart();
+		if (!m_isAttackCooldown){
+			AttackState();
+		}
+		HitCalculation();
 		m_stateMachine->Update();
 
 		m_position = m_characterController.Execute(m_moveSpeed, 1.0f);
@@ -53,7 +52,6 @@ namespace Enemy
 
 	void PoisonSnake::ActivateStart()
 	{
-
 	}
 
 	void PoisonSnake::Render(RenderContext& rc)
@@ -61,24 +59,43 @@ namespace Enemy
 		m_enemyModel.Draw(rc);
 	}
 
-	void PoisonSnake::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
-	{
-		if (wcscmp(eventName, L"Attack") == 0)
-		{
-			m_isAttack = true;
-		}
-	}
-
 	void PoisonSnake::AttackOff()
 	{
-		m_isAttack = false;
+		m_isAttackCooldown = false;
 		m_attackTime = ATTACK_TIME;
 	}
 
 	void PoisonSnake::AttackState()
 	{
-		if (!m_isAttack) {
+
+		if (!m_isAttackCooldown && m_attackTime >= 0) {
 			m_attackTime -= g_gameTime->GetFrameDeltaTime();
+		}
+		if (m_attackTime < 0) {
+			m_isAttackCooldown = true;
+		}
+
+	}
+
+	void PoisonSnake::HitCalculation()
+	{
+		//被弾した場合
+		if (m_target->m_collision->IsHit(m_characterController)) {
+
+			//HPを減らす
+			m_hp -= m_target->GetAttackPower();
+
+			//HPがまだ残っている
+			if (m_hp > 0.0f) {
+				//ノックバック
+				ChangeHitFlag();
+			}
+			//HPがなくなった
+			else {
+				//死亡（吹っ飛び）
+				m_isDeath = true;
+			}
+			return;
 		}
 	}
 
@@ -112,5 +129,7 @@ namespace Enemy
 		m_stateMachine->RegisterState<PoisonSnakeTrackState>();
 		m_stateMachine->InitializeState<PoisonSnakeIdleState>();
 	}
+
+
 
 }

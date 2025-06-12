@@ -29,16 +29,6 @@ namespace Enemy
 		void ActivateStart() override;
 		void Render(RenderContext& rc) override;
 
-		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
-
-		/// <summary>
-		/// 攻撃していいかどうかを返す
-		/// </summary>
-		/// <returns>攻撃判定</returns>
-		inline bool GetIsAttack() {
-			return m_isAttack;
-		}
-
 		/// <summary>
 		/// 攻撃判定をオフにする
 		/// </summary>
@@ -50,9 +40,20 @@ namespace Enemy
 		/// </summary>
 		void AttackState();
 
+		/// <summary>
+		/// アセットの読み込み
+		/// </summary>
 		void LoadAssets();
 
+		/// <summary>
+		/// ステートマシンの初期設定
+		/// </summary>
 		void InitStateMachine();
+
+		/// <summary>
+		/// ヒット計算
+		/// </summary>
+		void HitCalculation();
 
 	private:
 		PoisonSnakeStateMachine* m_stateMachine = nullptr;

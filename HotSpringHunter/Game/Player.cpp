@@ -101,6 +101,8 @@ namespace Character {
 		//ステートマシン生成
 		m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
 
+		g_sceneLight->SetLightPos(m_playerPos);
+
 		AddList();
 		LoadAssets();
 

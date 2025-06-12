@@ -86,14 +86,6 @@ namespace Enemy {
 			return m_owner->GetModelRender();
 		}
 
-		/// <summary>
-		/// 攻撃していいかどうかを返す
-		/// </summary>
-		/// <returns>攻撃判定</returns>
-		inline bool GetIsAttack() {
-			return m_owner->GetIsAttack();
-		}
-
 		//////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>
@@ -131,11 +123,11 @@ namespace Enemy {
 		//////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>
-		/// 攻撃できるかどうか
+		/// 攻撃のクールタイムが明けているかどうか
 		/// </summary>
 		/// <returns>攻撃可能ならture、不可能ならfalse</returns>
-		inline bool IsAttack() {
-			return m_owner->IsAttack();
+		inline bool IsAttackCooldown() {
+			return m_owner->IsAttackCooldown();
 		}
 
 		/// <summary>
@@ -156,6 +148,12 @@ namespace Enemy {
 
 		//////////////////////////////////////////////////////////////////////////////
 
+		/// <summary>
+		/// ヒットフラグを変更する
+		/// </summary>
+		void ChangeHitFlag() {
+			m_owner->ChangeHitFlag();
+		}
 
 		/// <summary>
 		/// 攻撃判定をオフにする
@@ -209,7 +207,7 @@ namespace Enemy {
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
 
-		float m_moveDirection = 1.0f;		//移動方向
+		float m_sideDirection = 1.0f;		//移動方向
 		float m_moveTime = 0.0f;			//移動時間
 		float m_idleTime = 0.0f;			//待機時間
 
@@ -225,7 +223,7 @@ namespace Enemy {
 
 	class PoisonSnakeAtkState : public IState
 	{
-		appState(PoisonSnakeIdleState);
+		appState(PoisonSnakeAtkState);
 	public:
 		PoisonSnakeAtkState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
 		virtual ~PoisonSnakeAtkState() {}
@@ -238,8 +236,7 @@ namespace Enemy {
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
 
-		bool m_isAttack = false;	//攻撃していいかどうか
-
+		bool m_isCreateBall = true;	//玉を出していいかどうか
 
 	};
 
@@ -287,7 +284,6 @@ namespace Enemy {
 
 		Vector3	m_moveSpeed = Vector3::Zero;	//移動速度
 
-		float m_isMove = 1.0f;		//手前と奥どちらのポイントに移動するか
 		float m_knockDecreased = 1.0f;		//減衰率
 	};
 
@@ -310,7 +306,6 @@ namespace Enemy {
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
 
-		float m_isMove = 1.0f;	//手前と奥どちらのポイントに移動するか
 
 	};
 }

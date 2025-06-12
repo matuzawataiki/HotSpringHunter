@@ -74,6 +74,7 @@ namespace Character {
 		float GetCharge() { return m_charge; };
 		//HPのを取得
 		float GetPlayerHP() { return m_playerHP; };
+		
 
 	public:
 		//チャージ量表示（仮）

@@ -58,21 +58,24 @@ namespace Enemy {
 	//////////////////////////////////////////////////////////////////////////////
 
 	namespace {
-		static const float MOVE_SPEED_OFFSET = 10.0f;
-		static const float IDEL_RANGE_FAR = 1000.0f;
-		static const float IDEL_RANGE_NIAR = 500.0f;
+		static const float MOVE_SPEED_OFFSET = 1.0f;
+		static const float IDEL_RANGE_FAR = 800.0f;
+		static const float IDEL_RANGE_NIAR = 400.0f;
 
 	}
 
 	void PoisonSnakeIdleState::Enter()
 	{
-		m_moveTime = rand() % 4 + 1;
+		m_moveTime = rand() % 2 + 1;
 		if (rand() % 2 == 1) {
-			m_moveDirection = -1;
+			m_sideDirection = -1;
 		}
 		else {
-			m_moveDirection = 1;
+			m_sideDirection = 1;
 		}
+
+		m_isIdleAnim = false;
+		m_isMoveAnim = true;
 
 	}
 
@@ -81,10 +84,10 @@ namespace Enemy {
 		if (m_moveTime < 0) {
 			m_moveTime = rand() % 4 + 1;
 			if (rand() % 2 == 1) {
-				m_moveDirection = -1;
+				m_sideDirection = -1;
 			}
 			else {
-				m_moveDirection = 1;
+				m_sideDirection = 1;
 			}
 		}
 
@@ -114,9 +117,19 @@ namespace Enemy {
 				m_owner->GetModelRender()->PlayAnimation(enAnimClip_Idle);
 			}
 			//移動方向の設定
-			Vector3 moveDirection = Vector3::Zero;
-			moveDirection.x = MOVE_SPEED_OFFSET * m_moveDirection;
-			m_owner->SetOwnerMoveSpeed(moveDirection);
+			/*Vector3 moveDirection = Vector3::AxisZ;
+			float direction = 90.0f * m_sideDirection;
+			enemyDirection.AddRotationDegY(direction);
+			enemyDirection.Apply(moveDirection);
+			moveDirection *= MOVE_SPEED_OFFSET;*/
+
+			Vector3 direction = m_owner->GetTarget()->GetPlayerPos() - m_owner->GetPosition();
+			direction.y = 0.0f;
+			direction = { -direction.z, 0.0f, direction.x };
+			direction.Normalize();
+			direction *= MOVE_SPEED_OFFSET * m_sideDirection;
+
+			m_owner->SetOwnerMoveSpeed(direction);
 
 			m_isIdleAnim = true;
 			m_isMoveAnim = false;
@@ -138,7 +151,7 @@ namespace Enemy {
 			return true;
 		}
 
-		if (m_owner->IsAttack()) {
+		if (m_owner->IsAttackCooldown()) {
 			request = PoisonSnakeAtkState::ID();
 			return true;
 		}
@@ -167,23 +180,20 @@ namespace Enemy {
 	{
 		ModelRender* ownerModel = m_owner->GetModelRender();
 		ownerModel->PlayAnimation(enAnimClip_Attack);
+		m_isCreateBall = true;
+
 	}
 
 	void PoisonSnakeAtkState::Update()
 	{
-		if (m_isAttack) {
-			return;
-		}
-		else {
-			if (!m_owner->GetIsAttack()) {
-				return;
-			}
+		if (m_isCreateBall) {
 
-			m_isAttack = true;
+			m_isCreateBall = false;
 
-			PoisonBall* poisonBall = new PoisonBall(m_owner->GetPosition(), m_owner->GetTarget()->GetPlayerPos(),*m_owner->GetTarget());
+			PoisonBall* poisonBall = new PoisonBall(m_owner->GetPosition(), m_owner->GetTarget()->GetPlayerPos(), *m_owner->GetTarget());
 			AddGo(poisonBall, 0, "poisonBall");
 		}
+
 	}
 
 	void PoisonSnakeAtkState::Exit()
@@ -193,6 +203,11 @@ namespace Enemy {
 
 	bool PoisonSnakeAtkState::RequestState(uint32_t& request)
 	{
+		if (!m_owner->GetModelRender()->IsPlayAnimation()) {
+			request = PoisonSnakeIdleState::ID();
+			return true;
+		}
+
 		if (m_owner->IsDeath()) {
 			request = PoisonSnakeDeathState::ID();
 			return true;
@@ -210,33 +225,45 @@ namespace Enemy {
 	// 追従ステート
 	//////////////////////////////////////////////////////////////////////////////
 	namespace {
-		const float MOVEPOINT_FAR = 550.0f;
-		const float MOVEPOINT_NIAR = 250.0f;
-		const float MOVE_SPEED = 50.0f;
+		const float MOVEPOINT_FAR = 700.0f;
+		const float MOVEPOINT_NIAR = 500.0f;
+		const float MOVE_SPEED = 3.0f;
 	}
 
 	void PoisonSnakeTrackState::Enter()
 	{
 		m_owner->GetModelRender()->PlayAnimation(enAnimClip_Run);
 
+
 		Vector3 moveDirection = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
 		float length = moveDirection.Length();
+		moveDirection.Normalize();
 
 		if (length >= MOVEPOINT_FAR) {
-			m_isMove = 1.0f;
+			m_isMove = -1.0f;
 		}
 		else
 		{
-			m_isMove = -1.0f;
+			m_isMove = 1.0f;
 		}
 
-		Vector3 moveSpeed = moveDirection * MOVE_SPEED * m_isMove;
-		m_owner->SetOwnerMoveSpeed(moveSpeed);
+
 	}
 
 	void PoisonSnakeTrackState::Update()
 	{
 
+		Vector3 moveDirection = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
+		float length = moveDirection.Length();
+		moveDirection.Normalize();
+		moveDirection.y = 0.0f;
+
+		Quaternion enemyDirection;
+		enemyDirection.SetRotationYFromDirectionXZ((moveDirection * m_isMove));
+		m_owner->SetOwnerRotetion(enemyDirection);
+
+		Vector3 moveSpeed = moveDirection * MOVE_SPEED * m_isMove;
+		m_owner->SetOwnerMoveSpeed(moveSpeed);
 	}
 
 	void PoisonSnakeTrackState::Exit()
@@ -259,7 +286,7 @@ namespace Enemy {
 		Vector3 toEnemyPlayer = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
 		float	lenghth = toEnemyPlayer.Length();
 
-		if (m_isMove = 1.0f) {
+		if (m_isMove == -1.0f) {
 			if (MOVEPOINT_FAR > lenghth) {
 				request = PoisonSnakeIdleState::ID();
 				return true;
@@ -286,6 +313,8 @@ namespace Enemy {
 
 	void PoisonSnakeKnockBackState::Enter()
 	{
+		m_knockDecreased = 1.0f;
+
 		m_owner->GetModelRender()->PlayAnimation(enAnimClip_Hit);
 
 		m_moveSpeed = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
@@ -305,10 +334,16 @@ namespace Enemy {
 	void PoisonSnakeKnockBackState::Exit()
 	{
 		m_owner->SetOwnerMoveSpeed(Vector3::Zero);
+		m_owner->ChangeHitFlag();
 	}
 
 	bool PoisonSnakeKnockBackState::RequestState(uint32_t& request)
 	{
+		if (m_knockDecreased < 0.7f) {
+			request = PoisonSnakeIdleState::ID();
+			return true;
+		}
+
 		if (m_owner->IsDeath()) {
 			request = PoisonSnakeDeathState::ID();
 			return true;
@@ -330,8 +365,8 @@ namespace Enemy {
 		moveDirection.y = 0;
 		moveDirection.Normalize();
 
-		Vector3 moveSpeed = moveDirection * 200;
-		moveSpeed.y = 500;
+		Vector3 moveSpeed = moveDirection * 1.0f;
+		moveSpeed.y = 2.0f;
 		m_owner->SetOwnerMoveSpeed(moveSpeed);
 	}
 
