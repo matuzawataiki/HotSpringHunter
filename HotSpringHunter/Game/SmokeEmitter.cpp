@@ -6,17 +6,17 @@
 namespace
 {
 	const Vector2 SMOKE_POSITION[] = {
-		Vector2(-800.0f,-500.0f),	//左下
-		Vector2(800.0f,-500.0f),	//右下
-		Vector2(-200.0f,-500.0f),	//真ん中
-		Vector2(200.0f,-500.0f),	//真ん中
-		Vector2(-400.0f,-500.0f),	//左真ん中
-		Vector2(400.0f,-500.0f),	//右真ん中
-		Vector2(-600.0f,-500.0f),	//左真ん中
-		Vector2(600.0f,-500.0f),	//右真ん中
+		Vector2(-800.0f,-600.0f),	//左下
+		Vector2(800.0f,-600.0f),	//右下
+		Vector2(-200.0f,-600.0f),	//真ん中
+		Vector2(200.0f,-600.0f),	//真ん中
+		Vector2(-400.0f,-600.0f),	//左真ん中
+		Vector2(400.0f,-600.0f),	//右真ん中
+		Vector2(-600.0f,-600.0f),	//左真ん中
+		Vector2(600.0f,-600.0f),	//右真ん中
 	};
 
-	const float MAKE_SMOKE_TIME = 0.2f;	//derujikan
+	const float MAKE_SMOKE_TIME = 0.2f;	//雲が生成される時間/毎
 }
 
 SmokeEmitter::SmokeEmitter()
@@ -63,7 +63,6 @@ void SmokeEmitter::Update()
 			{
 				m_positionIndex = 0;
 			}
-
 		}
 	}
 
