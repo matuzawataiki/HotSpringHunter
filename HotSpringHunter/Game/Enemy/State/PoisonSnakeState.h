@@ -189,6 +189,27 @@ namespace Enemy {
 	};
 
 	//////////////////////////////////////////////////////////////////////////////
+	// オフステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	class PoisonSnakeOffState : public IState
+	{
+		appState(PoisonSnakeOffState);
+	public:
+		PoisonSnakeOffState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
+		virtual ~PoisonSnakeOffState() {}
+
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+
+		virtual bool RequestState(uint32_t& request) override;
+	private:
+		PoisonSnakeStateMachine* m_owner = nullptr;
+
+	};
+
+	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
 
@@ -306,6 +327,6 @@ namespace Enemy {
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
 
-
+		float m_lifeTime = 0.0f;
 	};
 }

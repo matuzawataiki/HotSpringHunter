@@ -54,6 +54,30 @@ namespace Enemy {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
+	// オフステート
+	//////////////////////////////////////////////////////////////////////////////
+
+	void PoisonSnakeOffState::Enter()
+	{
+
+	}
+
+	void PoisonSnakeOffState::Update()
+	{
+
+	}
+
+	void PoisonSnakeOffState::Exit()
+	{
+
+	}
+
+	bool PoisonSnakeOffState::RequestState(uint32_t& request)
+	{
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
 
@@ -308,7 +332,7 @@ namespace Enemy {
 
 	namespace {
 		const float KNOCK_BACK_SPEED = 60.0f;
-		const float KNOCK_BACK_DECREASE = 0.02;
+		const float KNOCK_BACK_DECREASE = 0.027;
 	}
 
 	void PoisonSnakeKnockBackState::Enter()
@@ -356,6 +380,10 @@ namespace Enemy {
 	//デスステート
 	//////////////////////////////////////////////////////////////////////////////
 
+	namespace {
+		float DEATH_TIME = 10.0f;
+		float MOVE_OFFSET = 40.0f;
+	}
 
 	void PoisonSnakeDeathState::Enter()
 	{
@@ -365,13 +393,17 @@ namespace Enemy {
 		moveDirection.y = 0;
 		moveDirection.Normalize();
 
-		Vector3 moveSpeed = moveDirection * 1.0f;
-		moveSpeed.y = 2.0f;
+		Vector3 moveSpeed = moveDirection;
+		moveSpeed.y += 0.25f;
+		moveSpeed *= MOVE_OFFSET;
 		m_owner->SetOwnerMoveSpeed(moveSpeed);
+
+		m_lifeTime = DEATH_TIME;
 	}
 
 	void PoisonSnakeDeathState::Update()
 	{
+		m_lifeTime -= g_gameTime->GetFrameDeltaTime();
 	}
 
 	void PoisonSnakeDeathState::Exit()
@@ -381,6 +413,10 @@ namespace Enemy {
 
 	bool PoisonSnakeDeathState::RequestState(uint32_t& request)
 	{
+		if (m_lifeTime < 0.0f) {
+			request = PoisonSnakeOffState::ID();
+			return true;
+		}
 		return false;
 	}
 }
