@@ -414,7 +414,7 @@ namespace Enemy {
 	bool PoisonSnakeDeathState::RequestState(uint32_t& request)
 	{
 		if (m_lifeTime < 0.0f) {
-			request = PoisonSnakeOffState::ID();
+			//request = PoisonSnakeOffState::ID();
 			return true;
 		}
 		return false;
