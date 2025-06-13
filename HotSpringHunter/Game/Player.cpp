@@ -98,18 +98,20 @@ namespace Character {
 		m_stateList.clear();
 	}
 
-	bool Player::Start()
-	{
-		//player座標初期化
-		m_playerPos = PLAYER_NEW_POSITION;
-		//playerキャラコン初期化
-		m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
-		//playerのHPをセット
-		m_playerHP = MAX_PLAYER_HP;
-		//ステートマシン生成
-		m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
+		bool Player::Start()
+		{
+			//player座標初期化
+			m_playerPos = PLAYER_NEW_POSITION;
+			//playerキャラコン初期化
+			m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
+			//playerのHPをセット
+			m_playerHP = MAX_PLAYER_HP;
+			//ステートマシン生成
+			m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
 
 		m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
+		g_sceneLight->SetLightPos(m_playerPos);
 
 		AddList();
 		LoadAssets();
@@ -226,18 +228,18 @@ namespace Character {
 		}
 	}
 
-	/// <summary>
-	/// 被弾。
-	/// </summary>
-	/// <param name="reduce"></param>体力減少量。
-	void Player::Hit(float reduce)
-	{
-		//被弾SE
-		m_soundEffect->Play(enPlayerHitSE, false);
-		//ガードができていないなら。
-		if (m_guardFlag == true) {
-			return;
-		}
+		/// <summary>
+		/// 被弾。
+		/// </summary>
+		/// <param name="reduce">体力減少量</param>
+		void Player::Hit(float reduce)
+		{
+			//被弾SE
+			m_soundEffect->Play(enPlayerHitSE, false);
+			//ガードができていないなら。
+			if (m_guardFlag == true) {
+				return;
+			}
 
 		//HPを減らす。
 		m_playerHP -= reduce;

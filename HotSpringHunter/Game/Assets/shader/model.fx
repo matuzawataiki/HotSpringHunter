@@ -297,7 +297,7 @@ float3 CalcPhongSpecular(SPSIn psIn, float3 lightDirection, float3 lightColor, f
 float CalcShadowMap(SPSIn psIn)
 {
     float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
-    float2 shadowIntensity = normalize(shadowMapUV);
+    float2 shadowIntensity = shadowMapUV;
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;
     
@@ -309,7 +309,7 @@ float CalcShadowMap(SPSIn psIn)
         float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
         if (zInLVP > zInShadowMap + 0.001f)
         {
-            return 1.0f;/* * (1.0f - length(shadowIntensity));*/
+            return max(0.0f, (1.0f - length(shadowIntensity)));
         }
         return 0.0;
     }

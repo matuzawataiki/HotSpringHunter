@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "PoisonBall.h"
+#include "Player.h"
 #include "collision/CollisionObject.h"
 
 namespace {
-	const float SPHERE_COLLISION_SIZE = 18.0f;
-	const float MOVE_SPEED_OFFSET = 20.0f;
-	const float DELETE_TIME = 4.0f;
+	static const float SPHERE_COLLISION_SIZE = 18.0f;
+	static const float MOVE_SPEED_OFFSET = 20.0f;
+	static const float DELETE_TIME = 4.0f;
+	static const float DAMAGE = 20.0F;
 }
 
 namespace Enemy {
-	PoisonBall::PoisonBall(const Vector3& position, const Vector3& targetPosition)
+	PoisonBall::PoisonBall(const Vector3& position, const Vector3& targetPosition, Character::Player& target)
 	{
 		m_position = position;
 		m_targetPosition = targetPosition;
@@ -26,6 +28,8 @@ namespace Enemy {
 		m_sphereCollision.SetPosition(m_position);
 
 		m_sphereModel.SetPosition(m_position);
+
+		m_target = &target;
 	}
 
 	PoisonBall::~PoisonBall()
@@ -46,6 +50,10 @@ namespace Enemy {
 
 		m_sphereModel.Update();
 
+		if (m_sphereCollision.IsHit(m_target->m_playerCharaCon)) {
+			m_target->Hit(DAMAGE);
+			DeleteGO(this);
+		}
 	}
 
 

@@ -1,6 +1,7 @@
 #include "TMEnginePreCompile.h"
 #include "TMEngine.h"
 
+
 namespace nsTMEngine
 {
 	TMEngine* TMEngine::m_instance = nullptr;
@@ -52,4 +53,5 @@ namespace nsTMEngine
 		g_renderingEngine = nullptr;
 		g_engine = nullptr;
 	}
+
 }

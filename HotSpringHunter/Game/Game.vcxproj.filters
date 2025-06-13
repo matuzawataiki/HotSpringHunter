@@ -53,6 +53,10 @@
     <ClCompile Include="BackGround\MapObject\Fence.cpp" />
     <ClCompile Include="FenceManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="Enemy\State\IState.cpp" />
+    <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
+    <ClCompile Include="Enemy\IEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -108,5 +112,7 @@
     <ClInclude Include="BackGround\MapObject\Fence.h" />
     <ClInclude Include="FenceManager.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
+    <ClInclude Include="Enemy\IEnemy.h" />
   </ItemGroup>
 </Project>

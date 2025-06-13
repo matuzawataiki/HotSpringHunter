@@ -1,5 +1,10 @@
 #pragma once
-#include "Enemy/EnemyBase.h"
+#include "Enemy/IEnemy.h"
+
+namespace Character
+{
+	class Player;
+}
 
 namespace Enemy
 {
@@ -12,33 +17,50 @@ namespace Enemy
 		enAnimClip_Num,
 	};
 
-	class PoisonSnake : public EnemyBase
+	class PoisonSnakeStateMachine;
+	class PoisonSnake : public IEnemy
 	{
 	public:
+		PoisonSnake();
+		virtual ~PoisonSnake();
+
 		bool Start() override;
 		void Update() override;
+		void ActivateStart() override;
 		void Render(RenderContext& rc) override;
-	public:
-		~PoisonSnake();
-		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
-
-		/// <summary>
-		/// 攻撃していいかどうかを返す
-		/// </summary>
-		/// <returns>攻撃判定</returns>
-		inline bool GetIsAttack() {
-			return m_isAttack;
-		}
 
 		/// <summary>
 		/// 攻撃判定をオフにする
 		/// </summary>
-		inline void AttackOff() {
-			m_isAttack = false;
-		}
+		void AttackOff();
 
 	private:
-		bool m_isAttack = false;	//攻撃していいかどうか
+		/// <summary>
+		/// 攻撃の状態の管理
+		/// </summary>
+		void AttackState();
+
+		/// <summary>
+		/// アセットの読み込み
+		/// </summary>
+		void LoadAssets();
+
+		/// <summary>
+		/// ステートマシンの初期設定
+		/// </summary>
+		void InitStateMachine();
+
+		/// <summary>
+		/// ヒット計算
+		/// </summary>
+		void HitCalculation();
+
+	private:
+		PoisonSnakeStateMachine* m_stateMachine = nullptr;
+		Character::Player* m_target = nullptr;
+
+		AnimationClip m_animationClip[enAnimClip_Num];
+
 	};
 
 }

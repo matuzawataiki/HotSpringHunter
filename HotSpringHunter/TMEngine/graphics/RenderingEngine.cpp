@@ -16,7 +16,7 @@ namespace nsTMEngine
 		InitMainRenderTarget();
 		InitCopyMainRenderTargetToFrameBufferSprite();
 		m_shadowMapRender.Init();
-		//m_postEffect.Init(m_mainRenderTarget);
+		m_postEffect.Init(m_mainRenderTarget);
 		Init2DRenderTarget();
 		m_sceneLight.Init();
 	}
@@ -128,7 +128,7 @@ namespace nsTMEngine
 		{
 			model->Draw(rc);
 		}
-		//m_postEffect.Render(rc, m_mainRenderTarget);
+		m_postEffect.Render(rc, m_mainRenderTarget);
 		Render2D(rc);
 		CopyMainRenderTargetToFrameBufferSprite(rc);
 		m_registerModels.clear();

@@ -10,7 +10,9 @@ enum EnCameraVar {
 	enBearContact		//クマ登場のイベントカメラ
 };
 
-class Player;
+namespace Character {
+	class Player;
+}
 class Bear;
 class BackGround;
 class GameCamera :public IGameObject

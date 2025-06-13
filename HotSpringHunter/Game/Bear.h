@@ -1,9 +1,8 @@
 #pragma once
-
+#include "glm/glm.hpp"
 namespace Character {
 	class Player;
 }
-class Player;
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;

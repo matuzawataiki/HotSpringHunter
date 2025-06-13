@@ -13,6 +13,7 @@
 #include "GameOver.h"
 #include "GameClear.h"
 
+#include "Enemy/PoisonSnake/PoisonSnake.h"
 
 Game::Game()
 {
@@ -38,8 +39,6 @@ bool Game::Start()
 	
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 	m_enemyManager = NewGO<EnemyManager>(0, "enemyManager");
-	//m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
-
 	m_ui = NewGO<UI>(0, "ui");
 
 	m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
