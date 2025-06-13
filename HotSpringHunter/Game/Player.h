@@ -1,6 +1,11 @@
 #pragma once
 
+
 class SnakeEnemy;
+class SoundEffect;
+class EnemyManager;
+class GameCamera;
+class SceneManager;
 
 namespace Character {
 	//現在アクティブなステート。
@@ -13,6 +18,7 @@ namespace Character {
 		enPlayerGuard,				//ガード。
 		enPlayerHit,				//被弾。
 		enPlayerDeath,				//死亡。
+		enPlayerToGoal,				//ゴール地点へ向かう
 	};
 
 	//アニメーションクリップ。
@@ -30,6 +36,7 @@ namespace Character {
 		enPlayerAnimClip_Num,
 	};
 
+	
 	class IState;
 	class StateMachine;
 
@@ -41,7 +48,6 @@ namespace Character {
 		//リスト削除。
 		void DeleteList();
 		bool Start()override;
-
 		//リスト追加。
 		void AddList();
 		//アセットロード。
@@ -52,7 +58,7 @@ namespace Character {
 		//向きを更新。
 		void DirectionUpdate();
 		//被弾。
-		void Hit(float reduce);
+		void Hit(const float reduce);
 		//state管理。
 		void StateManage();
 		//チャージ量表示（仮）。
@@ -64,19 +70,29 @@ namespace Character {
 		float GetPlayerMAXHP();
 
 		//ゲッター
-		//player座標を取得
-		Vector3 GetPlayerPos() { return m_playerPos; };
-		//playerの向きを取得
-		Vector3 GetPlayerDir() { return m_playerDir; };
-		//攻撃力のを取得
-		float GetAttackPower() { return m_attackPower; };
-		//チャージのを取得
-		float GetCharge() { return m_charge; };
-		//HPのを取得
-		float GetPlayerHP() { return m_playerHP; };
-		
+		//座標を取得
+		inline Vector3 GetPlayerPos() const { return m_playerPos; };
+		//向きを取得
+		inline Vector3 GetPlayerDir() const { return m_playerDir; };
+		//攻撃力を取得
+		inline float GetAttackPower() const { return m_attackPower; };
+		//チャージ量を取得
+		inline float GetCharge() const { return m_charge; };
+		//現在のHPを取得
+		inline float GetPlayerHP() const { return m_playerHP; };
+		//行動状態を取得
+		inline int GetPlayerState() const { return m_currentState; };
 
-	public:
+		//セッター
+		//位置を設定
+		inline void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; };
+		//キャラコンの位置を設定
+		inline void SetPlayerControllerPos(const Vector3& pos) { m_playerCharaCon.SetPosition(pos); };
+		//向きを設定
+		inline void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
+		//行動状態を設定
+		inline void SetRequestState(const int state) { m_requestState = state; };
+	//private:
 		//チャージ量表示（仮）
 		FontRender m_chargeRender;
 		wchar_t m_chargeText[100];
@@ -88,30 +104,30 @@ namespace Character {
 		int m_currentState = 0;						//現在のステート。
 		int m_requestState = 0;						//変更したいステート。
 
-		StateMachine* m_stateMachine = nullptr;
-		SnakeEnemy* m_snakeEnemy = nullptr;
-		CollisionObject* m_collision = nullptr;
+		StateMachine*		m_stateMachine	= nullptr;
+		CollisionObject*	m_collision		= nullptr;
+		SoundEffect*		m_soundEffect	= nullptr;
 
 		AnimationClip		m_animationClips[enPlayerAnimClip_Num];	//アニメーションクリップ。	
 		CharacterController m_playerCharaCon;						//キャラコン。
 		ModelRender			m_playerModel;							//描画。
-		Quaternion			m_playerRot = Quaternion::Identity;		//回転。
+		Quaternion			m_playerRot		= Quaternion::Identity;	//回転。
 
-		Vector3 m_playerPos = Vector3::Zero;		//座標。
-		Vector3 m_playerSpeed = Vector3::Zero;		//移動スピード。
-		Vector3 m_playerDir = Vector3::Zero;		//向き。
+		Vector3	m_playerPos			= Vector3::Zero;	//座標。
+		Vector3 m_playerSpeed		= Vector3::Zero;	//移動スピード。
+		Vector3 m_playerDir			= Vector3::Zero;	//向き。
 
-		float m_playerHP = 0.0f;			//体力。
-		float m_dashState = 1.0f;			//ダッシュ：走り状態の移動管理。
-		float m_guardState = 1.0f;			//ガード：ガード状態の移動管理。
-		float m_charge = 0.0f;			//溜め攻撃：チャージ量。
-		float m_attackPower = 0.0f;			//攻撃共通：攻撃力。
+		float m_playerHP			= 0.0f;				//体力。
+		float m_dashState			= 1.0f;				//ダッシュ：走り状態の移動管理。
+		float m_guardState			= 1.0f;				//ガード：ガード状態の移動管理。
+		float m_charge				= 0.0f;				//溜め攻撃：チャージ量。
+		float m_attackPower			= 0.0f;				//攻撃共通：攻撃力。
 
-		bool m_guardFlag = false;		//ガード：ガードのフラッグ。
-		bool m_weakAtFlag = false;		//弱攻撃：弱攻撃中か。
-		bool m_chargeAtFlag = false;		//溜め攻撃：溜め攻撃中か。
-		bool m_hitFlag = false;		//被弾：被弾中かのフラッグ。
-		bool m_isDead = false;		//死亡：死亡しているかのフラッグ。
+		bool m_guardFlag			= false;			//ガード：ガードのフラッグ。
+		bool m_weakAtFlag			= false;			//弱攻撃：弱攻撃中か。
+		bool m_chargeAtFlag			= false;			//溜め攻撃：溜め攻撃中か。
+		bool m_hitFlag				= false;			//被弾：被弾中かのフラッグ。
+		bool m_isDead				= false;			//死亡：死亡しているかのフラッグ。
 	};
 
 	class IState
@@ -131,6 +147,7 @@ namespace Character {
 
 	class StateMachine :public IGameObject
 	{
+
 	public:
 		StateMachine();
 		~StateMachine();
@@ -139,7 +156,11 @@ namespace Character {
 		//ステート遷移（仮）。
 		void StateManage();
 	private:
-		Player* m_player = nullptr;
+		Player*			m_player		= nullptr;
+		SoundEffect*	m_soundEffect	= nullptr;	//サウンドソース。
+		GameCamera*		m_gameCamera	= nullptr;
+		SceneManager*	m_sceneManager	= nullptr;
+
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
 	};
 
@@ -156,6 +177,8 @@ namespace Character {
 		//待機。
 		void idle();
 		void Exit()override;
+	private:
+		SoundEffect* m_soundEffect = nullptr;
 	};
 
 	/// <summary>
@@ -171,16 +194,11 @@ namespace Character {
 		~PlayerMove();
 		void Enter()override;
 		void Update()override;
-		//移動
-		void AnimManage();
-		//歩き。
-		void Walk();
 		//ダッシュ。
 		void Dash();
-		//ジャンプ。
-		void Jump();
 		void Exit()override;
 	private:
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -201,11 +219,22 @@ namespace Character {
 		void ChangeState();
 		//弱攻撃。
 		void WeakAttack();
+		//最寄りの敵を自動ロックオン
+		void LockOnEnemy();
+		//最寄りの敵に吸いつき
+		void SuctionEnemy();
 		//コリジョン生成。
 		void MakeCollision();
 		void Exit()override;
 	private:
+		SoundEffect* m_soundEffect		= nullptr;			//サウンドソース。
+		EnemyManager* m_enemyManager	= nullptr;
 
+		Vector3 m_toSuctionTarget		= Vector3::Zero;	//吸いつきの目標位置
+
+		float m_suctionElapsedTime		= 0.0f;				//吸いつきの経過時間
+
+		bool m_isSuctionDecide			= false;			//敵への吸いつきを行うか
 	};
 
 	/// <summary>
@@ -233,10 +262,12 @@ namespace Character {
 		void Exit()override;
 
 	private:
-		Vector3 m_RStickOld = Vector3::Zero;				//Rスティックの入力量（変更前）。
-		float m_collisionSize = 0.0f;							//コリジョンサイズ。
-		bool m_isCharging = true;							//チャージ中？
-		bool m_isStateChange = false;						//アニメーションを切り替えた？	
+		SoundEffect* m_soundEffect	= nullptr;			//サウンドソース。
+  
+		Vector3		m_RStickOld		= Vector3::Zero;	//Rスティックの入力量（変更前）。
+		float		m_collisionSize = 0.0f;				//コリジョンサイズ。
+		bool		m_isCharging	= true;				//チャージ中？
+		bool		m_isStateChange = false;			//アニメーションを切り替えた？	
 	};
 
 	/// <summary>
@@ -258,10 +289,11 @@ namespace Character {
 		void GuardDirection();
 		void Exit()override;
 
-	private:
-		Vector3 m_directionGap = Vector3::Zero;				//向きの差分。
-	};
+private:
+	SoundEffect* m_soundEffect	= nullptr;	//サウンドソース。
 
+	Vector3 m_directionGap		= Vector3::Zero;				//向きの差分。
+};
 
 	/// <summary>
 	/// 被弾。
@@ -282,6 +314,7 @@ namespace Character {
 		void ChangeState();
 		void Exit()override;
 	private:
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
 	/// <summary>
@@ -301,5 +334,32 @@ namespace Character {
 		void Update()override;
 		void Exit()override;
 	private:
+		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
+	};
+
+	class PlayerToGoal :public IState
+	{
+	public:
+		PlayerToGoal(Player* player)
+			: IState(player)
+		{
+
+		}
+		~PlayerToGoal();
+		void Enter()override;
+		void Update()override;
+		//移動量を計算
+		void CalcMoveAmount();
+		//プレイヤーをゴール地点へ移動させる
+		void MoveToGoalPos();
+		
+		void Exit()override;
+
+	private:
+		SceneManager*	m_sceneManager	= nullptr;
+
+		Vector3		m_moveAmount		= Vector3::Zero;		//1フレームで移動する量
+
+		float		m_clearElapsedTime	= 0.0f;			//ゴールへの強制移動を始めてからの経過時間
 	};
 }

@@ -1,9 +1,11 @@
 #pragma once
+
 namespace Character {
 	class Player;
 }
 class EnemySpawn;
 class EnemyBase;
+class SoundEffect;
 
 //イノシシのステート
 enum EnWildBoarState
@@ -64,12 +66,40 @@ public:
 	//モデル
 	void Render(RenderContext& rc)override;
 
+	//移動速度を取得
+	float GetWildBoarSpeed()const;
+
+	//セッター
+	//位置を設定
+	inline void SetWildBoarPos(const Vector3& pos) { m_wildBoarPos = pos; };
+	//向きを設定
+	inline void SetWildBoarDir(const Vector3& dir) { m_wildBoarDir = dir; };
+	//回転を設定
+	inline void SetWildBoarRot(const Quaternion& rot) { m_wildBoarRot = rot; };
+	//移動速度を設定
+	inline void SetWildBoarSpeed(const Vector3& speed) { m_wildBoarSpeed = speed; };
+	//スポーン状態を設定
+	inline void SetWildBoarIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
+	//キャラコンの位置を設定
+	inline void SetWildBoarCharaConPos(const Vector3& pos) { m_wildBoarController.SetPosition(pos); };
+
+	//ゲッター
+	//位置を取得
+	inline Vector3 GetWildBoarPos() const { return m_wildBoarPos; };
+	//スポーン状態を取得
+	inline bool GetIsWildBoarIsSpawn() const { return m_isSpawn; };
+	//ステートを取得
+	inline int GetWildBoarState() const { return m_wildBoarState; };
+
 private:
 
 	CollisionObject*		collisionObject		= nullptr;
-	Character::Player*					m_player			= nullptr;
+	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+	SoundEffect*			m_soundEffect		= nullptr; //サウンドエフェクト
+	SoundSource*			m_chargeSound		= nullptr; //突進サウンド
+	SoundSource*			m_runSound			= nullptr;    //突進攻撃サウンド
 
 	AnimationClip			m_animationClips[enWildBoarAnimClip_Num];  //アニメーションクリップ
 	CharacterController		m_wildBoarController;					   //キャラクターコントローラー
@@ -86,17 +116,18 @@ private:
 	Vector3 m_chargeOldPos		= Vector3::Zero;		//突進前の位置
 
 	float m_wildBoarHP			= 0.0f;				//イノシシのHP
-	float m_ATKCoolTime			= 0.0f;				//近接攻撃のクールタイム
-	float m_chargeTime			= 0.0f;				//突進攻撃のクールタイム
+	float m_ATKCoolTime			= 0.0f;				//攻撃のクールタイム
+	float m_chargeTime			= 0.0f;				//突進のチャージ時間
 	float m_idleTime			= 0.0f;				//待機時間
 	float m_chargeCoolTime		= 0.0f;				//突進クールタイム
+	float m_elapsedTime			= 0.0f;				//死亡経過時間
 
 	int m_wildBoarState			= 0;				//イノシシの行動状態
 
-	bool m_isSpawn				= true;				//敵が出現するか
-	bool m_isAlive				= true;				//敵が生きているか
+	bool m_isSpawn				= false;			//敵が出現するか
 	bool m_isFind				= false;			//プレイヤーを捉えたか
 	bool m_isCanStateChange		= true;				//ステートを変えてもよいか
 	bool m_isHitCollision		= false;			//コリジョン当たったか
 	bool m_isRemoveController	= false;			//キャラコンを消したか
+	bool m_isChargeSoundPlay	= true;				//突進中か
 };

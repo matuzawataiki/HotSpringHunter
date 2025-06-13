@@ -12,7 +12,6 @@ public:
 
 private:
 	Game* m_game = nullptr;
-
 	SpriteRender m_titleModel;
 };
 

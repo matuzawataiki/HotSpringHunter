@@ -30,19 +30,23 @@ UI::UI()
 
 UI::~UI()
 {
+	DeleteGO(FindGO<PlayerHPUI>("playerHPUI"));
+	DeleteGO(FindGO<BossHPUI>("bossHPUI"));
 }
 
 bool UI::Start()
 {
 	//プレイヤーのUI
 	NewGO<PlayerHPUI>(0, "playerHPUI");
-	//ボスのUI
-	//NewGO<BossHPUI>(0, "bossHPUI");
+	m_bear = FindGO<Bear>("bear");
+
+	
 	return true;
 }
 
 void UI::Update()
 {
+	
 }
 
 void UI::Render(RenderContext& rc)
@@ -161,12 +165,20 @@ bool BossHPUI::Start()
 void BossHPUI::Update()
 {
 	UpdateBarWidth();
+	DeleteUI();
 }
 
 void BossHPUI::UpdateBarWidth()
 {
 	m_BearHPBar.SetScale(Vector2{ m_bear->GetBearHP() / m_bear->GetBearMAXHP(),1.0f });
 	m_BearHPBar.Update();
+}
+
+void BossHPUI::DeleteUI()
+{
+	if (m_bear->GetBearHP() <= 0.0f) {
+		DeleteGO(this);
+	}
 }
 
 void BossHPUI::Render(RenderContext& rc)

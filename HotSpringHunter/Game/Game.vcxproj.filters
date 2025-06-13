@@ -38,10 +38,23 @@
     <ClCompile Include="BackGround\HitObjectBase.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
+    <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="Smoke.cpp" />
+    <ClCompile Include="SmokeEmitter.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonSnake.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
+    <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
+    <ClCompile Include="BackGround\MapObject\Fence.cpp" />
+    <ClCompile Include="FenceManager.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SnakeEnemy.cpp" />
+    <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
     <ClCompile Include="Enemy\IEnemy.cpp" />
   </ItemGroup>
@@ -70,6 +83,8 @@
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
     <ClInclude Include="EnemyHPBar.h" />
+    <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
     <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="BackGround\ObjectBase.h" />
@@ -80,6 +95,9 @@
     <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
     <ClInclude Include="BackGround\HitObjectBase.h" />
+    <ClInclude Include="GameClear.h" />
+    <ClInclude Include="Smoke.h" />
+    <ClInclude Include="SmokeEmitter.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
     <ClInclude Include="BackGround\MapObject\GroundRun.h" />
@@ -87,6 +105,13 @@
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
+    <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="GameClear.h" />
+    <ClInclude Include="EnemySpawner.h" />
+    <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
+    <ClInclude Include="BackGround\MapObject\Fence.h" />
+    <ClInclude Include="FenceManager.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Enemy\IEnemy.h" />
   </ItemGroup>

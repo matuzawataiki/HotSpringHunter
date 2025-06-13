@@ -116,6 +116,7 @@ Vector3 EnemyBase::KnockBack(Vector3 enemyDir)
 
 	//ノックバックの方向はエネミーの向きの逆方向
 	knockBackVec = enemyDir;
+	knockBackVec.y = 0.0f;
 	knockBackVec *= KNOCK_BACK_AMOUNT;
 
 	//減速率を徐々に大きくする

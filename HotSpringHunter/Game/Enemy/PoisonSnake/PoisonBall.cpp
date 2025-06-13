@@ -54,7 +54,6 @@ namespace Enemy {
 			m_target->Hit(DAMAGE);
 			DeleteGO(this);
 		}
-
 	}
 
 

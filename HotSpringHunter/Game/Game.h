@@ -4,16 +4,17 @@ namespace Character {
 	class Player;
 }
 
-namespace Enemy {
-	class PoisonSnake;
-}
 class GameCamera;
 class EnemyBase;
+class EnemyManager;
+class EnemyHPBar;
 class StartWaveCollision;
 class UI;
-class WildBoar;
-class Bear;
 class StageManager;
+class SceneManager;
+class GameOver;
+class SoundEffect;
+
 
 class Game : public IGameObject
 {
@@ -29,10 +30,13 @@ private:
 	GameCamera*			m_gameCamera	= nullptr;
 	Character::Player*	m_player		= nullptr;
 	EnemyBase*			m_enemyBase		= nullptr;
+	EnemyManager*		m_enemyManager	= nullptr;
+	EnemyHPBar*			m_enemyHPBar	= nullptr;
 	StartWaveCollision* m_waveCollision = nullptr;
 	UI*					m_ui			= nullptr;
-	Bear*				m_bear			= nullptr;
-	WildBoar*			m_wildBoar		= nullptr;
 	StageManager*		m_stageManager	= nullptr;
+	SceneManager*		m_sceneManager	= nullptr;
+	SoundEffect*		m_soundEffect	= nullptr;
+	GameOver*			m_gameOver		= nullptr;
 };
 

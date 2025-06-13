@@ -10,7 +10,7 @@ public:
 	void Render(RenderContext& rc)override;
 
 	//backGround座標のゲッター。
-	Vector3 GetStagePosition() {
+	inline Vector3 GetStagePosition() {
 		return m_position;
 	}
 private:

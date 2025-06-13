@@ -1,5 +1,4 @@
 #pragma once
-
 namespace nsK2Engine
 {
 	class CollisionObject;
