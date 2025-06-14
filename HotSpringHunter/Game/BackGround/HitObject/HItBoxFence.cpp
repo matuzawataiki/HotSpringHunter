@@ -26,12 +26,12 @@ void HItBoxFence::PhysicsManage()
 		return;
 	}
 
-	if (m_fenceManager->GetIsHitActive()) {
-		m_physicsStaticObject.CreateFromModel(m_objeModel.GetModel(), m_objeModel.GetModel().GetWorldMatrix());
-	}
-	else {
-		m_physicsStaticObject.Release();
-	}
+	//if (m_fenceManager->GetIsHitActive()) {
+	//	m_physicsStaticObject.CreateFromModel(m_objeModel.GetModel(), m_objeModel.GetModel().GetWorldMatrix());
+	//}
+	//else {
+	//	m_physicsStaticObject.Release();
+	//}
 
 	m_isFlagMemory = m_fenceManager->GetIsHitActive();
 }

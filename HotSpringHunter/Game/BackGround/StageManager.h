@@ -1,18 +1,24 @@
 #pragma once
-class StageManager : public IGameObject
+class Stage;
+class StageManager:public IGameObject
 {
 public:
-	StageManager();
-	~StageManager();
+	StageManager(){}
+	~StageManager(){}
 
-	bool Start();
+	bool Start()override;
+	void Update()override;
+
+
+	int playerPos = 0;
 
 private:
-	LevelRender m_stageLevel_1;
-	LevelRender m_RunLevel_1;
-	LevelRender m_RunLevel_2;
-	LevelRender m_BattleLevel_1;
-	LevelRender m_BossBattleLevel_1;
-	LevelRender m_GoolLevel_1;
+
+
+	LevelRender m_stageLevel;
+	Stage* m_startStage = nullptr;
+	Stage* m_goolStage = nullptr;
+	Stage* m_BossStage = nullptr;
+	Stage* m_battleStage[2] = {nullptr,nullptr};
 };
 

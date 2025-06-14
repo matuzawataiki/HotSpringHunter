@@ -243,7 +243,6 @@
     <ClCompile Include="BackGround\MapObject\Fence.cpp" />
     <ClCompile Include="FenceManager.cpp" />
     <ClCompile Include="Enemy\IEnemy.cpp" />
-
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
@@ -252,10 +251,11 @@
     <ClCompile Include="BackGround\HitObject\HitBoxBattle.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxBossBattle.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxGool.cpp" />
-    <ClCompile Include="BackGround\HitObject\HitBoxRun.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxStart.cpp" />
     <ClCompile Include="BackGround\HitObjectBase.cpp" />
     <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
+    <ClCompile Include="BackGround\HitObject\InOutHitBox.cpp" />
+    <ClCompile Include="BackGround\MapObject\HotSpring.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="BackGround\ObjectBase.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -263,14 +263,14 @@
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="BackGround\MapObject\GroundRun.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="SmokeEmitter.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
-    <ClCompile Include="BackGround\StageManager.cpp" />
+    <ClCompile Include="BackGround\Stage.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="BackGround\StageManager.cpp" />
     <ClCompile Include="StartWaveCollision.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -289,6 +289,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
     <ClInclude Include="BackGround\MapObject\Tree.h" />
+    <ClInclude Include="BackGround\StageObject.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
     <ClInclude Include="Bucket.h" />
@@ -314,23 +315,24 @@
     <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxBossBattle.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxGool.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
     <ClInclude Include="BackGround\HitObjectBase.h" />
     <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
+    <ClInclude Include="BackGround\HitObject\InOutHitBox.h" />
+    <ClInclude Include="BackGround\MapObject\HotSpring.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Result.h" />
-    <ClInclude Include="BackGround\MapObject\GroundRun.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Smoke.h" />
     <ClInclude Include="SmokeEmitter.h" />
     <ClInclude Include="SnakeEnemy.h" />
-    <ClInclude Include="BackGround\StageManager.h" />
+    <ClInclude Include="BackGround\Stage.h" />
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
     <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="BackGround\StageManager.h" />
     <ClInclude Include="StartWaveCollision.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
