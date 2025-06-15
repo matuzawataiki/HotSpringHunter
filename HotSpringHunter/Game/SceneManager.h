@@ -46,6 +46,7 @@ public:
 	//最終スコアを取得
 	inline int GetFinalScore() const { return m_finalScore; };
 
+
 private:
 	FenceManager*		m_fenceManager	= nullptr;
 	EnemySpawner*		m_enemySpawner	= nullptr;

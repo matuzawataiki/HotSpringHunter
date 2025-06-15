@@ -17,3 +17,6 @@ using namespace nsK2EngineLow;
 #include "TMEngine.h"
 #include "level3DRender/LevelRender.h";
 
+#include "nature/SkyCube.h"
+
+

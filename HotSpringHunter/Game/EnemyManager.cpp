@@ -5,6 +5,7 @@
 #include "WildBoar.h"
 #include "Bear.h"
 #include "Player.h"
+#include "Enemy/PoisonSnake/PoisonSnake.h"
 
 namespace {
 	const int ENEMY_NUM				= 15;				//エネミーの数
@@ -68,6 +69,10 @@ void EnemyManager::AddEnemy()
 		auto* wildBoar = NewGO<WildBoar>(0, "wildBoar");
 		wildBoar->SetWildBoarPos(OFF_SCREEN_POS);
 		m_wildBoars.push_back(wildBoar);
+
+		auto poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
+		poisonSnake->SetPosition(OFF_SCREEN_POS);
+		m_poisonSnake.push_back(poisonSnake);
 	}
 
 	//クマは1体だけ

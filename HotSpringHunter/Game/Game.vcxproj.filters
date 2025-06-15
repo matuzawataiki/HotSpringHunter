@@ -20,7 +20,7 @@
     <ClCompile Include="StartWaveCollision.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
-    <ClCompile Include="BackGround\StageManager.cpp" />
+    <ClCompile Include="BackGround\Stage.cpp" />
     <ClCompile Include="BackGround\MapObject\Tree.cpp" />
     <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
@@ -28,12 +28,10 @@
     <ClCompile Include="BackGround\MapObject\GroundBattle.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundGool.cpp" />
-    <ClCompile Include="BackGround\MapObject\GroundRun.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundStart.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxBattle.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxBossBattle.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxGool.cpp" />
-    <ClCompile Include="BackGround\HitObject\HitBoxRun.cpp" />
     <ClCompile Include="BackGround\HitObject\HitBoxStart.cpp" />
     <ClCompile Include="BackGround\HitObjectBase.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
@@ -58,6 +56,9 @@
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
     <ClCompile Include="Enemy\IEnemy.cpp" />
     <ClCompile Include="EffectHub.cpp" />
+    <ClCompile Include="BackGround\HitObject\InOutHitBox.cpp" />
+    <ClCompile Include="BackGround\MapObject\HotSpring.cpp" />
+    <ClCompile Include="BackGround\StageManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -93,7 +94,6 @@
     <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxBossBattle.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxGool.h" />
-    <ClInclude Include="BackGround\HitObject\HitBoxRun.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxStart.h" />
     <ClInclude Include="BackGround\HitObjectBase.h" />
     <ClInclude Include="GameClear.h" />
@@ -101,8 +101,7 @@
     <ClInclude Include="SmokeEmitter.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
-    <ClInclude Include="BackGround\MapObject\GroundRun.h" />
-    <ClInclude Include="BackGround\StageManager.h" />
+    <ClInclude Include="BackGround\Stage.h" />
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
@@ -116,5 +115,9 @@
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Enemy\IEnemy.h" />
     <ClInclude Include="EffectHub.h" />
+    <ClInclude Include="BackGround\HitObject\InOutHitBox.h" />
+    <ClInclude Include="BackGround\MapObject\HotSpring.h" />
+    <ClInclude Include="BackGround\StageObject.h" />
+    <ClInclude Include="BackGround\StageManager.h" />
   </ItemGroup>
 </Project>

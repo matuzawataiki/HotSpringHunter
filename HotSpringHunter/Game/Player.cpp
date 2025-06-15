@@ -377,6 +377,12 @@ namespace Character {
 			m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
 			return;
 		}
+		////ゴールに移動中なら実行しない
+		//m_sceneManager = FindGO<SceneManager>("sceneManager");
+		//if (m_sceneManager->GetIsToGoal() == true) {
+		//	m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
+		//	return;
+		//}
 
 		//拘束されているなら実行しない
 		m_bear = FindGO<Bear>("bear");

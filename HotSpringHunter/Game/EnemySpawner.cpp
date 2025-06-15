@@ -24,7 +24,6 @@ bool EnemySpawner::Start()
 
 void EnemySpawner::Update()
 {
-	int hoge;
 }
 
 /// <summary>

@@ -3,5 +3,5 @@
 
 Tree::Tree()
 {
-    m_objeModel.Init("Assets/stage/tree.tkm");
+    m_objeModel.Init("Assets/stage/tree.tkm",nullptr,0,enModelUpAxisZ);
 }
