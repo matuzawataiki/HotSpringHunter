@@ -49,6 +49,8 @@ public:
 	void ExecuteSpeed();
 	//スポーンした時の処理
 	void Spawned();
+	//エフェクトの再生
+	void PlayEffect();
 	void Render(RenderContext& rc)override;
 
 	//ヘビの移動速度を取得

@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EffectHub.h"
 
 namespace {
 	const float DELTA_TIME				= 1.0f / 60.0f;		//フレームレート
@@ -36,14 +37,13 @@ bool SnakeEnemy::Start()
 	//アセット読み込み
 	LoadAsset();
 
+	//インスタンス探し
+	m_player = FindGO<Character::Player>("player");
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//基底クラス生成
-	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
-
-	//インスタンス探し
-	m_player	 = FindGO<Character::Player>("player");
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
 
 	//キャラクターコントローラー
 	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
@@ -106,6 +106,16 @@ void SnakeEnemy::ManageState()
 
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
+
+		//被弾エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enEnemyHit);
+		Vector3 effectPos = m_snakePos;
+		effectPos.y += 30.0f;
+		m_effect->SetPosition(effectPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->Play();
 		//HPがまだ残っている
 		if (m_snakeHP > 0.0f) {
 			//ノックバック
@@ -169,10 +179,12 @@ void SnakeEnemy::ExecuteAction()
 
 		//ノックバック
 	case enSnakeKnockBack:
+
 		//ノックバックをさせる
 		m_snakeSpeed = m_enemyBase->KnockBack(m_snakeDir);
 		//被弾アニメーションを再生
 		m_snakeModel.PlayAnimation(enSnakeAnimClip_Hit, ANIM_INTERPOLATE_TIME);
+
 		break;
 
 		//死亡

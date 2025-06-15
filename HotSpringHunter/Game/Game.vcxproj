@@ -233,6 +233,7 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
+    <ClCompile Include="EffectHub.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Bucket.h" />
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
+    <ClInclude Include="EffectHub.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyHPBar.h" />
     <ClInclude Include="EnemyManager.h" />

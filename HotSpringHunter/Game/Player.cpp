@@ -1,17 +1,20 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
+#include "Bear.h"
 #include "SoundEffect.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
 #include "SceneManager.h"
+#include "EffectHub.h"
+
 
 namespace Character {
 	namespace {
 
 		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,50.0f,0.0f };	//player初期位置。
 
-		const float MAX_PLAYER_HP			= 3.0f;		//最大HP。
+		const float MAX_PLAYER_HP			= 3000.0f;		//最大HP。
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
@@ -39,6 +42,10 @@ namespace Character {
 		const float HIT_RIGIDITY_TiME		= 0.5f;			//被弾：硬直時間。
 
 		const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
+
+		const float CONSTRAINTS＿DAMAGE		= 1.0f;			//拘束攻撃の継続ダメージ
+		const float BLOW_TIME				= 1.5f;			//ぶっ飛ばしの滞空時間
+		const float BLOW_HIGHT				= 150.0f;		//ぶっ飛ばしの最高高度
 
 		const float TO_GOAL_TIME			= 4.0f;			//ゴール地点に到達するまでの時間
 		const Vector3 GOAL_POS				= { 0.0f,0.0f,13500.0f };//ゴール地点
@@ -136,6 +143,7 @@ namespace Character {
 		m_stateList.push_back(new PlayerHit(this));
 		m_stateList.push_back(new PlayerDeath(this));
 		m_stateList.push_back(new PlayerToGoal(this));
+		m_stateList.push_back(new PlayerRestrain(this));
 	}
 
 	/// <summary>
@@ -143,6 +151,9 @@ namespace Character {
 	/// </summary>
 	void Player::LoadAssets()
 	{
+		m_RStickImage.Init("Assets/modelData/image/RStick.dds", 300.0f, 300.0f);
+		m_RStickImage.SetPosition({ 200.0f,200.0f });
+
 		//アニメーションロード。
 		m_animationClips[enPlayerAnimClip_Idle].Load("Assets/animData/player/idle.tka");
 		m_animationClips[enPlayerAnimClip_Idle].SetLoopFlag(true);
@@ -158,6 +169,8 @@ namespace Character {
 		m_animationClips[enPlayerAnimClip_ChargeAttack].SetLoopFlag(false);
 		m_animationClips[enPLayerAnimClip_Charging].Load("Assets/animData/player/charging.tka");
 		m_animationClips[enPLayerAnimClip_Charging].SetLoopFlag(false);
+		m_animationClips[enPLayerAnimClip_Restrain].Load("Assets/animData/player/restrain.tka");
+		m_animationClips[enPLayerAnimClip_Restrain].SetLoopFlag(false);
 		m_animationClips[enPlayerAnimClip_Hit].Load("Assets/animData/player/hit.tka");
 		m_animationClips[enPlayerAnimClip_Hit].SetLoopFlag(false);
 		m_animationClips[enPlayerAnimClip_Death].Load("Assets/animData/player/death.tka");
@@ -181,7 +194,10 @@ namespace Character {
 	{
 		//重力を発生させる。
 		if (!m_playerCharaCon.IsOnGround()) {
-			m_playerSpeed.y -= GRAVITY_AMOUNT;
+			//拘束中は発生させない
+			if (m_currentState != EnPlayerActiveState::enPlayerRestrain) {
+				m_playerSpeed.y -= GRAVITY_AMOUNT;
+			}			
 		}
 
 		//ポジションの更新。
@@ -312,6 +328,11 @@ namespace Character {
 		m_playerModel.Draw(rc);
 		m_chargeRender.Draw(rc);
 		m_posRender.Draw(rc);
+
+
+		if (m_currentState == enPlayerRestrain) {
+			m_RStickImage.Draw(rc);
+		}
 	}
 
 	/// <summary>
@@ -350,12 +371,25 @@ namespace Character {
 			return;
 		}
 
+		//ゴールに移動中なら実行しない
+		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		if (m_sceneManager->GetIsToGoal()) {
+			m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
+			return;
+		}
 		////ゴールに移動中なら実行しない
 		//m_sceneManager = FindGO<SceneManager>("sceneManager");
 		//if (m_sceneManager->GetIsToGoal() == true) {
 		//	m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
 		//	return;
 		//}
+
+		//拘束されているなら実行しない
+		m_bear = FindGO<Bear>("bear");
+		if (m_bear->GetIsCovering()) {
+			m_player->SetRequestState(EnPlayerActiveState::enPlayerRestrain);
+			return;
+		}
 
 		StateManage();
 	}
@@ -692,15 +726,38 @@ namespace Character {
 		//チャージが増加しているなら、溜め攻撃1アニメーションを再生。
 		if (m_player->m_charge >= 30.0f)
 		{
+			//効果音
 			m_soundEffect->Play(enPlayerCharge1SE, false);
+
+			//エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge01);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
 		}
 		if (m_player->m_charge >= 60.0f)
 		{
 			m_soundEffect->Play(enPlayerCharge2SE, false);
+
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge02);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
 		}
 		if (m_player->m_charge >= 100.0f)
 		{
 			m_soundEffect->Play(enPlayerCharge3SE, false);
+
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge03);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
 		}
 
 		//チャージを減少させる。
@@ -968,6 +1025,124 @@ namespace Character {
 	}
 
 	void PlayerToGoal::Exit()
+	{
+
+	}
+
+
+	/*********************************************************************************/
+	//拘束中クラス。
+	/*********************************************************************************/
+
+	PlayerRestrain::~PlayerRestrain()
+	{
+	}
+
+	void PlayerRestrain::Enter()
+	{
+		m_bear = FindGO<Bear>("bear");
+
+		//拘束中アニメーションを再生
+		m_player->m_playerModel.PlayAnimation(enPLayerAnimClip_Restrain, ANIM_INTERPOLATE_TIME);
+
+		//拘束時間をセット
+		m_restCoverTime = m_bear->GetCOVER_TIME();
+
+		//プレイヤーの位置を記録
+		m_blowStartPos = m_player->GetPlayerPos();
+		m_blowStartPos.y = 0.0f;
+	}
+
+	void PlayerRestrain::Update()
+	{
+		Restraining();
+		StickSpin();
+	}
+
+	/// <summary>
+	/// 拘束中の処理
+	/// </summary>
+	void PlayerRestrain::Restraining()
+	{
+		//ダメージを食らわせる
+		m_player->m_playerHP -= CONSTRAINTS＿DAMAGE;
+
+		//時間を計算
+		m_restCoverTime -= g_gameTime->GetFrameDeltaTime();
+		
+		//拘束時間が終了したら
+		if (m_restCoverTime <= 0.5f) {
+			
+			if (!m_bear->GetIsSlowPlayer()) {
+				//ぶっ飛ばしへ
+				m_bear->SetIsSlowPlayer(true);
+				//目標地点を計算
+				m_blowTargetPos = m_bear->GetBearPos() + (m_bear->GetBearDir() * m_bear->GetBLOW_POS_DIS());
+				m_blowTargetPos.y = 0.0f;
+			}
+
+			//ぶっ飛ばされてからの経過時間を計算
+			m_elapsedTime += g_gameTime->GetFrameDeltaTime();
+			float timeRatio = m_elapsedTime;
+			timeRatio / BLOW_TIME;
+			//プレイヤーをぶっ飛ばす
+			HasBlowing(m_blowStartPos, m_blowTargetPos, timeRatio);
+
+			//ぶっ飛ばし時間が完了したら
+			if ((m_elapsedTime >= BLOW_TIME / 2.0f) && (m_player->GetPlayerPos().y <= 20.0f)) {
+				m_bear->SetIsCovering(false);
+				//一応プレイヤーを着地させる
+				m_player->SetPlayerPos({ m_player->GetPlayerPos().x, 0.0f, m_player->GetPlayerPos().z });
+			}
+		}
+	}
+
+	/// <summary>
+	/// レバガチャ
+	/// </summary>
+	void PlayerRestrain::StickSpin()
+	{
+		//右スティックを回して脱出
+		Vector3 RStick = Vector3::Zero;				//Rスティック入力量。
+		float movePower = 0.0f;						//パワー（入力変動量）。
+
+		//Rスティックの入力量をとる。
+		RStick.x = g_pad[0]->GetRStickXF();
+		RStick.y = g_pad[0]->GetRStickYF();
+		//チャージ量にたすパワーを計算する（スティックの変更後、変更前の内積）。
+		movePower = Dot(RStick, m_RStickOld);
+		//スティックが動いていないなら、パワーを0にする。
+		if ((RStick.x == m_RStickOld.x) && (RStick.y == m_RStickOld.y)) {
+			movePower = 0.0f;
+		}
+		//movePowerを絶対値にする
+		movePower = fabsf(movePower);
+
+		//スティック入力量を更新。
+		m_RStickOld = RStick;
+
+		//パワーで拘束時間を短くする
+		m_restCoverTime -= movePower;
+	}
+
+	/// <summary>
+	/// プレイヤーをぶっ飛ばす
+	/// </summary>
+	void PlayerRestrain::HasBlowing(Vector3& start, Vector3& target, const float timeRatio)
+	{
+		// 線形補間    
+		Vector3 flatPos = start + (target - start) * timeRatio;
+
+		// 放物線によるY補正
+		float yOffset = BLOW_HIGHT * (1 - 4 * (timeRatio - 0.5f) * (timeRatio - 0.5f));
+
+		flatPos.y += yOffset;
+
+		m_player->SetPlayerPos(flatPos);
+		m_player->SetPlayerControllerPos(m_player->GetPlayerPos());
+	}
+
+	void PlayerRestrain::Exit()
 	{
 
 	}

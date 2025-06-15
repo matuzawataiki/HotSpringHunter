@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Result.h"
 #include "Title.h"
+#include "SceneManager.h"
 
 namespace
 {
@@ -75,8 +76,10 @@ void Result::Evaluation()
 //スコアの表示
 void Result::Score()
 {
+	m_sceneManager = FindGO<SceneManager>("sceneManager");
+
 	wchar_t score[256];
-	swprintf_s(score, 256, L"スコア : %d", int(m_finelScore));
+	swprintf_s(score, 256, L"スコア : %d", int(m_sceneManager->GetFinalScore()));
 
 	m_scoreFontRen.SetText(score);
 	m_scoreFontRen.SetPosition(SCORE_FONT_POS);
@@ -86,8 +89,10 @@ void Result::Score()
 
 void Result::ClearTime()
 {
+	m_sceneManager = FindGO<SceneManager>("sceneManager");
+
 	wchar_t time[256];
-	swprintf_s(time, 256, L"クリアタイム : %d", int(m_gameClearTime));
+	swprintf_s(time, 256, L"クリアタイム : %d", int(m_sceneManager->GetInGameTime()));
 
 	m_clearTimeFontRen.SetText(time);
 	m_clearTimeFontRen.SetPosition(CLEAR_TIME_POS);
@@ -192,8 +197,10 @@ void GameOverResult::OverEvaluation()
 
 void GameOverResult::OverScore()
 {
+	m_sceneManager = FindGO<SceneManager>("sceneManager");
+
 	wchar_t score[256];
-	swprintf_s(score, 256, L"スコア : %d", int(m_finelScore));
+	swprintf_s(score, 256, L"スコア : %d", int(m_sceneManager->GetFinalScore()));
 
 	m_overScoreFontRen.SetText(score);
 	m_overScoreFontRen.SetPosition(SCORE_FONT_POS);
@@ -203,8 +210,10 @@ void GameOverResult::OverScore()
 
 void GameOverResult::OverTime()
 {
+	m_sceneManager = FindGO<SceneManager>("sceneManager");
+
 	wchar_t time[256];
-	swprintf_s(time, 256, L"クリアタイム : %d", int(m_gameClearTime));
+	swprintf_s(time, 256, L"クリアタイム : %d", int(m_sceneManager->GetInGameTime()));
 
 	m_overoverTimeFontRen.SetText(time);
 	m_overoverTimeFontRen.SetPosition(CLEAR_TIME_POS);

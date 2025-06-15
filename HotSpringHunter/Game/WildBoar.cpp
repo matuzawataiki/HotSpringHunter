@@ -6,6 +6,7 @@
 #include "EnemyBase.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EffectHub.h"
 
 namespace
 {
@@ -33,12 +34,10 @@ namespace
 
 WildBoar::WildBoar()
 {
-
 }
 
 WildBoar::~WildBoar()
 {
-
 }
 
 bool WildBoar::Start()
@@ -173,6 +172,7 @@ void WildBoar::ChargeCaveat()
 
 	m_chargeCaveat.Update();
 }
+
 /// <summary>
 /// 突進攻撃
 /// </summary>
@@ -207,6 +207,8 @@ void WildBoar::Charge()
 			m_player->Hit(20.0f);
 			//プレイヤーにあたった効果音
 			m_soundEffect->Play(enwildBoarCahrgeAttackSE, false);
+			//エフェクト
+			PlayEffect();
 			//一度当たったら判定をtrueにする
 			m_isHitCollision = true;
 
@@ -247,6 +249,21 @@ void WildBoar::Charge()
 	m_chargeOldPos = m_wildBoarPos;
 	//チャージタイムリセット
 	m_chargeTime = 0.0f;
+}
+
+/// <summary>
+/// イノシシのエフェクトを再生
+/// </summary>
+void WildBoar::PlayEffect()
+{
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(EnEffectVar::enImpact);
+	Vector3 effectPos = m_wildBoarPos;
+	effectPos.y += 30.0f;
+	m_effect->SetPosition(effectPos);
+	m_effect->SetRotation(Quaternion::Identity);
+	m_effect->SetScale({ 10.0f,10.0f,10.0f });
+	m_effect->Play();
 }
 
 /// <summary>
@@ -298,6 +315,16 @@ void WildBoar::ManageState()
 
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
+
+		//被弾エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enEnemyHit);
+		Vector3 effectPos = m_wildBoarPos;
+		effectPos.y += 30.0f;
+		m_effect->SetPosition(effectPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->Play();
 
 		//HPがまだ残っている。
 		if (m_wildBoarHP > 0.0f) {

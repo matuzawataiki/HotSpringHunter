@@ -10,6 +10,7 @@
 #include "BackGround/StageManager.h";
 #include "SceneManager.h"
 #include "SoundEffect.h"
+#include "EffectHub.h"
 #include "GameOver.h"
 #include "GameClear.h"
 
@@ -24,7 +25,7 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_sceneManager);
 	DeleteGO(m_stageManager);
-	DeleteGO(m_enemyManager);
+	//DeleteGO(m_enemyManager);
 	DeleteGO(m_player);
 	DeleteGO(m_ui);
 	DeleteGO(m_soundEffect);
@@ -42,6 +43,7 @@ bool Game::Start()
 	m_ui = NewGO<UI>(0, "ui");
 
 	m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
+	m_effectHub = NewGO<EffectHub>(0, "effectHub");
 
 	//当たり判定を可視化する。
 	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();

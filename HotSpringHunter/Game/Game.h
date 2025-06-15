@@ -4,6 +4,10 @@ namespace Character {
 	class Player;
 }
 
+namespace Enemy {
+	class PoisonSnake;
+}
+
 class GameCamera;
 class EnemyBase;
 class EnemyManager;
@@ -14,6 +18,7 @@ class StageManager;
 class SceneManager;
 class GameOver;
 class SoundEffect;
+class EffectHub;
 
 
 class Game : public IGameObject
@@ -36,6 +41,7 @@ private:
 	StageManager*		m_stageManager	= nullptr;
 	SceneManager*		m_sceneManager	= nullptr;
 	SoundEffect*		m_soundEffect	= nullptr;
+	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
 };
 

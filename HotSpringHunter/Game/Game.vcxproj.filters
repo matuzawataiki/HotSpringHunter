@@ -55,6 +55,7 @@
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
     <ClCompile Include="Enemy\IEnemy.cpp" />
+    <ClCompile Include="EffectHub.cpp" />
     <ClCompile Include="BackGround\HitObject\InOutHitBox.cpp" />
     <ClCompile Include="BackGround\MapObject\HotSpring.cpp" />
     <ClCompile Include="BackGround\StageManager.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Enemy\IEnemy.h" />
+    <ClInclude Include="EffectHub.h" />
     <ClInclude Include="BackGround\HitObject\InOutHitBox.h" />
     <ClInclude Include="BackGround\MapObject\HotSpring.h" />
     <ClInclude Include="BackGround\StageObject.h" />

@@ -31,7 +31,6 @@ void EnemySpawner::Update()
 /// </summary>
 void EnemySpawner::TriggerEnemySpawn(EnGameScene Scene)
 {
-
 	switch (Scene) {
 	case EnGameScene::enObstacleArea1:
 
