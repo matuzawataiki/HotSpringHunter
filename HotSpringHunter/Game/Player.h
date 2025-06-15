@@ -7,6 +7,8 @@ class EnemyManager;
 class GameCamera;
 class SceneManager;
 class Bear;
+class SoundEffect;
+
 
 namespace Character {
 	//現在アクティブなステート。
@@ -112,6 +114,7 @@ namespace Character {
 		CollisionObject*	m_collision		= nullptr;
 		SoundEffect*		m_soundEffect	= nullptr;
 
+		SpriteRender		m_RStickImage;
 		AnimationClip		m_animationClips[enPlayerAnimClip_Num];	//アニメーションクリップ。	
 		CharacterController m_playerCharaCon;						//キャラコン。
 		ModelRender			m_playerModel;							//描画。
@@ -132,6 +135,7 @@ namespace Character {
 		bool m_chargeAtFlag			= false;			//溜め攻撃：溜め攻撃中か。
 		bool m_hitFlag				= false;			//被弾：被弾中かのフラッグ。
 		bool m_isDead				= false;			//死亡：死亡しているかのフラッグ。
+		bool m_isDrawRStick			= false;
 	};
 
 	class IState

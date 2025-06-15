@@ -88,8 +88,6 @@ void SnakeEnemy::Update()
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
-
-	PlayEffect();
 }
 
 
@@ -108,6 +106,16 @@ void SnakeEnemy::ManageState()
 
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
+
+		//被弾エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enEnemyHit);
+		Vector3 effectPos = m_snakePos;
+		effectPos.y += 30.0f;
+		m_effect->SetPosition(effectPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->Play();
 		//HPがまだ残っている
 		if (m_snakeHP > 0.0f) {
 			//ノックバック
@@ -299,19 +307,6 @@ void SnakeEnemy::Spawned()
 	m_snakeState = EnSnakeState::enSnakeIdle;
 	//ステート変更可能に
 	m_isCanStateChange = true;
-}
-
-/// <summary>
-/// エフェクトを再生
-/// </summary>
-void SnakeEnemy::PlayEffect()
-{
-	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-	m_effect->Init(EnEffectVar::enImpact);
-	m_effect->SetPosition(m_snakePos);
-	m_effect->SetRotation(Quaternion::Identity);
-	m_effect->SetScale({ 10.0f,10.0f,10.0f });
-	m_effect->Play();
 }
 
 void SnakeEnemy::Render(RenderContext& rc)

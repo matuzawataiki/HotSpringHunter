@@ -10,6 +10,8 @@
 #include "collision/CollisionObject.h"
 #include "EnemyHPBar.h"
 #include "SoundEffect.h"
+#include "EffectHub.h"
+
 
 
 namespace {
@@ -27,7 +29,7 @@ namespace {
 	const float COVER_HIT_TIME			= 1.0f;			//拘束攻撃：当たり判定を出す時間
 	const float COVER_COLLISION_DIS		= 20.0f;		//拘束攻撃：当たり判定を前に出す量
 	const float COVER_COLLISION_SIZE	= 3000.0f;		//拘束攻撃：当たり判定の半径
-	const float COVER_COOLTIME			= 5.0f;			//拘束攻撃：クールタイム
+	const float COVER_COOLTIME			= 50.0f;		//拘束攻撃：クールタイム
 	const float ON_THE_PLAYER_TIME		= 1.0f;			//拘束攻撃：プレイヤーに乗りかかる時間
 	const float ON_THE_PLAYER_DIS		= 50.0f;		//拘束攻撃：プレイヤーに乗りかかる距離
 	const float COVER_TIME				= 5.0f;			//拘束攻撃：拘束時間
@@ -332,6 +334,16 @@ void Bear::ManageState()
 
 		//HPを減らす。
 		m_bearHP -= m_player->m_attackPower;
+
+		//被弾エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enEnemyHit);
+		Vector3 effectPos = m_bearPos;
+		effectPos.y += 30.0f;
+		m_effect->SetPosition(effectPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->Play();
 
 		//HPがまだ残っている。
 		if (m_bearHP > 0.0f) {

@@ -9,5 +9,6 @@ namespace nsTMEngine
 	void PostEffect::Render(RenderContext& rc, RenderTarget& mainRenderTarget)
 	{
 		m_bloom.Render(rc, mainRenderTarget);
+		EffectEngine::GetInstance()->Draw();
 	}
 }

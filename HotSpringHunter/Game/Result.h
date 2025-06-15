@@ -1,5 +1,6 @@
 #pragma once
 class Title;
+class SceneManager;
 
 //ゲームクリアリザルト
 class Result :public IGameObject
@@ -24,6 +25,7 @@ private:
 	FontRender m_nextButtonRen;
 
 	Title* m_title = nullptr;
+	SceneManager* m_sceneManager = nullptr;
 
 	Vector2 m_nextButtonSize = Vector2(1.0f, 1.0f);
 
@@ -61,6 +63,7 @@ private:
 	FontRender m_overNextButtonRen;
 
 	Title* m_title = nullptr;
+	SceneManager* m_sceneManager = nullptr;
 
 	Vector2 m_nextButtonSize = Vector2(1.0f, 1.0f);
 

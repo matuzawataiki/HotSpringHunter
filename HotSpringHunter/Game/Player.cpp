@@ -6,6 +6,8 @@
 #include "EnemyManager.h"
 #include "GameCamera.h"
 #include "SceneManager.h"
+#include "EffectHub.h"
+
 
 namespace Character {
 	namespace {
@@ -149,6 +151,9 @@ namespace Character {
 	/// </summary>
 	void Player::LoadAssets()
 	{
+		m_RStickImage.Init("Assets/modelData/image/RStick.dds", 300.0f, 300.0f);
+		m_RStickImage.SetPosition({ 200.0f,200.0f });
+
 		//アニメーションロード。
 		m_animationClips[enPlayerAnimClip_Idle].Load("Assets/animData/player/idle.tka");
 		m_animationClips[enPlayerAnimClip_Idle].SetLoopFlag(true);
@@ -323,6 +328,11 @@ namespace Character {
 		m_playerModel.Draw(rc);
 		m_chargeRender.Draw(rc);
 		m_posRender.Draw(rc);
+
+
+		if (m_currentState == enPlayerRestrain) {
+			m_RStickImage.Draw(rc);
+		}
 	}
 
 	/// <summary>
@@ -710,15 +720,38 @@ namespace Character {
 		//チャージが増加しているなら、溜め攻撃1アニメーションを再生。
 		if (m_player->m_charge >= 30.0f)
 		{
+			//効果音
 			m_soundEffect->Play(enPlayerCharge1SE, false);
+
+			//エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge01);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
 		}
 		if (m_player->m_charge >= 60.0f)
 		{
 			m_soundEffect->Play(enPlayerCharge2SE, false);
+
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge02);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
 		}
 		if (m_player->m_charge >= 100.0f)
 		{
 			m_soundEffect->Play(enPlayerCharge3SE, false);
+
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge03);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
 		}
 
 		//チャージを減少させる。

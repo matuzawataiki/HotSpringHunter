@@ -101,7 +101,6 @@ void WildBoar::Update()
 	if (!m_isSpawn) {
 		return;
 	}
-	PlayEffect();
 	//ステート管理
 	ManageState();
 	//行動実行
@@ -172,19 +171,6 @@ void WildBoar::ChargeCaveat()
 	m_chargeCaveat.SetScale(1.0f, 1.0f, m_chargeVec.Length() / 100.0f);
 
 	m_chargeCaveat.Update();
-}
-
-/// <summary>
-/// イノシシのエフェクトを再生
-/// </summary>
-void WildBoar::PlayEffect()
-{
-	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-	m_effect->Init(EnEffectVar::enImpact);
-	m_effect->SetPosition(m_wildBoarPos);
-	m_effect->SetRotation(Quaternion::Identity);
-	m_effect->SetScale({ 10.0f,10.0f,10.0f });
-	m_effect->Play();
 }
 
 /// <summary>
@@ -266,6 +252,21 @@ void WildBoar::Charge()
 }
 
 /// <summary>
+/// イノシシのエフェクトを再生
+/// </summary>
+void WildBoar::PlayEffect()
+{
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(EnEffectVar::enImpact);
+	Vector3 effectPos = m_wildBoarPos;
+	effectPos.y += 30.0f;
+	m_effect->SetPosition(effectPos);
+	m_effect->SetRotation(Quaternion::Identity);
+	m_effect->SetScale({ 10.0f,10.0f,10.0f });
+	m_effect->Play();
+}
+
+/// <summary>
 /// イノシシの突進攻撃用のコリジョンオブジェクトを作成
 /// </summary>
 void WildBoar::ChargeCollision()
@@ -314,6 +315,16 @@ void WildBoar::ManageState()
 
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
+
+		//被弾エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enEnemyHit);
+		Vector3 effectPos = m_wildBoarPos;
+		effectPos.y += 30.0f;
+		m_effect->SetPosition(effectPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->Play();
 
 		//HPがまだ残っている。
 		if (m_wildBoarHP > 0.0f) {

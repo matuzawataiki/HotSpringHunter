@@ -41,6 +41,10 @@ public:
 	inline int GetGameScene() const { return m_sceneState; };
 	//ゴール移動のフラッグを取得
 	inline bool GetIsToGoal() const { return m_isToGoal; };
+	//プレイ時間を取得
+	inline float GetInGameTime() const { return m_gameClearTime; };
+	//最終スコアを取得
+	inline int GetFinalScore() const { return m_finalScore; };
 
 private:
 	FenceManager*		m_fenceManager	= nullptr;
@@ -50,7 +54,10 @@ private:
 	Character::Player*	m_player		= nullptr;
 	Bear*				m_bear			= nullptr;
 
+	float				 m_gameClearTime = 0.0f;		//ゲームのプレイ時間
+
 	int					m_sceneState	= 0;			//シーン状態
+	int					m_finalScore	= 0;			//最終スコア
 
 	bool				m_isExecuted	= false;		//シーン切り替え時の処理を実行したか
 	bool				m_isToGoal		= false;		//ゴールに移動させるかのフラッグ
