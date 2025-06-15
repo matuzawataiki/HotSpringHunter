@@ -59,6 +59,9 @@
     <ClCompile Include="BackGround\HitObject\InOutHitBox.cpp" />
     <ClCompile Include="BackGround\MapObject\HotSpring.cpp" />
     <ClCompile Include="BackGround\StageManager.cpp" />
+    <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="GameRule.cpp" />
+    <ClCompile Include="AttackTips.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -119,5 +122,8 @@
     <ClInclude Include="BackGround\MapObject\HotSpring.h" />
     <ClInclude Include="BackGround\StageObject.h" />
     <ClInclude Include="BackGround\StageManager.h" />
+    <ClInclude Include="GameController.h" />
+    <ClInclude Include="GameRule.h" />
+    <ClInclude Include="AttackTips.h" />
   </ItemGroup>
 </Project>

@@ -1,25 +1,24 @@
 #include "stdafx.h"
 #include "Result.h"
 #include "Title.h"
-#include "SceneManager.h"
 
 namespace
 {
 	//スプライトでやりたいかも(コンテニューの表示)
 	const float NEXT_BUTTON_COLOR_BASE = 1.0f;
-	const float NEXT_BUTTON_COLOR_MAX =  0.0f;
+	const float NEXT_BUTTON_COLOR_MAX = 0.0f;
 
 	const float NEXT_BUTTON_COLOR_TIME = 1.5f;
 
 	//文字position
 	//評価
-	const Vector3 EVALUATION_FONT_POS = Vector3{ -850.0f,400.0f,0.0f };
+	const Vector3 EVALUATION_FONT_POS = Vector3{ -400.0f,350.0f,0.0f };
 	//スコア
-	const Vector3 SCORE_FONT_POS = Vector3{ -850.0f,100.0f,0.0f };
+	const Vector3 SCORE_FONT_POS = Vector3{ -400.0f,100.0f,0.0f };
 	//タイム
-	const Vector3 CLEAR_TIME_POS = Vector3{ -850.0f,0.0f,0.0f };
+	const Vector3 CLEAR_TIME_POS = Vector3{ -400.0f,-50.0f,0.0f };
 	//ネクストボタン
-	const Vector3 NEXT_BUTTON_POS = Vector3{ -100.0f,-400.0f,0.0f };
+	const Vector3 NEXT_BUTTON_POS = Vector3{ -800.0f,-400.0f,0.0f };
 }
 
 /// <summary>
@@ -37,6 +36,18 @@ Result::~Result()
 bool Result::Start()
 {
 	m_clearResultModel.Init("Assets/modelData/image/gameclear_result.dds", 1920.0f, 1080.0f);
+
+	m_ecaluationFont.Init("Assets/modelData/image/hyouka.dds", 300.0f, 190.0f);
+	m_ecaluationFont.SetPosition(Vector2{ -700.0f,350.0f });
+	m_ecaluationFont.Update();
+
+	m_scoreFont.Init("Assets/modelData/image/score.dds", 200.0f, 110.0f);
+	m_scoreFont.SetPosition(Vector2{ -700.0f,-80.0f });
+	m_scoreFont.Update();
+
+	m_timeFont.Init("Assets/modelData/image/cleartime.dds", 300.0f, 100.0f);
+	m_timeFont.SetPosition(Vector2{ -700.0f,60.0f });
+	m_timeFont.Update();
 
 	return true;
 }
@@ -56,7 +67,7 @@ void Result::Update()
 
 void Result::SwitchTitle()
 {
-	if (g_pad[0]->IsTrigger(enButtonA)) 
+	if (g_pad[0]->IsTrigger(enButtonA))
 	{
 		m_title = NewGO<Title>(0, "title");
 		DeleteGO(this);
@@ -66,7 +77,7 @@ void Result::SwitchTitle()
 void Result::Evaluation()
 {
 	wchar_t evaluation[256];
-	swprintf_s(evaluation, 256, L"評価 : %d", int(m_evaluation));
+	swprintf_s(evaluation, 256, L"%d", int(m_evaluation));
 	m_evaluationFontRen.SetText(evaluation);
 	m_evaluationFontRen.SetPosition(EVALUATION_FONT_POS);
 	m_evaluationFontRen.SetScale(2.5f);
@@ -76,10 +87,8 @@ void Result::Evaluation()
 //スコアの表示
 void Result::Score()
 {
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
-
 	wchar_t score[256];
-	swprintf_s(score, 256, L"スコア : %d", int(m_sceneManager->GetFinalScore()));
+	swprintf_s(score, 256, L"%d", int(m_finelScore));
 
 	m_scoreFontRen.SetText(score);
 	m_scoreFontRen.SetPosition(SCORE_FONT_POS);
@@ -89,10 +98,8 @@ void Result::Score()
 
 void Result::ClearTime()
 {
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
-
 	wchar_t time[256];
-	swprintf_s(time, 256, L"クリアタイム : %d", int(m_sceneManager->GetInGameTime()));
+	swprintf_s(time, 256, L"%d", int(m_gameClearTime));
 
 	m_clearTimeFontRen.SetText(time);
 	m_clearTimeFontRen.SetPosition(CLEAR_TIME_POS);
@@ -108,7 +115,7 @@ void Result::NextButton()
 	m_nextButtonRen.SetPosition(NEXT_BUTTON_POS);
 	m_nextButtonRen.SetScale(1.0f);
 
-	//あたらしい
+	//文字の透明度を変える
 	m_nextButtonElapsed += buttonDeltaTime;
 	const float NEXT_BUTTON_COLOR_PARCENT = m_nextButtonElapsed / NEXT_BUTTON_COLOR_TIME;
 	if (m_isMaxTime == true)
@@ -141,6 +148,11 @@ void Result::NextButton()
 void Result::Render(RenderContext& rc)
 {
 	m_clearResultModel.Draw(rc);
+
+	m_ecaluationFont.Draw(rc);
+	m_scoreFont.Draw(rc);
+	m_timeFont.Draw(rc);
+
 	m_evaluationFontRen.Draw(rc);
 	m_scoreFontRen.Draw(rc);
 	m_clearTimeFontRen.Draw(rc);
@@ -161,18 +173,34 @@ GameOverResult::~GameOverResult()
 
 bool GameOverResult::Start()
 {
-	m_overResultModel.Init("Assets/modelData/image/gameover_risult.dds",1920.0f,1080.0f);
+	m_overResultModel.Init("Assets/modelData/image/gameover_risult.dds", 1920.0f, 1080.0f);
+
+	m_ecaluationFont.Init("Assets/modelData/image/hyouka.dds", 300.0f, 190.0f);
+	m_ecaluationFont.SetPosition(Vector2{ -700.0f,350.0f });
+	m_ecaluationFont.Update();
+
+	m_scoreFont.Init("Assets/modelData/image/score.dds", 200.0f, 110.0f);
+	m_scoreFont.SetPosition(Vector2{ -700.0f,-80.0f });
+	m_scoreFont.Update();
+
+	m_timeFont.Init("Assets/modelData/image/cleartime.dds", 300.0f, 100.0f);
+	m_timeFont.SetPosition(Vector2{ -700.0f,60.0f });
+	m_timeFont.Update();
 
 	return true;
 }
 
 void GameOverResult::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonA)) 
-	{
-		m_title = NewGO<Title>(0, "title");
-		DeleteGO(this);
-	}
+	OverSwitchTitle();
+
+	OverEvaluation();
+
+	OverScore();
+
+	OverTime();
+
+	NextButton();
 }
 
 void GameOverResult::OverSwitchTitle()
@@ -188,7 +216,7 @@ void GameOverResult::OverEvaluation()
 {
 
 	wchar_t evaluation[256];
-	swprintf_s(evaluation, 256, L"評価 : %d", int(m_evaluation));
+	swprintf_s(evaluation, 256, L"%d", int(m_evaluation));
 	m_overEvaluationFontRen.SetText(evaluation);
 	m_overEvaluationFontRen.SetPosition(EVALUATION_FONT_POS);
 	m_overEvaluationFontRen.SetScale(2.5f);
@@ -197,10 +225,8 @@ void GameOverResult::OverEvaluation()
 
 void GameOverResult::OverScore()
 {
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
-
 	wchar_t score[256];
-	swprintf_s(score, 256, L"スコア : %d", int(m_sceneManager->GetFinalScore()));
+	swprintf_s(score, 256, L"%d", int(m_finelScore));
 
 	m_overScoreFontRen.SetText(score);
 	m_overScoreFontRen.SetPosition(SCORE_FONT_POS);
@@ -210,10 +236,8 @@ void GameOverResult::OverScore()
 
 void GameOverResult::OverTime()
 {
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
-
 	wchar_t time[256];
-	swprintf_s(time, 256, L"クリアタイム : %d", int(m_sceneManager->GetInGameTime()));
+	swprintf_s(time, 256, L"%d", int(m_gameClearTime));
 
 	m_overoverTimeFontRen.SetText(time);
 	m_overoverTimeFontRen.SetPosition(CLEAR_TIME_POS);
@@ -261,4 +285,13 @@ void GameOverResult::NextButton()
 void GameOverResult::Render(RenderContext& rc)
 {
 	m_overResultModel.Draw(rc);
+
+	m_ecaluationFont.Draw(rc);
+	m_scoreFont.Draw(rc);
+	m_timeFont.Draw(rc);
+
+	m_overEvaluationFontRen.Draw(rc);
+	m_overScoreFontRen.Draw(rc);
+	m_overoverTimeFontRen.Draw(rc);
+	m_overNextButtonRen.Draw(rc);
 }
