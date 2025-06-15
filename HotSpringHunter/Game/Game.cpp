@@ -34,7 +34,7 @@ bool Game::Start()
 {
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_player = NewGO<Character::Player>(0, "player");
-	m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
+	//m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
 	
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
@@ -44,7 +44,7 @@ bool Game::Start()
 	m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
 
 	//当たり判定を可視化する。
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }

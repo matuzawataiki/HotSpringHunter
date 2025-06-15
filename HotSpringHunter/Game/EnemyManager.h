@@ -2,6 +2,9 @@
 namespace Character {
 	class Player;
 }
+namespace Enemy {
+	class PoisonSnake;
+}
 class SnakeEnemy;
 class WildBoar;
 class Bear;
@@ -39,6 +42,7 @@ private:
 
 	std::vector<SnakeEnemy*>	m_snakes;				//ヘビの配列
 	std::vector<WildBoar*>		m_wildBoars;			//イノシシの配列
+	std::vector<Enemy::PoisonSnake*> m_poisonSnake;
 
 	EnemySpawner*m_enemySpawner = nullptr;
 	Bear*		 m_bear			= nullptr;

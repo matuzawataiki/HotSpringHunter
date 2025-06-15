@@ -12,7 +12,7 @@ void Fence::Render(RenderContext& rc)
 	m_fenceManager = FindGO<FenceManager>("fenceManager");
 
 	//配置されているときだけ描画
-	if (m_fenceManager->GetIsDrawFence()) {
+	/*if (m_fenceManager->GetIsDrawFence()) {
 		m_objeModel.Draw(rc);
-	}
+	}*/
 }

@@ -40,7 +40,7 @@ public:
 	//シーン状態を取得
 	inline int GetGameScene() const { return m_sceneState; };
 	//ゴール移動のフラッグを取得
-	inline bool GetIsToGoal() const { return m_isToGoal; };
+	//inline bool GetIsToGoal() const { return m_isToGoal; };
 
 private:
 	FenceManager*		m_fenceManager	= nullptr;

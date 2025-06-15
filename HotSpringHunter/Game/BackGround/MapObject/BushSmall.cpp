@@ -3,5 +3,5 @@
 
 BushSmall::BushSmall()
 {
-    m_objeModel.Init("Assets/stage/bush2.tkm");
+    m_objeModel.Init("Assets/stage/bush2.tkm",nullptr, 0, enModelUpAxisZ);
 }
