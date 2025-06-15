@@ -1,5 +1,4 @@
 #pragma once
-#include "glm/glm.hpp"
 namespace Character {
 	class Player;
 }
@@ -18,8 +17,9 @@ enum EnBearState {
 	enBearIdle,				//待機
 	enBearTrack,			//追従
 	enBearMeleeAttack,		//近接攻撃
+	enBearCoverAttack,		//拘束攻撃
+	enBearSlowPlayer,		//プレイヤーぶっ飛ばし攻撃
 	enBearSlowStone,		//投石攻撃
-	enBearGoNewPos,			//初期位置へ移動（召喚用）
 	enBearSummonMinion,		//雑魚召喚
 	enBearKnockBack,		//ノックバック
 	enBearDeath,			//死亡
@@ -31,6 +31,7 @@ enum EnBearAnimClip
 	enBearAnimClip_Idle,			//待機
 	enBearAnimClip_Run,				//走り
 	enBearAnimClip_NeleeAttack,		//ひっかき攻撃
+	enBearAnimClip_Covering,		//覆いかぶさる
 	enBearAnimClip_SlowStone,		//投石攻撃
 	enBearAnimClip_Roar,			//咆哮
 	enBearAnimClip_Hit,				//被弾
@@ -53,8 +54,6 @@ public:
 	Vector3 CalcStoneVec( Vector3& start,  Vector3& target, const float t);
 	//岩のコリジョンを作る
 	void StoneCollision();
-	//クマを初期位置に移動(召喚用)
-	void GoNewPos();
 	//雑魚召喚
 	void SummonMinions();	
 	//召喚する位置を計算
@@ -75,6 +74,10 @@ public:
 	void ExecuteSpeed();
 	//クマのHPのゲッター
 	float GetBearMAXHP();
+	//拘束攻撃の初期の時間のゲッター
+	float GetCOVER_TIME();
+	//ぶっ飛ばしの距離のゲッター
+	float GetBLOW_POS_DIS();
 	void Render(RenderContext& rc)override;
 
 	//セッター
@@ -90,14 +93,24 @@ public:
 	inline void SetBearCharaConPos(const Vector3& pos) { m_bearController.SetPosition(pos); };
 	//スポーン位置を設定
 	inline void SetBearNewPos(const Vector3& pos) { m_bearNewPos = pos; };
+	//拘束中フラッグを設定
+	inline void SetIsCovering(const bool isCovering) { m_isCovering = isCovering; };
+	//ぶっ飛ばし攻撃フラッグを設定
+	inline void SetIsSlowPlayer(const bool isSlow) { m_isSlowPlayer = isSlow; };
 
 	//ゲッター	
 	//位置を取得
 	inline Vector3 GetBearPos() const { return m_bearPos; };
+	//向きを取得
+	inline Vector3 GetBearDir() const { return m_bearDir; };
 	//HPを取得
 	inline float GetBearHP() const { return m_bearHP; };
 	//スポーン状態を取得
 	inline bool GetIsBearSpawn() const { return m_isSpawn; };
+	//拘束中フラッグを取得
+	inline bool GetIsCovering() const { return m_isCovering; };
+	//ぶっ飛ばし攻撃フラッグを取得
+	inline bool GetIsSlowPlayer() const { return m_isSlowPlayer; };
 
 private:
 	Character::Player*	m_player			= nullptr;
@@ -105,6 +118,7 @@ private:
 	EnemyBase*			m_enemyBase			= nullptr;
 	EnemyManager*		m_enemyManager		= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
+	CollisionObject*	m_coverCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;
 	SoundEffect*        m_soundEffect       = nullptr;
 	BossHPUI*			m_bossHPUI			= nullptr;
@@ -128,12 +142,17 @@ private:
 	Vector3 m_newStonePos		= Vector3::Zero;		//投石をセットする位置
 	Vector3 m_toSlowPos			= Vector3::Zero;		//投石の目標位置
 	Vector3 m_bearNewPos		= Vector3::Zero;		//クマのスポーン位置
+	Vector3 m_bearMoveAmount	= Vector3::Zero;		//1フレームのクマの移動量
 
 	float m_bearHP				= 0.0f;		//敵のHP
 	float m_ATKCoolTime			= 0.0f;		//攻撃のクールタイム
 	float m_slowCoolTime		= 0.0f;		//投石攻撃のクールタイム
+	float m_summonCoolTime		= 0.0f;		//召喚のクールタイム
+	float m_coverCoolTime		= 0.0f;		//拘束攻撃のクールタイム
 	float m_setStoneTime		= 0.0f;		//投石攻撃の準備時間
 	float m_flightTime			= 0.0f;		//投石の飛行経過時間
+	float m_coverTime			= 0.0f;		//拘束攻撃の攻撃判定を出す時間
+
 
 	int m_bearState				= 0;		//クマの行動状態
 
@@ -148,4 +167,8 @@ private:
 	bool m_isSummon				= false;	//召喚：雑魚を召喚したか
 	bool m_isSummonEnd			= false;	//召喚：雑魚召喚が終わったか
 	bool m_isPlayRoar			= false;	//咆哮アニメーションを再生したか
+	bool m_isPutCoverCollision	= false;	//拘束攻撃の当たり判定を出したか
+	bool m_isCovering			= false;	//プレイヤーを拘束中か
+	bool m_isOutCovering		= false;	//拘束攻撃から抜け出したか
+	bool m_isSlowPlayer			= false;	//ぶっ飛ばしを行うか
 };

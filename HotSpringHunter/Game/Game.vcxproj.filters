@@ -57,6 +57,7 @@
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
     <ClCompile Include="Enemy\IEnemy.cpp" />
+    <ClCompile Include="EffectHub.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -114,5 +115,6 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Enemy\IEnemy.h" />
+    <ClInclude Include="EffectHub.h" />
   </ItemGroup>
 </Project>

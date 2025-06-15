@@ -6,6 +6,7 @@ class SoundEffect;
 class EnemyManager;
 class GameCamera;
 class SceneManager;
+class Bear;
 
 namespace Character {
 	//現在アクティブなステート。
@@ -19,6 +20,7 @@ namespace Character {
 		enPlayerHit,				//被弾。
 		enPlayerDeath,				//死亡。
 		enPlayerToGoal,				//ゴール地点へ向かう
+		enPlayerRestrain,			//拘束されている
 	};
 
 	//アニメーションクリップ。
@@ -31,6 +33,7 @@ namespace Character {
 		enPlayerAnimClip_WeakAttack,
 		enPlayerAnimClip_ChargeAttack,
 		enPLayerAnimClip_Charging,
+		enPLayerAnimClip_Restrain,
 		enPlayerAnimClip_Hit,
 		enPlayerAnimClip_Death,
 		enPlayerAnimClip_Num,
@@ -92,6 +95,7 @@ namespace Character {
 		inline void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
 		//行動状態を設定
 		inline void SetRequestState(const int state) { m_requestState = state; };
+
 	//private:
 		//チャージ量表示（仮）
 		FontRender m_chargeRender;
@@ -160,6 +164,7 @@ namespace Character {
 		SoundEffect*	m_soundEffect	= nullptr;	//サウンドソース。
 		GameCamera*		m_gameCamera	= nullptr;
 		SceneManager*	m_sceneManager	= nullptr;
+		Bear*			m_bear			= nullptr;
 
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
 	};
@@ -337,6 +342,9 @@ private:
 		SoundEffect* m_soundEffect = nullptr;	//サウンドソース。
 	};
 
+	/// <summary>
+	/// ゴール地点へ移動
+	/// </summary>
 	class PlayerToGoal :public IState
 	{
 	public:
@@ -361,5 +369,38 @@ private:
 		Vector3		m_moveAmount		= Vector3::Zero;		//1フレームで移動する量
 
 		float		m_clearElapsedTime	= 0.0f;			//ゴールへの強制移動を始めてからの経過時間
+	};
+
+
+	class PlayerRestrain :public IState
+	{
+	public:
+		PlayerRestrain(Player* player)
+			: IState(player)
+		{
+
+		}
+		~PlayerRestrain();
+
+		void Enter()override;
+		void Update()override;
+		//拘束中の処理
+		void Restraining();
+		//レバガチャ
+		void StickSpin();
+		//ぶっ飛ばされる
+		void HasBlowing(Vector3& start, Vector3& target, const float timeRatio);
+		void Exit()override;
+
+	private:
+		Bear*		m_bear				= nullptr;
+
+		Vector3		m_RStickOld			= Vector3::Zero;		//変更前のスティック入力量
+		Vector3		m_blowStartPos	= Vector3::Zero;		//拘束されたときのプレイヤーの位置
+		Vector3		m_blowTargetPos		= Vector3::Zero;
+
+		float		m_power				= 0.0f;					//レバガチャのパワー
+		float		m_restCoverTime		= 0.0f;					//残り拘束時間
+		float		m_elapsedTime		= 0.0f;					//ぶっ飛ばされてからの経過時間
 	};
 }

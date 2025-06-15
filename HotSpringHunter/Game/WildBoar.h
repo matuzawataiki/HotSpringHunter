@@ -63,6 +63,8 @@ public:
 	void ChargeCollision();
 	//警告表示
 	void ChargeCaveat();
+	//エフェクトの再生
+	void PlayEffect();
 	//モデル
 	void Render(RenderContext& rc)override;
 
@@ -100,6 +102,7 @@ private:
 	SoundEffect*			m_soundEffect		= nullptr; //サウンドエフェクト
 	SoundSource*			m_chargeSound		= nullptr; //突進サウンド
 	SoundSource*			m_runSound			= nullptr;    //突進攻撃サウンド
+	EffectEmitter*			m_effect			= nullptr;
 
 	AnimationClip			m_animationClips[enWildBoarAnimClip_Num];  //アニメーションクリップ
 	CharacterController		m_wildBoarController;					   //キャラクターコントローラー

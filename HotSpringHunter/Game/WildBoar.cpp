@@ -6,6 +6,7 @@
 #include "EnemyBase.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EffectHub.h"
 
 namespace
 {
@@ -33,12 +34,10 @@ namespace
 
 WildBoar::WildBoar()
 {
-
 }
 
 WildBoar::~WildBoar()
 {
-
 }
 
 bool WildBoar::Start()
@@ -102,6 +101,7 @@ void WildBoar::Update()
 	if (!m_isSpawn) {
 		return;
 	}
+	PlayEffect();
 	//ステート管理
 	ManageState();
 	//行動実行
@@ -173,6 +173,20 @@ void WildBoar::ChargeCaveat()
 
 	m_chargeCaveat.Update();
 }
+
+/// <summary>
+/// イノシシのエフェクトを再生
+/// </summary>
+void WildBoar::PlayEffect()
+{
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(EnEffectVar::enImpact);
+	m_effect->SetPosition(m_wildBoarPos);
+	m_effect->SetRotation(Quaternion::Identity);
+	m_effect->SetScale({ 10.0f,10.0f,10.0f });
+	m_effect->Play();
+}
+
 /// <summary>
 /// 突進攻撃
 /// </summary>
@@ -207,6 +221,8 @@ void WildBoar::Charge()
 			m_player->Hit(20.0f);
 			//プレイヤーにあたった効果音
 			m_soundEffect->Play(enwildBoarCahrgeAttackSE, false);
+			//エフェクト
+			PlayEffect();
 			//一度当たったら判定をtrueにする
 			m_isHitCollision = true;
 

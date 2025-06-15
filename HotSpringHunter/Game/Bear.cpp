@@ -13,7 +13,7 @@
 
 
 namespace {
-	const float MAX_BEAR_HP				= 5.0f;		//クマの最大HP
+	const float MAX_BEAR_HP				= 5.0f;			//クマの最大HP
 	const float FIND_RANGE				= 1500.0f;		//プレイヤーを捉える距離
 	const float PI						= 3.14;			//円周率
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
@@ -23,6 +23,16 @@ namespace {
 	const float ATK_RANGE				= 300.0f;		//近接攻撃：リーチ
 	const float MELEE_ATTACK_DAMAGE		= 20.0f;		//近接攻撃：攻撃力
 	const float ATK_COOLTIME			= 3.0f;			//近接攻撃：クールタイム
+
+	const float COVER_HIT_TIME			= 1.0f;			//拘束攻撃：当たり判定を出す時間
+	const float COVER_COLLISION_DIS		= 20.0f;		//拘束攻撃：当たり判定を前に出す量
+	const float COVER_COLLISION_SIZE	= 3000.0f;		//拘束攻撃：当たり判定の半径
+	const float COVER_COOLTIME			= 5.0f;			//拘束攻撃：クールタイム
+	const float ON_THE_PLAYER_TIME		= 1.0f;			//拘束攻撃：プレイヤーに乗りかかる時間
+	const float ON_THE_PLAYER_DIS		= 50.0f;		//拘束攻撃：プレイヤーに乗りかかる距離
+	const float COVER_TIME				= 5.0f;			//拘束攻撃：拘束時間
+
+	const float BLOW_POS_DIS			= 1000.0f;		//ぶっ飛ばし：ぶっ飛ばす距離
 
 	const float FOLLOW_RANGE			= 1000.0f;		//追従：追従する距離
 
@@ -43,6 +53,7 @@ namespace {
 	const float SUMMON_PCT				= 0.5f;			//召喚：召喚を行うHPの割合
 	const float RADIUS					= 300.0f;		//召喚：召喚する円の半径
 	const float SUMMON_YPOS				= 20.0f;		//召喚：召喚したときの高さ
+	const float SUMMON_COOLTIME			= 15.0f;		//召喚：クールタイム
 	const int SUMMON_NUM				= 4;			//召喚：雑魚を召喚する数
 
 	const float SINKING_TIME			= 0.05f;		//死亡：下に沈む速さ
@@ -93,8 +104,6 @@ bool Bear::Start()
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 	m_enemyManager	= FindGO<EnemyManager>("enemyManager");
 
-	//クマを初期位置に
-	//m_bearPos = NEW_POSITION;
 
 	//キャラクターコントローラー
 	m_bearController.Init(80.0f, 80.0f, m_bearPos);
@@ -116,6 +125,8 @@ void Bear::LoadAssets()
 	m_animationClips[enBearAnimClip_Run].SetLoopFlag(true);
 	m_animationClips[enBearAnimClip_NeleeAttack].Load("Assets/animData/bear/Attack.tka");
 	m_animationClips[enBearAnimClip_NeleeAttack].SetLoopFlag(false);
+	m_animationClips[enBearAnimClip_Covering].Load("Assets/animData/bear/ThrowingTrees.tka");
+	m_animationClips[enBearAnimClip_Covering].SetLoopFlag(false);
 	m_animationClips[enBearAnimClip_SlowStone].Load("Assets/animData/bear/SlowStone.tka");
 	m_animationClips[enBearAnimClip_SlowStone].SetLoopFlag(false);
 	m_animationClips[enBearAnimClip_Roar].Load("Assets/animData/bear/Roar.tka");
@@ -139,14 +150,15 @@ void Bear::Update()
 	}
 	//投石
 	StoneThrow();
+	//プレイヤーを探す
+	FindPlayer();
 	//ステート管理
 	ManageState();
 	//行動実行
 	ExecuteAction();	
 	//いろいろ更新
 	VariousUpdate();
-	//プレイヤーを探す
-	FindPlayer();
+	
 }
 
 /// <summary>
@@ -262,29 +274,6 @@ void Bear::StoneCollision()
 }
 
 /// <summary>
-/// クマを初期位置に移動させる（召喚用）
-/// </summary>
-void Bear::GoNewPos()
-{
-	Vector3 toNewPos = m_bearNewPos - m_bearPos;
-
-	//ステートを変更不能に
-	m_enemyBase->SetChangeFlag(false);
-	//クマの位置を初期位置に移動させる
-	m_bearSpeed = toNewPos;
-	m_bearSpeed.Normalize();
-	m_bearSpeed *= GO_NEW_POS_SPEED;
-
-	//ある程度初期位置に近づいたら
-	if (toNewPos.Length() < MOVE_STOP_DIS) {
-		//クマを手前側に向かせる
-		m_bearDir = Vector3{ 0.0f,0.0f,1.0f };
-		//召喚する
-		m_bearState = enBearSummonMinion;
-	}
-}
-
-/// <summary>
 /// 手下召喚
 /// </summary>
 void Bear::SummonMinions()
@@ -294,7 +283,8 @@ void Bear::SummonMinions()
 
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, m_summonPos[i], Quaternion::Identity);
+		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, m_summonPos.front(), Quaternion::Identity);
+		m_summonPos.erase(m_summonPos.begin());
 	}
 }
 
@@ -304,10 +294,19 @@ void Bear::SummonMinions()
 void Bear::CalcPos()
 {
 	for (int i = 0; i < SUMMON_NUM; i++) {
-		float angle = 2.0f * PI * i / SUMMON_NUM;
-		float x = m_bearPos.x + RADIUS * std::cos(angle);
-		float z = m_bearPos.z + RADIUS * std::sin(angle);
-		m_summonPos.emplace_back(Vector3{ x,SUMMON_YPOS,z });
+		//前方180度に召喚する
+		float angle = PI * i / (SUMMON_NUM - 1);
+
+		Vector3 right = Vector3{ -m_bearDir.z, 0.0f, m_bearDir.x };
+
+		float xOffset = std::cos(angle);
+		float zOffset = std::sin(angle);
+		Vector3 dir = right * xOffset + m_bearDir * zOffset;
+
+		float x = m_bearPos.x + dir.x * RADIUS;
+		float z = m_bearPos.z + dir.z * RADIUS;
+
+		m_summonPos.emplace_back(Vector3{ x, SUMMON_YPOS, z });
 	}
 }
 
@@ -357,14 +356,19 @@ void Bear::ManageState()
 		return;
 	}
 
-	//召喚
-	//クマのHPが30％以下、
-	//且つ召喚をまだしていないなら
-	if (m_bearHP < MAX_BEAR_HP * SUMMON_PCT && !m_isSummon) {
-		//まずは召喚位置へ移動
-		m_bearState = enBearGoNewPos;
-		//召喚を行った状態にする
-		m_isSummon = true;
+	////召喚
+	////クールタイムが終わっていたら
+	//if (m_summonCoolTime <= 0.0f) {
+	//	m_bearState = enBearSummonMinion;
+	//	//クールタイムをセット
+	//	m_summonCoolTime = SUMMON_COOLTIME;
+	//	return;
+	//}
+
+	//拘束攻撃
+	//クールタイムが終わっていたら
+	if (m_coverCoolTime <= 0.0f && m_toPlayer.Length() < ATK_RANGE) {
+		m_bearState = enBearCoverAttack;
 		return;
 	}
 
@@ -408,7 +412,7 @@ void Bear::FindPlayer()
 		m_isContact = true;
 		//クマを認識状態にする
 		m_bearState = enbearContact;
-    //咆哮の効果音
+		//咆哮の効果音
 		m_soundEffect->Play(enBearRoarSE, false);
 		//接触時のイベントカメラにする
 		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
@@ -428,6 +432,10 @@ void Bear::ExecuteAction()
 	m_ATKCoolTime -= g_gameTime->GetFrameDeltaTime();
 	//投石のクールタイムを計算
 	m_slowCoolTime -= g_gameTime->GetFrameDeltaTime();
+	//召喚のクールタイムを計算
+	m_summonCoolTime -= g_gameTime->GetFrameDeltaTime();
+	//拘束攻撃のクールタイムを計算
+	m_coverCoolTime -= g_gameTime->GetFrameDeltaTime();
 
 	switch (m_bearState) {
 
@@ -455,15 +463,6 @@ void Bear::ExecuteAction()
 		}
 		break;
 
-		//召喚位置へ移動
-	case enBearGoNewPos:
-		//移動する
-		GoNewPos();
-		//移動アニメーションを再生
-		m_bearModel.PlayAnimation(enBearAnimClip_Run, ANIM_INTERPOLATE_TIME);
-
-		break;
-
 		//召喚
 	case enBearSummonMinion:
 
@@ -477,13 +476,88 @@ void Bear::ExecuteAction()
 			m_isSummonEnd = true;
 		}
 
-		//アニメーションを再生し終わったらステート変更
-		if (!m_bearModel.IsPlayAnimation()) {
-			//ステート変更を可能にする
-			m_enemyBase->SetChangeFlag(true);
-			//未召喚にする
-			m_isSummonEnd = false;
+		////アニメーションを再生し終わったらステート変更
+		//if (!m_bearModel.IsPlayAnimation()) {
+		//	//ステート変更を可能にする
+		//	m_enemyBase->SetChangeFlag(true);
+		//	//未召喚にする
+		//	m_isSummonEnd = false;
+		//}
+		break;
+
+		//拘束攻撃
+	case enBearCoverAttack:
+
+		//覆いかぶさり攻撃のアニメーション
+		m_bearModel.PlayAnimation(enBearAnimClip_Covering, ANIM_INTERPOLATE_TIME);
+
+		//ステート変更を不可に
+		m_enemyBase->SetChangeFlag(false);
+
+		//攻撃判定を出す時間を計算
+		m_coverTime += g_gameTime->GetFrameDeltaTime();
+
+		if (m_coverTime >= COVER_HIT_TIME && !m_isPutCoverCollision) {
+			//当たり判定を出す位置を計算
+			Vector3 collisionPos = m_bearPos + (m_bearDir * COVER_COLLISION_DIS);
+			m_coverCollision = NewGO<CollisionObject>(0, "coverCollision");
+			m_coverCollision->CreateSphere(collisionPos, Quaternion::Identity, COVER_COLLISION_SIZE);
+			m_coverCollision->SetIsEnableAutoDelete(false);
+
+			if (m_coverCollision->IsHit(m_player->m_playerCharaCon)) {
+				m_isCovering = true;
+				//クマをプレイヤーの位置に
+				Vector3 toGoalDis = m_player->GetPlayerPos() - m_bearPos;
+				toGoalDis.y = 0.0f;
+				m_bearMoveAmount = toGoalDis / ON_THE_PLAYER_TIME;
+				m_bearMoveAmount *= DELTA_TIME;			
+			}
+
+			DeleteGO(m_coverCollision);
+
+			m_isPutCoverCollision = true;
 		}
+		
+		if (m_isCovering) {
+			if (m_toPlayer.Length() >= ON_THE_PLAYER_DIS) {
+				m_bearPos += m_bearMoveAmount;
+				m_bearController.SetPosition(m_bearPos);
+			}
+			
+			if (m_isSlowPlayer) {
+				m_bearState = enBearSlowPlayer;
+				m_coverTime = 0.0f;
+			}
+		}
+
+		//攻撃が当たらなかったら
+		if (!m_isCovering && !m_bearModel.IsPlayAnimation()) {
+			//ステート変更を可にする
+			m_enemyBase->SetChangeFlag(true);
+			//フラッグをリセット
+			m_isPutCoverCollision = false;
+			//タイマーをリセット
+			m_coverTime = 0.0f;
+		}
+
+		break;
+
+		//プレイヤーぶっ飛ばし攻撃
+	case enBearSlowPlayer:
+
+		//投石と同じアニメーションを再生
+		m_bearModel.PlayAnimation(enBearAnimClip_SlowStone, ANIM_INTERPOLATE_TIME);
+
+		//プレイヤーが着地したらステート変更
+		if (!m_isCovering) {
+			//フラッグをリセット
+			m_isSlowPlayer = false;
+			//クールタイムをセット
+			m_coverCoolTime = COVER_COOLTIME;
+			//ステート変更を可にする
+			m_enemyBase->SetChangeFlag(true);
+		}
+
 		break;
 
 		//近接攻撃
@@ -561,8 +635,8 @@ void Bear::ExecuteAction()
 		if (m_gameCamera->GetCameraState() != EnCameraVar::enBearContact) {
 			//ボスのHPを生成
 			NewGO<BossHPUI>(0, "bossHPUI");
-			//召喚状態へ
-			m_bearState = enBearGoNewPos;
+			//ステート変更を可に
+			m_enemyBase->SetChangeFlag(true);
 		}
 		break;
 
@@ -611,11 +685,6 @@ void Bear::DirUpdate()
 		m_bearDir = m_toPlayer;
 	}
 
-	//召喚時の移動の時は移動方向に向かせる
-	if (m_bearState == enBearGoNewPos) {
-		m_bearDir = m_bearSpeed;
-	}
-
 	//方向の情報を正規化
 	m_bearDir.Normalize();
 }
@@ -643,6 +712,24 @@ void Bear::ExecuteSpeed()
 float Bear::GetBearMAXHP()
 {
 	return MAX_BEAR_HP;
+}
+
+/// <summary>
+/// 初期の拘束時間を取得
+/// </summary>
+/// <returns>初期の拘束時間</returns>
+float Bear::GetCOVER_TIME()
+{
+	return COVER_TIME;
+}
+
+/// <summary>
+/// ぶっ飛ばしの距離を取得
+/// </summary>
+/// <returns>ぶっ飛ばしの距離</returns>
+float Bear::GetBLOW_POS_DIS()
+{
+	return BLOW_POS_DIS;
 }
 
 void Bear::Render(RenderContext& rc)

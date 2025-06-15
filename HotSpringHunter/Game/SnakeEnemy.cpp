@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EffectHub.h"
 
 namespace {
 	const float DELTA_TIME				= 1.0f / 60.0f;		//フレームレート
@@ -36,14 +37,13 @@ bool SnakeEnemy::Start()
 	//アセット読み込み
 	LoadAsset();
 
+	//インスタンス探し
+	m_player = FindGO<Character::Player>("player");
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//基底クラス生成
-	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
-
-	//インスタンス探し
-	m_player	 = FindGO<Character::Player>("player");
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
 
 	//キャラクターコントローラー
 	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
@@ -88,6 +88,8 @@ void SnakeEnemy::Update()
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+
+	PlayEffect();
 }
 
 
@@ -169,10 +171,12 @@ void SnakeEnemy::ExecuteAction()
 
 		//ノックバック
 	case enSnakeKnockBack:
+
 		//ノックバックをさせる
 		m_snakeSpeed = m_enemyBase->KnockBack(m_snakeDir);
 		//被弾アニメーションを再生
 		m_snakeModel.PlayAnimation(enSnakeAnimClip_Hit, ANIM_INTERPOLATE_TIME);
+
 		break;
 
 		//死亡
@@ -295,6 +299,19 @@ void SnakeEnemy::Spawned()
 	m_snakeState = EnSnakeState::enSnakeIdle;
 	//ステート変更可能に
 	m_isCanStateChange = true;
+}
+
+/// <summary>
+/// エフェクトを再生
+/// </summary>
+void SnakeEnemy::PlayEffect()
+{
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(EnEffectVar::enImpact);
+	m_effect->SetPosition(m_snakePos);
+	m_effect->SetRotation(Quaternion::Identity);
+	m_effect->SetScale({ 10.0f,10.0f,10.0f });
+	m_effect->Play();
 }
 
 void SnakeEnemy::Render(RenderContext& rc)
