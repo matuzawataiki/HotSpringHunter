@@ -2,7 +2,7 @@
 class Title;
 class GameOverResult;
 
-class GameOver:public IGameObject
+class GameOver :public IGameObject
 {
 public:
 	GameOver();
@@ -16,5 +16,7 @@ private:
 	GameOverResult* m_overResult = nullptr;
 
 	SpriteRender m_overModel;
+
+	float m_swtchDeltaTime = 0.0f;
 };
 

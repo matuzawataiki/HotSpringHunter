@@ -1,6 +1,5 @@
 #pragma once
 class Title;
-class SceneManager;
 
 //ゲームクリアリザルト
 class Result :public IGameObject
@@ -19,13 +18,15 @@ public:
 
 private:
 	SpriteRender m_clearResultModel;
+	SpriteRender m_ecaluationFont;
+	SpriteRender m_scoreFont;
+	SpriteRender m_timeFont;
 	FontRender m_evaluationFontRen;
 	FontRender m_scoreFontRen;
 	FontRender m_clearTimeFontRen;
 	FontRender m_nextButtonRen;
 
 	Title* m_title = nullptr;
-	SceneManager* m_sceneManager = nullptr;
 
 	Vector2 m_nextButtonSize = Vector2(1.0f, 1.0f);
 
@@ -57,13 +58,15 @@ public:
 
 private:
 	SpriteRender m_overResultModel;
+	SpriteRender m_ecaluationFont;
+	SpriteRender m_scoreFont;
+	SpriteRender m_timeFont;
 	FontRender m_overEvaluationFontRen;
 	FontRender m_overScoreFontRen;
 	FontRender m_overoverTimeFontRen;
 	FontRender m_overNextButtonRen;
 
 	Title* m_title = nullptr;
-	SceneManager* m_sceneManager = nullptr;
 
 	Vector2 m_nextButtonSize = Vector2(1.0f, 1.0f);
 
@@ -71,7 +74,7 @@ private:
 	int m_finelScore = 0;
 	float m_gameClearTime = 0.0f;
 	Vector2 m_nextButtonColor = Vector2(1.0f, 0.0f);
-	float m_nextButtonElapsed = 0.0f; //
+	float m_nextButtonElapsed = 0.0f; //経過時間
 	float m_buttonColor = 1.0f;
 
 	bool m_isMaxTime = true;
