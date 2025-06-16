@@ -183,8 +183,8 @@ namespace Character {
 	{
 		StateManage();
 		BasicBehavior();
-		/*DisplayCharge();
-		PositionDraw();*/
+		DisplayCharge();
+		PositionDraw();
 	}
 
 	/// <summary>
@@ -415,7 +415,7 @@ namespace Character {
 
 		//弱攻撃。
 		//Yボタンが押されたら。
-		if ((g_pad[0]->IsTrigger(enButtonY)) || (m_player->m_weakAtFlag)) {
+		if ((g_pad[0]->IsTrigger(enButtonY)) || (g_pad[0]->IsTrigger(enButtonB)) || (m_player->m_weakAtFlag)) {
 			m_player->m_requestState = enPlayerWeakAttack;
 			return;
 		}
@@ -429,7 +429,7 @@ namespace Character {
 
 		//ガード。
 		//Xボタンが入力されているなら。
-		if (g_pad[0]->IsPress(enButtonX)) {
+		if ((g_pad[0]->IsPress(enButtonX)) || (g_pad[0]->IsTrigger(enButtonA))) {
 			m_player->m_requestState = enPlayerGuard;
 			return;
 		}
