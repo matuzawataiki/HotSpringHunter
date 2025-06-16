@@ -48,7 +48,7 @@ namespace Character {
 		const float BLOW_HIGHT				= 150.0f;		//ぶっ飛ばしの最高高度
 
 		const float TO_GOAL_TIME			= 4.0f;			//ゴール地点に到達するまでの時間
-		const Vector3 GOAL_POS				= { 0.0f,0.0f,13500.0f };//ゴール地点
+		const Vector3 GOAL_POS				= { 0.0f,0.0f,16300.0f };//ゴール地点
 
 		/// <summary>
 		///	Rスティックが入力されているか
