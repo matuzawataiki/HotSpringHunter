@@ -28,6 +28,7 @@ public:
 	~Game();
 	bool Start()override;
 	void Update()override;
+	void Render(RenderContext& rc)override;
 
 private:
 
@@ -43,5 +44,7 @@ private:
 	SoundEffect*		m_soundEffect	= nullptr;
 	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
+
+	SpriteRender m_gameUI;				//インゲーム中の説明画像
 };
 

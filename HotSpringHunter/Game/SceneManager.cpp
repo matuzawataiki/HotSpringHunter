@@ -7,6 +7,11 @@
 #include "Player.h"
 #include "Bear.h"
 
+namespace {
+	const float GOAL_JUDG_ZPOS = 15500.0f;				//ゴール判定のz座標
+}
+
+
 SceneManager::SceneManager()
 {
 }
@@ -52,7 +57,7 @@ void SceneManager::InGameSceneManage()
 		m_sceneState = EnGameScene::enObstacleArea2;
 		m_isExecuted = false;
 	}
-	if (m_sceneState == EnGameScene::enObstacleArea2 && m_player->GetPlayerPos().z >= 12500.0f) {
+	if (m_sceneState == EnGameScene::enObstacleArea2 && m_player->GetPlayerPos().z >= GOAL_JUDG_ZPOS) {
 		//仮
 		m_sceneState = EnGameScene::enGoal;
 		m_isExecuted = false;

@@ -33,9 +33,11 @@ Game::~Game()
 
 bool Game::Start()
 {
+	m_gameUI.Init("Assets/modelData/image/setumei_ui.dds", 1920.0f, 1080.0f);
+
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_player = NewGO<Character::Player>(0, "player");
-	//m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
+	m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
 	
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
@@ -46,7 +48,7 @@ bool Game::Start()
 	m_effectHub = NewGO<EffectHub>(0, "effectHub");
 
 	//当たり判定を可視化する。
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }
@@ -60,4 +62,9 @@ void Game::Update()
 			m_gameOver = NewGO<GameOver>(0, "gameOver");
 		}
 	}
+}
+
+void Game::Render(RenderContext& rc)
+{
+	m_gameUI.Draw(rc);
 }
