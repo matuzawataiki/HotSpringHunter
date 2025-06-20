@@ -99,7 +99,6 @@ void EnemyManager::EnemyArrangement(const EnEnemyType type, const Vector3& pos, 
 
 	//敵の種類を判定し、出番が来ていない個体を探す
 	switch (type) {
-
 		//配置する敵がヘビのとき
 	case EnEnemyType::enSnake:
 

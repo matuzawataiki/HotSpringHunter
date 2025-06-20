@@ -1,15 +1,6 @@
 #pragma once
 #include "BackGround/StageObject.h"
 
-enum EnStage
-{
-	enStart,
-	enBattle,
-	enBoss,
-	enGool,
-	enNum
-};
-
 class Stage : public IGameObject
 {
 public:
@@ -18,22 +9,67 @@ public:
 	bool Start()override;
 	void Update()override;
 
-	void Init(EnStage stageNum, LevelObjectData& objData);
+	/// <summary>
+	/// ステージの種類
+	/// </summary>
+	enum EnStageType
+	{
+		enStart,
+		enBattle,
+		enBoss,
+		enGoal,
+		enNum
+	};
+
+	/// <summary>
+	/// ステージの初期化
+	/// </summary>
+	/// <param name="stageNum">ステージの種類</param>
+	/// <param name="objData">レベルオブジェクト</param>
+	void Init(EnStageType stageNum, LevelObjectData& objData);
+
+	/// <summary>
+	/// 地面のタイプの設定
+	/// </summary>
 	void InitStage();
+
+	/// <summary>
+	/// オブジェクトの設置や登録
+	/// </summary>
 	void InitLevel();
 
+	/// <summary>
+	/// 地面の設置
+	/// </summary>
+	/// <param name="objData">地面の種類</param>
+	/// <param name="position">レベルオブジェクト</param>
 	void NewGround(LevelObjectData& objData, Vector3& position);
+
+	/// <summary>
+	/// 当たり判定の設置
+	/// </summary>
+	/// <param name="objData">当たり判定種類</param>
+	/// <param name="position">レベルオブジェクト</param>
 	void NewHitBox(LevelObjectData& objData, Vector3& position);
+
+	/// <summary>
+	/// ステージオブジェクトを取得
+	/// </summary>
+	/// <returns></returns>
+	StageObject& GetStageObject() {
+		return m_stageObject;
+	}
 
 private:
 	LevelRender m_stageLevel;
+
 	StageObject m_stageObject;
 
 	Vector3 m_position = Vector3::Zero;
 
 	bool isInit = false;
 
-	EnStage m_stageNum = enNum;
+	EnStageType m_stageNum = enNum;
 	const char* m_levelFilePath = nullptr;
 	const wchar_t* m_grondName = nullptr;
 	const wchar_t* m_hitBoxName = nullptr;

@@ -22,13 +22,13 @@ struct StageObject
 {
 	HitBoxBattle* hitBoxBattle = nullptr;
 	HitBoxBossBattle* hitBoxBossBattle = nullptr;
-	HitBoxGool* hitBoxGool = nullptr;
+	HitBoxGoal* hitBoxGoal = nullptr;
 	HitBoxStart* hitBoxStart = nullptr;
 	InOutHitBox* inOutHitBox = nullptr;
 
 	GroundBattle* grondBattle = nullptr;
 	GroundBossBattle* grondBossBattle = nullptr;
-	GroundGool* grondGool = nullptr;
+	GroundGool* grondGoal = nullptr;
 	GroundStart* grondStart = nullptr;
 	HotSpring* hotSpring = nullptr;
 

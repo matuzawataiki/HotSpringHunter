@@ -29,20 +29,9 @@ void EnemySpawner::Update()
 /// <summary>
 /// エネミーを出す指示を出す
 /// </summary>
-void EnemySpawner::TriggerEnemySpawn(EnGameScene Scene)
+void EnemySpawner::TriggerEnemySpawn(EnGameScene scene)
 {
-	switch (Scene) {
-	case EnGameScene::enObstacleArea1:
-
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(-400.0f, 30.0f, 3000.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(-600.0f, 30.0f, 3000.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(400.0f, 30.0f, 5000.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(600.0f, 30.0f, 5000.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(-200.0f, 30.0f, 7000.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(0.0f, 30.0f, 7000.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, Vector3(200.0f, 30.0f, 7000.0f), Quaternion::Identity);
-		
-		break;
+	switch (scene) {
 	case EnGameScene::enBattleArea1:
 
 		m_enemyManager->EnemyArrangement(EnEnemyType::enWildBoar, Vector3(800.0f, 30.0f, 10500.0f), Quaternion::Identity);
