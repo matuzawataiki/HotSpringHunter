@@ -29,7 +29,7 @@ namespace {
 	const float COVER_HIT_TIME			= 1.0f;			//拘束攻撃：当たり判定を出す時間
 	const float COVER_COLLISION_DIS		= 20.0f;		//拘束攻撃：当たり判定を前に出す量
 	const float COVER_COLLISION_SIZE	= 3000.0f;		//拘束攻撃：当たり判定の半径
-	const float COVER_COOLTIME			= 50.0f;		//拘束攻撃：クールタイム
+	const float COVER_COOLTIME			= 5.0f;		//拘束攻撃：クールタイム
 	const float ON_THE_PLAYER_TIME		= 1.0f;			//拘束攻撃：プレイヤーに乗りかかる時間
 	const float ON_THE_PLAYER_DIS		= 50.0f;		//拘束攻撃：プレイヤーに乗りかかる距離
 	const float COVER_TIME				= 5.0f;			//拘束攻撃：拘束時間
@@ -539,6 +539,7 @@ void Bear::ExecuteAction()
 			if (m_isSlowPlayer) {
 				m_bearState = enBearSlowPlayer;
 				m_coverTime = 0.0f;
+				m_isPutCoverCollision = false;
 			}
 		}
 

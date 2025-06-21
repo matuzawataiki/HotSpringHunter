@@ -19,7 +19,7 @@ namespace Character {
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
 		const float MOVE_AMOUNT				= 1700.0f;		//移動：移動量。
-		const float GRAVITY_AMOUNT			= 10.0f;		//移動：重力量。
+		const float GRAVITY_AMOUNT			= 30.0f;		//移動：重力量。
 
 		const float WEAK_COLLISION_DIS		= 100.0f;		//弱攻撃：コリジョン位置。
 		const float WEAK_COLLISION_SIZE		= 400.0f;		//弱攻撃：コリジョンサイズ。
@@ -43,9 +43,11 @@ namespace Character {
 
 		const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
 
-		const float CONSTRAINTS＿DAMAGE		= 1.0f;			//拘束攻撃の継続ダメージ
-		const float BLOW_TIME				= 1.5f;			//ぶっ飛ばしの滞空時間
-		const float BLOW_HIGHT				= 150.0f;		//ぶっ飛ばしの最高高度
+		const float CONSTRAINTS＿DAMAGE		= 1.0f;			//拘束：継続ダメージ
+		const float BLOW_TIME				= 1.5f;			//拘束：ぶっ飛ばしの滞空時間
+		const float BLOW_HIGHT				= 700.0f;		//拘束：ぶっ飛ばしの高さ
+		const float BLOW_SPEED				= 1000.0f;		//拘束：ぶっ飛ばしの速度
+		const float POWER_REDUCE_AMONT		= 5.0f;			//拘束：レバガチャのパワーを減らす量	
 
 		const float TO_GOAL_TIME			= 4.0f;			//ゴール地点に到達するまでの時間
 		const Vector3 GOAL_POS				= { 0.0f,0.0f,16300.0f };//ゴール地点
@@ -194,10 +196,7 @@ namespace Character {
 	{
 		//重力を発生させる。
 		if (!m_playerCharaCon.IsOnGround()) {
-			//拘束中は発生させない
-			if (m_currentState != EnPlayerActiveState::enPlayerRestrain) {
-				m_playerSpeed.y -= GRAVITY_AMOUNT;
-			}			
+			m_playerSpeed.y -= GRAVITY_AMOUNT;
 		}
 
 		//ポジションの更新。
@@ -1076,23 +1075,27 @@ namespace Character {
 			if (!m_bear->GetIsSlowPlayer()) {
 				//ぶっ飛ばしへ
 				m_bear->SetIsSlowPlayer(true);
-				//目標地点を計算
-				m_blowTargetPos = m_bear->GetBearPos() + (m_bear->GetBearDir() * m_bear->GetBLOW_POS_DIS());
-				m_blowTargetPos.y = 0.0f;
+				//速さを設定
+				Vector3 blowSpeed = m_bear->GetBearDir();
+				blowSpeed *= BLOW_SPEED;
+				blowSpeed.y = BLOW_HIGHT;
+				m_player->SetPlayerSpeed(blowSpeed);
 			}
 
 			//ぶっ飛ばされてからの経過時間を計算
 			m_elapsedTime += g_gameTime->GetFrameDeltaTime();
 			float timeRatio = m_elapsedTime;
 			timeRatio / BLOW_TIME;
-			//プレイヤーをぶっ飛ばす
-			HasBlowing(m_blowStartPos, m_blowTargetPos, timeRatio);
 
 			//ぶっ飛ばし時間が完了したら
 			if ((m_elapsedTime >= BLOW_TIME / 2.0f) && (m_player->GetPlayerPos().y <= 20.0f)) {
 				m_bear->SetIsCovering(false);
 				//一応プレイヤーを着地させる
 				m_player->SetPlayerPos({ m_player->GetPlayerPos().x, 0.0f, m_player->GetPlayerPos().z });
+				//速度を0に
+				m_player->SetPlayerSpeed(Vector3::Zero);
+				//経過時間をリセット
+				m_elapsedTime = 0.0f;
 			}
 		}
 	}
@@ -1117,7 +1120,8 @@ namespace Character {
 		}
 		//movePowerを絶対値にする
 		movePower = fabsf(movePower);
-
+		//movePowerを減らす
+		movePower /= POWER_REDUCE_AMONT;
 		//スティック入力量を更新。
 		m_RStickOld = RStick;
 

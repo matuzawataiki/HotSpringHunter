@@ -95,6 +95,8 @@ namespace Character {
 		inline void SetPlayerControllerPos(const Vector3& pos) { m_playerCharaCon.SetPosition(pos); };
 		//向きを設定
 		inline void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
+		//速度を設定
+		inline void SetPlayerSpeed(const Vector3& speed) { m_playerSpeed = speed; };
 		//行動状態を設定
 		inline void SetRequestState(const int state) { m_requestState = state; };
 
