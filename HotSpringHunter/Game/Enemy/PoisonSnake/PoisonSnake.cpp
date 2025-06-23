@@ -53,7 +53,7 @@ namespace Enemy
 		m_enemyModel.SetRotation(m_rotation);
 		m_enemyModel.Update();
 
-		m_enemyHPBar->SetHpBar(m_hp, m_position, m_target->GetPlayerPos());
+		m_enemyHPBar->UpdateHpBar(m_hp, m_position, m_target->GetPlayerPos());
 	}
 
 	void PoisonSnake::ActivateStart()

@@ -113,7 +113,7 @@ void WildBoar::Update()
 	VariousUpdate();
 
 	//HPバーの更新
-	m_enemyHPBar->SetHpBar(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
+	m_enemyHPBar->UpdateHpBar(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 }
 
 /// <summary>

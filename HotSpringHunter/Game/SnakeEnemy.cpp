@@ -94,7 +94,7 @@ void SnakeEnemy::Update()
 	//いろいろ更新
 	VariousUpdate();
 	//HPバーの更新
-	m_enemyHPBar->SetHpBar(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
+	m_enemyHPBar->UpdateHpBar(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
 }
 
 
