@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PoisonSnake.h"
 #include "Player.h"
+#include "EnemyHPBar.h"
 #include "Enemy/State/PoisonSnakeState.h"
 
 namespace {
@@ -32,6 +33,9 @@ namespace Enemy
 
 	bool PoisonSnake::Start()
 	{
+		m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
+		m_enemyHPBar->Init(m_hp, m_position, m_target->GetPlayerPos());
+
 		return true;
 	}
 
@@ -48,6 +52,8 @@ namespace Enemy
 		m_enemyModel.SetPosition(m_position);
 		m_enemyModel.SetRotation(m_rotation);
 		m_enemyModel.Update();
+
+		m_enemyHPBar->SetHpBar(m_hp, m_position, m_target->GetPlayerPos());
 	}
 
 	void PoisonSnake::ActivateStart()

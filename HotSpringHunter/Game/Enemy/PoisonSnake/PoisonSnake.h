@@ -6,6 +6,8 @@ namespace Character
 	class Player;
 }
 
+class EnemyHPBar;
+
 namespace Enemy
 {
 	enum EnEnemyAnimationClip {
@@ -58,6 +60,7 @@ namespace Enemy
 	private:
 		PoisonSnakeStateMachine* m_stateMachine = nullptr;
 		Character::Player* m_target = nullptr;
+		EnemyHPBar* m_enemyHPBar = nullptr;
 
 		AnimationClip m_animationClip[enAnimClip_Num];
 
