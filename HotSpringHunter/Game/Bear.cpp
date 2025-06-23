@@ -2,6 +2,8 @@
 #include "Bear.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
+#include "Enemy/PoisonSnake/PoisonSnake.h"
+#include "WildBoar.h"
 #include "UI.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
@@ -104,8 +106,6 @@ bool Bear::Start()
 	m_player		= FindGO<Character::Player>("player");
 	m_enemySpawn	= FindGO<EnemySpawn>("enemySpawn");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
-	m_enemyManager	= FindGO<EnemyManager>("enemyManager");
-
 
 	//キャラクターコントローラー
 	m_bearController.Init(80.0f, 80.0f, m_bearPos);
@@ -283,11 +283,38 @@ void Bear::SummonMinions()
 	//まず位置を計算
 	CalcPos();
 
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+
+	SnakeEnemy* snake;
+	Enemy::PoisonSnake* poisonSnake;
+	WildBoar* wildBoar;
+
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, m_summonPos.front(), Quaternion::Identity);
-		m_summonPos.erase(m_summonPos.begin());
+		int random = rand() % 3;
+		switch (random)
+		{
+		case 0:
+			snake = NewGO<SnakeEnemy>(0, "snake");
+			snake->SetSnakePos(m_summonPos.front());
+			enemyManager->SetSnake(snake);
+			break;
+
+		case 1:
+			poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
+			poisonSnake->SetPosition(m_summonPos.front());
+			enemyManager->SetPoisonSnake(poisonSnake);
+			break;
+
+		case 2:
+			wildBoar = NewGO<WildBoar>(0, "wildBoar");
+			wildBoar->SetWildBoarPos(m_summonPos.front());
+			enemyManager->SetWildBoar(wildBoar);
+			break;
+		}
 	}
+
+	m_summonPos.clear();
 }
 
 /// <summary>

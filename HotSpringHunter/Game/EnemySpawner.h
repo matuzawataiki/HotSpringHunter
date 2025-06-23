@@ -5,7 +5,6 @@ namespace Character {
 	class Player;
 }
 
-class EnemyManager;
 class EnemySpawner:public IGameObject
 {
 public:
@@ -18,8 +17,6 @@ public:
 	void TriggerEnemySpawn(EnGameScene Scene);
 
 private:
-
-	EnemyManager*		m_enemyManager		= nullptr;
 	Character::Player*	m_player			= nullptr;
 };
 

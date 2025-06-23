@@ -162,6 +162,13 @@ namespace Enemy {
 			m_owner->AttackOff();
 		}
 
+		/// <summary>
+		/// 自身を死亡させる
+		/// </summary>
+		void Deash() {
+			m_owner->Deash();
+		}
+
 	private:
 		PoisonSnake* m_owner = nullptr;
 		Character::Player* m_target = nullptr;
@@ -177,27 +184,6 @@ namespace Enemy {
 	public:
 		PoisonSnakeSpawnState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
 		virtual ~PoisonSnakeSpawnState() {}
-
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
-
-		virtual bool RequestState(uint32_t& request) override;
-	private:
-		PoisonSnakeStateMachine* m_owner = nullptr;
-
-	};
-
-	//////////////////////////////////////////////////////////////////////////////
-	// オフステート
-	//////////////////////////////////////////////////////////////////////////////
-
-	class PoisonSnakeOffState : public IState
-	{
-		appState(PoisonSnakeOffState);
-	public:
-		PoisonSnakeOffState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeOffState() {}
 
 		virtual void Enter() override;
 		virtual void Update() override;

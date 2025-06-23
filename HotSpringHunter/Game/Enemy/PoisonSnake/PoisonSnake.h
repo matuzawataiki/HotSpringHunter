@@ -34,6 +34,13 @@ namespace Enemy
 		/// </summary>
 		void AttackOff();
 
+		/// <summary>
+		/// 自身を死亡させる
+		/// </summary>
+		void Deash() {
+			DeleteGO(this);
+		}
+
 	private:
 		/// <summary>
 		/// 攻撃の状態の管理
