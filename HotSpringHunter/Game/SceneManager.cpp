@@ -19,7 +19,7 @@ SceneManager::~SceneManager()
 bool SceneManager::Start()
 {
 	//最初のシーン状態
-	m_sceneState = EnGameScene::enStart;
+	m_sceneState = EnGameScene::enStartArea;
 
 	return true;
 }
@@ -41,7 +41,7 @@ void SceneManager::InGameSceneManage()
 	//入出検知オブジェクトに触れたらにゲームシーンを変更する
 	switch (m_sceneState)
 	{
-	case enStart:
+	case enStartArea:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBattleStage1).inOutHitBox->IsHit()) {
 			m_sceneState = EnGameScene::enBattleArea1;
 			SwitchingScenes();
@@ -67,12 +67,12 @@ void SceneManager::InGameSceneManage()
 
 	case enDefeatedBoss:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enGoalStage).inOutHitBox->IsHit()) {
-			m_sceneState = EnGameScene::enGoal;
+			m_sceneState = EnGameScene::enGoalArea;
 			SwitchingScenes();
 		}
 		break;
 
-	case enGoal:
+	case enGoalArea:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enGoalStage).inOutHitBox->IsHit()) {
 			if (m_gameClear == nullptr) {
 				m_gameClear = NewGO<GameClear>(0, "GameClear");
@@ -95,7 +95,7 @@ void SceneManager::SwitchingScenes()
 	m_player		= FindGO<Character::Player>("player");
 
 	switch (m_sceneState) {
-	case EnGameScene::enStart:
+	case EnGameScene::enStartArea:
 		break;
 
 	case EnGameScene::enBattleArea1:
@@ -109,7 +109,7 @@ void SceneManager::SwitchingScenes()
 	case EnGameScene::enDefeatedBoss:
 		break;
 
-	case EnGameScene::enGoal:
+	case EnGameScene::enGoalArea:
 		//プレイヤーをゴールに強制移動
 		m_isToGoal = true;		
 		break;

@@ -5,14 +5,14 @@ namespace Character {
 }
 
 enum EnGameScene {
-	enStart,			//ゲーム開始
+	enStartArea,			//ゲーム開始
 	enBattleArea1,		//戦闘エリア1
 	enBattleArea1Clear,	//戦闘エリア1クリア
 	enBattleArea2,		//戦闘エリア2
 	enBattleArea2Clear,	//戦闘エリア2クリア
 	enBossArea,			//戦闘エリア2
 	enDefeatedBoss,		//ボスを倒した
-	enGoal,				//ゴール
+	enGoalArea,				//ゴール
 };
 
 class FenceManager;
@@ -57,7 +57,7 @@ private:
 	Bear*				m_bear			= nullptr;
 	StageManager*		m_stageManager  = nullptr;
 
-	EnGameScene			m_sceneState = EnGameScene::enStart;	//シーン状態
+	EnGameScene			m_sceneState = EnGameScene::enStartArea;	//シーン状態
 
 	float				 m_gameClearTime = 0.0f;		//ゲームのプレイ時間
 
