@@ -1,8 +1,14 @@
 #include "stdafx.h"
 #include "EnemySpawner.h"
 #include "EnemyManager.h"
+#include "BackGround/StageManager.h"
 #include "SceneManager.h"
 #include "Player.h"
+#include "SnakeEnemy.h"
+#include "WildBoar.h"
+#include "Bear.h"
+#include "Enemy/PoisonSnake/PoisonSnake.h"
+
 
 EnemySpawner::EnemySpawner()
 {
@@ -14,13 +20,10 @@ EnemySpawner::~EnemySpawner()
 
 bool EnemySpawner::Start()
 {
-	m_enemyManager	= FindGO<EnemyManager>("enemyManager");
 	m_player		= FindGO<Character::Player>("player");
 
 	return true;
 }
-
-
 
 void EnemySpawner::Update()
 {
@@ -31,13 +34,63 @@ void EnemySpawner::Update()
 /// </summary>
 void EnemySpawner::TriggerEnemySpawn(EnGameScene scene)
 {
+	StageManager* stageManager = FindGO<StageManager>("stageManager");
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+
+	SnakeEnemy* snake;
+	Enemy::PoisonSnake* poisonSnake;
+	WildBoar* wildBoar;
+
 	switch (scene) {
 	case EnGameScene::enBattleArea1:
+		for (int i = 0;i < 10;i++) {
+			int random = rand() % 3;
+			switch (random)
+			{
+			case 0:
+				snake = NewGO<SnakeEnemy>(0, "snake");
+				snake->SetSnakePos(stageManager->GetStageObject(StageManager::enBattleStage1).enemyTargetPos[i]);
+				enemyManager->SetSnake(snake);
+				break;
 
-		m_enemyManager->EnemyArrangement(EnEnemyType::enWildBoar, Vector3(800.0f, 30.0f, 10500.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enWildBoar, Vector3(-800.0f, 30.0f, 10500.0f), Quaternion::Identity);
-		m_enemyManager->EnemyArrangement(EnEnemyType::enBear, Vector3(0.0f, 30.0f, 11000.0f), Quaternion::Identity);
+			case 1:
+				poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
+				poisonSnake->SetPosition(stageManager->GetStageObject(StageManager::enBattleStage1).enemyTargetPos[i]);
+				enemyManager->SetPoisonSnake(poisonSnake);
+				break;
 
+			case 2:
+				wildBoar = NewGO<WildBoar>(0, "wildBoar");
+				wildBoar->SetWildBoarPos(stageManager->GetStageObject(StageManager::enBattleStage1).enemyTargetPos[i]);
+				enemyManager->SetWildBoar(wildBoar);
+				break;
+			}
+		}
+		break;
+	case EnGameScene::enBattleArea2:
+		for (int i = 0;i < 10;i++) {
+			int random = rand() % 3;
+			switch (random)
+			{
+			case 0:
+				snake = NewGO<SnakeEnemy>(0, "snake");
+				snake->SetSnakePos(stageManager->GetStageObject(StageManager::enBattleStage2).enemyTargetPos[i]);
+				enemyManager->SetSnake(snake);
+				break;
+
+			case 1:
+				poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
+				poisonSnake->SetPosition(stageManager->GetStageObject(StageManager::enBattleStage2).enemyTargetPos[i]);
+				enemyManager->SetPoisonSnake(poisonSnake);
+				break;
+
+			case 2:
+				wildBoar = NewGO<WildBoar>(0, "wildBoar");
+				wildBoar->SetWildBoarPos(stageManager->GetStageObject(StageManager::enBattleStage2).enemyTargetPos[i]);
+				enemyManager->SetWildBoar(wildBoar);
+				break;
+			}
+		}
 		break;
 	default:
 		break;

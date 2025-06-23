@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PoisonSnake.h"
 #include "Player.h"
+#include "EnemyManager.h"
 #include "Enemy/State/PoisonSnakeState.h"
 
 namespace {
@@ -21,17 +22,19 @@ namespace Enemy
 
 		LoadAssets();
 		InitStateMachine();
-
-		m_position.z += 500.0f;
-		m_characterController.Init(30.0f, 50.0f, m_position);
-
 	}
+
 	PoisonSnake::~PoisonSnake()
 	{
+		EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+		enemyManager->DeleteEnemy(this);
+		delete m_stateMachine;
 	}
 
 	bool PoisonSnake::Start()
 	{
+		m_characterController.Init(30.0f, 50.0f, m_position);
+
 		return true;
 	}
 

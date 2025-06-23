@@ -47,8 +47,6 @@ public:
 	void VariousUpdate();
 	//速度を適応。
 	void ExecuteSpeed();
-	//スポーンした時の処理
-	void Spawned();
 	//エフェクトの再生
 	void PlayEffect();
 	void Render(RenderContext& rc)override;

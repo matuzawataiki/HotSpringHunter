@@ -22,30 +22,89 @@ class EnemyManager:public IGameObject
 public:
 	EnemyManager();
 	~EnemyManager();
-	//エネミーを削除
-	void DeleteEnemy();
 	bool Start()override;
-	//エネミーをリストに登録
-	void AddEnemy();
 	void Update()override;
-	//エネミーを配置
-	void EnemyArrangement(const EnEnemyType tipe, const Vector3& pos, const Quaternion& rot);
-	//エネミーが足りないときに追加
-	auto CreateNewEnemy(const EnEnemyType type);
 	//プレイヤーと最も近い敵を検索し、その方向ベクトルを計算
 	Vector3 CalcToNearestEnemyVec(const Vector3& playerPos);
 	//エネミーのフォーメーション
 	void EnemyFormation();
-	
+
+	/// <summary>
+	/// エネミーリストにヘビを登録
+	/// </summary>
+	/// <param name="snake">ヘビのインスタンス</param>
+	void SetSnake(SnakeEnemy* snake) {
+		m_snakes.push_back(snake);
+	}
+
+	/// <summary>
+	/// エネミーリストに毒ヘビを登録
+	/// </summary>
+	/// <param name="poisonSnake">毒ヘビのインスタンス</param>
+	void SetPoisonSnake(Enemy::PoisonSnake* poisonSnake) {
+		m_poisonSnake.push_back(poisonSnake);
+	}
+
+	/// <summary>
+	/// エネミーリストにイノシシを登録
+	/// </summary>
+	/// <param name="wildBoar"></param>
+	void SetWildBoar(WildBoar* wildBoar) {
+		m_wildBoars.push_back(wildBoar);
+	}
+
+	/// <summary>
+	/// エネミーリストからエビを削除
+	/// </summary>
+	/// <param name="snake">ヘビのインスタンス</param>
+	void DeleteEnemy(SnakeEnemy* snake) {
+		for (std::vector<SnakeEnemy*>::iterator it = m_snakes.begin();
+			it != m_snakes.end();
+			) {
+			if (*it == snake) {
+				m_snakes.erase(it);
+				return;
+			}
+		}
+	}
+	/// <summary>
+	/// エネミーリストから毒ヘビを削除
+	/// </summary>
+	/// <param name="poisonSnake">毒ヘビのインスタンス</param>
+	void DeleteEnemy(Enemy::PoisonSnake* poisonSnake) {
+		for (std::vector<Enemy::PoisonSnake*>::iterator it = m_poisonSnake.begin();
+			it != m_poisonSnake.end();
+			) {
+			if (*it == poisonSnake) {
+				m_poisonSnake.erase(it);
+				return;
+			}
+		}
+	}
+	/// <summary>
+	/// エネミーリストからイノシシを削除
+	/// </summary>
+	/// <param name="wildBoar">イノシシのインスタンス</param>
+	void DeleteEnemy(WildBoar* wildBoar) {
+		for (std::vector<WildBoar*>::iterator it = m_wildBoars.begin();
+			it != m_wildBoars.end();
+			) {
+			if (*it == wildBoar) {
+				m_wildBoars.erase(it);
+				return;
+			}
+		}
+	}
 
 private:
 
-	std::vector<SnakeEnemy*>	m_snakes;				//ヘビの配列
-	std::vector<WildBoar*>		m_wildBoars;			//イノシシの配列
-	std::vector<Enemy::PoisonSnake*> m_poisonSnake;
+	std::vector<SnakeEnemy*>			m_snakes;				//ヘビの配列
+	std::vector<WildBoar*>				m_wildBoars;			//イノシシの配列
+	std::vector<Enemy::PoisonSnake*>	m_poisonSnake;			//毒ヘビの配列
+	Bear* m_bear = nullptr;
+
 
 	EnemySpawner*m_enemySpawner = nullptr;
-	Bear*		 m_bear			= nullptr;
 	Character::Player* m_player = nullptr;
 };
 

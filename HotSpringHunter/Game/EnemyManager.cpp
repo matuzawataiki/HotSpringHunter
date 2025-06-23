@@ -20,31 +20,21 @@ EnemyManager::EnemyManager()
 
 EnemyManager::~EnemyManager()
 {
-	DeleteEnemy();
-}
-
-/// <summary>
-/// エネミーを削除
-/// </summary>
-void EnemyManager::DeleteEnemy()
-{
 	for (auto* snake : m_snakes) {
 		DeleteGO(snake);
 	}
 	m_snakes.clear();
-	
+
 	for (auto* boar : m_wildBoars) {
 		DeleteGO(boar);
 	}
 	m_wildBoars.clear();
-	
+
 	DeleteGO(m_bear);
 }
 
 bool EnemyManager::Start()
 {  
-	AddEnemy();
-
 	//スポナーを生成
 	m_enemySpawner = NewGO<EnemySpawner>(0, "enemySpawner");
 
@@ -53,144 +43,11 @@ bool EnemyManager::Start()
 	return true;
 }
 
-/// <summary>
-/// エネミーをリストに登録
-/// </summary>
-void EnemyManager::AddEnemy()
-{
-	// 各エネミーを10体ずつNewGOして、リストに入れる
-	//同時にエネミーを見えない位置へ
-	for (int i = 0; i < ENEMY_NUM; i++)
-	{
-		auto* snake = NewGO<SnakeEnemy>(0, "snakeEnemy");
-		snake->SetSnakePos(OFF_SCREEN_POS);
-		m_snakes.push_back(snake);
-
-		auto* wildBoar = NewGO<WildBoar>(0, "wildBoar");
-		wildBoar->SetWildBoarPos(OFF_SCREEN_POS);
-		m_wildBoars.push_back(wildBoar);
-
-		auto poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
-		poisonSnake->SetPosition(OFF_SCREEN_POS);
-		m_poisonSnake.push_back(poisonSnake);
-	}
-
-	//クマは1体だけ
-	m_bear = NewGO<Bear>(0, "bear");
-	m_bear->SetBearPos(OFF_SCREEN_POS);
-}
-
 void EnemyManager::Update()
 {
 	//敵の囲い込み
 	EnemyFormation();
 }
-
-/// <summary>
-/// 指定した種類の敵を、指定した位置と回転で配置
-/// </summary>
-/// <param name="type">配置する敵の種類</param>
-/// <param name="pos">敵を配置する位置</param>
-/// <param name="rot">敵の回転</param>
-void EnemyManager::EnemyArrangement(const EnEnemyType type, const Vector3& pos, const Quaternion& rot)
-{
-	SnakeEnemy* arrangeSnake	= nullptr;
-	WildBoar*	arrangeWildBoar = nullptr;
-
-	//敵の種類を判定し、出番が来ていない個体を探す
-	switch (type) {
-		//配置する敵がヘビのとき
-	case EnEnemyType::enSnake:
-
-		for (auto snakesIt = m_snakes.begin(); snakesIt != m_snakes.end(); ++snakesIt) {
-			//スポーンしていない敵を見つけたら
-			if ((*snakesIt)->GetIsSnakeSpawn() == false) {
-				//配置するエネミーに設定
-				arrangeSnake = *snakesIt;
-				//for文を抜ける
-				break;
-			}
-		}
-
-		//arrangeSnake = CreateNewEnemy(EnEnemyType::enSnake);
-		//エネミーを配置
-		arrangeSnake->Spawned();
-		arrangeSnake->SetSnakePos(pos);
-		arrangeSnake->SetSnakeCharaConPos(pos);
-		arrangeSnake->SetSnakeRot(rot);
-		arrangeSnake->SetSnakeIsSpawn(true);
-
-		break;
-
-		//配置する敵がイノシシのとき
-	case EnEnemyType::enWildBoar:
-
-		for (auto wildBoarsIt = m_wildBoars.begin(); wildBoarsIt != m_wildBoars.end(); ++wildBoarsIt) {
-			if ((*wildBoarsIt)->GetIsWildBoarIsSpawn() == false) {
-				arrangeWildBoar = *wildBoarsIt;
-				break;
-			}
-		}
-
-		arrangeWildBoar->SetWildBoarPos(pos);
-		arrangeWildBoar->SetWildBoarCharaConPos(pos);
-		arrangeWildBoar->SetWildBoarRot(rot);
-		arrangeWildBoar->SetWildBoarIsSpawn(true);
-
-		break;
-
-		//配置する敵がクマのとき
-	case EnEnemyType::enBear:
-
-		m_bear->SetBearPos(pos);
-		m_bear->SetBearCharaConPos(pos);
-		m_bear->SetBearNewPos(pos);
-		m_bear->SetBearRot(rot);
-		m_bear->SetBearIsSpawn(true);
-
-		break;
-
-	default:
-		break;
-	}
-}
-
-/// <summary>
-/// 新しいエネミーを追加
-/// </summary>
-/// <param name="type">作成する敵の種類/param>
-//auto EnemyManager::CreateNewEnemy(EnEnemyType type)
-//{
-//	switch (type) {
-//
-//		//新しいヘビを追加
-//	case EnEnemyType::enSnake:
-//
-//		SnakeEnemy* snake = NewGO<SnakeEnemy>(0, "snakeEnemy");
-//		snake->SetSnakePos(OFF_SCREEN_POS);
-//		m_snakes.push_back(snake);
-//
-//		//追加したエネミーを配置対象にする
-//		return snake;
-//
-//		break;
-//
-//		//新しいイノシシを追加
-//	case EnEnemyType::enWildBoar:
-//
-//		auto* wildBoar = NewGO<WildBoar>(0, "wildBoar");
-//		wildBoar->SetWildBoarPos(OFF_SCREEN_POS);
-//		m_wildBoars.push_back(wildBoar);
-//
-//		return wildBoar;
-//
-//		break;
-//
-//	default:
-//		return nullptr;
-//		break;
-//	}
-//}
 
 /// <summary>
 /// プレイヤーの位置から最も近い敵の位置を返す
@@ -229,13 +86,13 @@ Vector3 EnemyManager::CalcToNearestEnemyVec(const Vector3& playerPos)
 	}
 
 	//クマ
-	if (m_bear->GetIsBearSpawn()) {
-		toEnemyVec = m_bear->GetBearPos() - m_player->GetPlayerPos();
-		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
-			toNearestEnemyVec = toEnemyVec;
-			nearestEnemyPos = m_bear->GetBearPos();
-		}
-	}
+	//if (m_bear->GetIsBearSpawn()) {
+	//	toEnemyVec = m_bear->GetBearPos() - m_player->GetPlayerPos();
+	//	if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+	//		toNearestEnemyVec = toEnemyVec;
+	//		nearestEnemyPos = m_bear->GetBearPos();
+	//	}
+	//}
 
 	nearestEnemyPos.y = 0.0f;
 

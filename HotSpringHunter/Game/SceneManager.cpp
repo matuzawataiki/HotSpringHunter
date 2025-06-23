@@ -103,6 +103,7 @@ void SceneManager::SwitchingScenes()
 		break; 
 
 	case EnGameScene::enBattleArea2:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
 		break; 
 
 	case EnGameScene::enDefeatedBoss:

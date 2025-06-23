@@ -7,7 +7,7 @@ class InOutHitBox:public IGameObject
 {
 public:
 	InOutHitBox() { m_collision = new CollisionObject; }
-	~InOutHitBox() { delete m_collision; delete m_player; }
+	~InOutHitBox() { delete m_collision; }
 	
 	void init(Vector3 position, Quaternion rotation, Vector3 scale);
 

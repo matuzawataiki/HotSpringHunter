@@ -57,7 +57,7 @@ private:
 	Bear*				m_bear			= nullptr;
 	StageManager*		m_stageManager  = nullptr;
 
-	EnGameScene			m_sceneState = EnGameScene::enStart;			//シーン状態
+	EnGameScene			m_sceneState = EnGameScene::enStart;	//シーン状態
 
 	float				 m_gameClearTime = 0.0f;		//ゲームのプレイ時間
 
