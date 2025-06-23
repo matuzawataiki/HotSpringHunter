@@ -29,7 +29,7 @@ namespace Character {
 		const float SUCTION_TIME			= 1.0f;			//弱攻撃：吸いつきを行う時間
 
 		const float CHARGE_DECREASE			= 0.5f;			//溜め攻撃：チャージ減少量。
-		const float CHARGE_ADD_VALUE		= 2.0f;			//溜め攻撃：チャージ増加量（倍率）。
+		const float CHARGE_ADD_VALUE		= 1.5f;			//溜め攻撃：チャージ増加量（倍率）。
 		const float CHARGE_COLLISION_SIZE	= 3.0f;			//溜め攻撃：コリジョンの大きさの倍率。
 		const float COLLISION_SIZE_LOWEST	= 150.0f;		//溜め攻撃：コリジョンの大きさの最低保証。
 		const float CHARGE_MAX				= 100.0f;		//溜め攻撃：チャージ最大値。
@@ -722,45 +722,11 @@ namespace Character {
 		//パワーをチャージに足す。
 		m_player->m_charge += movePower;
 
-		//チャージが増加しているなら、溜め攻撃1アニメーションを再生。
-		if (m_player->m_charge >= 30.0f)
-		{
-			//効果音
-			m_soundEffect->Play(enPlayerCharge1SE, false);
-
-			//エフェクト
-			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-			m_effect->Init(EnEffectVar::enCharge01);
-			m_effect->SetPosition(m_player->GetPlayerPos());
-			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
-			m_effect->Play();
-		}
-		if (m_player->m_charge >= 60.0f)
-		{
-			m_soundEffect->Play(enPlayerCharge2SE, false);
-
-			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-			m_effect->Init(EnEffectVar::enCharge02);
-			m_effect->SetPosition(m_player->GetPlayerPos());
-			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
-			m_effect->Play();
-		}
-		if (m_player->m_charge >= 100.0f)
-		{
-			m_soundEffect->Play(enPlayerCharge3SE, false);
-
-			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-			m_effect->Init(EnEffectVar::enCharge03);
-			m_effect->SetPosition(m_player->GetPlayerPos());
-			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
-			m_effect->Play();
-		}
+		//チャージ状態を変更。
+		ChangeChargeState();
 
 		//チャージを減少させる。
-		m_player->m_charge -= CHARGE_DECREASE;
+		//m_player->m_charge -= CHARGE_DECREASE;
 
 		//チャージを0以下にさせない。
 		if (m_player->m_charge < 0.0f) {
@@ -792,6 +758,52 @@ namespace Character {
 			}
 
 			m_isCharging = false;
+		}
+	}
+
+	/// <summary>
+	/// チャージ状態を変更
+	/// </summary>
+	void PlayerChargeAttack::ChangeChargeState()
+	{
+		if (m_player->GetCharge() >= 100.0f && m_chargeState != enCharge03) {
+			m_chargeState = enCharge03;
+
+			//エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge03);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
+
+			return;
+		}
+		else if (m_player->GetCharge() >= 70.0f && m_player->GetCharge() < 100.0f && m_chargeState != enCharge02) {
+			m_chargeState = enCharge02;
+
+			//エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge02);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
+
+			return;
+		}
+		else if (m_player->GetCharge() >= 30.0f && m_player->GetCharge() < 70.0f && m_chargeState != enCharge01) {
+			m_chargeState = enCharge01;
+
+			//エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enCharge01);
+			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->Play();
+
+			return;
 		}
 	}
 

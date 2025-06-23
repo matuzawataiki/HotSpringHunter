@@ -41,6 +41,12 @@ namespace Character {
 		enPlayerAnimClip_Num,
 	};
 
+	enum EnChargeState {
+		enCharge01,
+		enCharge02,
+		enCharge03,
+		enNone,
+	}; 
 	
 	class IState;
 	class StateMachine;
@@ -264,6 +270,8 @@ namespace Character {
 		void Update()override;
 		//チャージ蓄積。
 		void Charging();
+		//チャージ状態を変更。
+		void ChangeChargeState();
 		//攻撃。
 		void ChargeAttack();
 		//コリジョン生成。
@@ -276,7 +284,9 @@ namespace Character {
 		SoundEffect* m_soundEffect	= nullptr;			//サウンドソース。
   
 		Vector3		m_RStickOld		= Vector3::Zero;	//Rスティックの入力量（変更前）。
-		float		m_collisionSize = 0.0f;				//コリジョンサイズ。
+		float		m_collisionSize = 0.0f;				//コリジョンサイズ
+		int			m_chargeState	= enNone;			//チャージ状態。
+		int			m_chargeOldState = enNone;			//チャージ状態（変更前）。
 		bool		m_isCharging	= true;				//チャージ中？
 		bool		m_isStateChange = false;			//アニメーションを切り替えた？	
 	};
