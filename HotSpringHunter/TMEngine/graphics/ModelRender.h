@@ -21,6 +21,7 @@ namespace nsTMEngine {
 			const char* filePath,
 			AnimationClip* animationeClips = nullptr,
 			int numAnimationClips = 0,
+			bool islighting = true,
 			EnModelUpAxis enModelUpAxiz = enModelUpAxisZ);
 
 		/// <summary>
