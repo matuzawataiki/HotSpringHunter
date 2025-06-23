@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyHPBar.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
@@ -42,6 +43,8 @@ WildBoar::~WildBoar()
 
 bool WildBoar::Start()
 {
+	//インスタンス探し
+	m_player = FindGO<Character::Player>("player");
 	//エフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
@@ -50,9 +53,7 @@ bool WildBoar::Start()
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
-
-	//インスタンス探し
-	m_player = FindGO<Character::Player>("player");
+	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
 
 	//イノシシのHPをセット
 	m_wildBoarHP = MAX_WILD_BOAR_HP;
@@ -63,6 +64,9 @@ bool WildBoar::Start()
 	m_wildBoarPos = NEW_POSITION;
 	//イノシシの大きさ
 	m_wildBoarModel.SetScale(Vector3(SET_SCALE));
+
+	//HPバーの初期化
+	m_enemyHPBar->Init(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 
 	return true;
 }
@@ -107,6 +111,9 @@ void WildBoar::Update()
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+
+	//HPバーの更新
+	m_enemyHPBar->SetHpBar(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 }
 
 /// <summary>

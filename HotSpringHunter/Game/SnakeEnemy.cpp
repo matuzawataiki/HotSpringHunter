@@ -2,6 +2,7 @@
 #include "SnakeEnemy.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyHPBar.h"
 #include "Game.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"
@@ -42,14 +43,18 @@ bool SnakeEnemy::Start()
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
+	//HPをセット
+	m_snakeHP = MAX_SNAKE_HP;
+
 	//基底クラス生成
-	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
+	//HPバーをセット
+	m_enemyHPBar->Init(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
+
 
 	//キャラクターコントローラー
 	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
-
-	//HPをセット
-	m_snakeHP = MAX_SNAKE_HP;
 
 	return true;
 }
@@ -88,6 +93,8 @@ void SnakeEnemy::Update()
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+	//HPバーの更新
+	m_enemyHPBar->SetHpBar(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
 }
 
 
