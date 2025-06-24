@@ -5,7 +5,7 @@ public:
 	ObjectBase();
 	~ObjectBase();
 
-	void Init(Vector3& pos, Quaternion& rot, Vector3& sca)
+	virtual void Init(Vector3& pos, Quaternion& rot, Vector3& sca)
 	{
 		m_objeModel.SetTRS(pos, rot, sca);
 		m_objeModel.Update();

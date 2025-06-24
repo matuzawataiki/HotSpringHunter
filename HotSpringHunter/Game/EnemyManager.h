@@ -60,6 +60,7 @@ public:
 	void DeleteEnemy(SnakeEnemy* snake) {
 		for (std::vector<SnakeEnemy*>::iterator it = m_snakes.begin();
 			it != m_snakes.end();
+			it++
 			) {
 			if (*it == snake) {
 				m_snakes.erase(it);
@@ -74,6 +75,7 @@ public:
 	void DeleteEnemy(Enemy::PoisonSnake* poisonSnake) {
 		for (std::vector<Enemy::PoisonSnake*>::iterator it = m_poisonSnake.begin();
 			it != m_poisonSnake.end();
+			it++
 			) {
 			if (*it == poisonSnake) {
 				m_poisonSnake.erase(it);
@@ -88,6 +90,7 @@ public:
 	void DeleteEnemy(WildBoar* wildBoar) {
 		for (std::vector<WildBoar*>::iterator it = m_wildBoars.begin();
 			it != m_wildBoars.end();
+			it++
 			) {
 			if (*it == wildBoar) {
 				m_wildBoars.erase(it);
@@ -96,13 +99,43 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// ボスを登録
+	/// </summary>
+	/// <param name="bear"></param>
+	void SetBoss(Bear* bear) {
+		m_bear = bear;
+	}
+	/// <summary>
+	/// ボスを削除
+	/// </summary>
+	void DeleteBoss() {
+		m_bear = nullptr;
+	}
+
+	/// <summary>
+	/// 敵がいるかどうか
+	/// </summary>
+	/// <returns>いる場合はtrueを返す</returns>
+	bool IsEnemy();
+
+	/// <summary>
+	/// ボスがいるかどうか
+	/// </summary>
+	/// <returns>いる場合はtrueを返す</returns>
+	bool IsBoss() {
+		if (m_bear != nullptr) {
+			return true;
+		}
+		return false;
+	}
+
 private:
 
 	std::vector<SnakeEnemy*>			m_snakes;				//ヘビの配列
 	std::vector<WildBoar*>				m_wildBoars;			//イノシシの配列
 	std::vector<Enemy::PoisonSnake*>	m_poisonSnake;			//毒ヘビの配列
 	Bear* m_bear = nullptr;
-
 
 	EnemySpawner*m_enemySpawner = nullptr;
 	Character::Player* m_player = nullptr;

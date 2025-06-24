@@ -123,6 +123,7 @@ void Stage::InitLevel()
 			return true;
 		}
 
+		//敵の出現位置
 		if (objData.EqualObjectName(L"enemyEnd") == true) {
 			m_stageObject.enemyTargetPos[countEnd] = position;
 			countEnd++;
@@ -135,6 +136,7 @@ void Stage::InitLevel()
 			return true;
 		}
 
+		//ボスの出現位置
 		if (objData.EqualObjectName(L"BossPosition") == true) {
 			m_stageObject.bossPos = position;
 			return true;
@@ -152,39 +154,45 @@ void Stage::InitLevel()
 			return true;
 		}
 
+		//入室検知オブジェクトの配置
 		if (objData.EqualObjectName(L"InOutBoxBattle") == true) {
 			m_stageObject.inOutHitBox = NewGO<InOutHitBox>(0, "inOutBoxBattle");
 			m_stageObject.inOutHitBox->init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//後ろのフェンスの配置
 		if (objData.EqualObjectName(L"BackFence") == true) {
-			//m_stageObject.fence[0] = NewGO<Fence>(0, "fence");
-			//m_stageObject.fence[0]->Init(position, objData.rotation, objData.scale);
+			m_stageObject.fence[0] = NewGO<Fence>(0, "fence");
+			m_stageObject.fence[0]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//前のフェンスの配置
 		if (objData.EqualObjectName(L"FrontFence") == true) {
-			//m_stageObject.fence[1] = NewGO<Fence>(0, "fence");
-			//m_stageObject.fence[1]->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.fence[1] = NewGO<Fence>(0, "fence");
+			m_stageObject.fence[1]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//後ろのフェンスの当たり判定を配置
 		if (objData.EqualObjectName(L"BackHitBoxFence") == true) {
-			//m_stageObject.hitBoxFence[0] = NewGO<HItBoxFence>(0, "hitBoxFence");
-			//m_stageObject.hitBoxFence[0]->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.hitBoxFence[0] = NewGO<HItBoxFence>(0, "hitBoxFence");
+			m_stageObject.hitBoxFence[0]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//前のフェンスの当たり判定を配置
 		if (objData.EqualObjectName(L"FrontHitBoxFence") == true) {
-			//m_stageObject.hitBoxFence[1] = NewGO<HItBoxFence>(0, "hitBoxFence");
-			//m_stageObject.hitBoxFence[1]->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.hitBoxFence[1] = NewGO<HItBoxFence>(0, "hitBoxFence");
+			m_stageObject.hitBoxFence[1]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//温泉の配置
 		if (objData.EqualObjectName(L"HotSpring") == true) {
 			m_stageObject.hotSpring = NewGO<HotSpring>(0, "hotSpring");
-			m_stageObject.hotSpring->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.hotSpring->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 

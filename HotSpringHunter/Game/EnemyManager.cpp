@@ -152,3 +152,17 @@ void EnemyManager::EnemyFormation()
 		trackTargetPos.erase(trackTargetPos.begin());
 	}
 }
+
+bool EnemyManager::IsEnemy()
+{
+	if (m_snakes.size() != 0) {
+		return true;
+	}
+	if (m_poisonSnake.size() != 0) {
+		return true;
+	}
+	if (m_wildBoars.size() != 0) {
+		return true;
+	}
+	return false;
+}

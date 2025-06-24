@@ -8,6 +8,7 @@
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
+#include "EnemyManager.h"
 
 namespace
 {
@@ -40,6 +41,8 @@ WildBoar::WildBoar()
 WildBoar::~WildBoar()
 {
 	DeleteGO(m_enemyBase);
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	enemyManager->DeleteEnemy(this);
 }
 
 bool WildBoar::Start()

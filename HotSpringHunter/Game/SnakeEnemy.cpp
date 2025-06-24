@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EnemyManager.h"
 #include "EffectHub.h"
 
 namespace {
@@ -30,6 +31,8 @@ SnakeEnemy::SnakeEnemy()
 
 SnakeEnemy::~SnakeEnemy()
 {
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	enemyManager->DeleteEnemy(this);
 	DeleteGO(m_enemyBase);
 }
 
@@ -42,6 +45,12 @@ bool SnakeEnemy::Start()
 	m_player = FindGO<Character::Player>("player");
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
+	//基底クラス生成
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
+
+	//キャラクターコントローラー
+	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
 
 	//HPをセット
 	m_snakeHP = MAX_SNAKE_HP;

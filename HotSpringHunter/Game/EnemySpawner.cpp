@@ -37,9 +37,10 @@ void EnemySpawner::TriggerEnemySpawn(EnGameScene scene)
 	StageManager* stageManager = FindGO<StageManager>("stageManager");
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 
-	SnakeEnemy* snake;
-	Enemy::PoisonSnake* poisonSnake;
-	WildBoar* wildBoar;
+	SnakeEnemy* snake = nullptr;
+	Enemy::PoisonSnake* poisonSnake = nullptr;
+	WildBoar* wildBoar = nullptr;
+	Bear* bear = nullptr;
 
 	switch (scene) {
 	case EnGameScene::enBattleArea1:
@@ -67,6 +68,7 @@ void EnemySpawner::TriggerEnemySpawn(EnGameScene scene)
 			}
 		}
 		break;
+
 	case EnGameScene::enBattleArea2:
 		for (int i = 0;i < 10;i++) {
 			int random = rand() % 3;
@@ -92,6 +94,13 @@ void EnemySpawner::TriggerEnemySpawn(EnGameScene scene)
 			}
 		}
 		break;
+
+	case EnGameScene::enBossArea:
+		bear = NewGO<Bear>(0, "bear");
+		bear->SetBearPos(stageManager->GetStageObject(StageManager::enBossStage).bossPos);
+		enemyManager->SetBoss(bear);
+		break;
+
 	default:
 		break;
 	}

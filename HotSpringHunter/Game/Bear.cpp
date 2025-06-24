@@ -495,6 +495,8 @@ void Bear::ExecuteAction()
 		if (!m_bearModel.IsPlayAnimation())	{
 			//地面に沈ませる
 			SinkIntoGround();
+			EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+			enemyManager->DeleteBoss();
 		}
 		break;
 

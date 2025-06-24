@@ -5,7 +5,6 @@ namespace Character {
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
-class EnemyManager;
 class GameCamera;
 class EnemyHPBar;
 class SoundEffect;

@@ -391,7 +391,6 @@ namespace Enemy {
 	{
 		if (m_lifeTime < 0.0f) {
 			m_owner->Deash();
-			return false;
 		}
 		return false;
 	}
