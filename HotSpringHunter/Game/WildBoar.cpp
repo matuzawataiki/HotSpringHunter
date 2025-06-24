@@ -38,6 +38,7 @@ WildBoar::WildBoar()
 
 WildBoar::~WildBoar()
 {
+	
 }
 
 bool WildBoar::Start()

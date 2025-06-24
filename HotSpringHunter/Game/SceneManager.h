@@ -17,8 +17,10 @@ enum EnGameScene {
 class FenceManager;
 class EnemySpawner;
 class GameClear;
+class GameOver;
 class GameCamera;
 class Bear; 
+class Result;
 
 class SceneManager:public IGameObject
 {
@@ -31,6 +33,13 @@ public:
 	void InGameSceneManage();
 	//シーン切り替わりの処理
 	void SwitchingScenes();
+	//ゲームタイム
+	void GameTimeUpdate();
+	//
+	void Render(RenderContext& rc)
+	{
+		m_timeRender.Draw(rc);
+	}
 
 	//セッター
 	//クリア演出フラッグを設定
@@ -46,16 +55,22 @@ public:
 	//最終スコアを取得
 	inline int GetFinalScore() const { return m_finalScore; };
 
+	float m_gamePlayTime = 0.0f;
 
 private:
 	FenceManager*		m_fenceManager	= nullptr;
 	EnemySpawner*		m_enemySpawner	= nullptr;
 	GameClear*			m_gameClear		= nullptr;
+	GameOver*           m_gameOver      = nullptr;
 	GameCamera*			m_gameCamera	= nullptr;
 	Character::Player*	m_player		= nullptr;
 	Bear*				m_bear			= nullptr;
+	Result*             m_result        = nullptr;
 
-	float				 m_gameClearTime = 0.0f;		//ゲームのプレイ時間
+	FontRender          m_timeRender;
+
+	float				m_gameClearTime = 0.0f;		//ゲームのプレイ時間
+	
 
 	int					m_sceneState	= 0;			//シーン状態
 	int					m_finalScore	= 0;			//最終スコア
@@ -63,4 +78,5 @@ private:
 	bool				m_isExecuted	= false;		//シーン切り替え時の処理を実行したか
 	bool				m_isToGoal		= false;		//ゴールに移動させるかのフラッグ
 	bool				m_isClearFrag	= false;		//クリア演出を実行するか
+	bool                m_isTimeOff     = true;        //タイムオフ
 };

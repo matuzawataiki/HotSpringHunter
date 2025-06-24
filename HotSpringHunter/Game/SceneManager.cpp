@@ -3,9 +3,16 @@
 #include "FenceManager.h"
 #include "EnemySpawner.h"
 #include "GameClear.h"
+#include "GameOver.h"
 #include "GameCamera.h"
 #include "Player.h"
 #include "Bear.h"
+
+namespace
+{
+	//タイムの位置
+	const Vector3 TIME_POS = { 610.0f,430.0f,0.0f };
+}
 
 SceneManager::SceneManager()
 {
@@ -13,6 +20,7 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
+	DeleteGO(m_fenceManager);
 }
 
 bool SceneManager::Start()
@@ -29,6 +37,7 @@ void SceneManager::Update()
 {
 	InGameSceneManage();
 	SwitchingScenes();
+	GameTimeUpdate();
 }
 
 /// <summary>
@@ -60,7 +69,16 @@ void SceneManager::InGameSceneManage()
 	if (m_sceneState == EnGameScene::enGoal && m_isClearFrag) {
 		if (m_gameClear == nullptr) {
 			m_gameClear = NewGO<GameClear>(0, "GameClear");
+			m_gameClear-> m_timer = m_gamePlayTime;
 		}			
+	}
+	if (m_player->GetPlayerHP() == 0.0f)
+	{
+		if (m_gameOver == nullptr)
+		{
+			m_gameOver = NewGO<GameOver>(0, "gameOver");
+			m_gameOver->m_timer = m_gamePlayTime;
+		}
 	}
 }
 
@@ -118,4 +136,25 @@ void SceneManager::SwitchingScenes()
 
 	//実行済みにする
 	m_isExecuted = true;
+}
+
+void SceneManager::GameTimeUpdate()
+{
+	if (m_isTimeOff == true)
+	{
+		m_gamePlayTime += g_gameTime->GetFrameDeltaTime();
+	}
+
+	wchar_t time[256];
+	swprintf_s(time, 256, L"Time:%d", int(m_gamePlayTime));
+	
+	m_timeRender.SetText(time);
+	m_timeRender.SetPosition(TIME_POS);
+	m_timeRender.SetScale(1.3f);
+	m_timeRender.SetColor(g_vec4Black);
+
+	if (m_sceneState == EnGameScene::enGoal || m_player->GetPlayerHP() <= 0.0f)
+	{
+		m_isTimeOff = false;
+	}
 }

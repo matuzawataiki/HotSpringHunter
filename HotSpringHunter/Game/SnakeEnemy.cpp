@@ -25,11 +25,12 @@ namespace {
 SnakeEnemy::SnakeEnemy()
 {
 
+	m_snakeController = new CharacterController;
 }
 
 SnakeEnemy::~SnakeEnemy()
 {
-	//m_snakeController.RemoveRigidBoby();
+	//delete m_snakeController;
 }
 
 bool SnakeEnemy::Start()
@@ -38,15 +39,15 @@ bool SnakeEnemy::Start()
 	LoadAsset();
 
 	//インスタンス探し
-	m_player = FindGO<Character::Player>("player");
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
 
-	//キャラクターコントローラー
-	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
+	//キャラクターコントローラーの生成
+	// 
+	//m_snakeController->Init(30.0f, 50.0f, m_snakePos);
 
 	//HPをセット
 	m_snakeHP = MAX_SNAKE_HP;
@@ -82,6 +83,9 @@ void SnakeEnemy::Update()
 		return;
 	}
 
+	m_player = FindGO<Character::Player>("player");
+
+
 	//ステート管理
 	ManageState();
 	//行動を実行
@@ -102,35 +106,41 @@ void SnakeEnemy::ManageState()
 		return;
 	}
 	//被弾した場合
-	if (m_player->m_collision->IsHit(m_snakeController)) {
-
-		//HPを減らす
-		m_snakeHP -= m_player->m_attackPower;
-
-		//被弾エフェクト
-		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-		m_effect->Init(EnEffectVar::enEnemyHit);
-		Vector3 effectPos = m_snakePos;
-		effectPos.y += 30.0f;
-		m_effect->SetPosition(effectPos);
-		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
-		m_effect->Play();
-		//HPがまだ残っている
-		if (m_snakeHP > 0.0f) {
-			//ノックバック
-			m_snakeState = enSnakeKnockBack;
-			//被弾の効果音
-			m_soundEffect->Play(enSnakeHitSE, false);
-		}
-		//HPがなくなった
-		else {
-			//死亡（吹っ飛び）
-			m_snakeState = enSnakeDeath;
-			//死亡の効果音
-			m_soundEffect->Play(enSnakeDeathSE, false);
-		}
+	/*if () {
 		return;
+	}*/
+	if (m_player->m_collision != nullptr){
+		if (m_player->m_collision->IsHit(*m_snakeController)) {
+
+
+			//HPを減らす
+			m_snakeHP -= m_player->m_attackPower;
+
+			//被弾エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enEnemyHit);
+			Vector3 effectPos = m_snakePos;
+			effectPos.y += 30.0f;
+			m_effect->SetPosition(effectPos);
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 10.0f,10.0f,10.0f });
+			m_effect->Play();
+			//HPがまだ残っている
+			if (m_snakeHP > 0.0f) {
+				//ノックバック
+				m_snakeState = enSnakeKnockBack;
+				//被弾の効果音
+				m_soundEffect->Play(enSnakeHitSE, false);
+			}
+			//HPがなくなった
+			else {
+				//死亡（吹っ飛び）
+				m_snakeState = enSnakeDeath;
+				//死亡の効果音
+				m_soundEffect->Play(enSnakeDeathSE, false);
+			}
+			return;
+		}
 	}
 
 	//近接攻撃
@@ -197,7 +207,7 @@ void SnakeEnemy::ExecuteAction()
 		m_snakeModel.PlayAnimation(enSnakeAnimClip_Death, ANIM_INTERPOLATE_TIME);
 		//キャラコンを消す
 		if (!m_isRemoveController) {
-			m_snakeController.RemoveRigidBoby();
+			m_snakeController->RemoveRigidBoby();
 			m_isRemoveController = true;
 		}
 		//一定時間がたったら
@@ -282,7 +292,7 @@ void SnakeEnemy::ExecuteSpeed()
 {
 	//まだキャラコンが削除されていないとき
 	if (!m_isRemoveController) {
-		m_snakePos = m_snakeController.Execute(m_snakeSpeed, DELTA_TIME);
+		m_snakePos = m_snakeController->Execute(m_snakeSpeed, DELTA_TIME);
 	}
 	//キャラコンが削除されているとき
 	else {
@@ -298,7 +308,7 @@ void SnakeEnemy::ExecuteSpeed()
 void SnakeEnemy::Spawned()
 {
 	//キャラクターコントローラー
-	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
+	m_snakeController->Init(30.0f, 50.0f, m_snakePos);
 	//HPをセット
 	m_snakeHP = MAX_SNAKE_HP;
 	//スポーン状態に

@@ -33,9 +33,12 @@ Game::~Game()
 
 bool Game::Start()
 {
+	//ゲーム内UI
+	m_gameUI.Init("Assets/modelData/image/ingame.dds", 1920.0f, 1080.0f);
+
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_player = NewGO<Character::Player>(0, "player");
-	//m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
+	m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
 	
 	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
@@ -53,11 +56,10 @@ bool Game::Start()
 
 void Game::Update()
 {
-	if (m_player->GetPlayerHP() == 0.0f)
-	{
-		if (m_gameOver == nullptr)
-		{
-			m_gameOver = NewGO<GameOver>(0, "gameOver");
-		}
-	}
+	
+}
+
+void Game::Render(RenderContext& rc)
+{
+	m_gameUI.Draw(rc);
 }

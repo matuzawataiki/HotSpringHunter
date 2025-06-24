@@ -7,13 +7,13 @@ namespace
 {
 	const Vector2 SMOKE_POSITION[] = {
 		Vector2(-800.0f,-600.0f),	//左下
-		Vector2(800.0f,-600.0f),	//右下
+		Vector2( 800.0f,-600.0f),	//右下
 		Vector2(-200.0f,-600.0f),	//真ん中
-		Vector2(200.0f,-600.0f),	//真ん中
-		Vector2(-400.0f,-600.0f),	//左真ん中
-		Vector2(400.0f,-600.0f),	//右真ん中
-		Vector2(-600.0f,-600.0f),	//左真ん中
-		Vector2(600.0f,-600.0f),	//右真ん中
+		Vector2( 200.0f,-600.0f),	//真ん中
+		Vector2(-400.0f,-600.0f),	//左真ん中1
+		Vector2( 400.0f,-600.0f),	//右真ん中1
+		Vector2(-600.0f,-600.0f),	//左真ん中2
+		Vector2( 600.0f,-600.0f),	//右真ん中2
 	};
 
 	const float MAKE_SMOKE_TIME = 0.2f;	//雲が生成される時間/毎
@@ -44,6 +44,7 @@ void SmokeEmitter::Update()
 
 	if (m_isActiveEmitter == true)
 	{
+		//湯気のランダム生成
 		if (m_mekeSmokeElapsedTime >= MAKE_SMOKE_TIME)
 		{
 			m_mekeSmokeElapsedTime = 0.0f;

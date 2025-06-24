@@ -28,9 +28,9 @@ public:
 	~Game();
 	bool Start()override;
 	void Update()override;
+	void Render(RenderContext& rc);
 
 private:
-
 	GameCamera*			m_gameCamera	= nullptr;
 	Character::Player*	m_player		= nullptr;
 	EnemyBase*			m_enemyBase		= nullptr;
@@ -43,5 +43,8 @@ private:
 	SoundEffect*		m_soundEffect	= nullptr;
 	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
+	EnemySpawner*		m_enemySpawner	= nullptr;
+
+	SpriteRender m_gameUI;
 };
 

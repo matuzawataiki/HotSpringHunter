@@ -68,7 +68,7 @@ public:
 	//スポーン状態を設定
 	inline void SetSnakeIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
-	inline void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController.SetPosition(pos); };
+	inline void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController->SetPosition(pos); };
 
 	//ゲッター
 	//位置を取得
@@ -84,9 +84,9 @@ private:
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
 	SoundEffect*			m_soundEffect		= nullptr;	//サウンドエフェクト 
+	CharacterController*	m_snakeController   = nullptr;						//キャラクターコントローラー	
 
 	AnimationClip			m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
-	CharacterController		m_snakeController;						//キャラクターコントローラー	
 	Quaternion				m_snakeRot = Quaternion::Identity;		//回転
 	ModelRender				m_snakeModel;							//モデルレンダー
 
