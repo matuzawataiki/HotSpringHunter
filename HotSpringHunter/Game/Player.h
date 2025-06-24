@@ -133,6 +133,7 @@ namespace Character {
 		Vector3 m_playerDir			= Vector3::Zero;	//向き。
 
 		float m_playerHP			= 0.0f;				//体力。
+		float m_damageMemory		= 0.0f;				//受けたダメージを記録
 		float m_dashState			= 1.0f;				//ダッシュ：走り状態の移動管理。
 		float m_guardState			= 1.0f;				//ガード：ガード状態の移動管理。
 		float m_charge				= 0.0f;				//溜め攻撃：チャージ量。

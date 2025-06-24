@@ -14,7 +14,7 @@ namespace Character {
 
 		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,50.0f,0.0f };	//player初期位置。
 
-		const float MAX_PLAYER_HP			= 3000.0f;		//最大HP。
+		const float MAX_PLAYER_HP			= 300.0f;		//最大HP。
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
@@ -40,6 +40,7 @@ namespace Character {
 		const float GUARD_TOLERANCE			= 1.0f;			//ガード：ガード可能な角度。
 
 		const float HIT_RIGIDITY_TiME		= 0.5f;			//被弾：硬直時間。
+		const float DAMAGE_ENDUCE			= 15.0f;		//被弾：ダメージリアクションを耐えられる量。
 
 		const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
 
@@ -256,6 +257,11 @@ namespace Character {
 				return;
 			}
 
+			//ダメージリアクション中は無敵時間とする
+			if(m_hitFlag) {
+				return;
+			}
+
 		//HPを減らす。
 		m_playerHP -= reduce;
 
@@ -268,12 +274,20 @@ namespace Character {
 		if (m_playerHP < 0.0) {
 			m_playerHP = 0.0f;
 		}
-		//HPの残量でステートを変える。
-		if (m_playerHP > 0.0f) {
-			m_hitFlag = true;
-		}
-		else {
+
+		//HPが0以下になったら死亡フラグを立てる。
+		if(m_playerHP <= 0.0f) {
 			m_isDead = true;
+		}
+
+		//ダメージ量を記録
+		m_damageMemory += reduce;
+		//ダメージ量が耐えられる量を超えたら。
+		if (m_damageMemory >= DAMAGE_ENDUCE) {
+			//被弾フラッグを立てる。
+			m_hitFlag = true;
+			//ダメージ記録をリセット。
+			m_damageMemory = 0.0f;
 		}
 	}
 
@@ -376,12 +390,6 @@ namespace Character {
 			m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
 			return;
 		}
-		////ゴールに移動中なら実行しない
-		//m_sceneManager = FindGO<SceneManager>("sceneManager");
-		//if (m_sceneManager->GetIsToGoal() == true) {
-		//	m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
-		//	return;
-		//}
 
 		//拘束されているなら実行しない
 		m_bear = FindGO<Bear>("bear");
@@ -428,7 +436,7 @@ namespace Character {
 
 		//ガード。
 		//Xボタンが入力されているなら。
-		if ((g_pad[0]->IsPress(enButtonX)) || (g_pad[0]->IsTrigger(enButtonA))) {
+		if ((g_pad[0]->IsPress(enButtonX)) || (g_pad[0]->IsPress(enButtonA))) {
 			m_player->m_requestState = enPlayerGuard;
 			return;
 		}
