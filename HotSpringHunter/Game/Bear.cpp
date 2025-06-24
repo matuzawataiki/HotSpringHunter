@@ -146,10 +146,6 @@ void Bear::LoadAssets()
 
 void Bear::Update()
 {
-	//スポーンしていないときは実行しない
-	if (!m_isSpawn) {
-		return;
-	}
 	//投石
 	StoneThrow();
 	//プレイヤーを探す
@@ -280,17 +276,17 @@ void Bear::StoneCollision()
 /// </summary>
 void Bear::SummonMinions()
 {
-	//まず位置を計算
-	CalcPos();
-
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
-
 	SnakeEnemy* snake;
 	Enemy::PoisonSnake* poisonSnake;
 	WildBoar* wildBoar;
 
+	//まず位置を計算
+	CalcPos();
+
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
+		
 		int random = rand() % 3;
 		switch (random)
 		{
@@ -313,7 +309,6 @@ void Bear::SummonMinions()
 			break;
 		}
 	}
-
 	m_summonPos.clear();
 }
 
@@ -367,10 +362,10 @@ void Bear::ManageState()
 		m_effect->Init(EnEffectVar::enEnemyHit);
 		Vector3 effectPos = m_bearPos;
 		effectPos += (m_bearDir * 200.0f);
-		effectPos.y += 200.0f;
+		effectPos.y += 150.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
 		m_effect->Play();
 
 		//HPがまだ残っている。
@@ -787,10 +782,7 @@ float Bear::GetBLOW_POS_DIS()
 
 void Bear::Render(RenderContext& rc)
 {
-	//クマ描画（スポーンしているときだけ）
-	if (m_isSpawn) {
-		m_bearModel.Draw(rc);
-	}
+	m_bearModel.Draw(rc);
 
 	//岩描画（岩が飛んでいるときだけ）
 	if (m_isStoneDraw) {

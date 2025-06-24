@@ -40,7 +40,7 @@ namespace Character {
 		const float GUARD_TOLERANCE			= 1.0f;			//ガード：ガード可能な角度。
 
 		const float HIT_RIGIDITY_TiME		= 0.5f;			//被弾：硬直時間。
-		const float DAMAGE_ENDUCE			= 15.0f;		//被弾：ダメージリアクションを耐えられる量。
+		const float DAMAGE_ENDUCE			= 40.0f;		//被弾：ダメージリアクションを耐えられる量。
 
 		const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
 
