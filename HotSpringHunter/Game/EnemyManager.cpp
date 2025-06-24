@@ -31,6 +31,8 @@ EnemyManager::~EnemyManager()
 	m_wildBoars.clear();
 
 	DeleteGO(m_bear);
+
+	DeleteGO(m_enemySpawner);
 }
 
 bool EnemyManager::Start()

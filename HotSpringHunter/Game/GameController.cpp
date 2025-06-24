@@ -21,7 +21,7 @@ void GameController::Update()
 {
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_game = NewGO<Game>(0, "Game");
+		m_game = NewGO<Game>(0, "game");
 		DeleteGO(this);
 	}
 }

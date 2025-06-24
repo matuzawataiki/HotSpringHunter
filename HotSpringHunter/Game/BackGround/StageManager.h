@@ -6,7 +6,7 @@ class StageManager:public IGameObject
 {
 public:
 	StageManager(){}
-	~StageManager(){}
+	~StageManager();
 
 	bool Start()override;
 	void Update()override;
@@ -50,4 +50,3 @@ private:
 	Stage* m_stage[enStageNum];
 	LevelRender m_stageLevel;
 };
-

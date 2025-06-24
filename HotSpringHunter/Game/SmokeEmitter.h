@@ -20,7 +20,9 @@ private:
 	std::vector<Smoke*>m_smokeList;
 
 	float m_mekeSmokeElapsedTime = 0.0f;
+
 	int m_positionIndex = 0;
+
 	bool m_isActiveEmitter = true;
 };
 

@@ -6,22 +6,22 @@
 
 namespace
 {
-	const float PLAYER_HP_FRAME_WIDTH = 700.0f;    //プレイヤーのフレームの横
-	const float PLAYER_HP_FRAME_HEIGHT = 140.0f;   //プレイヤーのフレームの縦
-	const float PLAYER_HP_BAR_WIDTH = 600.0f;      //プレイヤーのバーの横
-	const float PLAYER_HP_BAR_HEIGHT = 50.0f;      //プレイヤーのバーの縦
+	const float PLAYER_HP_FRAME_WIDTH   = 700.0f;    //プレイヤーのフレームの横
+	const float PLAYER_HP_FRAME_HEIGHT  = 140.0f;   //プレイヤーのフレームの縦
+	const float PLAYER_HP_BAR_WIDTH     = 600.0f;      //プレイヤーのバーの横
+	const float PLAYER_HP_BAR_HEIGHT    = 50.0f;      //プレイヤーのバーの縦
 
-	const Vector2 PLAYER_HP_FRAME_POS = Vector2{ -590.0f,-460.0f };  //プレイヤーのフレームの位置
-	const Vector2 PLAYER_HP_BAR_POS = Vector2{ -850.0f,-500.0f };    //プレイヤーのバーの位置
-	const Vector2 HP_PIVOT = Vector2{ 0.0f,0.0f };   //プレイヤーのHPバーのピボット位置
+	const Vector2 PLAYER_HP_FRAME_POS   = Vector2{ -590.0f,-460.0f };  //プレイヤーのフレームの位置
+	const Vector2 PLAYER_HP_BAR_POS     = Vector2{ -850.0f,-500.0f };    //プレイヤーのバーの位置
+	const Vector2 HP_PIVOT              = Vector2{ 0.0f,0.0f };   //プレイヤーのHPバーのピボット位置
 
-	const float BOSS_HP_FRAME_WIDTH = 900.0f;   //くまのフレームの横
-	const float BOSS_HP_FRAME_HEIGHT = 135.0f;  //くまのフレームの縦
-	const float BOSS_HP_BAR_WIDTH = 800.0f;    //くまのバーの横
-	const float BOSS_HP_BAR_HEIGHT = 50.0f;    //くまのバーの縦
+	const float BOSS_HP_FRAME_WIDTH     = 900.0f;   //くまのフレームの横
+	const float BOSS_HP_FRAME_HEIGHT    = 135.0f;  //くまのフレームの縦
+	const float BOSS_HP_BAR_WIDTH       = 800.0f;    //くまのバーの横
+	const float BOSS_HP_BAR_HEIGHT      = 50.0f;    //くまのバーの縦
 
-	const Vector2 BOSS_HP_FRAME_POS = Vector2{ 0.0f,450.0f };  //くまのフレームの位置
-	const Vector2 BOSS_HP_BAR_POS = Vector2{ -350.0f,410.0f };  //くまのバーの位置
+	const Vector2 BOSS_HP_FRAME_POS     = Vector2{ 0.0f,450.0f };  //くまのフレームの位置
+	const Vector2 BOSS_HP_BAR_POS       = Vector2{ -350.0f,410.0f };  //くまのバーの位置
 }
 
 UI::UI()
@@ -90,6 +90,7 @@ void PlayerHPUI::Update()
 	UpdateBarWidth();
 }
 
+//HPバーのscaleの値を変えてHPをさげる
 void PlayerHPUI::UpdateBarWidth()
 {
 	m_playerHPBar.SetScale(Vector2{ m_player->GetPlayerHP() / m_player->GetPlayerMAXHP(),1.0f });
@@ -170,6 +171,7 @@ void BossHPUI::Update()
 
 void BossHPUI::UpdateBarWidth()
 {
+	//HPバーのscaleの値を変えてHPをさげる
 	m_BearHPBar.SetScale(Vector2{ m_bear->GetBearHP() / m_bear->GetBearMAXHP(),1.0f });
 	m_BearHPBar.Update();
 }

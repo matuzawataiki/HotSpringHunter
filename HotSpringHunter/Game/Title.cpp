@@ -7,12 +7,12 @@ namespace
 {
 	//文字の透明度
 	const float NEXT_BUTTON_COLOR_BASE = 1.0f;
-	const float NEXT_BUTTON_COLOR_MAX = 0.0f;
+	const float NEXT_BUTTON_COLOR_MAX  = 0.0f;
 
 	const float NEXT_BUTTON_COLOR_TIME = 1.5f;
 
 	//文字position
-	const Vector3 NEXT_BUTTON_POS = Vector3{ -280.0,-300.0f,0.0f };
+	const Vector3 NEXT_BUTTON_POS      = Vector3{ -280.0,-300.0f,0.0f };
 }
 
 Title::Title()
@@ -49,12 +49,13 @@ void Title::NextButton()
 {
 	const float buttonDeltaTime = g_gameTime->GetFrameDeltaTime();
 
-	m_titleNextButtonRen.SetText(L"Aボタンを押してね");
+	m_titleNextButtonRen.SetText(L"PLESS A BUTTON");
 	m_titleNextButtonRen.SetPosition(NEXT_BUTTON_POS);
 	m_titleNextButtonRen.SetScale(1.5f);
 
-	//文字の透明度を変える
+	//文字の透明度を時間で変える
 	m_titleNextButtonElapsed += buttonDeltaTime;
+	//定数に計算式を入れる
 	const float TITLE_NEXT_BUTTON_COLOR_PARCENT = m_titleNextButtonElapsed / NEXT_BUTTON_COLOR_TIME;
 	if (m_isMaxTime == true)
 	{
@@ -76,6 +77,7 @@ void Title::NextButton()
 			m_isMaxTime = true;
 		}
 	}
+	//lerpで透明度を滑らかに表示
 	m_titleNextButtonColor.Lerp(m_buttonColor, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
 	m_titleNextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_titleNextButtonColor.x);
 }

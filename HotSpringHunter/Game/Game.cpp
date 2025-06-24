@@ -32,7 +32,8 @@ Game::~Game()
 
 bool Game::Start()
 {
-	m_gameUI.Init("Assets/modelData/image/setumei_ui.dds", 1920.0f, 1080.0f);
+	//ゲーム内UI
+	m_gameUI.Init("Assets/modelData/image/ingame.dds", 1920.0f, 1080.0f);
 
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_player = NewGO<Character::Player>(0, "player");
@@ -52,13 +53,7 @@ bool Game::Start()
 
 void Game::Update()
 {
-	if (m_player->GetPlayerHP() == 0.0f)
-	{
-		if (m_gameOver == nullptr)
-		{
-			m_gameOver = NewGO<GameOver>(0, "gameOver");
-		}
-	}
+	
 }
 
 void Game::Render(RenderContext& rc)

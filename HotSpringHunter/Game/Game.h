@@ -31,7 +31,6 @@ public:
 	void Render(RenderContext& rc)override;
 
 private:
-
 	GameCamera*			m_gameCamera	= nullptr;
 	Character::Player*	m_player		= nullptr;
 	EnemyBase*			m_enemyBase		= nullptr;
@@ -44,7 +43,7 @@ private:
 	SoundEffect*		m_soundEffect	= nullptr;
 	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
-
-	SpriteRender m_gameUI;				//インゲーム中の説明画像
-};
-
+	EnemySpawner*		m_enemySpawner	= nullptr;
+  
+	SpriteRender m_gameUI;
+  };

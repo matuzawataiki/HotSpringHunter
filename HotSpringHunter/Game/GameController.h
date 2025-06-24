@@ -11,7 +11,7 @@ public:
 	void Render(RenderContext& rc)override;
 
 private:
-	Game* m_game = nullptr;
+	Game*        m_game = nullptr;
 	SpriteRender m_controllerModel;
 };
 

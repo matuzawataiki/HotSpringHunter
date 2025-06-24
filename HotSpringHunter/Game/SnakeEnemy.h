@@ -65,7 +65,7 @@ public:
 	//移動速度を設定
 	inline void SetSnakeSpeed(const Vector3& speed) { m_snakeSpeed = speed; };
 	//キャラコンの位置を設定
-	inline void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController.SetPosition(pos); };
+	inline void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController->SetPosition(pos); };
 
 	//ゲッター
 	//位置を取得
@@ -80,9 +80,9 @@ private:
 	EnemyBase*				m_enemyBase			= nullptr;
 	EnemyHPBar*				m_enemyHPBar		= nullptr;	//敵のHPバー
 	SoundEffect*			m_soundEffect		= nullptr;	//サウンドエフェクト 
+	CharacterController*	m_snakeController   = nullptr;						//キャラクターコントローラー	
 
 	AnimationClip			m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ
-	CharacterController		m_snakeController;						//キャラクターコントローラー	
 	Quaternion				m_snakeRot = Quaternion::Identity;		//回転
 	ModelRender				m_snakeModel;							//モデルレンダー
 

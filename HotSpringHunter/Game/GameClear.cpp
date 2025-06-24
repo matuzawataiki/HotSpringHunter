@@ -7,14 +7,14 @@
 namespace
 {
 	const Vector2 GAME_CLEAR_SCALE_BASE = Vector2(1.0f, 1.0f);
-	const Vector2 GAME_CLEAR_SCALE_MAX = Vector2(5.0f, 5.0f);
+	const Vector2 GAME_CLEAR_SCALE_MAX  = Vector2(5.0f, 5.0f);
 
 	//何秒かけておっきくする
-	const float GAME_CLEAR_SCALE_TIME = 1.5f;
+	const float GAME_CLEAR_SCALE_TIME   = 1.5f;
 	//埋めつくす時間
-	const float GAME_CLEAR_SMOKE_TIME = 5.0f;
+	const float GAME_CLEAR_SMOKE_TIME   = 5.0f;
 	//消える時間
-	const float DELETE_SMOKE_TIME = 6.0f;
+	const float DELETE_SMOKE_TIME       = 6.0f;
 }
 
 
@@ -25,18 +25,14 @@ GameClear::GameClear()
 GameClear::~GameClear()
 {
 	DeleteGO(this);
-
 }
 
 bool GameClear::Start()
 {
-
 	m_gameClearModel = new SpriteRender();
 	m_gameClearModel->Init("Assets/modelData/image/gameclear.dds", 384.0f, 216.0f);
 	m_gameClearSize = GAME_CLEAR_SCALE_BASE;
 	m_gameClearModel->SetScale(m_gameClearSize);
-
-
 
 	return true;
 }
@@ -79,6 +75,7 @@ void GameClear::Update()
 		break;
 
 	case enSmokeStep3:
+		//湯気の後ろでゲームクリアリザルトの表示
 		if (m_resultModel == nullptr)
 		{
 			m_resultModel = new SpriteRender();
@@ -93,6 +90,7 @@ void GameClear::Update()
 		break;
 
 	case enSmokeStep4:
+		//特定の時間がたったら湯気の生成を止める
 		m_elapsedTime += deltaTime;
 		if (m_elapsedTime >= DELETE_SMOKE_TIME)
 		{
@@ -101,13 +99,14 @@ void GameClear::Update()
 		break;
 
 	case enResult:
-
-		m_clearResultModel = NewGO<Result>(0, "Result");
+		//新しいクリアリザルトの生成
+		m_clearResult = NewGO<Result>(0, "Result");
 		Game* game = FindGO<Game>("game");
 		DeleteGO(this);
 		DeleteGO(game);
 		DeleteGO(m_smokeEmitter);
 		delete m_resultModel;
+		m_clearResult-> m_gameTime = m_timer;
 		m_resultModel = nullptr;
 		break;
 	}
@@ -123,7 +122,5 @@ void GameClear::Render(RenderContext&rc)
 	{
 		m_gameClearModel->Draw(rc);
 	}
-	
-
 }
 

@@ -2,6 +2,17 @@
 #include "StageManager.h"
 #include "BackGround/Stage.h"
 
+StageManager::~StageManager()
+{
+	DeleteGO(m_startStage);
+	for (int i = 0; i < 2; i++)
+	{
+		DeleteGO(m_battleStage[i]);
+	}
+	DeleteGO(m_BossStage);
+	DeleteGO(m_goolStage);
+}
+
 bool StageManager::Start()
 {
 	m_stageLevel.Init("Assets/stage/Level/LevelStage.tkl", [&](LevelObjectData& objData) {
