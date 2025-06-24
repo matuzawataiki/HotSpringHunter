@@ -163,8 +163,8 @@ void Stage::InitLevel()
 
 		//後ろのフェンスの配置
 		if (objData.EqualObjectName(L"BackFence") == true) {
-			m_stageObject.fence[0] = NewGO<Fence>(0, "fence");
-			m_stageObject.fence[0]->Init(position, objData.rotation, objData.scale);
+			//m_stageObject.fence[0] = NewGO<Fence>(0, "fence");
+			//m_stageObject.fence[0]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 

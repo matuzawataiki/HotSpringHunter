@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Bear.h"
 #include "BackGround/StageManager.h"
+#include "BackGround/StageManager.h"
 
 SceneManager::SceneManager()
 {
@@ -19,6 +20,7 @@ SceneManager::~SceneManager()
 bool SceneManager::Start()
 {
 	//最初のシーン状態
+	m_sceneState = EnGameScene::enStartArea;
 	m_sceneState = EnGameScene::enStartArea;
 
 	return true;
@@ -145,6 +147,7 @@ void SceneManager::SwitchingScenes()
 	case enGoalArea:
 		m_isToGoal = true;
 		break;
+
 
 	default:
 		break;

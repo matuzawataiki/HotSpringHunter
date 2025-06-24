@@ -86,8 +86,6 @@ public:
 	inline void SetBearDir(const Vector3& dir) { m_bearDir = dir; };
 	//回転を設定
 	inline void SetBearRot(const Quaternion& rot) { m_bearRot = rot; };
-	//スポーン状態を設定
-	inline void SetBearIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
 	inline void SetBearCharaConPos(const Vector3& pos) { m_bearController.SetPosition(pos); };
 	//スポーン位置を設定
@@ -104,8 +102,6 @@ public:
 	inline Vector3 GetBearDir() const { return m_bearDir; };
 	//HPを取得
 	inline float GetBearHP() const { return m_bearHP; };
-	//スポーン状態を取得
-	inline bool GetIsBearSpawn() const { return m_isSpawn; };
 	//拘束中フラッグを取得
 	inline bool GetIsCovering() const { return m_isCovering; };
 	//ぶっ飛ばし攻撃フラッグを取得
@@ -155,7 +151,6 @@ private:
 	int m_bearState				= 0;		//クマの行動状態
 
 	bool m_isCanStateChange		= true;		//ステート変更を受け付けているか
-	bool m_isSpawn				= false;	//敵がスポーンしているか
 	bool m_isContact			= false;	//プレイヤーを認識したか
 	bool m_isPlayDeadAnim		= false;	//死亡アニメーションを再生したか
 	bool m_isRemoveController	= false;	//キャラコンを削除したか

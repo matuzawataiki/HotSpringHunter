@@ -137,6 +137,11 @@ private:
 	std::vector<Enemy::PoisonSnake*>	m_poisonSnake;			//毒ヘビの配列
 	Bear* m_bear = nullptr;
 
+	std::vector<SnakeEnemy*>			m_snakes;				//ヘビの配列
+	std::vector<WildBoar*>				m_wildBoars;			//イノシシの配列
+	std::vector<Enemy::PoisonSnake*>	m_poisonSnake;			//毒ヘビの配列
+	Bear* m_bear = nullptr;
+
 
 	EnemySpawner*m_enemySpawner = nullptr;
 	Character::Player* m_player = nullptr;

@@ -41,6 +41,12 @@ namespace Character {
 		enPlayerAnimClip_Num,
 	};
 
+	enum EnChargeState {
+		enCharge01,
+		enCharge02,
+		enCharge03,
+		enNone,
+	}; 
 	
 	class IState;
 	class StateMachine;
@@ -95,6 +101,8 @@ namespace Character {
 		inline void SetPlayerControllerPos(const Vector3& pos) { m_playerCharaCon.SetPosition(pos); };
 		//向きを設定
 		inline void SetPlayerDir(const Vector3& dir) { m_playerDir = dir; };
+		//速度を設定
+		inline void SetPlayerSpeed(const Vector3& speed) { m_playerSpeed = speed; };
 		//行動状態を設定
 		inline void SetRequestState(const int state) { m_requestState = state; };
 
@@ -125,6 +133,7 @@ namespace Character {
 		Vector3 m_playerDir			= Vector3::Zero;	//向き。
 
 		float m_playerHP			= 0.0f;				//体力。
+		float m_damageMemory		= 0.0f;				//受けたダメージを記録
 		float m_dashState			= 1.0f;				//ダッシュ：走り状態の移動管理。
 		float m_guardState			= 1.0f;				//ガード：ガード状態の移動管理。
 		float m_charge				= 0.0f;				//溜め攻撃：チャージ量。
@@ -262,6 +271,8 @@ namespace Character {
 		void Update()override;
 		//チャージ蓄積。
 		void Charging();
+		//チャージ状態を変更。
+		void ChangeChargeState();
 		//攻撃。
 		void ChargeAttack();
 		//コリジョン生成。
@@ -274,7 +285,9 @@ namespace Character {
 		SoundEffect* m_soundEffect	= nullptr;			//サウンドソース。
   
 		Vector3		m_RStickOld		= Vector3::Zero;	//Rスティックの入力量（変更前）。
-		float		m_collisionSize = 0.0f;				//コリジョンサイズ。
+		float		m_collisionSize = 0.0f;				//コリジョンサイズ
+		int			m_chargeState	= enNone;			//チャージ状態。
+		int			m_chargeOldState = enNone;			//チャージ状態（変更前）。
 		bool		m_isCharging	= true;				//チャージ中？
 		bool		m_isStateChange = false;			//アニメーションを切り替えた？	
 	};

@@ -5,6 +5,7 @@ namespace Character {
 }
 class EnemySpawn;
 class EnemyBase;
+class EnemyHPBar;
 class SoundEffect;
 
 //イノシシのステート
@@ -80,16 +81,12 @@ public:
 	inline void SetWildBoarRot(const Quaternion& rot) { m_wildBoarRot = rot; };
 	//移動速度を設定
 	inline void SetWildBoarSpeed(const Vector3& speed) { m_wildBoarSpeed = speed; };
-	//スポーン状態を設定
-	inline void SetWildBoarIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
 	inline void SetWildBoarCharaConPos(const Vector3& pos) { m_wildBoarController.SetPosition(pos); };
 
 	//ゲッター
 	//位置を取得
 	inline Vector3 GetWildBoarPos() const { return m_wildBoarPos; };
-	//スポーン状態を取得
-	inline bool GetIsWildBoarIsSpawn() const { return m_isSpawn; };
 	//ステートを取得
 	inline int GetWildBoarState() const { return m_wildBoarState; };
 
@@ -99,6 +96,7 @@ private:
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+	EnemyHPBar*				m_enemyHPBar		= nullptr; //エネミーHPバー
 	SoundEffect*			m_soundEffect		= nullptr; //サウンドエフェクト
 	SoundSource*			m_chargeSound		= nullptr; //突進サウンド
 	SoundSource*			m_runSound			= nullptr;    //突進攻撃サウンド
@@ -127,7 +125,6 @@ private:
 
 	int m_wildBoarState			= 0;				//イノシシの行動状態
 
-	bool m_isSpawn				= false;			//敵が出現するか
 	bool m_isFind				= false;			//プレイヤーを捉えたか
 	bool m_isCanStateChange		= true;				//ステートを変えてもよいか
 	bool m_isHitCollision		= false;			//コリジョン当たったか
