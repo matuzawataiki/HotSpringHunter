@@ -284,12 +284,6 @@ void Bear::SummonMinions()
 	//まず位置を計算
 	CalcPos();
 
-	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
-
-	SnakeEnemy* snake;
-	Enemy::PoisonSnake* poisonSnake;
-	WildBoar* wildBoar;
-
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
 		
@@ -501,6 +495,8 @@ void Bear::ExecuteAction()
 		if (!m_bearModel.IsPlayAnimation())	{
 			//地面に沈ませる
 			SinkIntoGround();
+			EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+			enemyManager->DeleteBoss();
 		}
 		break;
 

@@ -13,7 +13,7 @@ public:
 		m_objeModel.Update();
 		m_underPosition = pos;
 		m_position = pos;
-		m_underPosition.y -= 400.0f;
+		m_underPosition.y -= 200.0f;
 	}
 
 	void UpFence() {
