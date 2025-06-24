@@ -323,6 +323,11 @@ void WildBoar::ManageState()
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
 
+		//0以下になったら0にする
+		if (m_wildBoarHP < 0.0f) {
+			m_wildBoarHP = 0.0f;
+		}
+
 		//被弾エフェクト
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);

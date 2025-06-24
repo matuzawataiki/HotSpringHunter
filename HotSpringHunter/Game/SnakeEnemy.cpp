@@ -114,6 +114,11 @@ void SnakeEnemy::ManageState()
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
 
+		//0以下になったら0にする
+		if(m_snakeHP < 0.0f) {
+			m_snakeHP = 0.0f;
+		}
+
 		//被弾エフェクト
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);
