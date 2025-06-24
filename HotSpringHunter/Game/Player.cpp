@@ -393,9 +393,11 @@ namespace Character {
 
 		//拘束されているなら実行しない
 		m_bear = FindGO<Bear>("bear");
-		if (m_bear->GetIsCovering()) {
-			m_player->SetRequestState(EnPlayerActiveState::enPlayerRestrain);
-			return;
+		if(m_bear != nullptr){
+			if (m_bear->GetIsCovering()) {
+				m_player->SetRequestState(EnPlayerActiveState::enPlayerRestrain);
+				return;
+			}
 		}
 
 		StateManage();

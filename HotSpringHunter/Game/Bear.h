@@ -5,7 +5,6 @@ namespace Character {
 class SnakeEnemy;
 class EnemySpawn;
 class EnemyBase;
-class EnemyManager;
 class GameCamera;
 class EnemyHPBar;
 class SoundEffect;
@@ -116,7 +115,6 @@ private:
 	Character::Player*	m_player			= nullptr;
 	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
-	EnemyManager*		m_enemyManager		= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	CollisionObject*	m_coverCollision	= nullptr;
 	GameCamera*			m_gameCamera		= nullptr;

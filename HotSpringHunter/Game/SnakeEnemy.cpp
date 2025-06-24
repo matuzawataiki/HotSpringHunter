@@ -30,7 +30,7 @@ SnakeEnemy::SnakeEnemy()
 
 SnakeEnemy::~SnakeEnemy()
 {
-	//m_snakeController.RemoveRigidBoby();
+	DeleteGO(m_enemyBase);
 }
 
 bool SnakeEnemy::Start()
@@ -54,7 +54,13 @@ bool SnakeEnemy::Start()
 
 
 	//キャラクターコントローラー
-	//m_snakeController.Init(30.0f, 50.0f, m_snakePos);
+	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
+
+	//待機状態に
+	m_snakeState = EnSnakeState::enSnakeIdle;
+
+	//ステート変更可能に
+	m_isCanStateChange = true;
 
 	return true;
 }
@@ -82,11 +88,6 @@ void SnakeEnemy::LoadAsset()
 
 void SnakeEnemy::Update()
 {
-	//スポーンしているなら
-	if (!m_isSpawn) {
-		return;
-	}
-
 	//ステート管理
 	ManageState();
 	//行動を実行
@@ -214,10 +215,7 @@ void SnakeEnemy::ExecuteAction()
 		}
 		//一定時間がたったら
 		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
-			//時間をリセット
-			m_elapsedTime = 0.0f;
-			//非スポーン状態にする
-			m_isSpawn = false;
+			DeleteGO(this);
 		}
 
 		break;
@@ -303,31 +301,8 @@ void SnakeEnemy::ExecuteSpeed()
 	}
 }
 
-
-/// <summary>
-/// スポーンした時の処理。
-/// </summary>
-void SnakeEnemy::Spawned()
-{
-	//キャラクターコントローラー
-	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
-	//HPをセット
-	m_snakeHP = MAX_SNAKE_HP;
-	//スポーン状態に
-	m_isSpawn = true;
-	//待機状態に
-	m_snakeState = EnSnakeState::enSnakeIdle;
-	//ステート変更可能に
-	m_isCanStateChange = true;
-}
-
 void SnakeEnemy::Render(RenderContext& rc)
 {
-	//スポーンしていないなら実行しない
-	if (!m_isSpawn) {
-		return;
-	}
-
 	//死亡時は点滅表示を行う
 	if ((m_snakeState == enSnakeDeath) && (m_enemyBase->IsBlinkRender())) {
 		m_snakeModel.Draw(rc);

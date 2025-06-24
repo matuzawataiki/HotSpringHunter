@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "HitBoxGool.h"
 
-HitBoxGool::HitBoxGool()
+HitBoxGoal::HitBoxGoal()
 {
 	m_objeModel.Init("Assets/stage/HitBoxGool.tkm");
 }

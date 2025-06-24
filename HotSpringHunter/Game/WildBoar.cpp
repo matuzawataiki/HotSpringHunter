@@ -39,6 +39,7 @@ WildBoar::WildBoar()
 
 WildBoar::~WildBoar()
 {
+	DeleteGO(m_enemyBase);
 }
 
 bool WildBoar::Start()
@@ -96,15 +97,11 @@ void WildBoar::LoadAssets()
 	m_wildBoarModel.Init("Assets/modelData/wildBoar/wildBoar.tkm", m_animationClips, enWildBoarAnimClip_Num, enModelUpAxisZ);
 
 	//警告表示
-	m_chargeCaveat.Init("Assets/modelData/wildBoar/ChargeCaveat.tkm");
+	m_chargeCaveat.Init("Assets/modelData/wildBoar/ChargeCaveat.tkm", nullptr, 0, false);
 }
 
 void WildBoar::Update()
 {
-	//スポーンしていないときは実行しない
-	if (!m_isSpawn) {
-		return;
-	}
 	//ステート管理
 	ManageState();
 	//行動実行
@@ -443,10 +440,7 @@ void WildBoar::ExecuteAction()
 		}
 		//一定時間がたったら
 		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
-			//時間をリセット
-			m_elapsedTime = 0.0f;
-			//非スポーン状態にする
-			m_isSpawn = false;
+			DeleteGO(this);
 		}
 
 		break;
@@ -568,11 +562,6 @@ void WildBoar::ExecuteSpeed()
 
 void WildBoar::Render(RenderContext& rc)
 {
-	//スポーンしていないなら実行しない
-	if (!m_isSpawn) {
-		return;
-	}
-
 	//死亡時以外は通常表示
 	if (m_wildBoarState != enWildBoarDeath) {
 		m_wildBoarModel.Draw(rc);

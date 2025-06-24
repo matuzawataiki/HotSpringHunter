@@ -121,6 +121,10 @@ namespace Enemy
 
 		//////////////////////////////////////////////////////////////////////////////
 
+		/// <summary>
+		/// ダメージを与える
+		/// </summary>
+		/// <param name="damage">ダメージ量</param>
 		inline void AddDamage(float damage) {
 			m_hp -= damage;
 		}
@@ -130,6 +134,13 @@ namespace Enemy
 		/// </summary>
 		inline void ChangeHitFlag() {
 			m_isHit = !m_isHit;
+		}
+		
+		/// <summary>
+		/// エネミーを削除する
+		/// </summary>
+		inline void EnemyDeath() {
+			DeleteGO(this);
 		}
 
 	protected:

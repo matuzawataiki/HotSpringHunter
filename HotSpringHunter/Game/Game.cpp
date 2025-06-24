@@ -39,8 +39,6 @@ bool Game::Start()
 	m_player = NewGO<Character::Player>(0, "player");
 	m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
-	
-	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 	m_enemyManager = NewGO<EnemyManager>(0, "enemyManager");
 	m_ui = NewGO<UI>(0, "ui");
 
