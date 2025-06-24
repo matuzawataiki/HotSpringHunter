@@ -339,7 +339,8 @@ void Bear::ManageState()
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);
 		Vector3 effectPos = m_bearPos;
-		effectPos.y += 30.0f;
+		effectPos += (m_bearDir * 200.0f);
+		effectPos.y += 200.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
 		m_effect->SetScale({ 10.0f,10.0f,10.0f });
