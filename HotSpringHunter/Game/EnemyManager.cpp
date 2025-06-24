@@ -62,26 +62,21 @@ Vector3 EnemyManager::CalcToNearestEnemyVec(const Vector3& playerPos)
 
 	//ヘビ
 	for (auto snakesIt = m_snakes.begin(); snakesIt != m_snakes.end(); ++snakesIt) {
-		//スポーンしている敵を見つける
-		if ((*snakesIt)->GetIsSnakeSpawn()) {
-			//見つけた敵へのベクトルを計算
-			toEnemyVec = (*snakesIt)->GetSnakePos() - m_player->GetPlayerPos();
-			//一番近いなら更新
-			if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
-				toNearestEnemyVec = toEnemyVec;
-				nearestEnemyPos = (*snakesIt)->GetSnakePos();
-			}
+		//見つけた敵へのベクトルを計算
+		toEnemyVec = (*snakesIt)->GetSnakePos() - m_player->GetPlayerPos();
+		//一番近いなら更新
+		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+			toNearestEnemyVec = toEnemyVec;
+			nearestEnemyPos = (*snakesIt)->GetSnakePos();
 		}
 	}
 
 	//イノシシ
 	for (auto wildBoarIt = m_wildBoars.begin(); wildBoarIt != m_wildBoars.end(); ++wildBoarIt) {
-		if ((*wildBoarIt)->GetIsWildBoarIsSpawn()) {
-			toEnemyVec = (*wildBoarIt)->GetWildBoarPos() - m_player->GetPlayerPos();
-			if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
-				toNearestEnemyVec = toEnemyVec;
-				nearestEnemyPos = (*wildBoarIt)->GetWildBoarPos();
-			}
+		toEnemyVec = (*wildBoarIt)->GetWildBoarPos() - m_player->GetPlayerPos();
+		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+			toNearestEnemyVec = toEnemyVec;
+			nearestEnemyPos = (*wildBoarIt)->GetWildBoarPos();
 		}
 	}
 
