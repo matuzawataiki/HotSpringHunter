@@ -7,8 +7,8 @@
 namespace {
 	const float		CAMERA_NEAR					= 1.0f;						//カメラ近平面
 	const float		CAMERA_FAR					= 30000.0f;					//カメラ遠平面
-	const float		CAMERA_LEFT_LIMIT_OBSTAC	= -800.0f;					//障害物：左方向の限界値
-	const float		CAMERA_RIGHT_LIMIT_OBSTAC	= 800.0f;					//障害物：右方向の限界値
+	const float		CAMERA_LEFT_LIMIT_OBSTAC	= -1250.0f;					//障害物：左方向の限界値
+	const float		CAMERA_RIGHT_LIMIT_OBSTAC	= 1250.0f;					//障害物：右方向の限界値
 	const float		CAMERA_LEFT_LIMIT_BATTLE	= -1200.0f;					//戦闘：左方向の限界値
 	const float		CAMERA_RIGHT_LIMIT_BATTLE	= 1200.0f;					//戦闘：右方向の限界値
 

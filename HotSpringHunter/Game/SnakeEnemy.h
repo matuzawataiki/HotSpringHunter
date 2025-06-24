@@ -5,6 +5,7 @@ namespace Character {
 }
 class EnemySpawn;
 class EnemyBase;
+class EnemyHPBar;
 class SoundEffect;
 
 //ヘビのステートの種類
@@ -47,8 +48,6 @@ public:
 	void VariousUpdate();
 	//速度を適応。
 	void ExecuteSpeed();
-	//スポーンした時の処理
-	void Spawned();
 	//エフェクトの再生
 	void PlayEffect();
 	void Render(RenderContext& rc)override;
@@ -65,16 +64,12 @@ public:
 	inline void SetSnakeRot(const Quaternion& rot) { m_snakeRot = rot; };
 	//移動速度を設定
 	inline void SetSnakeSpeed(const Vector3& speed) { m_snakeSpeed = speed; };
-	//スポーン状態を設定
-	inline void SetSnakeIsSpawn(const bool isSpawn) { m_isSpawn = isSpawn; };
 	//キャラコンの位置を設定
 	inline void SetSnakeCharaConPos(const Vector3& pos) { m_snakeController->SetPosition(pos); };
 
 	//ゲッター
 	//位置を取得
 	inline Vector3 GetSnakePos() const { return m_snakePos; };
-	//スポーン状態を取得
-	inline bool GetIsSnakeSpawn() const { return m_isSpawn; };
 	//ステートを取得
 	inline int GetSnakeState() const { return m_snakeState; };
 
@@ -83,6 +78,7 @@ private:
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+	EnemyHPBar*				m_enemyHPBar		= nullptr;	//敵のHPバー
 	SoundEffect*			m_soundEffect		= nullptr;	//サウンドエフェクト 
 	CharacterController*	m_snakeController   = nullptr;						//キャラクターコントローラー	
 
@@ -102,6 +98,5 @@ private:
 	int m_snakeState			= 0;			//ヘビのステート
 
 	bool m_isCanStateChange		= true;			//ステートを変えてもよいか
-	bool m_isSpawn				= false;			//敵が出現するか
 	bool m_isRemoveController	= false;		//キャラコンを削除したか
 };

@@ -28,7 +28,7 @@ public:
 	~Game();
 	bool Start()override;
 	void Update()override;
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 
 private:
 	GameCamera*			m_gameCamera	= nullptr;
@@ -44,7 +44,6 @@ private:
 	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
 	EnemySpawner*		m_enemySpawner	= nullptr;
-
+  
 	SpriteRender m_gameUI;
-};
-
+  };

@@ -2,6 +2,8 @@
 #include "Bear.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
+#include "Enemy/PoisonSnake/PoisonSnake.h"
+#include "WildBoar.h"
 #include "UI.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
@@ -29,7 +31,7 @@ namespace {
 	const float COVER_HIT_TIME			= 1.0f;			//拘束攻撃：当たり判定を出す時間
 	const float COVER_COLLISION_DIS		= 20.0f;		//拘束攻撃：当たり判定を前に出す量
 	const float COVER_COLLISION_SIZE	= 3000.0f;		//拘束攻撃：当たり判定の半径
-	const float COVER_COOLTIME			= 50.0f;		//拘束攻撃：クールタイム
+	const float COVER_COOLTIME			= 5.0f;		//拘束攻撃：クールタイム
 	const float ON_THE_PLAYER_TIME		= 1.0f;			//拘束攻撃：プレイヤーに乗りかかる時間
 	const float ON_THE_PLAYER_DIS		= 50.0f;		//拘束攻撃：プレイヤーに乗りかかる距離
 	const float COVER_TIME				= 5.0f;			//拘束攻撃：拘束時間
@@ -104,8 +106,6 @@ bool Bear::Start()
 	m_player		= FindGO<Character::Player>("player");
 	m_enemySpawn	= FindGO<EnemySpawn>("enemySpawn");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
-	m_enemyManager	= FindGO<EnemyManager>("enemyManager");
-
 
 	//キャラクターコントローラー
 	m_bearController.Init(80.0f, 80.0f, m_bearPos);
@@ -146,10 +146,6 @@ void Bear::LoadAssets()
 
 void Bear::Update()
 {
-	//スポーンしていないときは実行しない
-	if (!m_isSpawn) {
-		return;
-	}
 	//投石
 	StoneThrow();
 	//プレイヤーを探す
@@ -280,14 +276,40 @@ void Bear::StoneCollision()
 /// </summary>
 void Bear::SummonMinions()
 {
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	SnakeEnemy* snake;
+	Enemy::PoisonSnake* poisonSnake;
+	WildBoar* wildBoar;
+
 	//まず位置を計算
 	CalcPos();
 
 	//雑魚を計算した位置に召喚
 	for (int i = 0; i < SUMMON_NUM; i++) {
-		m_enemyManager->EnemyArrangement(EnEnemyType::enSnake, m_summonPos.front(), Quaternion::Identity);
-		m_summonPos.erase(m_summonPos.begin());
+		
+		int random = rand() % 3;
+		switch (random)
+		{
+		case 0:
+			snake = NewGO<SnakeEnemy>(0, "snake");
+			snake->SetSnakePos(m_summonPos.front());
+			enemyManager->SetSnake(snake);
+			break;
+
+		case 1:
+			poisonSnake = NewGO<Enemy::PoisonSnake>(0, "poisonSnake");
+			poisonSnake->SetPosition(m_summonPos.front());
+			enemyManager->SetPoisonSnake(poisonSnake);
+			break;
+
+		case 2:
+			wildBoar = NewGO<WildBoar>(0, "wildBoar");
+			wildBoar->SetWildBoarPos(m_summonPos.front());
+			enemyManager->SetWildBoar(wildBoar);
+			break;
+		}
 	}
+	m_summonPos.clear();
 }
 
 /// <summary>
@@ -339,10 +361,11 @@ void Bear::ManageState()
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);
 		Vector3 effectPos = m_bearPos;
-		effectPos.y += 30.0f;
+		effectPos += (m_bearDir * 200.0f);
+		effectPos.y += 150.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
 		m_effect->Play();
 
 		//HPがまだ残っている。
@@ -472,6 +495,8 @@ void Bear::ExecuteAction()
 		if (!m_bearModel.IsPlayAnimation())	{
 			//地面に沈ませる
 			SinkIntoGround();
+			EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+			enemyManager->DeleteBoss();
 		}
 		break;
 
@@ -539,6 +564,7 @@ void Bear::ExecuteAction()
 			if (m_isSlowPlayer) {
 				m_bearState = enBearSlowPlayer;
 				m_coverTime = 0.0f;
+				m_isPutCoverCollision = false;
 			}
 		}
 
@@ -636,6 +662,18 @@ void Bear::ExecuteAction()
 		if (!m_isPlayRoar) {
 			//咆哮アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+
+			//咆哮エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enRoar);
+			Vector3 effectPos = m_bearPos;
+			effectPos += (m_bearDir * 30.0f); //クマの前方にエフェクトを出す
+			effectPos.y = 60.0f;
+			m_effect->SetPosition(effectPos);
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 40.0f,40.0f,40.0f });
+			m_effect->Play();
+
 			m_isPlayRoar = true;
 		}		
 		//アニメーションが再生し終わったら待機アニメーション
@@ -746,10 +784,7 @@ float Bear::GetBLOW_POS_DIS()
 
 void Bear::Render(RenderContext& rc)
 {
-	//クマ描画（スポーンしているときだけ）
-	if (m_isSpawn) {
-		m_bearModel.Draw(rc);
-	}
+	m_bearModel.Draw(rc);
 
 	//岩描画（岩が飛んでいるときだけ）
 	if (m_isStoneDraw) {

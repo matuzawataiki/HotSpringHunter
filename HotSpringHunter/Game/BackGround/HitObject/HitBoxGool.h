@@ -1,8 +1,8 @@
 #pragma once
 #include "BackGround/HitObjectBase.h";
-class HitBoxGool : public HitObjectBase
+class HitBoxGoal : public HitObjectBase
 {
 public:
-	HitBoxGool();
+	HitBoxGoal();
 };
 

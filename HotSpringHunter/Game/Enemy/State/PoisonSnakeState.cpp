@@ -54,30 +54,6 @@ namespace Enemy {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	// オフステート
-	//////////////////////////////////////////////////////////////////////////////
-
-	void PoisonSnakeOffState::Enter()
-	{
-
-	}
-
-	void PoisonSnakeOffState::Update()
-	{
-
-	}
-
-	void PoisonSnakeOffState::Exit()
-	{
-
-	}
-
-	bool PoisonSnakeOffState::RequestState(uint32_t& request)
-	{
-		return false;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
 
@@ -414,8 +390,7 @@ namespace Enemy {
 	bool PoisonSnakeDeathState::RequestState(uint32_t& request)
 	{
 		if (m_lifeTime < 0.0f) {
-			//request = PoisonSnakeOffState::ID();
-			return true;
+			m_owner->Deash();
 		}
 		return false;
 	}

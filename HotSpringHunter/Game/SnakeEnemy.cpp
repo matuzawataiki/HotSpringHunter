@@ -2,10 +2,12 @@
 #include "SnakeEnemy.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyHPBar.h"
 #include "Game.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EnemyManager.h"
 #include "EffectHub.h"
 
 namespace {
@@ -31,6 +33,9 @@ SnakeEnemy::SnakeEnemy()
 SnakeEnemy::~SnakeEnemy()
 {
 	//delete m_snakeController;
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	enemyManager->DeleteEnemy(this);
+	DeleteGO(m_enemyBase);
 }
 
 bool SnakeEnemy::Start()
@@ -51,6 +56,22 @@ bool SnakeEnemy::Start()
 
 	//HPをセット
 	m_snakeHP = MAX_SNAKE_HP;
+
+	//基底クラス生成
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
+	//HPバーをセット
+	m_enemyHPBar->Init(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
+
+
+	//キャラクターコントローラー
+	m_snakeController->Init(30.0f, 50.0f, m_snakePos);
+
+	//待機状態に
+	m_snakeState = EnSnakeState::enSnakeIdle;
+
+	//ステート変更可能に
+	m_isCanStateChange = true;
 
 	return true;
 }
@@ -78,20 +99,14 @@ void SnakeEnemy::LoadAsset()
 
 void SnakeEnemy::Update()
 {
-	//スポーンしているなら
-	if (!m_isSpawn) {
-		return;
-	}
-
-	m_player = FindGO<Character::Player>("player");
-
-
 	//ステート管理
 	ManageState();
 	//行動を実行
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+	//HPバーの更新
+	m_enemyHPBar->UpdateHpBar(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
 }
 
 
@@ -106,7 +121,39 @@ void SnakeEnemy::ManageState()
 		return;
 	}
 	//被弾した場合
-	/*if () {
+	if (m_player->m_collision->IsHit(m_snakeController)) {
+
+		//HPを減らす
+		m_snakeHP -= m_player->m_attackPower;
+
+		//0以下になったら0にする
+		if(m_snakeHP < 0.0f) {
+			m_snakeHP = 0.0f;
+		}
+
+		//被弾エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enEnemyHit);
+		Vector3 effectPos = m_snakePos;
+		effectPos.y += 30.0f;
+		m_effect->SetPosition(effectPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
+		m_effect->Play();
+		//HPがまだ残っている
+		if (m_snakeHP > 0.0f) {
+			//ノックバック
+			m_snakeState = enSnakeKnockBack;
+			//被弾の効果音
+			m_soundEffect->Play(enSnakeHitSE, false);
+		}
+		//HPがなくなった
+		else {
+			//死亡（吹っ飛び）
+			m_snakeState = enSnakeDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enSnakeDeathSE, false);
+		}
 		return;
 	}*/
 	if (m_player->m_collision != nullptr){
@@ -212,10 +259,7 @@ void SnakeEnemy::ExecuteAction()
 		}
 		//一定時間がたったら
 		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
-			//時間をリセット
-			m_elapsedTime = 0.0f;
-			//非スポーン状態にする
-			m_isSpawn = false;
+			DeleteGO(this);
 		}
 
 		break;
@@ -301,31 +345,8 @@ void SnakeEnemy::ExecuteSpeed()
 	}
 }
 
-
-/// <summary>
-/// スポーンした時の処理。
-/// </summary>
-void SnakeEnemy::Spawned()
-{
-	//キャラクターコントローラー
-	m_snakeController->Init(30.0f, 50.0f, m_snakePos);
-	//HPをセット
-	m_snakeHP = MAX_SNAKE_HP;
-	//スポーン状態に
-	m_isSpawn = true;
-	//待機状態に
-	m_snakeState = EnSnakeState::enSnakeIdle;
-	//ステート変更可能に
-	m_isCanStateChange = true;
-}
-
 void SnakeEnemy::Render(RenderContext& rc)
 {
-	//スポーンしていないなら実行しない
-	if (!m_isSpawn) {
-		return;
-	}
-
 	//死亡時は点滅表示を行う
 	if ((m_snakeState == enSnakeDeath) && (m_enemyBase->IsBlinkRender())) {
 		m_snakeModel.Draw(rc);

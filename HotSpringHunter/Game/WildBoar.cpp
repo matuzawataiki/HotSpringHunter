@@ -4,9 +4,11 @@
 #include "Player.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyHPBar.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
+#include "EnemyManager.h"
 
 namespace
 {
@@ -38,11 +40,15 @@ WildBoar::WildBoar()
 
 WildBoar::~WildBoar()
 {
-	
+	DeleteGO(m_enemyBase);
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	enemyManager->DeleteEnemy(this);
 }
 
 bool WildBoar::Start()
 {
+	//インスタンス探し
+	m_player = FindGO<Character::Player>("player");
 	//エフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
@@ -51,9 +57,7 @@ bool WildBoar::Start()
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
-
-	//インスタンス探し
-	m_player = FindGO<Character::Player>("player");
+	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
 
 	//イノシシのHPをセット
 	m_wildBoarHP = MAX_WILD_BOAR_HP;
@@ -64,6 +68,9 @@ bool WildBoar::Start()
 	m_wildBoarPos = NEW_POSITION;
 	//イノシシの大きさ
 	m_wildBoarModel.SetScale(Vector3(SET_SCALE));
+
+	//HPバーの初期化
+	m_enemyHPBar->Init(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 
 	return true;
 }
@@ -93,21 +100,20 @@ void WildBoar::LoadAssets()
 	m_wildBoarModel.Init("Assets/modelData/wildBoar/wildBoar.tkm", m_animationClips, enWildBoarAnimClip_Num, enModelUpAxisZ);
 
 	//警告表示
-	m_chargeCaveat.Init("Assets/modelData/wildBoar/ChargeCaveat.tkm");
+	m_chargeCaveat.Init("Assets/modelData/wildBoar/ChargeCaveat.tkm", nullptr, 0, false);
 }
 
 void WildBoar::Update()
 {
-	//スポーンしていないときは実行しない
-	if (!m_isSpawn) {
-		return;
-	}
 	//ステート管理
 	ManageState();
 	//行動実行
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+
+	//HPバーの更新
+	m_enemyHPBar->UpdateHpBar(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 }
 
 /// <summary>
@@ -179,7 +185,6 @@ void WildBoar::ChargeCaveat()
 /// </summary>
 void WildBoar::Charge()
 {
-	
 	if (m_isChargeSoundPlay)
 	{
 		//突進の効果音
@@ -253,17 +258,18 @@ void WildBoar::Charge()
 }
 
 /// <summary>
-/// イノシシのエフェクトを再生
+/// イノシシの突進エフェクトを再生
 /// </summary>
 void WildBoar::PlayEffect()
 {
 	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 	m_effect->Init(EnEffectVar::enImpact);
 	Vector3 effectPos = m_wildBoarPos;
-	effectPos.y += 30.0f;
+	effectPos += (m_wildBoarDir * 20.0f);
+	effectPos.y += 30.0f;	
 	m_effect->SetPosition(effectPos);
 	m_effect->SetRotation(Quaternion::Identity);
-	m_effect->SetScale({ 10.0f,10.0f,10.0f });
+	m_effect->SetScale({ 15.0f,15.0f,15.0f });
 	m_effect->Play();
 }
 
@@ -317,6 +323,11 @@ void WildBoar::ManageState()
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
 
+		//0以下になったら0にする
+		if (m_wildBoarHP < 0.0f) {
+			m_wildBoarHP = 0.0f;
+		}
+
 		//被弾エフェクト
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);
@@ -324,7 +335,7 @@ void WildBoar::ManageState()
 		effectPos.y += 30.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
 		m_effect->Play();
 
 		//HPがまだ残っている。
@@ -432,10 +443,7 @@ void WildBoar::ExecuteAction()
 		}
 		//一定時間がたったら
 		if (m_elapsedTime >= TO_NOT_SPAWNED_TIME) {
-			//時間をリセット
-			m_elapsedTime = 0.0f;
-			//非スポーン状態にする
-			m_isSpawn = false;
+			DeleteGO(this);
 		}
 
 		break;
@@ -480,7 +488,7 @@ void WildBoar::ExecuteAction()
 
 		//追従
 	case enWildBoarTrack:
-		//m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
+		m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Walk);
 		break;
@@ -557,11 +565,6 @@ void WildBoar::ExecuteSpeed()
 
 void WildBoar::Render(RenderContext& rc)
 {
-	//スポーンしていないなら実行しない
-	if (!m_isSpawn) {
-		return;
-	}
-
 	//死亡時以外は通常表示
 	if (m_wildBoarState != enWildBoarDeath) {
 		m_wildBoarModel.Draw(rc);

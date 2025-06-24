@@ -5,13 +5,14 @@ namespace Character {
 }
 
 enum EnGameScene {
-	enStart,				//ゲーム開始
-	enObstacleArea1,		//障害物エリア1
-	enBattleArea1,			//戦闘エリア1
-	enObstacleArea2,		//障害物エリア2
-	enBattleArea2,			//戦闘エリア2
-	enDefeatedBoss,			//ボスを倒した
-	enGoal,					//ゴール
+	enStartArea,		//ゲーム開始
+	enBattleArea1,		//戦闘エリア1
+	enBattleArea1Clear,	//戦闘エリア1クリア
+	enBattleArea2,		//戦闘エリア2
+	enBattleArea2Clear,	//戦闘エリア2クリア
+	enBossArea,			//戦闘エリア2
+	enDefeatedBoss,		//ボスを倒した
+	enGoalArea,			//ゴール
 };
 
 class FenceManager;
@@ -21,6 +22,7 @@ class GameOver;
 class GameCamera;
 class Bear; 
 class Result;
+class StageManager;
 
 class SceneManager:public IGameObject
 {
@@ -58,7 +60,6 @@ public:
 	float m_gamePlayTime = 0.0f;
 
 private:
-	FenceManager*		m_fenceManager	= nullptr;
 	EnemySpawner*		m_enemySpawner	= nullptr;
 	GameClear*			m_gameClear		= nullptr;
 	GameOver*           m_gameOver      = nullptr;
@@ -66,16 +67,17 @@ private:
 	Character::Player*	m_player		= nullptr;
 	Bear*				m_bear			= nullptr;
 	Result*             m_result        = nullptr;
+	StageManager*		m_stageManager  = nullptr;
+
+	EnGameScene			m_sceneState = EnGameScene::enStartArea;	//シーン状態
 
 	FontRender          m_timeRender;
 
 	float				m_gameClearTime = 0.0f;		//ゲームのプレイ時間
 	
 
-	int					m_sceneState	= 0;			//シーン状態
 	int					m_finalScore	= 0;			//最終スコア
 
-	bool				m_isExecuted	= false;		//シーン切り替え時の処理を実行したか
 	bool				m_isToGoal		= false;		//ゴールに移動させるかのフラッグ
 	bool				m_isClearFrag	= false;		//クリア演出を実行するか
 	bool                m_isTimeOff     = true;        //タイムオフ

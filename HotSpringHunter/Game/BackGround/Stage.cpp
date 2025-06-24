@@ -65,9 +65,9 @@ Stage::~Stage()
 		DeleteGO(m_stageObject.hitBoxFence[1]);
 		break;
 
-	case enGool:
-		DeleteGO(m_stageObject.grondGool);
-		DeleteGO(m_stageObject.hitBoxGool);
+	case enGoal:
+		DeleteGO(m_stageObject.grondGoal);
+		DeleteGO(m_stageObject.hitBoxGoal);
 		DeleteGO(m_stageObject.hotSpring);
 		break;
 	default:
@@ -84,44 +84,12 @@ void Stage::Update()
 {
 }
 
-void Stage::Init(EnStage stageNum, LevelObjectData& objData)
+void Stage::Init(EnStageType stageNum, LevelObjectData& objData)
 {
 	m_stageNum = stageNum;
 	m_position = objData.position;
 	InitStage();
 	InitLevel();
-}
-
-void Stage::InitStage()
-{
-	switch (m_stageNum)
-	{
-	case enStart:
-		m_levelFilePath = "Assets/stage/Level/LevelStart.tkl";
-		m_grondName = L"GroundStart";
-		m_hitBoxName = L"HitBoxStart";
-		break;
-
-	case enBattle:
-		m_levelFilePath = "Assets/stage/Level/LevelBattle.tkl";
-		m_grondName = L"GroundBattle";
-		m_hitBoxName = L"HitBoxBattle";
-		break;
-
-	case enBoss:
-		m_levelFilePath = "Assets/stage/Level/LevelBoss.tkl";
-		m_grondName = L"GroundBoss";
-		m_hitBoxName = L"HitBoxBoss";
-		break;
-
-	case enGool:
-		m_levelFilePath = "Assets/stage/Level/LevelGool.tkl";
-		m_grondName = L"GroundGool";
-		m_hitBoxName = L"HitBoxGool";
-		break;
-	default:
-		break;
-	}
 }
 
 void Stage::InitLevel()
@@ -155,6 +123,7 @@ void Stage::InitLevel()
 			return true;
 		}
 
+		//敵の出現位置
 		if (objData.EqualObjectName(L"enemyEnd") == true) {
 			m_stageObject.enemyTargetPos[countEnd] = position;
 			countEnd++;
@@ -167,6 +136,7 @@ void Stage::InitLevel()
 			return true;
 		}
 
+		//ボスの出現位置
 		if (objData.EqualObjectName(L"BossPosition") == true) {
 			m_stageObject.bossPos = position;
 			return true;
@@ -184,44 +154,82 @@ void Stage::InitLevel()
 			return true;
 		}
 
+		//入室検知オブジェクトの配置
 		if (objData.EqualObjectName(L"InOutBoxBattle") == true) {
 			m_stageObject.inOutHitBox = NewGO<InOutHitBox>(0, "inOutBoxBattle");
 			m_stageObject.inOutHitBox->init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//後ろのフェンスの配置
 		if (objData.EqualObjectName(L"BackFence") == true) {
 			m_stageObject.fence[0] = NewGO<Fence>(0, "fence");
 			m_stageObject.fence[0]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//前のフェンスの配置
 		if (objData.EqualObjectName(L"FrontFence") == true) {
-			//m_stageObject.fence[1] = NewGO<Fence>(0, "fence");
-			//m_stageObject.fence[1]->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.fence[1] = NewGO<Fence>(0, "fence");
+			m_stageObject.fence[1]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//後ろのフェンスの当たり判定を配置
 		if (objData.EqualObjectName(L"BackHitBoxFence") == true) {
-			//m_stageObject.hitBoxFence[0] = NewGO<HItBoxFence>(0, "hitBoxFence");
-			//m_stageObject.hitBoxFence[0]->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.hitBoxFence[0] = NewGO<HItBoxFence>(0, "hitBoxFence");
+			m_stageObject.hitBoxFence[0]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//前のフェンスの当たり判定を配置
 		if (objData.EqualObjectName(L"FrontHitBoxFence") == true) {
-	/*		m_stageObject.hitBoxFence[1] = NewGO<HItBoxFence>(0, "hitBoxFence");
-			m_stageObject.hitBoxFence[1]->Init(m_position, objData.rotation, objData.scale);*/
+			m_stageObject.hitBoxFence[1] = NewGO<HItBoxFence>(0, "hitBoxFence");
+			m_stageObject.hitBoxFence[1]->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
+		//温泉の配置
 		if (objData.EqualObjectName(L"HotSpring") == true) {
 			m_stageObject.hotSpring = NewGO<HotSpring>(0, "hotSpring");
-			m_stageObject.hotSpring->Init(m_position, objData.rotation, objData.scale);
+			m_stageObject.hotSpring->Init(position, objData.rotation, objData.scale);
 			return true;
 		}
 
 		return false;
 		});
+}
+
+void Stage::InitStage()
+{
+	switch (m_stageNum)
+	{
+	case enStart:
+		m_levelFilePath = "Assets/stage/Level/LevelStart.tkl";
+		m_grondName = L"GroundStart";
+		m_hitBoxName = L"HitBoxStart";
+		break;
+
+	case enBattle:
+		m_levelFilePath = "Assets/stage/Level/LevelBattle.tkl";
+		m_grondName = L"GroundBattle";
+		m_hitBoxName = L"HitBoxBattle";
+		break;
+
+	case enBoss:
+		m_levelFilePath = "Assets/stage/Level/LevelBoss.tkl";
+		m_grondName = L"GroundBoss";
+		m_hitBoxName = L"HitBoxBoss";
+		break;
+
+	case enGoal:
+		m_levelFilePath = "Assets/stage/Level/LevelGoal.tkl";
+		m_grondName = L"GroundGoal";
+		m_hitBoxName = L"HitBoxGoal";
+		break;
+	default:
+		break;
+	}
 }
 
 void Stage::NewGround(LevelObjectData& objData, Vector3& position)
@@ -243,9 +251,9 @@ void Stage::NewGround(LevelObjectData& objData, Vector3& position)
 		m_stageObject.grondBossBattle->Init(position, objData.rotation, objData.scale);
 		break;
 
-	case enGool:
-		m_stageObject.grondGool = NewGO<GroundGool>(0, "groundGool");
-		m_stageObject.grondGool->Init(position, objData.rotation, objData.scale);
+	case enGoal:
+		m_stageObject.grondGoal = NewGO<GroundGool>(0, "groundGoal");
+		m_stageObject.grondGoal->Init(position, objData.rotation, objData.scale);
 		break;
 	default:
 		break;
@@ -274,10 +282,10 @@ void Stage::NewHitBox(LevelObjectData& objData, Vector3& position)
 		m_stageObject.hitBoxBossBattle->CreatePhysicsObject();
 		break;
 
-	case enGool:
-		m_stageObject.hitBoxGool = NewGO<HitBoxGool>(0, "hitBoxGool");
-		m_stageObject.hitBoxGool->Init(position, objData.rotation, objData.scale);
-		m_stageObject.hitBoxGool->CreatePhysicsObject();
+	case enGoal:
+		m_stageObject.hitBoxGoal = NewGO<HitBoxGoal>(0, "hitBoxGoal");
+		m_stageObject.hitBoxGoal->Init(position, objData.rotation, objData.scale);
+		m_stageObject.hitBoxGoal->CreatePhysicsObject();
 		break;
 	default:
 		break;

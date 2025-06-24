@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "PoisonSnake.h"
 #include "Player.h"
+#include "EnemyHPBar.h"
+#include "EnemyManager.h"
 #include "Enemy/State/PoisonSnakeState.h"
 
 namespace {
@@ -21,17 +23,21 @@ namespace Enemy
 
 		LoadAssets();
 		InitStateMachine();
-
-		m_position.z += 500.0f;
-		m_characterController.Init(30.0f, 50.0f, m_position);
-
 	}
+
 	PoisonSnake::~PoisonSnake()
 	{
+		EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+		enemyManager->DeleteEnemy(this);
+		delete m_stateMachine;
 	}
 
 	bool PoisonSnake::Start()
 	{
+		m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
+		m_enemyHPBar->Init(m_hp, m_position, m_target->GetPlayerPos());
+		m_characterController.Init(30.0f, 50.0f, m_position);
+
 		return true;
 	}
 
@@ -48,6 +54,8 @@ namespace Enemy
 		m_enemyModel.SetPosition(m_position);
 		m_enemyModel.SetRotation(m_rotation);
 		m_enemyModel.Update();
+
+		m_enemyHPBar->UpdateHpBar(m_hp, m_position, m_target->GetPlayerPos());
 	}
 
 	void PoisonSnake::ActivateStart()

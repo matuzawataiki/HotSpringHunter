@@ -5,7 +5,6 @@
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "EnemyHPBar.h"
-#include "StartWaveCollision.h"
 #include "UI.h"
 #include "BackGround/StageManager.h";
 #include "SceneManager.h"
@@ -40,8 +39,6 @@ bool Game::Start()
 	m_player = NewGO<Character::Player>(0, "player");
 	m_sceneManager = NewGO<SceneManager>(0, "sceneManager");
 	m_stageManager = NewGO<StageManager>(0, "stageManager");
-	
-	//m_waveCollision = NewGO<StartWaveCollision>(0, "startWaveCollision");
 	m_enemyManager = NewGO<EnemyManager>(0, "enemyManager");
 	m_ui = NewGO<UI>(0, "ui");
 
@@ -49,7 +46,7 @@ bool Game::Start()
 	m_effectHub = NewGO<EffectHub>(0, "effectHub");
 
 	//当たり判定を可視化する。
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }

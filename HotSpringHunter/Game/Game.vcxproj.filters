@@ -17,7 +17,6 @@
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemySpawn.cpp" />
-    <ClCompile Include="StartWaveCollision.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\Stage.cpp" />
@@ -78,7 +77,6 @@
     <ClInclude Include="Towel.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemySpawn.h" />
-    <ClInclude Include="StartWaveCollision.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="SnakeEnemy.h" />
