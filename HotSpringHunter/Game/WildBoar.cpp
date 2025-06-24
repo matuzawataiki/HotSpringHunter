@@ -491,7 +491,7 @@ void WildBoar::ExecuteAction()
 
 		//追従
 	case enWildBoarTrack:
-		//m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
+		m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Walk);
 		break;
