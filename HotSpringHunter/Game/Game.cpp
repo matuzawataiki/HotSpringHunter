@@ -5,7 +5,6 @@
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "EnemyHPBar.h"
-#include "StartWaveCollision.h"
 #include "UI.h"
 #include "BackGround/StageManager.h";
 #include "SceneManager.h"

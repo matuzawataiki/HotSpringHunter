@@ -53,6 +53,24 @@ public:
 	void NewHitBox(LevelObjectData& objData, Vector3& position);
 
 	/// <summary>
+	/// フェンスを出す
+	/// </summary>
+	void UpFence() {
+		m_stageObject.fence[0]->UpFence();
+		m_stageObject.fence[1]->UpFence();
+		m_stageObject.hitBoxFence[0]->CreatePhysicsObject();
+		m_stageObject.hitBoxFence[1]->CreatePhysicsObject();
+	}
+
+	/// <summary>
+	/// 前方のフェンスを消す
+	/// </summary>
+	void DeleteFence() {
+		m_stageObject.fence[1]->DownFence();
+		DeleteGO(m_stageObject.hitBoxFence[1]);
+	}
+
+	/// <summary>
 	/// ステージオブジェクトを取得
 	/// </summary>
 	/// <returns></returns>

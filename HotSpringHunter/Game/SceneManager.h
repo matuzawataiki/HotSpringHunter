@@ -5,14 +5,14 @@ namespace Character {
 }
 
 enum EnGameScene {
-	enStartArea,			//ゲーム開始
+	enStartArea,		//ゲーム開始
 	enBattleArea1,		//戦闘エリア1
 	enBattleArea1Clear,	//戦闘エリア1クリア
 	enBattleArea2,		//戦闘エリア2
 	enBattleArea2Clear,	//戦闘エリア2クリア
 	enBossArea,			//戦闘エリア2
 	enDefeatedBoss,		//ボスを倒した
-	enGoalArea,				//ゴール
+	enGoalArea,			//ゴール
 };
 
 class FenceManager;

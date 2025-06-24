@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
+#include "EnemyManager.h"
 #include "EffectHub.h"
 
 namespace {
@@ -29,6 +30,8 @@ SnakeEnemy::SnakeEnemy()
 
 SnakeEnemy::~SnakeEnemy()
 {
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	enemyManager->DeleteEnemy(this);
 	DeleteGO(m_enemyBase);
 }
 
