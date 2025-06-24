@@ -637,6 +637,18 @@ void Bear::ExecuteAction()
 		if (!m_isPlayRoar) {
 			//咆哮アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+
+			//咆哮エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enRoar);
+			Vector3 effectPos = m_bearPos;
+			effectPos += (m_bearDir * 30.0f); //クマの前方にエフェクトを出す
+			effectPos.y = 60.0f;
+			m_effect->SetPosition(effectPos);
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 40.0f,40.0f,40.0f });
+			m_effect->Play();
+
 			m_isPlayRoar = true;
 		}		
 		//アニメーションが再生し終わったら待機アニメーション

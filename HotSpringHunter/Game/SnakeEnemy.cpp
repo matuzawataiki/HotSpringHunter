@@ -126,7 +126,7 @@ void SnakeEnemy::ManageState()
 		effectPos.y += 30.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
 		m_effect->Play();
 		//HPがまだ残っている
 		if (m_snakeHP > 0.0f) {

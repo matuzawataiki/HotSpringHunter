@@ -774,15 +774,17 @@ namespace Character {
 	/// </summary>
 	void PlayerChargeAttack::ChangeChargeState()
 	{
+		Vector3 effectPos = m_player->GetPlayerPos();
+		effectPos.y += 100.0f;
 		if (m_player->GetCharge() >= 100.0f && m_chargeState != enCharge03) {
 			m_chargeState = enCharge03;
 
 			//エフェクト
 			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 			m_effect->Init(EnEffectVar::enCharge03);
-			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->SetScale({ 9.0f,9.0f,9.0f });
 			m_effect->Play();
 
 			return;
@@ -793,7 +795,7 @@ namespace Character {
 			//エフェクト
 			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 			m_effect->Init(EnEffectVar::enCharge02);
-			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
 			m_effect->SetScale({ 7.0f,7.0f,7.0f });
 			m_effect->Play();
@@ -806,9 +808,9 @@ namespace Character {
 			//エフェクト
 			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 			m_effect->Init(EnEffectVar::enCharge01);
-			m_effect->SetPosition(m_player->GetPlayerPos());
+			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->SetScale({ 5.0f,5.0f,5.0f });
 			m_effect->Play();
 
 			return;
