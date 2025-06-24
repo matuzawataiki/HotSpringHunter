@@ -19,7 +19,7 @@ void EnemyHPBar::Init(const float hp, const Vector3& enemyPos, const Vector3& pl
 	m_isInit = true;
 }
 
-void EnemyHPBar::SetHpBar(const float hp, const Vector3& enemyPos, const Vector3& playerPos)
+void EnemyHPBar::UpdateHpBar(const float hp, const Vector3& enemyPos, const Vector3& playerPos)
 {
 	m_HP = hp;
 	m_enemyPos = enemyPos;

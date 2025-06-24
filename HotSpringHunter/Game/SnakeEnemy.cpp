@@ -2,6 +2,7 @@
 #include "SnakeEnemy.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyHPBar.h"
 #include "Game.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"
@@ -42,14 +43,18 @@ bool SnakeEnemy::Start()
 	//サウンドエフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
+	//HPをセット
+	m_snakeHP = MAX_SNAKE_HP;
+
 	//基底クラス生成
-	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
+	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
+	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
+	//HPバーをセット
+	m_enemyHPBar->Init(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
+
 
 	//キャラクターコントローラー
 	m_snakeController.Init(30.0f, 50.0f, m_snakePos);
-
-	//HPをセット
-	m_snakeHP = MAX_SNAKE_HP;
 
 	//待機状態に
 	m_snakeState = EnSnakeState::enSnakeIdle;
@@ -89,6 +94,8 @@ void SnakeEnemy::Update()
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+	//HPバーの更新
+	m_enemyHPBar->UpdateHpBar(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
 }
 
 
@@ -108,6 +115,11 @@ void SnakeEnemy::ManageState()
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
 
+		//0以下になったら0にする
+		if(m_snakeHP < 0.0f) {
+			m_snakeHP = 0.0f;
+		}
+
 		//被弾エフェクト
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);
@@ -115,7 +127,7 @@ void SnakeEnemy::ManageState()
 		effectPos.y += 30.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
 		m_effect->Play();
 		//HPがまだ残っている
 		if (m_snakeHP > 0.0f) {

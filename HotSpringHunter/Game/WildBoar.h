@@ -5,6 +5,7 @@ namespace Character {
 }
 class EnemySpawn;
 class EnemyBase;
+class EnemyHPBar;
 class SoundEffect;
 
 //イノシシのステート
@@ -99,6 +100,7 @@ private:
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+	EnemyHPBar*				m_enemyHPBar		= nullptr; //エネミーHPバー
 	SoundEffect*			m_soundEffect		= nullptr; //サウンドエフェクト
 	SoundSource*			m_chargeSound		= nullptr; //突進サウンド
 	SoundSource*			m_runSound			= nullptr;    //突進攻撃サウンド

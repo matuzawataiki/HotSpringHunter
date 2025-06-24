@@ -9,7 +9,7 @@ public:
 	/// <param name="pos">位置</param>
 	void Init(const float hp, const Vector3& enemyPos, const Vector3& playerPos);
 
-	void SetHpBar(const float hp, const Vector3& enemyPos, const Vector3& playerPos);
+	void UpdateHpBar(const float hp, const Vector3& enemyPos, const Vector3& playerPos);
 
 private:
 	void Update();

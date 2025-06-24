@@ -5,6 +5,7 @@ namespace Character {
 }
 class EnemySpawn;
 class EnemyBase;
+class EnemyHPBar;
 class SoundEffect;
 
 //ヘビのステートの種類
@@ -81,6 +82,7 @@ private:
 	Character::Player*		m_player			= nullptr;
 	EnemySpawn*				m_enemySpawn		= nullptr;
 	EnemyBase*				m_enemyBase			= nullptr;
+	EnemyHPBar*				m_enemyHPBar		= nullptr;	//敵のHPバー
 	SoundEffect*			m_soundEffect		= nullptr;	//サウンドエフェクト 
 
 	AnimationClip			m_animationClips[enSnakeAnimClip_Num];  //アニメーションクリップ

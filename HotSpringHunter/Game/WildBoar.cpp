@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "EnemySpawn.h"
 #include "EnemyBase.h"
+#include "EnemyHPBar.h"
 #include "collision/CollisionObject.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
@@ -43,6 +44,8 @@ WildBoar::~WildBoar()
 
 bool WildBoar::Start()
 {
+	//インスタンス探し
+	m_player = FindGO<Character::Player>("player");
 	//エフェクト
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 
@@ -51,9 +54,7 @@ bool WildBoar::Start()
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
-
-	//インスタンス探し
-	m_player = FindGO<Character::Player>("player");
+	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
 
 	//イノシシのHPをセット
 	m_wildBoarHP = MAX_WILD_BOAR_HP;
@@ -64,6 +65,9 @@ bool WildBoar::Start()
 	m_wildBoarPos = NEW_POSITION;
 	//イノシシの大きさ
 	m_wildBoarModel.SetScale(Vector3(SET_SCALE));
+
+	//HPバーの初期化
+	m_enemyHPBar->Init(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 
 	return true;
 }
@@ -104,6 +108,9 @@ void WildBoar::Update()
 	ExecuteAction();
 	//いろいろ更新
 	VariousUpdate();
+
+	//HPバーの更新
+	m_enemyHPBar->UpdateHpBar(m_wildBoarHP, m_wildBoarPos, m_player->GetPlayerPos());
 }
 
 /// <summary>
@@ -175,7 +182,6 @@ void WildBoar::ChargeCaveat()
 /// </summary>
 void WildBoar::Charge()
 {
-	
 	if (m_isChargeSoundPlay)
 	{
 		//突進の効果音
@@ -249,17 +255,18 @@ void WildBoar::Charge()
 }
 
 /// <summary>
-/// イノシシのエフェクトを再生
+/// イノシシの突進エフェクトを再生
 /// </summary>
 void WildBoar::PlayEffect()
 {
 	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 	m_effect->Init(EnEffectVar::enImpact);
 	Vector3 effectPos = m_wildBoarPos;
-	effectPos.y += 30.0f;
+	effectPos += (m_wildBoarDir * 20.0f);
+	effectPos.y += 30.0f;	
 	m_effect->SetPosition(effectPos);
 	m_effect->SetRotation(Quaternion::Identity);
-	m_effect->SetScale({ 10.0f,10.0f,10.0f });
+	m_effect->SetScale({ 15.0f,15.0f,15.0f });
 	m_effect->Play();
 }
 
@@ -313,6 +320,11 @@ void WildBoar::ManageState()
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
 
+		//0以下になったら0にする
+		if (m_wildBoarHP < 0.0f) {
+			m_wildBoarHP = 0.0f;
+		}
+
 		//被弾エフェクト
 		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 		m_effect->Init(EnEffectVar::enEnemyHit);
@@ -320,7 +332,7 @@ void WildBoar::ManageState()
 		effectPos.y += 30.0f;
 		m_effect->SetPosition(effectPos);
 		m_effect->SetRotation(Quaternion::Identity);
-		m_effect->SetScale({ 10.0f,10.0f,10.0f });
+		m_effect->SetScale({ 15.0f,15.0f,15.0f });
 		m_effect->Play();
 
 		//HPがまだ残っている。
@@ -473,7 +485,7 @@ void WildBoar::ExecuteAction()
 
 		//追従
 	case enWildBoarTrack:
-		//m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
+		m_wildBoarSpeed = m_enemyBase->Tracking(m_toPlayer);
 		//歩きアニメーションを再生
 		m_wildBoarModel.PlayAnimation(enWildBoarAnimClip_Walk);
 		break;
