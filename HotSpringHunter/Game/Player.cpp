@@ -7,7 +7,7 @@
 #include "GameCamera.h"
 #include "SceneManager.h"
 #include "EffectHub.h"
-
+#include "SlashAttack.h"
 
 namespace Character {
 	namespace {
@@ -91,6 +91,7 @@ namespace Character {
 	Player::~Player()
 	{
 		DeleteList();
+		g_sceneLight->RemoveLightPos();
 		DeleteGO(m_stateMachine);
 	}
 
@@ -357,6 +358,34 @@ namespace Character {
 		return MAX_PLAYER_HP;
 	}
 
+	void Player::GetPowerUp(PowerUpBox::EnPowerUp powerUp)
+	{
+		switch (powerUp)
+		{
+		case PowerUpBox::enSlash:
+			m_mainPowerUp = 1;
+			break;
+		case PowerUpBox::enSlash1:
+			m_subPowerUp = 1;
+			break;
+		case PowerUpBox::enSlash2:
+			m_subPowerUp = 2;
+			break;
+		case PowerUpBox::enRangeAttack:
+			m_mainPowerUp = 2;
+			break;
+		case PowerUpBox::enRangeAttack2:
+			m_subPowerUp = 1;
+			break;
+		case PowerUpBox::enRangeAttack3:
+			m_subPowerUp = 2;
+			break;
+		}
+
+		auto powerUpBox = FindGO<PowerUpBox>("powerUpBox");
+		DeleteGO(powerUpBox);
+	}
+
 	/*********************************************************************************/
 	//ステートマシン（仮）。
 	/*********************************************************************************/
@@ -566,6 +595,9 @@ namespace Character {
 		LockOnEnemy();
 		//コリジョン生成。
 		MakeCollision();
+		if(m_player->GetPowerUpSelect() == 1){
+			SlashAttack* slash = NewGO<SlashAttack>(0);
+		}
 		//コリジョン削除。
 		DeleteGO(m_player->m_collision);
 	}
@@ -692,6 +724,17 @@ namespace Character {
 		m_isStateChange = false;
 		//チャージの初期値。
 		m_player->m_charge = NEW_CHARGE;
+
+		if (m_player->GetPowerUpSelect() == 2&&
+			m_player->GetUpgradeSelect() == 2
+			){
+			m_chargeCollision = NewGO<CollisionObject>(0, "chargeAttack");		//コリジョンオブジェクトを作成
+			Vector3 collisionPosition = m_player->m_playerPos;
+			m_chargeCollision->CreateSphere(collisionPosition,
+				Quaternion::Identity,
+				COLLISION_SIZE_LOWEST
+			);
+		}
 	}
 
 	void PlayerChargeAttack::Update()
@@ -824,7 +867,16 @@ namespace Character {
 	/// </summary>
 	void PlayerChargeAttack::ChargeAttack()
 	{
-		SnakeEnemy* snakeEnemy = FindGO<SnakeEnemy>("enemy");
+		if (m_player->GetPowerUpSelect() == 1) {
+			SlashAttack* slash = NewGO<SlashAttack>(0);
+			slash->OnCharge();
+		}
+		if (m_player->GetPowerUpSelect() == 2 &&
+			m_player->GetUpgradeSelect() == 2
+			) {
+			DeleteGO(m_chargeCollision);
+		}
+
 		//コリジョン生成。
 		MakeCollision();
 		//コリジョン削除。
@@ -836,17 +888,40 @@ namespace Character {
 	/// </summary>
 	void PlayerChargeAttack::MakeCollision()
 	{
-		//コリジョンオブジェクトを作成
-		m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
-		Vector3 collisionPosition = m_player->m_playerPos;
-		m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST;
-		//球状のコリジョンを作成
-		m_player->m_collision->CreateSphere(collisionPosition,
-			Quaternion::Identity,
-			m_collisionSize);
+		if(m_player->GetPowerUpSelect() == 2)
+		{
+			//コリジョンオブジェクトを作成
+			m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
+			Vector3 collisionPosition = m_player->m_playerPos;
+			if(m_player->GetUpgradeSelect() == 1){
+				m_collisionSize = (CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST) * 1.5f;
+			}
+			else {
+				m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST;
+			}
+			//球状のコリジョンを作成
+			m_player->m_collision->CreateSphere(collisionPosition,
+				Quaternion::Identity,
+				m_collisionSize
+			);
+			//攻撃力を設定。
+			m_player->m_attackPower = m_player->m_charge * CHARGE_POWER;
+		}
+		else {
+			//コリジョンオブジェクトを作成
+			m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
+			Vector3 collisionPosition = m_player->m_playerPos;
+			m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST;
+			//球状のコリジョンを作成
+			m_player->m_collision->CreateSphere(collisionPosition,
+				Quaternion::Identity,
+				m_collisionSize
+			);
+			//攻撃力を設定。
+			m_player->m_attackPower = m_player->m_charge * CHARGE_POWER;
+		}
+		
 
-		//攻撃力を設定。
-		m_player->m_attackPower = m_player->m_charge * CHARGE_POWER;
 	}
 
 	/// <summary>

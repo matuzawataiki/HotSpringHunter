@@ -7,7 +7,7 @@ namespace Character {
 namespace Enemy {
 	class PoisonSnake;
 }
-
+class ProjectileManager;
 class GameCamera;
 class EnemyBase;
 class EnemyManager;
@@ -32,18 +32,19 @@ public:
 
 private:
 
-	GameCamera*			m_gameCamera	= nullptr;
-	Character::Player*	m_player		= nullptr;
-	EnemyBase*			m_enemyBase		= nullptr;
-	EnemyManager*		m_enemyManager	= nullptr;
-	EnemyHPBar*			m_enemyHPBar	= nullptr;
-	StartWaveCollision* m_waveCollision = nullptr;
-	UI*					m_ui			= nullptr;
-	StageManager*		m_stageManager	= nullptr;
-	SceneManager*		m_sceneManager	= nullptr;
-	SoundEffect*		m_soundEffect	= nullptr;
-	EffectHub*			m_effectHub		= nullptr;
-	GameOver*			m_gameOver		= nullptr;
+	GameCamera*			m_gameCamera		= nullptr;
+	Character::Player*	m_player			= nullptr;
+	EnemyBase*			m_enemyBase			= nullptr;
+	EnemyManager*		m_enemyManager		= nullptr;
+	EnemyHPBar*			m_enemyHPBar		= nullptr;
+	StartWaveCollision* m_waveCollision		= nullptr;
+	UI*					m_ui				= nullptr;
+	StageManager*		m_stageManager		= nullptr;
+	SceneManager*		m_sceneManager		= nullptr;
+	SoundEffect*		m_soundEffect		= nullptr;
+	EffectHub*			m_effectHub			= nullptr;
+	GameOver*			m_gameOver			= nullptr;
+	ProjectileManager*	m_projectileManager = nullptr;
 
 	SpriteRender m_gameUI;				//インゲーム中の説明画像
 };
