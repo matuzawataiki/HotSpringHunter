@@ -122,7 +122,6 @@ namespace Character {
 		CollisionObject*	m_collision		= nullptr;
 		SoundEffect*		m_soundEffect	= nullptr;
 
-		SpriteRender		m_RStickImage;
 		AnimationClip		m_animationClips[enPlayerAnimClip_Num];	//アニメーションクリップ。	
 		CharacterController m_playerCharaCon;						//キャラコン。
 		ModelRender			m_playerModel;							//描画。

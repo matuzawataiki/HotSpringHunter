@@ -20,7 +20,6 @@ class GameOver;
 class SoundEffect;
 class EffectHub;
 
-
 class Game : public IGameObject
 {
 public:
@@ -43,7 +42,6 @@ private:
 	SoundEffect*		m_soundEffect	= nullptr;
 	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
-	EnemySpawner*		m_enemySpawner	= nullptr;
-  
+
 	SpriteRender m_gameUI;
   };

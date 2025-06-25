@@ -4,13 +4,9 @@
 
 StageManager::~StageManager()
 {
-	DeleteGO(m_startStage);
-	for (int i = 0; i < 2; i++)
-	{
-		DeleteGO(m_battleStage[i]);
+	for (int i = 0; i < 5; i++) {
+		DeleteGO(m_stage[i]);
 	}
-	DeleteGO(m_BossStage);
-	DeleteGO(m_goolStage);
 }
 
 bool StageManager::Start()

@@ -50,6 +50,11 @@ namespace Enemy {
 
 		m_sphereModel.Update();
 
+		//playerがnullなら実行しない
+		m_target = FindGO<Character::Player>("player");
+		if(m_target == nullptr) {
+			return;
+		}
 		if (m_sphereCollision.IsHit(m_target->m_playerCharaCon)) {
 			m_target->Hit(DAMAGE);
 			DeleteGO(this);
