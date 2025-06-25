@@ -1,5 +1,6 @@
 #pragma once
 class Game;
+class SoundEffect;
 
 class GameController:public IGameObject
 {
@@ -11,7 +12,8 @@ public:
 	void Render(RenderContext& rc)override;
 
 private:
-	Game*        m_game = nullptr;
+	Game*        m_game        = nullptr;
+	SoundEffect* m_soundEffect = nullptr;
 	SpriteRender m_controllerModel;
 };
 

@@ -8,12 +8,12 @@
 #include "Player.h"
 #include "Bear.h"
 #include "BackGround/StageManager.h"
-#include "BackGround/StageManager.h"
+#include "SoundEffect.h"
 
 namespace
 {
 	//タイムの位置
-	const Vector3 TIME_POS = { 610.0f,430.0f,0.0f };
+	const Vector3 TIME_POS = { 740.0f,430.0f,0.0f };
 }
 
 SceneManager::SceneManager()
@@ -26,6 +26,9 @@ SceneManager::~SceneManager()
 
 bool SceneManager::Start()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+	m_soundEffect->Play(enNomalBGM);
+
 	//最初のシーン状態
 	m_sceneState = EnGameScene::enStartArea;
 	m_sceneState = EnGameScene::enStartArea;
@@ -84,6 +87,7 @@ void SceneManager::InGameSceneManage()
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBossStage).inOutHitBox->IsHit()) {
 			m_sceneState = EnGameScene::enBossArea;
 			SwitchingScenes();
+			m_soundEffect->Play(enBossBGM);
 		}
 		break;
 
@@ -181,7 +185,7 @@ void SceneManager::GameTimeUpdate()
 	}
 
 	wchar_t time[256];
-	swprintf_s(time, 256, L"Time:%d", int(m_gamePlayTime));
+	swprintf_s(time, 256, L"%d", int(m_gamePlayTime));
 	
 	m_timeRender.SetText(time);
 	m_timeRender.SetPosition(TIME_POS);

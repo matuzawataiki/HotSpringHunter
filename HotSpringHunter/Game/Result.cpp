@@ -2,6 +2,7 @@
 #include "Result.h"
 #include "Title.h"
 #include "SceneManager.h"
+#include "SoundEffect.h"
 
 namespace
 {
@@ -89,6 +90,7 @@ bool Result::Start()
 	m_rankC.Update();
 
 	m_sceneManager = FindGO<SceneManager>("sceneManager");
+	m_clearEffect = FindGO<SoundEffect>("soundEffect");
 
 	return true;
 }
@@ -160,6 +162,11 @@ void Result::NextButton()
 	//Lerp関数で滑らかに透明度を変化させる
 	m_nextButtonColor.Lerp(m_buttonColor, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
 	m_nextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_nextButtonColor.x);
+}
+
+void Result::ClearEffect()
+{
+	m_clearEffect->Play(enGameClearBGM);
 }
 
 
@@ -242,6 +249,7 @@ bool GameOverResult::Start()
 	m_rankC.Update();
 
 	m_sceneManager = FindGO<SceneManager>("sceneManager");
+	m_overEffect = FindGO<SoundEffect>("soundEffect");
 
 	return true;
 }
@@ -313,6 +321,11 @@ void GameOverResult::NextButton()
 	//Lerp関数で滑らかに透明度を変化させる
 	m_nextButtonColor.Lerp(m_buttonColor, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
 	m_overNextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_nextButtonColor.x);
+}
+
+void GameOverResult::OverEffect()
+{
+	m_overEffect->Play(enGameOverBGM);
 }
 
 void GameOverResult::Render(RenderContext& rc)
