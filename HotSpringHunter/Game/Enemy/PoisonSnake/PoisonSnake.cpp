@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PoisonSnake.h"
 #include "Player.h"
+#include "EffectHub.h"
 #include "EnemyHPBar.h"
 #include "EnemyManager.h"
 #include "Enemy/State/PoisonSnakeState.h"
@@ -92,6 +93,18 @@ namespace Enemy
 
 			//HPを減らす
 			m_hp -= m_target->GetAttackPower();
+
+			//被弾エフェクト
+			//被弾エフェクト
+			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+			m_effect->Init(EnEffectVar::enEnemyHit);
+			Vector3 effectPos = m_position;
+			effectPos.y += 30.0f;
+			m_effect->SetPosition(effectPos);
+			m_effect->SetRotation(Quaternion::Identity);
+			m_effect->SetScale({ 10.0f,10.0f,10.0f });
+			m_effect->Play();
+			
 
 			//HPがまだ残っている
 			if (m_hp > 0.0f) {

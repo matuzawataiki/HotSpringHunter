@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneManager.h"
 namespace Character {
 	class Player;
 }
@@ -10,6 +11,7 @@ class WildBoar;
 class Bear;
 class Player;
 class EnemySpawner;
+class SceneManager;
 
 enum class EnEnemyType {
 	enSnake,
@@ -67,6 +69,9 @@ public:
 				return;
 			}
 		}
+
+		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		m_sceneManager->AddDefeatedEnemyCount();
 	}
 	/// <summary>
 	/// エネミーリストから毒ヘビを削除
@@ -82,6 +87,9 @@ public:
 				return;
 			}
 		}
+
+		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		m_sceneManager->AddDefeatedEnemyCount();
 	}
 	/// <summary>
 	/// エネミーリストからイノシシを削除
@@ -97,6 +105,9 @@ public:
 				return;
 			}
 		}
+
+		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		m_sceneManager->AddDefeatedEnemyCount();
 	}
 
 	/// <summary>
@@ -137,6 +148,7 @@ private:
 	std::vector<Enemy::PoisonSnake*>	m_poisonSnake;			//毒ヘビの配列
 	Bear* m_bear = nullptr;
 
+	SceneManager* m_sceneManager = nullptr;
 	EnemySpawner*m_enemySpawner = nullptr;
 	Character::Player* m_player = nullptr;
 };

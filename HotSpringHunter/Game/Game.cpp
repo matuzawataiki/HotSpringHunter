@@ -12,6 +12,7 @@
 #include "EffectHub.h"
 #include "GameOver.h"
 #include "GameClear.h"
+#include "ItemExplanation.h"
 
 #include "Enemy/PoisonSnake/PoisonSnake.h"
 
@@ -28,6 +29,8 @@ Game::~Game()
 	DeleteGO(m_player);
 	DeleteGO(m_ui);
 	//DeleteGO(m_soundEffect);
+	DeleteGO(m_soundEffect);
+	DeleteGO(m_itemExplanation);
 }
 
 bool Game::Start()
@@ -44,6 +47,7 @@ bool Game::Start()
 
 	//m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
 	m_effectHub = NewGO<EffectHub>(0, "effectHub");
+	m_itemExplanation = NewGO<ItemExplanation>(0, "itemExplanation");
 
 	//当たり判定を可視化する。
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();

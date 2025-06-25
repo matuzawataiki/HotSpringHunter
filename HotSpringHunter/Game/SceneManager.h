@@ -6,11 +6,14 @@ namespace Character {
 
 enum EnGameScene {
 	enStartArea,		//ゲーム開始
+	enBattleArea1Start,	//戦闘エリア1
 	enBattleArea1,		//戦闘エリア1
 	enBattleArea1Clear,	//戦闘エリア1クリア
+	enBattleArea2Start,	//戦闘エリア2
 	enBattleArea2,		//戦闘エリア2
 	enBattleArea2Clear,	//戦闘エリア2クリア
-	enBossArea,			//戦闘エリア2
+	enBossAreaStart,	//ボスエリア
+	enBossArea,			//ボスエリア
 	enDefeatedBoss,		//ボスを倒した
 	enGoalArea,			//ゴール
 };
@@ -36,6 +39,8 @@ public:
 	void InGameSceneManage();
 	//シーン切り替わりの処理
 	void SwitchingScenes();
+	//倒した敵の数を追加
+	void AddDefeatedEnemyCount() { m_defeatedEnemyes++; };
 	//ゲームタイム
 	void GameTimeUpdate();
 	//
@@ -77,9 +82,10 @@ private:
 
 	float				m_gameClearTime = 0.0f;		//ゲームのプレイ時間
 	
-
 	int					m_finalScore	= 0;			//最終スコア
+	int					m_defeatedEnemyes = 0;			//倒した敵の数
 
+	bool				m_isAddMoreEnemy = false;		//エネミーを追加したか
 	bool				m_isToGoal		= false;		//ゴールに移動させるかのフラッグ
 	bool				m_isClearFrag	= false;		//クリア演出を実行するか
 	bool                m_isTimeOff     = true;        //タイムオフ

@@ -19,6 +19,7 @@ class SceneManager;
 class GameOver;
 class SoundEffect;
 class EffectHub;
+class ItemExplanation;
 
 class Game : public IGameObject
 {
@@ -42,6 +43,7 @@ private:
 	SoundEffect*		m_soundEffect	= nullptr;
 	EffectHub*			m_effectHub		= nullptr;
 	GameOver*			m_gameOver		= nullptr;
+	ItemExplanation*	m_itemExplanation = nullptr;
 
 	SpriteRender m_gameUI;
   };

@@ -57,6 +57,13 @@ void SceneManager::InGameSceneManage()
 	{
 	case enStartArea:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBattleStage1).inOutHitBox->IsHit()) {
+			m_sceneState = EnGameScene::enBattleArea1Start;
+			SwitchingScenes();
+		}
+		break;
+
+	case enBattleArea1Start:
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBattleArea1;
 			SwitchingScenes();
 		}
@@ -71,6 +78,13 @@ void SceneManager::InGameSceneManage()
 
 	case enBattleArea1Clear:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBattleStage2).inOutHitBox->IsHit()) {
+			m_sceneState = EnGameScene::enBattleArea2Start;
+			SwitchingScenes();
+		}
+		break;
+
+	case enBattleArea2Start:
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBattleArea2;
 			SwitchingScenes();
 		}
@@ -85,9 +99,16 @@ void SceneManager::InGameSceneManage()
 
 	case enBattleArea2Clear:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBossStage).inOutHitBox->IsHit()) {
-			m_sceneState = EnGameScene::enBossArea;
+			m_sceneState = EnGameScene::enBossAreaStart;
 			SwitchingScenes();
 			m_soundEffect->Play(enBossBGM);
+		}
+		break;
+
+	case enBossAreaStart:
+		if (!enemyManager->IsEnemy()) {
+			m_sceneState = EnGameScene::enBossArea;
+			SwitchingScenes();
 		}
 		break;
 
@@ -129,7 +150,7 @@ void SceneManager::SwitchingScenes()
 {
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
-	m_stageManager = FindGO<StageManager>("stageManager");
+	m_stageManager	= FindGO<StageManager>("stageManager");
 
 
 	switch (m_sceneState)
@@ -137,27 +158,39 @@ void SceneManager::SwitchingScenes()
 	case enStartArea:
 		break;
 
-	case enBattleArea1:
+	case enBattleArea1Start:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea1);
 		m_stageManager->UpFence(StageManager::enBattleStage1);
+		break;
+
+	case enBattleArea1:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea1);
 		break;
 
 	case enBattleArea1Clear:
 		m_stageManager->DeleteFence(StageManager::enBattleStage1);
 		break;
 
-	case enBattleArea2:
+	case enBattleArea2Start:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
 		m_stageManager->UpFence(StageManager::enBattleStage2);
+		break;
+
+	case enBattleArea2:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
 		break;
 
 	case enBattleArea2Clear:
 		m_stageManager->DeleteFence(StageManager::enBattleStage2);
 		break;
 
-	case enBossArea:
+	case enBossAreaStart:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBossArea);
 		m_stageManager->UpFence(StageManager::enBossStage);
+		break;
+
+	case enBossArea:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBossArea);
 		break;
 
 	case enDefeatedBoss:

@@ -189,7 +189,7 @@ namespace Character {
 		DisplayCharge();
 		PositionDraw();
 
-		m_damageMemory -= 0.3f;
+		m_damageMemory -= 0.2f;
 	}
 
 	/// <summary>
@@ -206,7 +206,7 @@ namespace Character {
 		m_playerPos = m_playerCharaCon.Execute(m_playerSpeed, DELTA_TIME);
 		m_playerModel.SetPosition(m_playerPos);
 		//向きの更新。
-		if (m_currentState == enPlayerWalk) {
+		if ((m_currentState == enPlayerWalk) || (m_currentState == enPlayerChargeAttack)) {
 			DirectionUpdate();
 		}
 		//回転の更新。
@@ -824,6 +824,15 @@ namespace Character {
 		SnakeEnemy* snakeEnemy = FindGO<SnakeEnemy>("enemy");
 		//コリジョン生成。
 		MakeCollision();
+
+		//エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enCharge);
+		m_effect->SetPosition(m_player->GetPlayerPos());
+		m_effect->SetRotation(m_player->GetPlayerRot());
+		m_effect->SetScale({ 100.0f,100.0f,100.0f });
+		m_effect->Play();
+
 		//コリジョン削除。
 		DeleteGO(m_player->m_collision);
 	}

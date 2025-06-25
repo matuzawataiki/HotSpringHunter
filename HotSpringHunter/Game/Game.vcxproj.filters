@@ -61,6 +61,7 @@
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameRule.cpp" />
     <ClCompile Include="AttackTips.cpp" />
+    <ClCompile Include="ItemExplanation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -123,5 +124,6 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameRule.h" />
     <ClInclude Include="AttackTips.h" />
+    <ClInclude Include="ItemExplanation.h" />
   </ItemGroup>
 </Project>
