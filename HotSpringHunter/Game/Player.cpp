@@ -93,6 +93,9 @@ namespace Character {
 		DeleteList();
 		g_sceneLight->RemoveLightPos();
 		DeleteGO(m_stateMachine);
+
+		// 
+		g_sceneLight->ClearLightPos();
 	}
 
 	/// <summary>
@@ -155,9 +158,6 @@ namespace Character {
 	/// </summary>
 	void Player::LoadAssets()
 	{
-		m_RStickImage.Init("Assets/modelData/image/RStick.dds", 300.0f, 300.0f);
-		m_RStickImage.SetPosition({ 200.0f,200.0f });
-
 		//アニメーションロード。
 		m_animationClips[enPlayerAnimClip_Idle].Load("Assets/animData/player/idle.tka");
 		m_animationClips[enPlayerAnimClip_Idle].SetLoopFlag(true);
@@ -189,6 +189,8 @@ namespace Character {
 		BasicBehavior();
 		DisplayCharge();
 		PositionDraw();
+
+		m_damageMemory -= 0.2f;
 	}
 
 	/// <summary>
@@ -205,7 +207,7 @@ namespace Character {
 		m_playerPos = m_playerCharaCon.Execute(m_playerSpeed, DELTA_TIME);
 		m_playerModel.SetPosition(m_playerPos);
 		//向きの更新。
-		if (m_currentState == enPlayerWalk) {
+		if ((m_currentState == enPlayerWalk) || (m_currentState == enPlayerChargeAttack)) {
 			DirectionUpdate();
 		}
 		//回転の更新。
@@ -342,11 +344,6 @@ namespace Character {
 		m_playerModel.Draw(rc);
 		m_chargeRender.Draw(rc);
 		m_posRender.Draw(rc);
-
-
-		if (m_currentState == enPlayerRestrain) {
-			m_RStickImage.Draw(rc);
-		}
 	}
 
 	/// <summary>
@@ -879,6 +876,15 @@ namespace Character {
 
 		//コリジョン生成。
 		MakeCollision();
+
+		//エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enCharge);
+		m_effect->SetPosition(m_player->GetPlayerPos());
+		m_effect->SetRotation(m_player->GetPlayerRot());
+		m_effect->SetScale({ 100.0f,100.0f,100.0f });
+		m_effect->Play();
+
 		//コリジョン削除。
 		DeleteGO(m_player->m_collision);
 	}

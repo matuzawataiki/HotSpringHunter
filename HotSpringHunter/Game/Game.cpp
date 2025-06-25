@@ -12,6 +12,7 @@
 #include "EffectHub.h"
 #include "GameOver.h"
 #include "GameClear.h"
+#include "ItemExplanation.h"
 #include "ProjectileManager.h"
 
 Game::Game()
@@ -23,16 +24,19 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_sceneManager);
 	DeleteGO(m_stageManager);
-	//DeleteGO(m_enemyManager);
+	DeleteGO(m_enemyManager);
 	DeleteGO(m_player);
 	DeleteGO(m_ui);
+	//DeleteGO(m_soundEffect);
 	DeleteGO(m_soundEffect);
 	DeleteGO(m_projectileManager);
+	DeleteGO(m_itemExplanation);
 }
 
 bool Game::Start()
 {
-	m_gameUI.Init("Assets/modelData/image/setumei_ui.dds", 1920.0f, 1080.0f);
+	//ゲーム内UI
+	m_gameUI.Init("Assets/modelData/image/ingame.dds", 1920.0f, 1080.0f);
 
 	m_gameCamera		= NewGO<GameCamera>(0, "gameCamera");
 	m_player			= NewGO<Character::Player>(0, "player");
@@ -42,8 +46,9 @@ bool Game::Start()
 	m_projectileManager = NewGO<ProjectileManager>(0, "projectileManager");
 	m_ui				= NewGO<UI>(0, "ui");
 
-	m_soundEffect		= NewGO<SoundEffect>(0, "soundEffect");
-	m_effectHub			= NewGO<EffectHub>(0, "effectHub");
+	//m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
+	m_effectHub = NewGO<EffectHub>(0, "effectHub");
+	m_itemExplanation = NewGO<ItemExplanation>(0, "itemExplanation");
 
 	//当たり判定を可視化する。
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
@@ -53,13 +58,7 @@ bool Game::Start()
 
 void Game::Update()
 {
-	if (m_player->GetPlayerHP() == 0.0f)
-	{
-		if (m_gameOver == nullptr)
-		{
-			m_gameOver = NewGO<GameOver>(0, "gameOver");
-		}
-	}
+	
 }
 
 void Game::Render(RenderContext& rc)

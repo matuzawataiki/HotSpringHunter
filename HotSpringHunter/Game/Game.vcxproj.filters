@@ -64,6 +64,7 @@
     <ClCompile Include="SlashAttack.cpp" />
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Item\PowerUpBox.cpp" />
+    <ClCompile Include="ItemExplanation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -129,5 +130,6 @@
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="SlashAttack.h" />
     <ClInclude Include="Item\PowerUpBox.h" />
+    <ClInclude Include="ItemExplanation.h" />
   </ItemGroup>
 </Project>

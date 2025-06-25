@@ -12,7 +12,7 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	AttackTips* m_attackTips = nullptr;
+	AttackTips*  m_attackTips = nullptr;
 	SpriteRender m_ruleModel;
 };
 

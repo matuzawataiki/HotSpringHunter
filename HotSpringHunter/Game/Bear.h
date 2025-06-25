@@ -121,6 +121,7 @@ private:
 
 	ModelRender				m_bearModel;							//モデルレンダー
 	ModelRender				m_stoneModel;							//投石攻撃の岩のモデル
+	SpriteRender			m_RStickImage;							//Rスティックのイラスト
 	CharacterController		m_bearController;						//キャラクターコントローラー
 	AnimationClip			m_animationClips[enBearAnimClip_Num];	//アニメーションクリップ
 	Quaternion				m_bearRot	= Quaternion::Identity;		//回転
@@ -164,4 +165,5 @@ private:
 	bool m_isCovering			= false;	//プレイヤーを拘束中か
 	bool m_isOutCovering		= false;	//拘束攻撃から抜け出したか
 	bool m_isSlowPlayer			= false;	//ぶっ飛ばしを行うか
+	bool m_isPlayerCover		= false;	//プレイヤーが拘束状態か
 };

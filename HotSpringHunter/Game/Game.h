@@ -19,7 +19,7 @@ class SceneManager;
 class GameOver;
 class SoundEffect;
 class EffectHub;
-
+class ItemExplanation;
 
 class Game : public IGameObject
 {
@@ -31,7 +31,6 @@ public:
 	void Render(RenderContext& rc)override;
 
 private:
-
 	GameCamera*			m_gameCamera		= nullptr;
 	Character::Player*	m_player			= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
@@ -45,7 +44,7 @@ private:
 	EffectHub*			m_effectHub			= nullptr;
 	GameOver*			m_gameOver			= nullptr;
 	ProjectileManager*	m_projectileManager = nullptr;
+	ItemExplanation*	m_itemExplanation = nullptr;
 
-	SpriteRender m_gameUI;				//インゲーム中の説明画像
-};
-
+	SpriteRender m_gameUI;
+  };

@@ -357,7 +357,7 @@ namespace Enemy {
 	//////////////////////////////////////////////////////////////////////////////
 
 	namespace {
-		float DEATH_TIME = 10.0f;
+		float DEATH_TIME = 3.0f;
 		float MOVE_OFFSET = 40.0f;
 	}
 

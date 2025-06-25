@@ -32,7 +32,7 @@ namespace {
 	const float COVER_HIT_TIME			= 1.0f;			//拘束攻撃：当たり判定を出す時間
 	const float COVER_COLLISION_DIS		= 20.0f;		//拘束攻撃：当たり判定を前に出す量
 	const float COVER_COLLISION_SIZE	= 3000.0f;		//拘束攻撃：当たり判定の半径
-	const float COVER_COOLTIME			= 5.0f;		//拘束攻撃：クールタイム
+	const float COVER_COOLTIME			= 5.0f;			//拘束攻撃：クールタイム
 	const float ON_THE_PLAYER_TIME		= 1.0f;			//拘束攻撃：プレイヤーに乗りかかる時間
 	const float ON_THE_PLAYER_DIS		= 50.0f;		//拘束攻撃：プレイヤーに乗りかかる距離
 	const float COVER_TIME				= 5.0f;			//拘束攻撃：拘束時間
@@ -61,7 +61,7 @@ namespace {
 	const float SUMMON_COOLTIME			= 15.0f;		//召喚：クールタイム
 	const int SUMMON_NUM				= 4;			//召喚：雑魚を召喚する数
 
-	const float SINKING_TIME			= 0.05f;		//死亡：下に沈む速さ
+	const float SINKING_SPEED			= 0.05f;		//死亡：下に沈む速さ
 
 	/// <summary>
 	/// 渡された値を設定した最小、最大の範囲内に設定して返す
@@ -143,6 +143,10 @@ void Bear::LoadAssets()
 	m_bearModel.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
 	//投石の岩モデル読み込み
 	m_stoneModel.Init("Assets/modelData/bear/slowStone.tkm");
+	//Rスティックのイラスト読み込み
+	m_RStickImage.Init("Assets/modelData/image/RStick.dds", 300.0f, 300.0f);
+	m_RStickImage.SetPosition({ 300.0f,200.0f });
+	m_RStickImage.Update();
 }
 
 void Bear::Update()
@@ -157,7 +161,6 @@ void Bear::Update()
 	ExecuteAction();	
 	//いろいろ更新
 	VariousUpdate();
-	
 }
 
 /// <summary>
@@ -309,6 +312,7 @@ void Bear::SummonMinions()
 			enemyManager->SetWildBoar(wildBoar);
 			break;
 		}
+		m_summonPos.erase(m_summonPos.begin());
 	}
 	m_summonPos.clear();
 }
@@ -344,7 +348,7 @@ void Bear::SinkIntoGround()
 	m_bearController.RemoveRigidBoby();
 
 	//地面に沈ませる
-	m_bearPos.y -= SINKING_TIME;
+	m_bearPos.y -= SINKING_SPEED;
 }
 
 /// <summary>
@@ -403,14 +407,14 @@ void Bear::ManageState()
 		return;
 	}
 
-	////召喚
-	////クールタイムが終わっていたら
-	//if (m_summonCoolTime <= 0.0f) {
-	//	m_bearState = enBearSummonMinion;
-	//	//クールタイムをセット
-	//	m_summonCoolTime = SUMMON_COOLTIME;
-	//	return;
-	//}
+	//召喚
+	//クールタイムが終わっていたら
+	if (m_summonCoolTime <= 0.0f) {
+		m_bearState = enBearSummonMinion;
+		//クールタイムをセット
+		m_summonCoolTime = SUMMON_COOLTIME;
+		return;
+	}
 
 	//拘束攻撃
 	//クールタイムが終わっていたら
@@ -555,6 +559,7 @@ void Bear::ExecuteAction()
 
 			if (m_coverCollision->IsHit(m_player->m_playerCharaCon)) {
 				m_isCovering = true;
+				m_isPlayerCover = true;
 				//クマをプレイヤーの位置に
 				Vector3 toGoalDis = m_player->GetPlayerPos() - m_bearPos;
 				toGoalDis.y = 0.0f;
@@ -575,6 +580,7 @@ void Bear::ExecuteAction()
 			
 			if (m_isSlowPlayer) {
 				m_bearState = enBearSlowPlayer;
+				m_isPlayerCover = false;
 				m_coverTime = 0.0f;
 				m_isPutCoverCollision = false;
 			}
@@ -801,5 +807,10 @@ void Bear::Render(RenderContext& rc)
 	//岩描画（岩が飛んでいるときだけ）
 	if (m_isStoneDraw) {
 		m_stoneModel.Draw(rc);
+	}
+
+	//Rスティックの画像を描画
+	if (m_isPlayerCover) {
+		m_RStickImage.Draw(rc);
 	}
 }

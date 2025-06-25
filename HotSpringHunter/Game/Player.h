@@ -88,6 +88,8 @@ namespace Character {
 		inline Vector3 GetPlayerPos() const { return m_playerPos; };
 		//向きを取得
 		inline Vector3 GetPlayerDir() const { return m_playerDir; };
+		//回転を取得
+		inline Quaternion GetPlayerRot() const { return m_playerRot; };
 		//攻撃力を取得
 		inline float GetAttackPower() const { return m_attackPower; };
 		//チャージ量を取得
@@ -128,7 +130,6 @@ namespace Character {
 		CollisionObject*	m_collision		= nullptr;
 		SoundEffect*		m_soundEffect	= nullptr;
 
-		SpriteRender		m_RStickImage;
 		AnimationClip		m_animationClips[enPlayerAnimClip_Num];	//アニメーションクリップ。	
 		CharacterController m_playerCharaCon;						//キャラコン。
 		ModelRender			m_playerModel;							//描画。

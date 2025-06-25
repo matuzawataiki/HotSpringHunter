@@ -1,5 +1,7 @@
 #pragma once
 class Title;
+class SceneManager;
+class SoundEffect;
 
 //ゲームクリアリザルト
 class Result :public IGameObject
@@ -9,33 +11,38 @@ public:
 	~Result();
 	bool Start()override;
 	void Update()override;
+
 	void SwitchTitle();
-	void Evaluation(); //評価
-	void Score();	   //スコア
 	void ClearTime();  //クリアタイム
 	void NextButton();
+	void ClearEffect(); //SE
 	void Render(RenderContext& rc)override;
 
+	float m_gameTime = 0.0f;
+	
 private:
+	SceneManager* m_sceneManager = nullptr;
+	Title*        m_title        = nullptr;
+	SoundEffect*  m_clearEffect  = nullptr;
+
 	SpriteRender m_clearResultModel;
-	SpriteRender m_ecaluationFont;
 	SpriteRender m_scoreFont;
 	SpriteRender m_timeFont;
-	FontRender m_evaluationFontRen;
-	FontRender m_scoreFontRen;
-	FontRender m_clearTimeFontRen;
+	SpriteRender m_rankS; //scoreS/A/B/C
+	SpriteRender m_rankA;
+	SpriteRender m_rankB;
+	SpriteRender m_rankC;
+
+	FontRender m_gameTimeFontRen;
 	FontRender m_nextButtonRen;
 
-	Title* m_title = nullptr;
-
-	Vector2 m_nextButtonSize = Vector2(1.0f, 1.0f);
-
-	int m_evaluation = 0;
-	int m_finelScore = 0;
-	float m_gameClearTime = 0.0f;
+	Vector2 m_nextButtonSize  = Vector2(1.0f, 1.0f);
 	Vector2 m_nextButtonColor = Vector2(1.0f, 0.0f);
-	float m_nextButtonElapsed = 0.0f; //
-	float m_buttonColor = 1.0f;
+
+	int m_finelScore = 0;
+
+	float m_nextButtonElapsed = 0.0f; //経過時間
+	float m_buttonColor       = 1.0f;
 
 	bool m_isMaxTime = true;
 };
@@ -49,34 +56,39 @@ public:
 
 	bool Start() override;
 	void Update() override;
+
 	void OverSwitchTitle();
-	void OverEvaluation(); //評価
-	void OverScore();	   //スコア
 	void OverTime();  //クリアタイム
 	void NextButton();
+	void OverEffect(); //SE
 	void Render(RenderContext& rc) override;
 
+	float m_gameTime = 0.0f;
+
 private:
+	SceneManager* m_sceneManager = nullptr;
+	Title*        m_title        = nullptr;
+	SoundEffect*  m_overEffect  = nullptr;
+
 	SpriteRender m_overResultModel;
-	SpriteRender m_ecaluationFont;
 	SpriteRender m_scoreFont;
 	SpriteRender m_timeFont;
-	FontRender m_overEvaluationFontRen;
-	FontRender m_overScoreFontRen;
-	FontRender m_overoverTimeFontRen;
+	SpriteRender m_rankS; //scoreS/A/B/C
+	SpriteRender m_rankA;
+	SpriteRender m_rankB;
+	SpriteRender m_rankC;
+
+	FontRender m_gameOverTimeFontRen;
 	FontRender m_overNextButtonRen;
 
-	Title* m_title = nullptr;
-
-	Vector2 m_nextButtonSize = Vector2(1.0f, 1.0f);
-
-	int m_evaluation = 0;
-	int m_finelScore = 0;
-	float m_gameClearTime = 0.0f;
+	Vector2 m_nextButtonSize  = Vector2(1.0f, 1.0f);
 	Vector2 m_nextButtonColor = Vector2(1.0f, 0.0f);
-	float m_nextButtonElapsed = 0.0f; //経過時間
-	float m_buttonColor = 1.0f;
 
+	int m_finelScore = 0;
+
+	float m_nextButtonElapsed = 0.0f; //経過時間
+	float m_buttonColor       = 1.0f;
+	
 	bool m_isMaxTime = true;
 };
 

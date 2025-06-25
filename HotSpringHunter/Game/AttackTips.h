@@ -13,7 +13,7 @@ public:
 
 private:
 	GameController* m_controller;
-	SpriteRender m_tipsModel;
+	SpriteRender    m_tipsModel;
 
 };
 

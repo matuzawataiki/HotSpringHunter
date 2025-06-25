@@ -22,15 +22,18 @@ class GameClear:public IGameObject
 	void Update() override;
 	//void SwitchGame() override;
 	void Render(RenderContext&rc) override;
+
 public:
-	Result* m_clearResultModel = nullptr;
-	SmokeEmitter* m_smokeEmitter;
+	Result*       m_clearResult      = nullptr;
+	SmokeEmitter* m_smokeEmitter     = nullptr;
 
 	Vector2 m_gameClearSize = Vector2(1.0f, 1.0f);
+
 	SpriteRender* m_gameClearModel;
 	SpriteRender* m_resultModel;
 
-	int m_resultState = enGameClear;
-	float m_elapsedTime = 0.0f; //毎フレーム加算
+	int   m_resultState   = enGameClear; //ステート
+	float m_elapsedTime   = 0.0f; //毎フレーム加算
+	float m_timer = 0.0f;
 };
 

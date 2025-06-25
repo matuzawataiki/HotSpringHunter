@@ -3,6 +3,7 @@
 
 #include "Game.h"
 #include"Title.h"
+#include "SoundEffect.h"
 
 
 // K2EngineLowのグローバルアクセスポイント。
@@ -19,11 +20,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	SkyCube* skyCube = NewGO<SkyCube>(0, "skyCube");
 	skyCube->SetType(enSkyCubeType_SunriseToon);
-	skyCube->SetScale(1000.0f);
+	skyCube->SetScale(2000.0f);
 
 
 	//Titleクラスのオブジェクトを作成。
 	NewGO<Title>(0, "title");
+	NewGO<SoundEffect>(0, "soundEffect");
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

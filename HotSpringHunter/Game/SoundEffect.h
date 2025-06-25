@@ -34,8 +34,11 @@ enum Sound
 	enBearDeathSE,
 
 	//ゲーム内BGM
+	enTitleBGM,
 	enNomalBGM,
 	enBossBGM,
+	enGameClearBGM,
+	enGameOverBGM,
 
 	enSoundNumSE
 };
@@ -62,6 +65,8 @@ public:
 	/// </summary>
 	/// <param name="index">停止する対象のインデックス。</param>
 	void Stop(SoundSource*soundSorce);
+
+	void StopBGM();
 
 private:
 	std::vector<SoundSource*> m_gameSEList;

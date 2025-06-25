@@ -3,11 +3,19 @@
 #include "EnemyManager.h"
 #include "EnemySpawner.h"
 #include "GameClear.h"
+#include "GameOver.h"
 #include "GameCamera.h"
 #include "Player.h"
 #include "Bear.h"
 #include "BackGround/StageManager.h"
 #include "Item/PowerUpBox.h"
+#include "SoundEffect.h"
+
+namespace
+{
+	//タイムの位置
+	const Vector3 TIME_POS = { 740.0f,430.0f,0.0f };
+}
 
 SceneManager::SceneManager()
 {
@@ -19,6 +27,9 @@ SceneManager::~SceneManager()
 
 bool SceneManager::Start()
 {
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+	m_soundEffect->Play(enNomalBGM);
+
 	//最初のシーン状態
 	m_sceneState = EnGameScene::enStartArea;
 	m_sceneState = EnGameScene::enStartArea;
@@ -29,6 +40,7 @@ bool SceneManager::Start()
 void SceneManager::Update()
 {
 	InGameSceneManage();
+	GameTimeUpdate();
 }
 
 /// <summary>
@@ -38,6 +50,7 @@ void SceneManager::InGameSceneManage()
 {
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	m_stageManager	= FindGO<StageManager>("stageManager");
+	m_player = FindGO<Character::Player>("player");
 
 	//入出検知オブジェクトに触れたらにゲームシーンを変更する
 	//エリア内の敵をすべて倒したらクリアにする
@@ -45,6 +58,13 @@ void SceneManager::InGameSceneManage()
 	{
 	case enStartArea:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBattleStage1).inOutHitBox->IsHit()) {
+			m_sceneState = EnGameScene::enBattleArea1Start;
+			SwitchingScenes();
+		}
+		break;
+
+	case enBattleArea1Start:
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBattleArea1;
 			SwitchingScenes();
 		}
@@ -59,6 +79,13 @@ void SceneManager::InGameSceneManage()
 
 	case enBattleArea1Clear:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBattleStage2).inOutHitBox->IsHit()) {
+			m_sceneState = EnGameScene::enBattleArea2Start;
+			SwitchingScenes();
+		}
+		break;
+
+	case enBattleArea2Start:
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBattleArea2;
 			SwitchingScenes();
 		}
@@ -73,6 +100,14 @@ void SceneManager::InGameSceneManage()
 
 	case enBattleArea2Clear:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBossStage).inOutHitBox->IsHit()) {
+			m_sceneState = EnGameScene::enBossAreaStart;
+			SwitchingScenes();
+			m_soundEffect->Play(enBossBGM);
+		}
+		break;
+
+	case enBossAreaStart:
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBossArea;
 			SwitchingScenes();
 		}
@@ -98,6 +133,15 @@ void SceneManager::InGameSceneManage()
 	default:
 		break;
 	}
+  
+  if (m_player->GetPlayerHP() == 0.0f)
+	{
+	  if (m_gameOver == nullptr)
+		{
+			m_gameOver = NewGO<GameOver>(0, "gameOver");
+			m_gameOver->m_timer = m_gamePlayTime;
+		}
+	}
 	
 }
 
@@ -108,13 +152,18 @@ void SceneManager::SwitchingScenes()
 {
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
-	m_player		= FindGO<Character::Player>("player");
-	m_stageManager = FindGO<StageManager>("stageManager");
+	m_stageManager	= FindGO<StageManager>("stageManager");
 	PowerUpBox* powerUpBox;
+
 
 	switch (m_sceneState)
 	{
 	case enStartArea:
+		break;
+
+	case enBattleArea1Start:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea1);
+		m_stageManager->UpFence(StageManager::enBattleStage1);
 		break;
 
 	case enBattleArea1:
@@ -130,9 +179,22 @@ void SceneManager::SwitchingScenes()
 		m_stageManager->DeleteFence(StageManager::enBattleStage1);
 		break;
 
-	case enBattleArea2:
+	case enBattleArea2Start:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
 		m_stageManager->UpFence(StageManager::enBattleStage2);
+		break;
+
+	case enBattleArea1Clear:
+		m_stageManager->DeleteFence(StageManager::enBattleStage1);
+		break;
+
+	case enBattleArea2Start:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
+		m_stageManager->UpFence(StageManager::enBattleStage2);
+		break;
+
+	case enBattleArea2:
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
 		break;
 
 	case enBattleArea2Clear:
@@ -157,11 +219,13 @@ void SceneManager::SwitchingScenes()
 		m_stageManager->UpFence(StageManager::enBossStage);
 		break;
 
-	case enDefeatedBoss:
+	case EnGameScene::enDefeatedBoss:
 		m_stageManager->DeleteFence(StageManager::enBossStage);
 		break;
 
 	case enGoalArea:
+    m_gameClear = NewGO<GameClear>(0, "GameClear");
+		m_gameClear-> m_timer = m_gamePlayTime;
 		m_isToGoal = true;
 		break;
 
@@ -170,4 +234,25 @@ void SceneManager::SwitchingScenes()
 		break;
 	}
 
+}
+
+void SceneManager::GameTimeUpdate()
+{
+	if (m_isTimeOff == true)
+	{
+		m_gamePlayTime += g_gameTime->GetFrameDeltaTime();
+	}
+
+	wchar_t time[256];
+	swprintf_s(time, 256, L"%d", int(m_gamePlayTime));
+	
+	m_timeRender.SetText(time);
+	m_timeRender.SetPosition(TIME_POS);
+	m_timeRender.SetScale(1.3f);
+	m_timeRender.SetColor(g_vec4Black);
+
+	if (m_sceneState == EnGameScene::enGoalArea || m_player->GetPlayerHP() <= 0.0f)
+	{
+		m_isTimeOff = false;
+	}
 }

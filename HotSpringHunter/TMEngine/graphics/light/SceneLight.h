@@ -310,6 +310,11 @@ namespace nsTMEngine {
 			m_lightPos = &m_defaultLightPos;
 		}
 
+		// TODO
+		void ClearLightPos() {
+			m_lightPos = &m_defaultLightPos;
+		}
+
 		/// <summary>
 		/// 新規ポイントライトを登録
 		/// </summary>

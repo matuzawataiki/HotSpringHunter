@@ -10,7 +10,7 @@ enum enSmokeType
 
 class Smoke:public IGameObject
 {
-	public:
+public:
 	Smoke();
 	~Smoke();
 
@@ -33,7 +33,7 @@ class Smoke:public IGameObject
 	
 private:
 	SpriteRender m_smokeModel;
-	Vector2 m_smokePos;
+	Vector2      m_smokePos;
 
 	int m_smokeType;
 };
