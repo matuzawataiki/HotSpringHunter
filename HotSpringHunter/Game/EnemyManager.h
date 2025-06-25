@@ -99,7 +99,6 @@ public:
 		for (std::vector<WildBoar*>::iterator it = m_wildBoars.begin();
 			it != m_wildBoars.end();
 			it++
-			it++
 			) {
 			if (*it == wildBoar) {
 				m_wildBoars.erase(it);

@@ -120,7 +120,7 @@ void SnakeEnemy::ManageState()
 		return;
 	}
 
-	if (projectileManager->IsChargeHit(&m_snakeController)) {
+	if (projectileManager->IsChargeHit(m_snakeController)) {
 		m_snakeHP -= 0.1;
 		//HPがまだ残っている
 		if (m_snakeHP <= 0.0f) {
@@ -131,8 +131,8 @@ void SnakeEnemy::ManageState()
 		}
 	}
 	//被弾した場合
-	if (m_player->m_collision->IsHit(m_snakeController) ||
-		projectileManager->IsHit(&m_snakeController)) {
+	if (m_player->m_collision->IsHit(*m_snakeController) ||
+		projectileManager->IsHit(m_snakeController)) {
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
 

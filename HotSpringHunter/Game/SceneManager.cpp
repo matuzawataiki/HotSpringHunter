@@ -184,15 +184,6 @@ void SceneManager::SwitchingScenes()
 		m_stageManager->UpFence(StageManager::enBattleStage2);
 		break;
 
-	case enBattleArea1Clear:
-		m_stageManager->DeleteFence(StageManager::enBattleStage1);
-		break;
-
-	case enBattleArea2Start:
-		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
-		m_stageManager->UpFence(StageManager::enBattleStage2);
-		break;
-
 	case enBattleArea2:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
 		break;
