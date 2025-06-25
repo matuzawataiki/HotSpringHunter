@@ -85,6 +85,8 @@ namespace Character {
 		inline Vector3 GetPlayerPos() const { return m_playerPos; };
 		//向きを取得
 		inline Vector3 GetPlayerDir() const { return m_playerDir; };
+		//回転を取得
+		inline Quaternion GetPlayerRot() const { return m_playerRot; };
 		//攻撃力を取得
 		inline float GetAttackPower() const { return m_attackPower; };
 		//チャージ量を取得
