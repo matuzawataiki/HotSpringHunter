@@ -189,7 +189,7 @@ namespace Character {
 		DisplayCharge();
 		PositionDraw();
 
-		m_damageMemory -= 0.3f;
+		m_damageMemory -= 0.2f;
 	}
 
 	/// <summary>
@@ -206,7 +206,7 @@ namespace Character {
 		m_playerPos = m_playerCharaCon.Execute(m_playerSpeed, DELTA_TIME);
 		m_playerModel.SetPosition(m_playerPos);
 		//向きの更新。
-		if (m_currentState == enPlayerWalk) {
+		if ((m_currentState == enPlayerWalk) || (m_currentState == enPlayerChargeAttack)) {
 			DirectionUpdate();
 		}
 		//回転の更新。

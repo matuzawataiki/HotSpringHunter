@@ -31,7 +31,7 @@ SnakeEnemy::SnakeEnemy()
 
 SnakeEnemy::~SnakeEnemy()
 {
-	//delete m_snakeController;
+	delete m_snakeController;
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	enemyManager->DeleteEnemy(this);
 	DeleteGO(m_enemyBase);
@@ -48,10 +48,6 @@ bool SnakeEnemy::Start()
 
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");	
-
-	//キャラクターコントローラーの生成
-	// 
-	//m_snakeController->Init(30.0f, 50.0f, m_snakePos);
 
 	//HPをセット
 	m_snakeHP = MAX_SNAKE_HP;
