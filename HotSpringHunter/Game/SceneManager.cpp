@@ -22,7 +22,6 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
-	DeleteGO(m_fenceManager);
 }
 
 bool SceneManager::Start()
@@ -47,6 +46,7 @@ void SceneManager::InGameSceneManage()
 {
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	m_stageManager	= FindGO<StageManager>("stageManager");
+	m_player = FindGO<Character::Player>("player");
 
 	//入出検知オブジェクトに触れたらにゲームシーンを変更する
 	//エリア内の敵をすべて倒したらクリアにする
@@ -125,7 +125,6 @@ void SceneManager::SwitchingScenes()
 {
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
-	m_player		= FindGO<Character::Player>("player");
 	m_stageManager = FindGO<StageManager>("stageManager");
 
 
@@ -189,7 +188,7 @@ void SceneManager::GameTimeUpdate()
 	m_timeRender.SetScale(1.3f);
 	m_timeRender.SetColor(g_vec4Black);
 
-	if (m_sceneState == EnGameScene::enGoal || m_player->GetPlayerHP() <= 0.0f)
+	if (m_sceneState == EnGameScene::enGoalArea || m_player->GetPlayerHP() <= 0.0f)
 	{
 		m_isTimeOff = false;
 	}

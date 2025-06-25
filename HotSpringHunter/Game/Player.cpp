@@ -92,6 +92,9 @@ namespace Character {
 	{
 		DeleteList();
 		DeleteGO(m_stateMachine);
+
+		// 
+		g_sceneLight->ClearLightPos();
 	}
 
 	/// <summary>
@@ -154,9 +157,6 @@ namespace Character {
 	/// </summary>
 	void Player::LoadAssets()
 	{
-		m_RStickImage.Init("Assets/modelData/image/RStick.dds", 300.0f, 300.0f);
-		m_RStickImage.SetPosition({ 200.0f,200.0f });
-
 		//アニメーションロード。
 		m_animationClips[enPlayerAnimClip_Idle].Load("Assets/animData/player/idle.tka");
 		m_animationClips[enPlayerAnimClip_Idle].SetLoopFlag(true);
@@ -188,6 +188,8 @@ namespace Character {
 		BasicBehavior();
 		DisplayCharge();
 		PositionDraw();
+
+		m_damageMemory -= 0.3f;
 	}
 
 	/// <summary>
@@ -341,11 +343,6 @@ namespace Character {
 		m_playerModel.Draw(rc);
 		m_chargeRender.Draw(rc);
 		m_posRender.Draw(rc);
-
-
-		if (m_currentState == enPlayerRestrain) {
-			m_RStickImage.Draw(rc);
-		}
 	}
 
 	/// <summary>

@@ -26,7 +26,6 @@ namespace {
 
 SnakeEnemy::SnakeEnemy()
 {
-
 	m_snakeController = new CharacterController;
 }
 
@@ -60,6 +59,8 @@ bool SnakeEnemy::Start()
 	//基底クラス生成
 	m_enemyBase = NewGO<EnemyBase>(0, "enemyBase");
 	m_enemyHPBar = NewGO<EnemyHPBar>(0, "enemyHPBar");
+
+	m_player = FindGO<Character::Player>("player");
 	//HPバーをセット
 	m_enemyHPBar->Init(m_snakeHP, m_snakePos, m_player->GetPlayerPos());
 
@@ -120,8 +121,9 @@ void SnakeEnemy::ManageState()
 	if (!m_isCanStateChange) {
 		return;
 	}
+
 	//被弾した場合
-	if (m_player->m_collision->IsHit(m_snakeController)) {
+	if (m_player->m_collision->IsHit(*m_snakeController)) {
 
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
@@ -155,7 +157,7 @@ void SnakeEnemy::ManageState()
 			m_soundEffect->Play(enSnakeDeathSE, false);
 		}
 		return;
-	}*/
+	}
 	if (m_player->m_collision != nullptr){
 		if (m_player->m_collision->IsHit(*m_snakeController)) {
 
