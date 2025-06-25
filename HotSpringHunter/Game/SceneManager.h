@@ -23,6 +23,7 @@ class GameCamera;
 class Bear; 
 class Result;
 class StageManager;
+class SoundEffect;
 
 class SceneManager:public IGameObject
 {
@@ -68,6 +69,7 @@ private:
 	Bear*				m_bear			= nullptr;
 	Result*             m_result        = nullptr;
 	StageManager*		m_stageManager  = nullptr;
+	SoundEffect*        m_soundEffect   = nullptr;
 
 	EnGameScene			m_sceneState = EnGameScene::enStartArea;	//シーン状態
 

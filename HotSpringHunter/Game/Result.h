@@ -1,6 +1,7 @@
 #pragma once
 class Title;
 class SceneManager;
+class SoundEffect;
 
 //ゲームクリアリザルト
 class Result :public IGameObject
@@ -14,12 +15,15 @@ public:
 	void SwitchTitle();
 	void ClearTime();  //クリアタイム
 	void NextButton();
+	void ClearEffect(); //SE
 	void Render(RenderContext& rc)override;
 
 	float m_gameTime = 0.0f;
-
+	
 private:
 	SceneManager* m_sceneManager = nullptr;
+	Title*        m_title        = nullptr;
+	SoundEffect*  m_clearEffect  = nullptr;
 
 	SpriteRender m_clearResultModel;
 	SpriteRender m_scoreFont;
@@ -31,8 +35,6 @@ private:
 
 	FontRender m_gameTimeFontRen;
 	FontRender m_nextButtonRen;
-
-	Title* m_title = nullptr;
 
 	Vector2 m_nextButtonSize  = Vector2(1.0f, 1.0f);
 	Vector2 m_nextButtonColor = Vector2(1.0f, 0.0f);
@@ -58,12 +60,15 @@ public:
 	void OverSwitchTitle();
 	void OverTime();  //クリアタイム
 	void NextButton();
+	void OverEffect(); //SE
 	void Render(RenderContext& rc) override;
 
 	float m_gameTime = 0.0f;
 
 private:
 	SceneManager* m_sceneManager = nullptr;
+	Title*        m_title        = nullptr;
+	SoundEffect*  m_overEffect  = nullptr;
 
 	SpriteRender m_overResultModel;
 	SpriteRender m_scoreFont;
@@ -75,8 +80,6 @@ private:
 
 	FontRender m_gameOverTimeFontRen;
 	FontRender m_overNextButtonRen;
-
-	Title* m_title = nullptr;
 
 	Vector2 m_nextButtonSize  = Vector2(1.0f, 1.0f);
 	Vector2 m_nextButtonColor = Vector2(1.0f, 0.0f);

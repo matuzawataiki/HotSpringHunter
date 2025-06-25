@@ -1,6 +1,7 @@
 #pragma once
 class Game;
 class GameRule;
+class SoundEffect;
 
 class Title :public IGameObject
 {
@@ -11,10 +12,12 @@ public:
 	void Update();
 	void SwitchGame();
 	void NextButton();
+	void PlayEffect();
 	void Render(RenderContext& rc)override;
 
 private:
-	GameRule* m_gameRule = nullptr;
+	GameRule* m_gameRule       = nullptr;
+	SoundEffect* m_soundEffect = nullptr; //BGM
 
 	SpriteRender m_titleModel;
 

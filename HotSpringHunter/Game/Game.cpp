@@ -24,10 +24,10 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_sceneManager);
 	DeleteGO(m_stageManager);
-	//DeleteGO(m_enemyManager);
+	DeleteGO(m_enemyManager);
 	DeleteGO(m_player);
 	DeleteGO(m_ui);
-	DeleteGO(m_soundEffect);
+	//DeleteGO(m_soundEffect);
 }
 
 bool Game::Start()
@@ -42,7 +42,7 @@ bool Game::Start()
 	m_enemyManager = NewGO<EnemyManager>(0, "enemyManager");
 	m_ui = NewGO<UI>(0, "ui");
 
-	m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
+	//m_soundEffect = NewGO<SoundEffect>(0, "soundEffect");
 	m_effectHub = NewGO<EffectHub>(0, "effectHub");
 
 	//当たり判定を可視化する。

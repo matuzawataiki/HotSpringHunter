@@ -2,6 +2,7 @@
 #include "Title.h"
 #include "Game.h"
 #include "GameRule.h"
+#include "SoundEffect.h"
 
 namespace
 {
@@ -22,12 +23,17 @@ Title::Title()
 
 Title::~Title()
 {
-
+	
 }
 
 bool Title::Start()
 {
 	m_titleModel.Init("Assets/modelData/image/newtitle.dds", 1920.0f, 1080.0f);
+
+	//BGM
+	m_soundEffect = FindGO<SoundEffect>("soundEffect");
+
+	PlayEffect();
 
 	return true;
 }
@@ -80,6 +86,12 @@ void Title::NextButton()
 	//lerpで透明度を滑らかに表示
 	m_titleNextButtonColor.Lerp(m_buttonColor, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
 	m_titleNextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_titleNextButtonColor.x);
+}
+
+void Title::PlayEffect()
+{
+	//BGMの再生
+	m_soundEffect->Play(enTitleBGM);
 }
 
 void Title::Render(RenderContext& rc)
