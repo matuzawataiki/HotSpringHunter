@@ -9,6 +9,7 @@
 #include "SoundEffect.h"
 #include "EnemyManager.h"
 #include "EffectHub.h"
+#include "ProjectileManager.h"
 
 namespace {
 	const float DELTA_TIME				= 1.0f / 60.0f;		//フレームレート
@@ -112,15 +113,26 @@ void SnakeEnemy::Update()
 /// </summary>
 void SnakeEnemy::ManageState()
 {
+	ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
 	//ステートを変えてもよいなら
 	m_isCanStateChange = m_enemyBase->ChangeFlag();
 	if (!m_isCanStateChange) {
 		return;
 	}
 
+	if (projectileManager->IsChargeHit(m_snakeController)) {
+		m_snakeHP -= 0.1;
+		//HPがまだ残っている
+		if (m_snakeHP <= 0.0f) {
+			//死亡（吹っ飛び）
+			m_snakeState = enSnakeDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enSnakeDeathSE, false);
+		}
+	}
 	//被弾した場合
-	if (m_player->m_collision->IsHit(*m_snakeController)) {
-
+	if (m_player->m_collision->IsHit(*m_snakeController) ||
+		projectileManager->IsHit(m_snakeController)) {
 		//HPを減らす
 		m_snakeHP -= m_player->m_attackPower;
 

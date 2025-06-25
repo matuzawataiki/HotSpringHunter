@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Item/PowerUpBox.h"
 
 class SnakeEnemy;
 class SoundEffect;
@@ -79,6 +79,9 @@ namespace Character {
 		void Render(RenderContext& rc)override;
 		//プレイヤーの最大HPを取得。
 		float GetPlayerMAXHP();
+		void GetPowerUp(PowerUpBox::EnPowerUp powerUp);
+		const int GetPowerUpSelect() { return m_mainPowerUp; }
+		const int GetUpgradeSelect() { return m_subPowerUp; }
 
 		//ゲッター
 		//座標を取得
@@ -116,9 +119,12 @@ namespace Character {
 		FontRender m_posRender;
 		wchar_t m_posText[256];
 
-		std::vector<IState*> m_stateList;			//各ステートクラスのリスト。
-		int m_currentState = 0;						//現在のステート。
-		int m_requestState = 0;						//変更したいステート。
+		std::vector<IState*> m_stateList;	//各ステートクラスのリスト。
+		int m_currentState = 0;				//現在のステート。
+		int m_requestState = 0;				//変更したいステート。
+		int m_mainPowerUp = 0;				//メインのパワーアップ。1,遠距離攻撃。2,範囲攻撃
+		int m_subPowerUp = 0;				//サブのアップデート
+
 
 		StateMachine*		m_stateMachine	= nullptr;
 		CollisionObject*	m_collision		= nullptr;
@@ -284,13 +290,15 @@ namespace Character {
 
 	private:
 		SoundEffect* m_soundEffect	= nullptr;			//サウンドソース。
-  
+		CollisionObject* m_chargeCollision = nullptr;	//チャージ攻撃中のコリジョン
+		
 		Vector3		m_RStickOld		= Vector3::Zero;	//Rスティックの入力量（変更前）。
 		float		m_collisionSize = 0.0f;				//コリジョンサイズ
 		int			m_chargeState	= enNone;			//チャージ状態。
 		int			m_chargeOldState = enNone;			//チャージ状態（変更前）。
 		bool		m_isCharging	= true;				//チャージ中？
-		bool		m_isStateChange = false;			//アニメーションを切り替えた？	
+		bool		m_isStateChange = false;			//アニメーションを切り替えた？
+
 	};
 
 	/// <summary>

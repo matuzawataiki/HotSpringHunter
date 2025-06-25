@@ -61,6 +61,9 @@
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameRule.cpp" />
     <ClCompile Include="AttackTips.cpp" />
+    <ClCompile Include="SlashAttack.cpp" />
+    <ClCompile Include="ProjectileManager.cpp" />
+    <ClCompile Include="Item\PowerUpBox.cpp" />
     <ClCompile Include="ItemExplanation.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +127,9 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameRule.h" />
     <ClInclude Include="AttackTips.h" />
+    <ClInclude Include="ProjectileManager.h" />
+    <ClInclude Include="SlashAttack.h" />
+    <ClInclude Include="Item\PowerUpBox.h" />
     <ClInclude Include="ItemExplanation.h" />
   </ItemGroup>
 </Project>

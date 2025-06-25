@@ -27,6 +27,9 @@ public:
 		m_isLerp = true;
 	}
 
+	const Vector3 GetPosition() {
+		return m_position;
+	}
 
 private:
 	bool m_isDraw = false;						

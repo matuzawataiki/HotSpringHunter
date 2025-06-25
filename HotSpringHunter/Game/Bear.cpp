@@ -13,6 +13,7 @@
 #include "EnemyHPBar.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
+#include "ProjectileManager.h"
 
 
 
@@ -355,8 +356,19 @@ void Bear::SinkIntoGround()
 /// </summary>
 void Bear::ManageState()
 {
+	ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
+	if (projectileManager->IsChargeHit(&m_bearController)) {
+		m_bearHP -= 0.1;
+		if (m_bearHP <= 0.0f) {
+			//死亡
+			m_bearState = enBearDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enBearDeathSE, false);
+		}
+	}
 	//被弾した場合
-	if (m_player->m_collision->IsHit(m_bearController)) {
+	if (m_player->m_collision->IsHit(m_bearController)||
+		projectileManager->IsHit(&m_bearController)) {
 
 		//HPを減らす。
 		m_bearHP -= m_player->m_attackPower;

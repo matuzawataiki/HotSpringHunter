@@ -9,6 +9,7 @@
 #include "SoundEffect.h"
 #include "EffectHub.h"
 #include "EnemyManager.h"
+#include "ProjectileManager.h"
 
 namespace
 {
@@ -316,9 +317,21 @@ bool WildBoar::CanIdleState()
 /// </summary>
 void WildBoar::ManageState()
 {
+	ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
+	if (projectileManager->IsChargeHit(&m_wildBoarController)) {
+		m_wildBoarHP -= 0.1;
+		if (m_wildBoarHP <= 0.0f) {
+			//死亡
+			m_wildBoarState = enWildBoarDeath;
+			//死亡の効果音
+			m_soundEffect->Play(enWildBoarDeathSE, false);
+			DeleteGO(collisionObject);
+		}
+	}
 	//ダメージリアクションは最優先で
 	//被弾した場合
-	if (m_player->m_collision->IsHit(m_wildBoarController)) {
+	if (m_player->m_collision->IsHit(m_wildBoarController) ||
+		projectileManager->IsHit(&m_wildBoarController)) {
 
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;

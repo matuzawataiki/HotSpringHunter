@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Bear.h"
 #include "BackGround/StageManager.h"
+#include "Item/PowerUpBox.h"
 #include "SoundEffect.h"
 
 namespace
@@ -141,6 +142,7 @@ void SceneManager::InGameSceneManage()
 			m_gameOver->m_timer = m_gamePlayTime;
 		}
 	}
+	
 }
 
 /// <summary>
@@ -151,6 +153,7 @@ void SceneManager::SwitchingScenes()
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 	m_stageManager	= FindGO<StageManager>("stageManager");
+	PowerUpBox* powerUpBox;
 
 
 	switch (m_sceneState)
@@ -165,9 +168,14 @@ void SceneManager::SwitchingScenes()
 
 	case enBattleArea1:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea1);
+		m_stageManager->UpFence(StageManager::enBattleStage1);
 		break;
 
 	case enBattleArea1Clear:
+		powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+		powerUpBox->InitBox(PowerUpBox::enRangeAttack);
+		powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+		powerUpBox->InitBox(PowerUpBox::enSlash);
 		m_stageManager->DeleteFence(StageManager::enBattleStage1);
 		break;
 
@@ -181,19 +189,28 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enBattleArea2Clear:
+		if(m_player->GetPowerUpSelect() == 1)
+		{
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enSlash1);
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enSlash2);
+		}
+		else {
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enRangeAttack2);
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enRangeAttack3);
+		}
 		m_stageManager->DeleteFence(StageManager::enBattleStage2);
-		break;
-
-	case enBossAreaStart:
-		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBossArea);
-		m_stageManager->UpFence(StageManager::enBossStage);
 		break;
 
 	case enBossArea:
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBossArea);
+		m_stageManager->UpFence(StageManager::enBossStage);
 		break;
 
-	case enDefeatedBoss:
+	case EnGameScene::enDefeatedBoss:
 		m_stageManager->DeleteFence(StageManager::enBossStage);
 		break;
 

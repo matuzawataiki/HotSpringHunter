@@ -105,9 +105,6 @@ public:
 				return;
 			}
 		}
-
-		m_sceneManager = FindGO<SceneManager>("sceneManager");
-		m_sceneManager->AddDefeatedEnemyCount();
 	}
 
 	/// <summary>

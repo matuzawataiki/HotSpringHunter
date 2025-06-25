@@ -5,6 +5,7 @@
 #include "EnemyHPBar.h"
 #include "EnemyManager.h"
 #include "Enemy/State/PoisonSnakeState.h"
+#include "ProjectileManager.h"
 
 namespace {
 	static const float HP = 100.0f;
@@ -88,8 +89,18 @@ namespace Enemy
 
 	void PoisonSnake::HitCalculation()
 	{
+		ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
+		if (projectileManager->IsChargeHit(&m_characterController)) {
+			m_hp -= 0.1;
+			//HPがまだ残っている
+			if (m_hp <= 0.0f) {
+				//死亡（吹っ飛び）
+				m_isDeath = true;
+			}
+		}
 		//被弾した場合
-		if (m_target->m_collision->IsHit(m_characterController)) {
+		if (m_target->m_collision->IsHit(m_characterController)||
+			projectileManager->IsHit(&m_characterController)) {
 
 			//HPを減らす
 			m_hp -= m_target->GetAttackPower();
