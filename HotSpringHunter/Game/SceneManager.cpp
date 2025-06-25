@@ -70,23 +70,15 @@ void SceneManager::InGameSceneManage()
 		break;
 
 	case enBattleArea1:
-		//ウェーブ2
-		if (!m_isAddMoreEnemy && !enemyManager->IsEnemy()) {
-			SwitchingScenes();
-			m_isAddMoreEnemy = true;
-		}
-
-		//エリアクリアへ
-		if (m_isAddMoreEnemy && !enemyManager->IsEnemy()) {
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBattleArea1Clear;
 			SwitchingScenes();
-			m_isAddMoreEnemy = false;
 		}
 		break;
 
 	case enBattleArea1Clear:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBattleStage2).inOutHitBox->IsHit()) {
-			m_sceneState = EnGameScene::enBattleArea2;
+			m_sceneState = EnGameScene::enBattleArea2Start;
 			SwitchingScenes();
 		}
 		break;
@@ -99,11 +91,7 @@ void SceneManager::InGameSceneManage()
 		break;
 
 	case enBattleArea2:
-		if (!m_isAddMoreEnemy && !enemyManager->IsEnemy()) {
-			SwitchingScenes();
-			m_isAddMoreEnemy = true;
-		}
-		if (m_isAddMoreEnemy && !enemyManager->IsEnemy()) {
+		if (!enemyManager->IsEnemy()) {
 			m_sceneState = EnGameScene::enBattleArea2Clear;
 			SwitchingScenes();
 		}
@@ -111,7 +99,7 @@ void SceneManager::InGameSceneManage()
 
 	case enBattleArea2Clear:
 		if (m_stageManager->GetStageObject(StageManager::EnStageName::enBossStage).inOutHitBox->IsHit()) {
-			m_sceneState = EnGameScene::enBossArea;
+			m_sceneState = EnGameScene::enBossAreaStart;
 			SwitchingScenes();
 			m_soundEffect->Play(enBossBGM);
 		}
@@ -184,8 +172,8 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enBattleArea2Start:
-		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea1);
-		m_stageManager->UpFence(StageManager::enBattleStage1);
+		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBattleArea2);
+		m_stageManager->UpFence(StageManager::enBattleStage2);
 		break;
 
 	case enBattleArea2:
