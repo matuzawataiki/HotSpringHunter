@@ -302,6 +302,13 @@ namespace nsTMEngine {
 		void SetLightPos(Vector3& pos) {
 			m_lightPos = &pos;
 		}
+		/// <summary>
+		/// ディレクションライトの位置の削除
+		/// </summary>
+		/// <param name="pos">ディクションライトの位置</param>
+		void RemoveLightPos() {
+			m_lightPos = &m_defaultLightPos;
+		}
 
 		/// <summary>
 		/// 新規ポイントライトを登録
