@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "Bear.h"
 #include "BackGround/StageManager.h"
-#include "BackGround/StageManager.h"
+#include "Item/PowerUpBox.h"
 
 SceneManager::SceneManager()
 {
@@ -110,7 +110,7 @@ void SceneManager::SwitchingScenes()
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 	m_player		= FindGO<Character::Player>("player");
 	m_stageManager = FindGO<StageManager>("stageManager");
-
+	PowerUpBox* powerUpBox;
 
 	switch (m_sceneState)
 	{
@@ -123,6 +123,10 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enBattleArea1Clear:
+		powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+		powerUpBox->InitBox(PowerUpBox::enRangeAttack);
+		powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+		powerUpBox->InitBox(PowerUpBox::enSlash);
 		m_stageManager->DeleteFence(StageManager::enBattleStage1);
 		break;
 
@@ -132,6 +136,19 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enBattleArea2Clear:
+		if(m_player->GetPowerUpSelect() == 1)
+		{
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enSlash1);
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enSlash2);
+		}
+		else {
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enRangeAttack2);
+			powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
+			powerUpBox->InitBox(PowerUpBox::enRangeAttack3);
+		}
 		m_stageManager->DeleteFence(StageManager::enBattleStage2);
 		break;
 

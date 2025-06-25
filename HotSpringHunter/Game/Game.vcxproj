@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -266,8 +266,11 @@
     <ClCompile Include="Enemy\PoisonSnake\PoisonSnake.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
+    <ClCompile Include="Item\PowerUpBox.cpp" />
+    <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SlashAttack.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="SmokeEmitter.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
@@ -331,8 +334,11 @@
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
+    <ClInclude Include="Item\PowerUpBox.h" />
+    <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SlashAttack.h" />
     <ClInclude Include="Smoke.h" />
     <ClInclude Include="SmokeEmitter.h" />
     <ClInclude Include="SnakeEnemy.h" />
