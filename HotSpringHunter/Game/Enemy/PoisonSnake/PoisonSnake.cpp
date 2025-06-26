@@ -145,7 +145,7 @@ namespace Enemy
 		m_animationClip[enAnimClip_Attack].SetLoopFlag(false);
 		m_animationClip[enAnimClip_Hit].Load("Assets/animData/snake/hit.tka");
 		m_animationClip[enAnimClip_Hit].SetLoopFlag(false);
-		m_animationClip[enAnimClip_Death].Load("Assets/animData/snake/poisonSnake/attackAnimation.tka");
+		m_animationClip[enAnimClip_Death].Load("Assets/animData/snake/death.tka");
 		m_animationClip[enAnimClip_Death].SetLoopFlag(true);
 
 		//モデル読み込み
