@@ -78,7 +78,7 @@ namespace Enemy
 	void PoisonSnake::AttackState()
 	{
 
-		if (!m_isAttackCooldown && m_attackTime >= 0) {
+		if (!m_isAttackCooldown && m_attackTime > 0) {
 			m_attackTime -= g_gameTime->GetFrameDeltaTime();
 		}
 		if (m_attackTime < 0) {
@@ -104,6 +104,9 @@ namespace Enemy
 
 			//HPを減らす
 			m_hp -= m_target->GetAttackPower();
+			if (m_hp < 0) {
+				m_hp = 0;
+			}
 
 			//被弾エフェクト
 			//被弾エフェクト
