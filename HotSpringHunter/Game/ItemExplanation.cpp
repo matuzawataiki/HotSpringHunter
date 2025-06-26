@@ -31,41 +31,44 @@ void ItemExplanation::Update()
 /// <summary>
 /// 画像を描画します。
 /// </summary>
-void ItemExplanation::DrawImage()
-{
-	m_isDrawImage = true;
-
-}
-
-/// <summary>
-/// テキストを設定します。
-/// </summary>
-void ItemExplanation::SetText(int base,int derivative)
+void ItemExplanation::DrawImage(int var)
 {
 	wchar_t text[256];
 
-	if (base == 1) {
-		if (derivative == 0) {
-			swprintf_s(text, 256, L"攻撃をすると、波動が出る！！");
-		}
-		else if (derivative == 1) {
-			swprintf_s(text, 256, L"チャージで波動が増える！！");
-		}
-		else if (derivative == 2) {
-			swprintf_s(text, 256, L"波動が大きくなる！！");
+	switch (var) {
 
-		}
-	}
-	else if (derivative == 2) {
-		if (derivative == 0) {
-			swprintf_s(text, 256, L"チャージ攻撃が広範囲攻撃に強化！！");
-		}
-		else if (derivative == 0) {
-			swprintf_s(text, 256, L"チャージ攻撃の範囲拡大！！");
-		}
-		else if (derivative == 0) {
-			swprintf_s(text, 256, L"チャージ中に、近くの敵にダメージ！！");
-		}
+	case 0:
+		swprintf_s(text, 256, L"攻撃をすると、波動が出る！！");
+		break;
+
+	case 1:
+		swprintf_s(text, 256, L"チャージで波動が増える！！");
+		break;
+
+	case 2:
+		swprintf_s(text, 256, L"波動が大きくなる！！");
+		break;
+
+	case 3:
+		break;
+
+	case 4:
+		swprintf_s(text, 256, L"チャージ攻撃が広範囲攻撃に強化！！");
+		break;
+
+	case 5:
+		swprintf_s(text, 256, L"チャージ攻撃の範囲拡大！！");
+		break;
+
+	case 6:
+		swprintf_s(text, 256, L"チャージ中に、近くの敵にダメージ！！");
+		break;
+
+	case 7:
+		break;
+
+	default:
+		break;
 	}
 
 	m_itemImageText.SetText(text);
@@ -90,6 +93,7 @@ void ItemExplanation::HideImage()
 
 	if (m_elapsedTime >= IMAGE_DISPLAY_TIME) {
 		m_isDrawImage = false;
+		m_elapsedTime = 0.0f; // 表示時間をリセット
 	}
 }
 

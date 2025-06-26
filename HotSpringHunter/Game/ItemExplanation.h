@@ -3,14 +3,13 @@
 class ItemExplanation : public IGameObject
 {
 public:
-	//画像を表示
-	void DrawImage();
+	
 	ItemExplanation();
 	~ItemExplanation();
 	bool Start()override;
 	void Update()override;
-	//テキストを設定
-	void SetText(int base, int derivative);
+	//画像を表示
+	void DrawImage(int var);
 	//画像を非表示へ
 	void HideImage();
 	void Render(RenderContext& rc)override;
