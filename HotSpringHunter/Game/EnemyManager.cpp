@@ -11,7 +11,7 @@ namespace {
 	const int ENEMY_NUM				= 15;				//エネミーの数
 	const float PI					= 3.1415;			//円周率
 	const float TRACK_TARGET_RADIUS = 200.0f;			//追従の目標位置のプレイヤーからの半径
-	const Vector3 OFF_SCREEN_POS = { 0.0f,3000.0f,500.0f };		//出番が来てないときの敵を格納する位置
+	const Vector3 OFF_SCREEN_POS	= { 0.0f,3000.0f,500.0f };		//出番が来てないときの敵を格納する位置
 }
 
 EnemyManager::EnemyManager()
@@ -70,6 +70,17 @@ Vector3 EnemyManager::CalcToNearestEnemyVec(const Vector3& playerPos)
 		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
 			toNearestEnemyVec = toEnemyVec;
 			nearestEnemyPos = (*snakesIt)->GetSnakePos();
+		}
+	}
+
+	//毒ヘビ
+	for (auto poisonSnakeIt = m_poisonSnake.begin(); poisonSnakeIt != m_poisonSnake.end(); ++poisonSnakeIt) {
+		//見つけた敵へのベクトルを計算
+		toEnemyVec = (*poisonSnakeIt)->GetPosition() - m_player->GetPlayerPos();
+		//一番近いなら更新
+		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+			toNearestEnemyVec = toEnemyVec;
+			nearestEnemyPos = (*poisonSnakeIt)->GetPosition();
 		}
 	}
 
