@@ -44,6 +44,7 @@ WildBoar::~WildBoar()
 	DeleteGO(m_enemyBase);
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	enemyManager->DeleteEnemy(this);
+	DeleteGO(m_enemyHPBar);
 }
 
 bool WildBoar::Start()
