@@ -140,7 +140,7 @@ void Bear::LoadAssets()
 	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
 
 	//クマモデル読み込み
-	m_bearModel.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
+	m_bearModel.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisY);
 	//投石の岩モデル読み込み
 	m_stoneModel.Init("Assets/modelData/bear/slowStone.tkm");
 	//Rスティックのイラスト読み込み
