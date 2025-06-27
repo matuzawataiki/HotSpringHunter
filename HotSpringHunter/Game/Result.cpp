@@ -92,6 +92,9 @@ bool Result::Start()
 	m_sceneManager = FindGO<SceneManager>("sceneManager");
 	m_clearEffect = FindGO<SoundEffect>("soundEffect");
 
+	//ゲームクリアの音
+	ClearEffect();
+
 	return true;
 }
 
@@ -166,7 +169,7 @@ void Result::NextButton()
 
 void Result::ClearEffect()
 {
-	m_clearEffect->Play(enGameClearBGM);
+	m_clearEffect->Play(enGameClearBGM,false);
 }
 
 
@@ -251,6 +254,9 @@ bool GameOverResult::Start()
 	m_sceneManager = FindGO<SceneManager>("sceneManager");
 	m_overEffect = FindGO<SoundEffect>("soundEffect");
 
+	//ゲームオーバーの音
+	OverEffect();
+
 	return true;
 }
 
@@ -325,7 +331,7 @@ void GameOverResult::NextButton()
 
 void GameOverResult::OverEffect()
 {
-	m_overEffect->Play(enGameOverBGM);
+	m_overEffect->Play(enGameOverBGM,false);
 }
 
 void GameOverResult::Render(RenderContext& rc)

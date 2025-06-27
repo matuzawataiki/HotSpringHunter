@@ -136,6 +136,7 @@ void SceneManager::InGameSceneManage()
   
   if (m_player->GetPlayerHP() == 0.0f)
 	{
+	  m_soundEffect->StopBGM();
 	  if (m_gameOver == nullptr)
 		{
 			m_gameOver = NewGO<GameOver>(0, "gameOver");
