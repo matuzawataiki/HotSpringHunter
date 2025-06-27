@@ -44,6 +44,7 @@ WildBoar::~WildBoar()
 	DeleteGO(m_enemyBase);
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	enemyManager->DeleteEnemy(this);
+	DeleteGO(m_enemyHPBar);
 }
 
 bool WildBoar::Start()
@@ -544,8 +545,6 @@ void WildBoar::VariousUpdate()
 
 	//速度を適応。
 	ExecuteSpeed();
-
-	m_wildBoarPos.y = 0.0f;
 
 	//回転の更新。
 	m_wildBoarRot.SetRotationYFromDirectionXZ(m_wildBoarDir);

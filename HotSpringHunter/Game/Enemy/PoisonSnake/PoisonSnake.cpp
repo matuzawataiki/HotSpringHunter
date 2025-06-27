@@ -32,6 +32,7 @@ namespace Enemy
 		EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 		enemyManager->DeleteEnemy(this);
 		delete m_stateMachine;
+		DeleteGO(m_enemyHPBar);
 	}
 
 	bool PoisonSnake::Start()

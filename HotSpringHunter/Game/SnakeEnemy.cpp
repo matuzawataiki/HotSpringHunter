@@ -36,6 +36,7 @@ SnakeEnemy::~SnakeEnemy()
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	enemyManager->DeleteEnemy(this);
 	DeleteGO(m_enemyBase);
+	DeleteGO(m_enemyHPBar);
 }
 
 bool SnakeEnemy::Start()

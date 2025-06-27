@@ -2,6 +2,7 @@
 namespace Character{
 	class Player;
 }
+class ItemExplanation;
 class PowerUpBox :public IGameObject
 {
 public:
@@ -31,6 +32,7 @@ public:
 
 private:
 	Character::Player* m_plaeyr = nullptr;
+	ItemExplanation* m_itemExplanation = nullptr;
 
 	ModelRender m_boxModel;
 	Vector3 m_position = Vector3::Zero;
