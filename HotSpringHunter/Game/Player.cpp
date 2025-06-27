@@ -867,6 +867,12 @@ namespace Character {
 		if (m_player->GetPowerUpSelect() == 1) {
 			SlashAttack* slash = NewGO<SlashAttack>(0);
 			slash->OnCharge();
+			if (m_player->GetUpgradeSelect() == 1) {
+				slash->SetPowerUp(SlashAttack::enPowerUp1);
+			}
+			else if (m_player->GetUpgradeSelect() == 2){
+				slash->SetPowerUp(SlashAttack::enPowerUp2);
+			}
 		}
 		if (m_player->GetPowerUpSelect() == 2 &&
 			m_player->GetUpgradeSelect() == 2

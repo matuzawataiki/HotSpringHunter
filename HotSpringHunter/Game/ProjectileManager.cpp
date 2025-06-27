@@ -27,6 +27,7 @@ bool ProjectileManager::IsHit(CharacterController* characterController)
 {
 	for (auto collision : m_collisionObject) {
 		if (collision->IsHit(*characterController)) {
+			collision->Dead();
 			return true;
 		}
 	}

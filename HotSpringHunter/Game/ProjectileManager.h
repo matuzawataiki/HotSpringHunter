@@ -10,7 +10,7 @@ public:
 	ProjectileManager();
 	~ProjectileManager();
 
-	void AddProjectile(CollisionObject& collisionObject) { m_collisionObject.push_back(&collisionObject); }
+	void AddProjectile(CollisionObject* collisionObject) { m_collisionObject.push_back(collisionObject); }
 	void DeleteProjectile(CollisionObject* collisionObject);
 
 	bool IsHit(CharacterController* characterController);

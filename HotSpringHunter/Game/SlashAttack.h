@@ -24,7 +24,6 @@ public:
 	{
 		enPowerUp1,
 		enPowerUp2,
-		enPowerUp3,
 		enPowerUpNull,
 	};
 
@@ -36,8 +35,8 @@ private:
 	ProjectileManager*	m_projectileManager = nullptr;
 
 
-	CollisionObject		m_mainCollision;		//メインのコライダー
-	CollisionObject		m_subCollision[2];		//サブのコライダー
+	CollisionObject*	m_mainCollision;		//メインのコライダー
+	CollisionObject*	m_subCollision[2];		//サブのコライダー
 	ModelRender			m_sphereModel;			//メインのモデル
 	ModelRender			m_subModel[2];			//サブのモデル
 
