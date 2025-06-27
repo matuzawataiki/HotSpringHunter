@@ -379,8 +379,10 @@ namespace Character {
 			break;
 		}
 
-		auto powerUpBox = FindGO<PowerUpBox>("powerUpBox");
-		DeleteGO(powerUpBox);
+		auto powerUpBox = FindGOs<PowerUpBox>("powerUpBox");
+		for (auto it : powerUpBox) {
+			DeleteGO(it);
+		}
 	}
 
 	/*********************************************************************************/
