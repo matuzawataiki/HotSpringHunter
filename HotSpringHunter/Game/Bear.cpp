@@ -39,7 +39,7 @@ namespace {
 
 	const float BLOW_POS_DIS			= 1000.0f;		//ぶっ飛ばし：ぶっ飛ばす距離
 
-	const float FOLLOW_RANGE			= 1000.0f;		//追従：追従する距離
+	const float FOLLOW_RANGE			= 5000.0f;		//追従：追従する距離
 
 	const float SLOW_RANGE				= 1500.0f;		//投石：投石攻撃ができる距離
 	const float SLOW_COOLTIME			= 3.0f;			//投石：投石のクールタイム
@@ -335,6 +335,10 @@ void Bear::CalcPos()
 		float x = m_bearPos.x + dir.x * RADIUS;
 		float z = m_bearPos.z + dir.z * RADIUS;
 
+		//限界値を設ける
+		x = Clamp(x, -2475.0f, 2475.0f);
+		z = Clamp(z, -9500.0f, 14000.0f);
+
 		m_summonPos.emplace_back(Vector3{ x, SUMMON_YPOS, z });
 	}
 }
@@ -517,23 +521,18 @@ void Bear::ExecuteAction()
 		//召喚
 	case enBearSummonMinion:
 
-		//まだ召喚していなかったら
-		if (!m_isSummonEnd) {
-			//雑魚を召喚する
-			SummonMinions();
-			//咆哮アニメーションを再生
-			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
-			//召喚済みにする
-			m_isSummonEnd = true;
-		}
+		//雑魚を召喚する
+		SummonMinions();
+		//咆哮アニメーションを再生
+		m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+		//召喚済みにする
+		m_isSummonEnd = true;			
 
-		////アニメーションを再生し終わったらステート変更
-		//if (!m_bearModel.IsPlayAnimation()) {
-		//	//ステート変更を可能にする
-		//	m_enemyBase->SetChangeFlag(true);
-		//	//未召喚にする
-		//	m_isSummonEnd = false;
-		//}
+		//アニメーションを再生し終わったらステート変更
+		if (!m_bearModel.IsPlayAnimation()) {
+			//ステート変更を可能にする
+			m_enemyBase->SetChangeFlag(true);
+		}
 		break;
 
 		//拘束攻撃
@@ -637,7 +636,7 @@ void Bear::ExecuteAction()
 		//追従
 	case enBearTrack:
 		//追従させる
-		m_bearSpeed = m_enemyBase->Tracking(m_toPlayer);
+		m_bearSpeed = (m_enemyBase->Tracking(m_toPlayer) * 3.0f);
 		//歩きアニメーションを再生
 		m_bearModel.PlayAnimation(enBearAnimClip_Run, ANIM_INTERPOLATE_TIME);
 		break;
