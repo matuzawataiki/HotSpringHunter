@@ -458,18 +458,16 @@ void Bear::FindPlayer()
 	if (m_isContact) {
 		return;
 	}
-	if (m_toPlayer.Length() < FIND_RANGE) {
-		//認識済みにする
-		m_isContact = true;
-		//クマを認識状態にする
-		m_bearState = enbearContact;
-		//咆哮の効果音
-		m_soundEffect->Play(enBearRoarSE, false);
-		//接触時のイベントカメラにする
-		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
-		//ステート変更を不可に
-		m_enemyBase->SetChangeFlag(false);
-	}
+	//認識済みにする
+	m_isContact = true;
+	//クマを認識状態にする
+	m_bearState = enbearContact;
+	//咆哮の効果音
+	m_soundEffect->Play(enBearRoarSE, false);
+	//接触時のイベントカメラにする
+	m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
+	//ステート変更を不可に
+	m_enemyBase->SetChangeFlag(false);		
 }
 
 /// <summary>
@@ -684,12 +682,13 @@ void Bear::ExecuteAction()
 			//咆哮エフェクト
 			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 			m_effect->Init(EnEffectVar::enRoar);
+			//エフェクトをクマの前にセット
 			Vector3 effectPos = m_bearPos;
-			effectPos += (m_bearDir * 30.0f); //クマの前方にエフェクトを出す
-			effectPos.y = 60.0f;
+			effectPos.z += -200.0f;
+			effectPos.y = 180.0f;
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 40.0f,40.0f,40.0f });
+			m_effect->SetScale({ 25.0f,25.0f,25.0f });
 			m_effect->Play();
 
 			m_isPlayRoar = true;

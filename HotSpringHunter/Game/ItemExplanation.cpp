@@ -57,14 +57,14 @@ void ItemExplanation::DrawImage(int var)
 		break;
 
 	case 5:
-		swprintf_s(text, 256, L"チャージ攻撃の範囲拡大！！");
 		break;
 
 	case 6:
-		swprintf_s(text, 256, L"チャージ中に、近くの敵にダメージ！！");
+		swprintf_s(text, 256, L"チャージ攻撃の範囲拡大！！");
 		break;
 
 	case 7:
+		swprintf_s(text, 256, L"チャージ中に、近くの敵にダメージ！！");
 		break;
 
 	default:

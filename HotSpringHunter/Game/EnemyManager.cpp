@@ -94,13 +94,13 @@ Vector3 EnemyManager::CalcToNearestEnemyVec(const Vector3& playerPos)
 	}
 
 	//クマ
-	//if (m_bear->GetIsBearSpawn()) {
-	//	toEnemyVec = m_bear->GetBearPos() - m_player->GetPlayerPos();
-	//	if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
-	//		toNearestEnemyVec = toEnemyVec;
-	//		nearestEnemyPos = m_bear->GetBearPos();
-	//	}
-	//}
+	if (m_bear != nullptr) {
+		toEnemyVec = m_bear->GetBearPos() - m_player->GetPlayerPos();
+		if (toEnemyVec.Length() < toNearestEnemyVec.Length()) {
+			toNearestEnemyVec = toEnemyVec;
+			nearestEnemyPos = m_bear->GetBearPos();
+		}
+	}
 
 	nearestEnemyPos.y = 0.0f;
 
