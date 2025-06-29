@@ -2,6 +2,7 @@
 #include "PowerUpBox.h"
 #include "Player.h"
 #include "BackGround/StageManager.h"
+#include "ItemExplanation.h"
 
 namespace {
 	float XM_2PI = 6.283185307f;
@@ -82,6 +83,10 @@ void PowerUpBox::Update()
 	length.y = 0.0f;
 	if (length.Length() <= 100.0f) {
 		m_plaeyr->GetPowerUp(m_num);
+
+		//アイテムの説明を表示
+		m_itemExplanation = FindGO<ItemExplanation>("itemExplanation");
+		m_itemExplanation->DrawImage(m_num);
 	}
 
 	m_time += g_gameTime->GetFrameDeltaTime();

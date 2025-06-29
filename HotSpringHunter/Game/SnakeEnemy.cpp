@@ -38,6 +38,7 @@ SnakeEnemy::~SnakeEnemy()
 		enemyManager->DeleteEnemy(this);
 	}
 	DeleteGO(m_enemyBase);
+	DeleteGO(m_enemyHPBar);
 }
 
 bool SnakeEnemy::Start()

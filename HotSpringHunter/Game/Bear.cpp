@@ -39,7 +39,7 @@ namespace {
 
 	const float BLOW_POS_DIS			= 1000.0f;		//ぶっ飛ばし：ぶっ飛ばす距離
 
-	const float FOLLOW_RANGE			= 1000.0f;		//追従：追従する距離
+	const float FOLLOW_RANGE			= 5000.0f;		//追従：追従する距離
 
 	const float SLOW_RANGE				= 1500.0f;		//投石：投石攻撃ができる距離
 	const float SLOW_COOLTIME			= 3.0f;			//投石：投石のクールタイム
@@ -140,7 +140,7 @@ void Bear::LoadAssets()
 	m_animationClips[enBearAnimClip_Death].SetLoopFlag(false);
 
 	//クマモデル読み込み
-	m_bearModel.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisZ);
+	m_bearModel.Init("Assets/modelData/bear/bear.tkm", m_animationClips, enBearAnimClip_Num, enModelUpAxisY);
 	//投石の岩モデル読み込み
 	m_stoneModel.Init("Assets/modelData/bear/slowStone.tkm");
 	//Rスティックのイラスト読み込み
@@ -335,6 +335,10 @@ void Bear::CalcPos()
 		float x = m_bearPos.x + dir.x * RADIUS;
 		float z = m_bearPos.z + dir.z * RADIUS;
 
+		//限界値を設ける
+		x = Clamp(x, -2475.0f, 2475.0f);
+		z = Clamp(z, -9500.0f, 14000.0f);
+
 		m_summonPos.emplace_back(Vector3{ x, SUMMON_YPOS, z });
 	}
 }
@@ -458,18 +462,16 @@ void Bear::FindPlayer()
 	if (m_isContact) {
 		return;
 	}
-	if (m_toPlayer.Length() < FIND_RANGE) {
-		//認識済みにする
-		m_isContact = true;
-		//クマを認識状態にする
-		m_bearState = enbearContact;
-		//咆哮の効果音
-		m_soundEffect->Play(enBearRoarSE, false);
-		//接触時のイベントカメラにする
-		m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
-		//ステート変更を不可に
-		m_enemyBase->SetChangeFlag(false);
-	}
+	//認識済みにする
+	m_isContact = true;
+	//クマを認識状態にする
+	m_bearState = enbearContact;
+	//咆哮の効果音
+	m_soundEffect->Play(enBearRoarSE, false);
+	//接触時のイベントカメラにする
+	m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
+	//ステート変更を不可に
+	m_enemyBase->SetChangeFlag(false);		
 }
 
 /// <summary>
@@ -519,23 +521,18 @@ void Bear::ExecuteAction()
 		//召喚
 	case enBearSummonMinion:
 
-		//まだ召喚していなかったら
-		if (!m_isSummonEnd) {
-			//雑魚を召喚する
-			SummonMinions();
-			//咆哮アニメーションを再生
-			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
-			//召喚済みにする
-			m_isSummonEnd = true;
-		}
+		//雑魚を召喚する
+		SummonMinions();
+		//咆哮アニメーションを再生
+		m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+		//召喚済みにする
+		m_isSummonEnd = true;			
 
-		////アニメーションを再生し終わったらステート変更
-		//if (!m_bearModel.IsPlayAnimation()) {
-		//	//ステート変更を可能にする
-		//	m_enemyBase->SetChangeFlag(true);
-		//	//未召喚にする
-		//	m_isSummonEnd = false;
-		//}
+		//アニメーションを再生し終わったらステート変更
+		if (!m_bearModel.IsPlayAnimation()) {
+			//ステート変更を可能にする
+			m_enemyBase->SetChangeFlag(true);
+		}
 		break;
 
 		//拘束攻撃
@@ -639,7 +636,7 @@ void Bear::ExecuteAction()
 		//追従
 	case enBearTrack:
 		//追従させる
-		m_bearSpeed = m_enemyBase->Tracking(m_toPlayer);
+		m_bearSpeed = (m_enemyBase->Tracking(m_toPlayer) * 3.0f);
 		//歩きアニメーションを再生
 		m_bearModel.PlayAnimation(enBearAnimClip_Run, ANIM_INTERPOLATE_TIME);
 		break;
@@ -684,12 +681,13 @@ void Bear::ExecuteAction()
 			//咆哮エフェクト
 			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
 			m_effect->Init(EnEffectVar::enRoar);
+			//エフェクトをクマの前にセット
 			Vector3 effectPos = m_bearPos;
-			effectPos += (m_bearDir * 30.0f); //クマの前方にエフェクトを出す
-			effectPos.y = 60.0f;
+			effectPos.z += -200.0f;
+			effectPos.y = 180.0f;
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 40.0f,40.0f,40.0f });
+			m_effect->SetScale({ 25.0f,25.0f,25.0f });
 			m_effect->Play();
 
 			m_isPlayRoar = true;
