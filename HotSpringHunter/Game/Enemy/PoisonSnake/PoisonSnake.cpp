@@ -84,11 +84,13 @@ namespace Enemy
 		if (m_attackTime < 0) {
 			m_isAttackCooldown = true;
 		}
-
 	}
 
 	void PoisonSnake::HitCalculation()
 	{
+		if (m_isHit) {
+			return;
+		}
 		ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
 		if (projectileManager->IsChargeHit(&m_characterController)) {
 			m_hp -= 0.1;
