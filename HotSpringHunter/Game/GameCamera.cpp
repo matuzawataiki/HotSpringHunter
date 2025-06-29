@@ -11,6 +11,8 @@ namespace {
 	const float		CAMERA_RIGHT_LIMIT_OBSTAC	= 1250.0f;					//障害物：右方向の限界値
 	const float		CAMERA_LEFT_LIMIT_BATTLE	= -1200.0f;					//戦闘：左方向の限界値
 	const float		CAMERA_RIGHT_LIMIT_BATTLE	= 1200.0f;					//戦闘：右方向の限界値
+	const float		CAMERA_LEFT_LIMIT_BOSSBATTLE = -2200.0f;				//ボス：左方向の限界値
+	const float		CAMERA_RIGHT_LIMIT_BOSSBATTLE = 2200.0f;				//ボス：右方向の限界値
 
 	const float		CAMERA_TARGET_HEIGHT		= 100.0f;					//追従カメラ：注視点を高くする量
 	const Vector3	FOLLOW_CAMERA_POS			= { 0.0f,175.0f,-300.0f };	//追従カメラ：カメラ座標
@@ -55,7 +57,7 @@ bool GameCamera::Start()
 	//遠平面
 	g_camera3D->SetFar(CAMERA_FAR);
 	//障害物エリアモードに
-	SwitchObstaclesMode();
+	SwitchBattleMode();
 
 	return true;
 }
@@ -183,6 +185,15 @@ void GameCamera::SwitchBattleMode()
 {
 	m_cameraLeftLimitPos = CAMERA_LEFT_LIMIT_BATTLE;
 	m_cameraRightLimitPos = CAMERA_RIGHT_LIMIT_BATTLE;
+}
+
+/// <summary>
+/// ボスバトルモードへのカメラ切り替えを行います。
+/// </summary>
+void GameCamera::SwitchBossBattleMode()
+{
+	m_cameraLeftLimitPos = CAMERA_LEFT_LIMIT_BOSSBATTLE;
+	m_cameraRightLimitPos = CAMERA_RIGHT_LIMIT_BOSSBATTLE;
 }
 
 /// <summary>

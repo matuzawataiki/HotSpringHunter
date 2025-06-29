@@ -150,6 +150,7 @@ void SceneManager::InGameSceneManage()
 /// </summary>
 void SceneManager::SwitchingScenes()
 {
+	GameCamera* gameCamera = FindGO<GameCamera>("gameCamera");
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 	m_stageManager	= FindGO<StageManager>("stageManager");
@@ -205,6 +206,7 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enBossArea:
+		gameCamera->SwitchBossBattleMode();
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBossArea);
 		m_stageManager->UpFence(StageManager::enBossStage);
 		break;
