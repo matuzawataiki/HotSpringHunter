@@ -30,7 +30,9 @@ namespace Enemy
 	PoisonSnake::~PoisonSnake()
 	{
 		EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
-		enemyManager->DeleteEnemy(this);
+		if (enemyManager != nullptr) {
+			enemyManager->DeleteEnemy(this);
+		}
 		delete m_stateMachine;
 	}
 

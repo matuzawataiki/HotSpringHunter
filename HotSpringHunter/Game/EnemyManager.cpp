@@ -30,6 +30,11 @@ EnemyManager::~EnemyManager()
 	}
 	m_wildBoars.clear();
 
+	for (auto* poisonSnake : m_poisonSnake) {
+		DeleteGO(poisonSnake);
+	}
+	m_poisonSnake.clear();
+
 	DeleteGO(m_bear);
 
 	DeleteGO(m_enemySpawner);
