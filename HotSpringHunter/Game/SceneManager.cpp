@@ -129,7 +129,7 @@ void SceneManager::InGameSceneManage()
 
 	case enGoalArea:
 		break;
-
+		enemyManager->DeleteBoss();
 	default:
 		break;
 	}
@@ -217,7 +217,7 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enGoalArea:
-    m_gameClear = NewGO<GameClear>(0, "GameClear");
+		m_gameClear = NewGO<GameClear>(0, "GameClear");
 		m_gameClear-> m_timer = m_gamePlayTime;
 		m_isToGoal = true;
 		break;

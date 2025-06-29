@@ -35,8 +35,6 @@ EnemyManager::~EnemyManager()
 	}
 	m_poisonSnake.clear();
 
-	DeleteGO(m_bear);
-
 	DeleteGO(m_enemySpawner);
 }
 
@@ -169,6 +167,12 @@ void EnemyManager::EnemyFormation()
 		(*trackWildBoarIt)->SetWildBoarSpeed(speed);
 		trackTargetPos.erase(trackTargetPos.begin());
 	}
+}
+
+void EnemyManager::DeleteBoss()
+{
+	DeleteGO(m_bear);
+	m_bear = nullptr;
 }
 
 bool EnemyManager::IsEnemy()

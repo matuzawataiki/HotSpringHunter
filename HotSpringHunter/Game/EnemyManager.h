@@ -117,9 +117,7 @@ public:
 	/// <summary>
 	/// ボスを削除
 	/// </summary>
-	void DeleteBoss() {
-		m_bear = nullptr;
-	}
+	void DeleteBoss();
 
 	/// <summary>
 	/// 敵がいるかどうか
