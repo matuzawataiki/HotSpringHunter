@@ -36,6 +36,8 @@ public:
 	void SwitchObstaclesMode();
 	//カメラを戦闘エリアモードに移行
 	void SwitchBattleMode();
+	//カメラをボスエリアモードに移行	
+	void SwitchBossBattleMode();
 
 	//セッター
 	//カメラ状態を設定

@@ -34,7 +34,9 @@ SnakeEnemy::~SnakeEnemy()
 {
 	delete m_snakeController;
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
-	enemyManager->DeleteEnemy(this);
+	if (enemyManager != nullptr) {
+		enemyManager->DeleteEnemy(this);
+	}
 	DeleteGO(m_enemyBase);
 	DeleteGO(m_enemyHPBar);
 }

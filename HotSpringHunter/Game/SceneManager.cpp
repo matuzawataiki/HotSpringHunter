@@ -129,7 +129,7 @@ void SceneManager::InGameSceneManage()
 
 	case enGoalArea:
 		break;
-
+		enemyManager->DeleteBoss();
 	default:
 		break;
 	}
@@ -151,6 +151,7 @@ void SceneManager::InGameSceneManage()
 /// </summary>
 void SceneManager::SwitchingScenes()
 {
+	GameCamera* gameCamera = FindGO<GameCamera>("gameCamera");
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 	m_stageManager	= FindGO<StageManager>("stageManager");
@@ -206,6 +207,7 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enBossArea:
+		gameCamera->SwitchBossBattleMode();
 		m_enemySpawner->TriggerEnemySpawn(EnGameScene::enBossArea);
 		m_stageManager->UpFence(StageManager::enBossStage);
 		break;
@@ -215,7 +217,7 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enGoalArea:
-    m_gameClear = NewGO<GameClear>(0, "GameClear");
+		m_gameClear = NewGO<GameClear>(0, "GameClear");
 		m_gameClear-> m_timer = m_gamePlayTime;
 		m_isToGoal = true;
 		break;

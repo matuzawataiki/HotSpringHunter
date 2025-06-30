@@ -30,7 +30,9 @@ namespace Enemy
 	PoisonSnake::~PoisonSnake()
 	{
 		EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
-		enemyManager->DeleteEnemy(this);
+		if (enemyManager != nullptr) {
+			enemyManager->DeleteEnemy(this);
+		}
 		delete m_stateMachine;
 		DeleteGO(m_enemyHPBar);
 	}
@@ -79,17 +81,19 @@ namespace Enemy
 	void PoisonSnake::AttackState()
 	{
 
-		if (!m_isAttackCooldown && m_attackTime >= 0) {
+		if (!m_isAttackCooldown && m_attackTime > 0) {
 			m_attackTime -= g_gameTime->GetFrameDeltaTime();
 		}
 		if (m_attackTime < 0) {
 			m_isAttackCooldown = true;
 		}
-
 	}
 
 	void PoisonSnake::HitCalculation()
 	{
+		if (m_isHit) {
+			return;
+		}
 		ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
 		if (projectileManager->IsChargeHit(&m_characterController)) {
 			m_hp -= 0.1;
@@ -105,6 +109,9 @@ namespace Enemy
 
 			//HPを減らす
 			m_hp -= m_target->GetAttackPower();
+			if (m_hp < 0) {
+				m_hp = 0;
+			}
 
 			//被弾エフェクト
 			//被弾エフェクト
@@ -143,7 +150,7 @@ namespace Enemy
 		m_animationClip[enAnimClip_Attack].SetLoopFlag(false);
 		m_animationClip[enAnimClip_Hit].Load("Assets/animData/snake/hit.tka");
 		m_animationClip[enAnimClip_Hit].SetLoopFlag(false);
-		m_animationClip[enAnimClip_Death].Load("Assets/animData/snake/poisonSnake/attackAnimation.tka");
+		m_animationClip[enAnimClip_Death].Load("Assets/animData/snake/death.tka");
 		m_animationClip[enAnimClip_Death].SetLoopFlag(true);
 
 		//モデル読み込み

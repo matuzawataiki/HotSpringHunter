@@ -82,7 +82,6 @@ void PowerUpBox::Update()
 	Vector3 length = m_position - m_plaeyr->GetPlayerPos();
 	length.y = 0.0f;
 	if (length.Length() <= 100.0f) {
-		DeleteGO(this);
 		m_plaeyr->GetPowerUp(m_num);
 
 		//アイテムの説明を表示

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ProjectileManager.h"
+#include "Player.h"
 #include "collision/CollisionObject.h"
 
 ProjectileManager::ProjectileManager()
@@ -25,8 +26,14 @@ void ProjectileManager::DeleteProjectile(CollisionObject* collisionObject)
 
 bool ProjectileManager::IsHit(CharacterController* characterController)
 {
+	Character::Player* player = FindGO<Character::Player>("player");
 	for (auto collision : m_collisionObject) {
-		if (collision->IsHit(*characterController)) {
+		if (collision->IsHit(*characterController)){
+			if (!(player->GetPowerUpSelect() == 1 &&
+				player->GetUpgradeSelect() == 2)
+				) {
+				collision->Dead();
+			}
 			return true;
 		}
 	}
