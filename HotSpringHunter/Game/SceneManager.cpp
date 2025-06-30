@@ -217,10 +217,14 @@ void SceneManager::SwitchingScenes()
 		break;
 
 	case enGoalArea:
-		m_gameClear = NewGO<GameClear>(0, "GameClear");
-		m_gameClear-> m_timer = m_gamePlayTime;
-		m_isToGoal = true;
-		break;
+		m_soundEffect->StopBGM();
+		if(m_gameClear == nullptr)
+		{
+			m_gameClear = NewGO<GameClear>(0, "GameClear");
+			m_gameClear->m_timer = m_gamePlayTime;
+			m_isToGoal = true;
+		}
+				break;
 
 
 	default:
