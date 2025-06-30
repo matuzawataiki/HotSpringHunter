@@ -42,6 +42,7 @@ WildBoar::WildBoar()
 WildBoar::~WildBoar()
 {
 	DeleteGO(m_enemyBase);
+	DeleteGO(m_enemyHPBar);
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	if(enemyManager != nullptr){
 		enemyManager->DeleteEnemy(this);
