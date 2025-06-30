@@ -184,24 +184,22 @@ void Result::Render(RenderContext& rc)
 	m_nextButtonRen.Draw(rc);
 
 	//ランクの表示
-	/*if (m_gameTime)
+	if (m_gameTime <= 120.0f)
 	{
 		m_rankS.Draw(rc);
 	}
-	if(m_gameTime)
+	if(m_gameTime <= 150.0f)
 	{
 		m_rankA.Draw(rc);
 	}
-	if (m_gameTime)
+	if (m_gameTime <= 200.0f)
 	{
 		m_rankB.Draw(rc);
 	}
 	else
 	{
 		m_rankC.Draw(rc);
-	}*/
-
-	m_rankS.Draw(rc);
+	}
 }
 
 /// <summary>
@@ -345,22 +343,5 @@ void GameOverResult::Render(RenderContext& rc)
 	m_overNextButtonRen.Draw(rc);
 
 	//ランクの表示
-/*if (m_gameTime)
-{
-	m_rankS.Draw(rc);
-}
-if(m_gameTime)
-{
-	m_rankA.Draw(rc);
-}
-if (m_gameTime)
-{
-	m_rankB.Draw(rc);
-}
-else
-{
 	m_rankC.Draw(rc);
-}*/
-
-	m_rankS.Draw(rc);
 }

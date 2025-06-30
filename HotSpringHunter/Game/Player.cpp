@@ -14,7 +14,7 @@ namespace Character {
 
 		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,50.0f,0.0f };	//player初期位置。
 
-		const float MAX_PLAYER_HP			= 300.0f;		//最大HP。
+		const float MAX_PLAYER_HP			= 1000.0f;		//最大HP。
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
@@ -342,8 +342,8 @@ namespace Character {
 	void Player::Render(RenderContext& rc)
 	{
 		m_playerModel.Draw(rc);
-		m_chargeRender.Draw(rc);
-		m_posRender.Draw(rc);
+		//m_chargeRender.Draw(rc);
+		//m_posRender.Draw(rc);
 	}
 
 	/// <summary>
