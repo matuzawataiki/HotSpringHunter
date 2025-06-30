@@ -16,7 +16,7 @@ namespace
 		Vector2( 600.0f,-600.0f),	//右真ん中2
 	};
 
-	const float MAKE_SMOKE_TIME = 0.2f;	//雲が生成される時間/毎
+	const float MAKE_SMOKE_TIME = 0.1f;	//雲が生成される時間/毎
 }
 
 SmokeEmitter::SmokeEmitter()
