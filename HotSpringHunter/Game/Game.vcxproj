@@ -230,14 +230,12 @@
     <ClCompile Include="BackGround\MapObject\GroundBattle.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
-    <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
     <ClCompile Include="EffectHub.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
-    <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
@@ -284,9 +282,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Towel.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\MapObject\Tree.cpp" />
@@ -298,14 +294,12 @@
     <ClInclude Include="BackGround\StageObject.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
-    <ClInclude Include="Bucket.h" />
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
     <ClInclude Include="EffectHub.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyHPBar.h" />
     <ClInclude Include="EnemyManager.h" />
-    <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
@@ -348,9 +342,7 @@
     <ClInclude Include="BackGround\StageManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
-    <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="Towel.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
   </ItemGroup>

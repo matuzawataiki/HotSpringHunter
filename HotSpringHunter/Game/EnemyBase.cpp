@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "EnemyBase.h"
-#include "EnemySpawn.h"
 #include "Game.h"
 #include "Player.h"
 #include "collision/CollisionObject.h"

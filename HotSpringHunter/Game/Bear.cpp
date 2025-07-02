@@ -5,7 +5,6 @@
 #include "Enemy/PoisonSnake/PoisonSnake.h"
 #include "WildBoar.h"
 #include "UI.h"
-#include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
@@ -114,7 +113,6 @@ bool Bear::Start()
 
 	//インスタンス探し
 	m_player		= FindGO<Character::Player>("player");
-	m_enemySpawn	= FindGO<EnemySpawn>("enemySpawn");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 
 	//キャラクターコントローラー

@@ -2,7 +2,6 @@
 #include "WildBoar.h"
 #include "Game.h"
 #include "Player.h"
-#include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "EnemyHPBar.h"
 #include "collision/CollisionObject.h"
@@ -27,12 +26,12 @@ namespace
 	const float ATK_CHARGE_SPEED	= 1000.0f;				//突進攻撃のスピード 
 	const float CHARGE_COOL_TIME	= 15.0f;				//次の突進攻撃するまでのクールタイム
 
-	const float IDLE_TIME			= 3.0f;					//Idleの時間 
+	const float IDLE_TIME			= 3.0f;					//待機アニメーションの時間 
 
 	const float TO_NOT_SPAWNED_TIME = 5.0f;					//死亡してから非スポーン状態とする時間
 
-	const Vector3 NEW_POSITION		= { 0.0f,0.0f,500.0f };		//初期位置
-	const Vector3 SET_SCALE			= { 1.5f,1.5f,1.5f };       //イノシシの大きさ
+	const Vector3 NEW_POSITION		= { 0.0f,0.0f,500.0f };	//初期位置
+	const Vector3 SET_SCALE			= { 1.5f,1.5f,1.5f };   //イノシシの大きさ
 }
 
 WildBoar::WildBoar()
@@ -131,7 +130,7 @@ void WildBoar::Accumulate()
 	//突進チャージのコリジョンを作成
 	ChargeCaveat();
 
-	//突進する前のチャージ時間 3.0f
+	//突進する前のチャージ時間
 	m_chargeTime += g_gameTime->GetFrameDeltaTime();
 
 	//どこまで突進するか

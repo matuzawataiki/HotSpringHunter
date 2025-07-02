@@ -9,12 +9,9 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Towel.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
-    <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\Stage.cpp" />
@@ -72,11 +69,8 @@
     <ClInclude Include="Result.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
-    <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="Towel.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="SnakeEnemy.h" />

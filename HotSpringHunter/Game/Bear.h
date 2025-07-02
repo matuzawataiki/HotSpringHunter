@@ -177,7 +177,6 @@ public:
 
 private:
 	Character::Player*	m_player			= nullptr;
-	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	CollisionObject*	m_coverCollision	= nullptr;
