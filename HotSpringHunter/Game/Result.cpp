@@ -188,11 +188,11 @@ void Result::Render(RenderContext& rc)
 	{
 		m_rankS.Draw(rc);
 	}
-	if(m_gameTime <= 150.0f)
+	else if(m_gameTime <= 150.0f)
 	{
 		m_rankA.Draw(rc);
 	}
-	if (m_gameTime <= 200.0f)
+	else if (m_gameTime <= 200.0f)
 	{
 		m_rankB.Draw(rc);
 	}
