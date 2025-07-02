@@ -44,7 +44,7 @@
     <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
     <ClCompile Include="BackGround\MapObject\Fence.cpp" />
     <ClCompile Include="FenceManager.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
@@ -60,6 +60,7 @@
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Item\PowerUpBox.cpp" />
     <ClCompile Include="ItemExplanation.cpp" />
+    <ClCompile Include="ICharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -106,7 +107,7 @@
     <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
     <ClInclude Include="BackGround\MapObject\Fence.h" />
     <ClInclude Include="FenceManager.h" />
-    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Enemy\IEnemy.h" />
     <ClInclude Include="EffectHub.h" />
@@ -121,5 +122,6 @@
     <ClInclude Include="SlashAttack.h" />
     <ClInclude Include="Item\PowerUpBox.h" />
     <ClInclude Include="ItemExplanation.h" />
+    <ClInclude Include="ICharacter.h" />
   </ItemGroup>
 </Project>

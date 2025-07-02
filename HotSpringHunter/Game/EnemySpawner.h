@@ -1,5 +1,5 @@
 #pragma once
-#include "SceneManager.h"
+#include "BattleManager.h"
 
 namespace Character {
 	class Player;

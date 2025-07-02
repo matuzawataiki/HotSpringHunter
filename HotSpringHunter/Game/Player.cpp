@@ -5,7 +5,7 @@
 #include "SoundEffect.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
-#include "SceneManager.h"
+#include "BattleManager.h"
 #include "EffectHub.h"
 #include "SlashAttack.h"
 #include "ProjectileManager.h"
@@ -414,8 +414,8 @@ namespace Character {
 		}
 
 		//ゴールに移動中なら実行しない
-		m_sceneManager = FindGO<SceneManager>("sceneManager");
-		if (m_sceneManager->GetIsToGoal()) {
+		m_battleManager = FindGO<BattleManager>("battleManager");
+		if (m_battleManager->GetIsToGoal()) {
 			m_player->SetRequestState(EnPlayerActiveState::enPlayerToGoal);
 			return;
 		}
@@ -1091,7 +1091,7 @@ namespace Character {
 
 	void PlayerToGoal::Enter()
 	{
-		m_sceneManager = FindGO<SceneManager>("sceneManager");
+		m_battleManager = FindGO<BattleManager>("battleManager");
 		m_player->m_playerModel.PlayAnimation(enPlayerAnimClip_Run, ANIM_INTERPOLATE_TIME);
 		CalcMoveAmount();
 	}
@@ -1125,7 +1125,7 @@ namespace Character {
 			//プレイヤーを正面に向かせる
 			m_player->SetPlayerDir(Vector3::Zero);
 			//クリア演出をだす
-			m_sceneManager->SetIsClearFrag(true);
+			m_battleManager->SetIsClearFrag(true);
 			return;
 		}
 		//時間を計算

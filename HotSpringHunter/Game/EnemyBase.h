@@ -4,7 +4,6 @@ namespace Character {
 	class Player;
 }
 class PlayerChargeAttack;
-class EnemySpawn;
 
 class EnemyBase : public IGameObject
 {

@@ -2,7 +2,7 @@
 #include "EnemySpawner.h"
 #include "EnemyManager.h"
 #include "BackGround/StageManager.h"
-#include "SceneManager.h"
+#include "BattleManager.h"
 #include "Player.h"
 #include "SnakeEnemy.h"
 #include "WildBoar.h"

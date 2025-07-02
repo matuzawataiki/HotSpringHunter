@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Result.h"
 #include "Title.h"
-#include "SceneManager.h"
+#include "BattleManager.h"
 #include "SoundEffect.h"
 
 namespace
@@ -89,7 +89,7 @@ bool Result::Start()
 	m_rankC.SetPosition(EVALUATION_SPRITE_POS);
 	m_rankC.Update();
 
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
+	m_battleManager = FindGO<BattleManager>("battleManager");
 	m_clearEffect = FindGO<SoundEffect>("soundEffect");
 
 	//ゲームクリアの音
@@ -249,7 +249,7 @@ bool GameOverResult::Start()
 	m_rankC.SetPosition(EVALUATION_SPRITE_POS);
 	m_rankC.Update();
 
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
+	m_battleManager = FindGO<BattleManager>("battleManager");
 	m_overEffect = FindGO<SoundEffect>("soundEffect");
 
 	//ゲームオーバーの音

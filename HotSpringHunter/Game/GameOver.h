@@ -1,7 +1,7 @@
 #pragma once
 class Title;
 class GameOverResult;
-class SceneManager;
+class BattleManager;
 
 class GameOver :public IGameObject
 {
@@ -17,7 +17,7 @@ public:
 
 private:
 	GameOverResult* m_overResult = nullptr;
-	SceneManager* m_sceneManager = nullptr;
+	BattleManager* m_battleManager = nullptr;
 
 	SpriteRender    m_overModel;
 
