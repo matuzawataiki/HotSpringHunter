@@ -65,10 +65,12 @@
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="graphics\preRender\ShadowMapRender.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="level3DRender\LevelRender.h" />
     <ClInclude Include="nature\SkyCube.h" />
     <ClInclude Include="TMEngine.h" />
     <ClInclude Include="TMEnginePreCompile.h" />
+    <ClInclude Include="Util\CRC32.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
