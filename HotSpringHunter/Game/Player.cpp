@@ -8,6 +8,7 @@
 #include "SceneManager.h"
 #include "EffectHub.h"
 #include "SlashAttack.h"
+#include "ProjectileManager.h"
 
 namespace Character {
 	namespace {
@@ -22,7 +23,7 @@ namespace Character {
 		const float GRAVITY_AMOUNT			= 30.0f;		//移動：重力量。
 
 		const float WEAK_COLLISION_DIS		= 100.0f;		//弱攻撃：コリジョン位置。
-		const float WEAK_COLLISION_SIZE		= 400.0f;		//弱攻撃：コリジョンサイズ。
+		const float WEAK_COLLISION_SIZE		= 150.0f;		//弱攻撃：コリジョンサイズ。
 		const float WEAK_ATTACK_POWER		= 50.0f;		//弱攻撃：攻撃力。
 		const float SUCTION_CONDITION_DIS	= 500.0f;		//弱攻撃：吸いつきを行う条件の距離
 		const float SUCTION_TARGET_POS_DIS	= 10.0f;		//弱攻撃：攻撃吸いつきの位置の距離
@@ -31,7 +32,7 @@ namespace Character {
 		const float CHARGE_DECREASE			= 0.5f;			//溜め攻撃：チャージ減少量。
 		const float CHARGE_ADD_VALUE		= 1.5f;			//溜め攻撃：チャージ増加量（倍率）。
 		const float CHARGE_COLLISION_SIZE	= 3.0f;			//溜め攻撃：コリジョンの大きさの倍率。
-		const float COLLISION_SIZE_LOWEST	= 150.0f;		//溜め攻撃：コリジョンの大きさの最低保証。
+		const float COLLISION_SIZE_LOWEST	= 300.0f;		//溜め攻撃：コリジョンの大きさの最低保証。
 		const float CHARGE_MAX				= 100.0f;		//溜め攻撃：チャージ最大値。
 		const float CHARGE_POWER			= 2.0f;			//溜め攻撃：攻撃力の倍率。
 		const float CHANGE_WEAK				= 20.0f;		//溜め攻撃：弱攻撃になるチャージ。
@@ -729,10 +730,13 @@ namespace Character {
 			){
 			m_chargeCollision = NewGO<CollisionObject>(0, "chargeAttack");		//コリジョンオブジェクトを作成
 			Vector3 collisionPosition = m_player->m_playerPos;
+			m_chargeCollision->SetIsEnableAutoDelete(false);
 			m_chargeCollision->CreateSphere(collisionPosition,
 				Quaternion::Identity,
 				COLLISION_SIZE_LOWEST
 			);
+			ProjectileManager* projectileManager = FindGO< ProjectileManager>("projectileManager");
+			projectileManager->AddChargeProjectile(m_chargeCollision);
 		}
 	}
 
@@ -879,7 +883,8 @@ namespace Character {
 		if (m_player->GetPowerUpSelect() == 2 &&
 			m_player->GetUpgradeSelect() == 2
 			) {
-			DeleteGO(m_chargeCollision);
+			ProjectileManager* projectileManager = FindGO< ProjectileManager>("projectileManager");
+			projectileManager->DeleteChargeProjectile();
 		}
 
 		//コリジョン生成。
@@ -925,7 +930,8 @@ namespace Character {
 			//コリジョンオブジェクトを作成
 			m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
 			Vector3 collisionPosition = m_player->m_playerPos;
-			m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST;
+			collisionPosition += m_player->m_playerDir * WEAK_COLLISION_DIS;
+			m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + WEAK_COLLISION_SIZE;
 			//球状のコリジョンを作成
 			m_player->m_collision->CreateSphere(collisionPosition,
 				Quaternion::Identity,

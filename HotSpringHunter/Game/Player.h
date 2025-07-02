@@ -122,8 +122,8 @@ namespace Character {
 		std::vector<IState*> m_stateList;	//各ステートクラスのリスト。
 		int m_currentState = 0;				//現在のステート。
 		int m_requestState = 0;				//変更したいステート。
-		int m_mainPowerUp = 0;				//メインのパワーアップ。1,遠距離攻撃。2,範囲攻撃
-		int m_subPowerUp = 0;				//サブのアップデート
+		int m_mainPowerUp = 2;				//メインのパワーアップ。1,遠距離攻撃。2,範囲攻撃
+		int m_subPowerUp = 2;				//サブのアップデート
 
 
 		StateMachine*		m_stateMachine	= nullptr;
