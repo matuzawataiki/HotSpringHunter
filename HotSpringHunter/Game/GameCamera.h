@@ -7,14 +7,13 @@ namespace Character {
 enum EnCameraVar {
 	enFollow,			//追従カメラ
 	enLookDown,			//見下ろし固定カメラ
-	enBearContact		//クマ登場のイベントカメラ
+	enBearEventCamera		//クマ登場のイベントカメラ
 };
 
 namespace Character {
 	class Player;
 }
 class Bear;
-class BackGround;
 class GameCamera :public IGameObject
 {
 public:
@@ -50,7 +49,6 @@ public:
 private:
 	Character::Player*m_player				= nullptr;
 	Bear*			m_bear					= nullptr;
-	BackGround*		m_backGround			= nullptr;
 
 	Vector3			m_cameraPos				= Vector3::Zero;		//カメラ座標
 	Vector3			m_cameraTarget			= Vector3::Zero;		//カメラ注視点

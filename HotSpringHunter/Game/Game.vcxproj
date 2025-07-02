@@ -227,7 +227,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackTips.cpp" />
-    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundBattle.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
@@ -294,7 +293,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackTips.h" />
-    <ClInclude Include="BackGround.h" />
     <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
     <ClInclude Include="BackGround\MapObject\Tree.h" />
     <ClInclude Include="BackGround\StageObject.h" />

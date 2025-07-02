@@ -408,7 +408,7 @@ namespace Character {
 	{
 		//イベントカメラ中なら実行しない
 		m_gameCamera = FindGO<GameCamera>("gameCamera");
-		if (m_gameCamera->GetCameraState() == EnCameraVar::enBearContact) {
+		if (m_gameCamera->GetCameraState() == EnCameraVar::enBearEventCamera) {
 			m_player->m_requestState = enPlayerIdle;
 			return;
 		}
