@@ -1,5 +1,5 @@
 #pragma once
-#include "Enemy/State/Util/CRC32.h"
+#include "Util/CRC32.h"
 #include <unordered_map>
 
 #define appState(name)	\
