@@ -60,7 +60,6 @@
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Item\PowerUpBox.cpp" />
     <ClCompile Include="ItemExplanation.cpp" />
-    <ClCompile Include="ICharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -74,7 +73,6 @@
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="SnakeEnemy.h" />
     <ClInclude Include="BackGround\MapObject\GroundBattle.h" />
     <ClInclude Include="BackGround\MapObject\Tree.h" />
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
@@ -122,6 +120,6 @@
     <ClInclude Include="SlashAttack.h" />
     <ClInclude Include="Item\PowerUpBox.h" />
     <ClInclude Include="ItemExplanation.h" />
-    <ClInclude Include="ICharacter.h" />
+    <ClInclude Include="SnakeEnemy.h" />
   </ItemGroup>
 </Project>

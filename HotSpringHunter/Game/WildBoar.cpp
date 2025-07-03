@@ -191,7 +191,7 @@ void WildBoar::Charge()
 	if (m_isChargeSoundPlay)
 	{
 		//突進の効果音
-		m_runSound=m_soundEffect->Play(emWildBoarRunSE, true);
+		m_runSound = m_soundEffect->Play(emWildBoarRunSE, true);
 		m_isChargeSoundPlay = false;
 	}
 	//イノシシからプレイヤーまでのベクトルを求める
@@ -334,6 +334,12 @@ void WildBoar::ManageState()
 	//被弾した場合
 	if (m_player->m_collision->IsHit(m_wildBoarController) ||
 		projectileManager->IsHit(&m_wildBoarController)) {
+
+		//イノシシの突進攻撃の効果音を止める
+		m_soundEffect->Stop(m_runSound);
+		m_runSound = nullptr;
+		m_soundEffect->Stop(m_chargeSound);
+		m_chargeSound = nullptr;
 
 		//HPを減らす。
 		m_wildBoarHP -= m_player->m_attackPower;
