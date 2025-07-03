@@ -72,7 +72,8 @@
     <ClInclude Include="level3DRender\LevelRender.h" />
     <ClInclude Include="nature\SkyCube.h" />
     <ClInclude Include="Util\CRC32.h" />
-    <ClInclude Include="json.hpp" />
+    <ClInclude Include="json\json.hpp" />
+    <ClInclude Include="json\Json.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

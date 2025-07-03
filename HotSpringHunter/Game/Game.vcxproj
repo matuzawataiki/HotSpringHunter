@@ -311,7 +311,6 @@
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
-    <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="BackGround\MapObject\Fence.h" />
     <ClInclude Include="FenceManager.h" />
     <ClInclude Include="Enemy\IEnemy.h" />

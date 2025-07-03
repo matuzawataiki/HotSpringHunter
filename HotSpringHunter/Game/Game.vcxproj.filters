@@ -93,7 +93,6 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
-    <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="BackGround\ObjectBase.h" />
     <ClInclude Include="BackGround\MapObject\GroundGool.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />
