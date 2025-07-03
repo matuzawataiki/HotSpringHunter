@@ -35,8 +35,8 @@ namespace {
 
 	const float COVER_HIT_TIME			= 1.0f;			//拘束攻撃：当たり判定を出す時間
 	const float COVER_COLLISION_DIS		= 20.0f;		//拘束攻撃：当たり判定を前に出す量
-	const float COVER_COLLISION_SIZE	= 200.0f;		//拘束攻撃：当たり判定の半径
-	const float COVER_COOLTIME			= 5.0f;			//拘束攻撃：クールタイム
+	const float COVER_COLLISION_SIZE	= 300.0f;		//拘束攻撃：当たり判定の半径
+	const float COVER_COOLTIME			= 30.0f;		//拘束攻撃：クールタイム
 	const float ON_THE_PLAYER_TIME		= 1.0f;			//拘束攻撃：プレイヤーに乗りかかる時間
 	const float ON_THE_PLAYER_DIS		= 50.0f;		//拘束攻撃：プレイヤーに乗りかかる距離
 	const float COVER_TIME				= 5.0f;			//拘束攻撃：拘束時間
@@ -46,8 +46,8 @@ namespace {
 	const float FOLLOW_RANGE			= 5000.0f;		//追従：追従する距離
 	const float FOLLOW_SPEED			= 3.0f;			//追従：追従する速さ
 
-	const float SLOW_RANGE				= 1500.0f;		//投石：投石攻撃ができる距離
-	const float SLOW_COOLTIME			= 3.0f;			//投石：投石のクールタイム
+	const float SLOW_RANGE				= 3000.0f;		//投石：投石攻撃ができる距離
+	const float SLOW_COOLTIME			= 10.0f;		//投石：投石のクールタイム
 	const float SET_STONE_POS_DIS		= 160.0f;		//投石：岩をセットする位置（どれだけ前に出すか）
 	const float SET_STONE_TIME			= 0.3f;			//投石：岩をセットする時間
 	const float SLOW_SPEED				= 500.0f;		//投石：投球速度
@@ -489,6 +489,8 @@ void Bear::ManageState()
 		m_bearState = enBearSummonMinion;
 		//クールタイムをセット
 		m_summonCoolTime = SUMMON_COOLTIME;
+
+		m_enemyBase->SetChangeFlag(false);
 		return;
 	}
 
@@ -496,6 +498,16 @@ void Bear::ManageState()
 	//クールタイムが終わっていたら
 	if (m_coverCoolTime <= 0.0f && m_toPlayer.Length() < ATK_RANGE) {
 		m_bearState = enBearCoverAttack;
+		
+		return;
+	}
+
+	//投石攻撃
+	//投石攻撃の攻撃範囲まで近づいたら
+	if ((m_toPlayer.Length() < SLOW_RANGE) && (m_slowCoolTime <= 0.0f)) {
+		m_bearState = enBearSlowStone;
+		//投石のクールタイムをセット
+		m_slowCoolTime = SLOW_COOLTIME;
 		return;
 	}
 
@@ -510,15 +522,6 @@ void Bear::ManageState()
 	//追従範囲外に入っていたら
 	if (m_toPlayer.Length() < FOLLOW_RANGE) {
 		m_bearState = enBearTrack;
-		return;
-	}
-
-	//投石攻撃
-	//投石攻撃の攻撃範囲まで近づいたら
-	if ((m_toPlayer.Length() < SLOW_RANGE) && (m_slowCoolTime <= 0.0f)) {
-		m_bearState = enBearSlowStone;
-		//投石のクールタイムをセット
-		m_slowCoolTime = SLOW_COOLTIME;
 		return;
 	}
 
@@ -593,17 +596,20 @@ void Bear::ExecuteAction()
 		//召喚
 	case EnBearState::enBearSummonMinion:
 
-		//雑魚を召喚する
-		SummonMinions();
-		//咆哮アニメーションを再生
-		m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
-		//召喚済みにする
-		m_isSummonEnd = true;			
+		if (!m_isSummonEnd) {
+			//雑魚を召喚する
+			SummonMinions();
+			//咆哮アニメーションを再生
+			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
+			//召喚済みにする
+			m_isSummonEnd = true;
+		}		
 
 		//アニメーションを再生し終わったらステート変更
 		if (!m_bearModel.IsPlayAnimation()) {
 			//ステート変更を可能にする
 			m_enemyBase->SetChangeFlag(true);
+			m_isSummonEnd = false;
 		}
 		break;
 

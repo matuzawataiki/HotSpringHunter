@@ -835,6 +835,9 @@ namespace Character {
 			m_effect->SetScale({ 9.0f,9.0f,9.0f });
 			m_effect->Play();
 
+			//se
+			m_soundEffect->Play(enPlayerCharge3SE, false);
+
 			return;
 		}
 		else if (m_player->GetCharge() >= 70.0f && m_player->GetCharge() < 100.0f && m_chargeState != enCharge02) {
@@ -848,6 +851,9 @@ namespace Character {
 			m_effect->SetScale({ 7.0f,7.0f,7.0f });
 			m_effect->Play();
 
+			//se
+			m_soundEffect->Play(enPlayerCharge2SE, false);
+
 			return;
 		}
 		else if (m_player->GetCharge() >= 30.0f && m_player->GetCharge() < 70.0f && m_chargeState != enCharge01) {
@@ -860,6 +866,9 @@ namespace Character {
 			m_effect->SetRotation(Quaternion::Identity);
 			m_effect->SetScale({ 5.0f,5.0f,5.0f });
 			m_effect->Play();
+
+			//se
+			m_soundEffect->Play(enPlayerCharge1SE, false);
 
 			return;
 		}
@@ -897,6 +906,9 @@ namespace Character {
 		m_effect->SetRotation(m_player->GetPlayerRot());
 		m_effect->SetScale({ 100.0f,100.0f,100.0f });
 		m_effect->Play();
+
+		//SE
+		m_soundEffect->Play(enPlayerAttackSE, false);
 
 		//コリジョン削除。
 		DeleteGO(m_player->m_collision);
