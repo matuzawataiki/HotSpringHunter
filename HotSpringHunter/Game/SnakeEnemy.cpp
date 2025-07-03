@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SnakeEnemy.h"
-#include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "EnemyHPBar.h"
 #include "Game.h"
