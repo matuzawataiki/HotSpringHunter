@@ -2,8 +2,6 @@
 namespace Character {
 	class Player;
 }
-class SnakeEnemy;
-class EnemySpawn;
 class EnemyBase;
 class GameCamera;
 class EnemyHPBar;
@@ -12,7 +10,7 @@ class BossHPUI;
 
 //クマの行動状態
 enum EnBearState {
-	enbearContact,			//プレイヤーを認識
+	enBearContact,			//プレイヤーを認識
 	enBearIdle,				//待機
 	enBearTrack,			//追従
 	enBearMeleeAttack,		//近接攻撃
@@ -44,40 +42,110 @@ public:
 	Bear();
 	~Bear();
 	bool Start()override;
-	//アセットを読み込む
+
+	/// <summary>
+	/// アセットを読み込みます。
+	/// </summary>
 	void LoadAssets();
+
 	void Update()override;
-	//投石攻撃
+
+	/// <summary>
+	/// 投石攻撃
+	/// </summary>
 	void StoneThrow();
-	//投石のベクトルを計算
-	Vector3 CalcStoneVec( Vector3& start,  Vector3& target, const float t);
-	//岩のコリジョンを作る
+
+	/// <summary>
+	/// 投石のベクトルを計算
+	/// </summary>
+	/// <param name="start">投石の開始位置</param>
+	/// <param name="target">投石の目標位置</param>
+	/// <param name="t">投石の経過時間</param>
+	/// <returns>岩の現在位置</returns>
+	Vector3 CalcStoneVec(Vector3& start, Vector3& target, const float t);
+
+	/// <summary>
+	/// 岩のコリジョンを作る
+	/// </summary>
 	void StoneCollision();
-	//雑魚召喚
+
+	/// <summary>
+	/// 雑魚を召喚
+	/// </summary>
 	void SummonMinions();	
-	//召喚する位置を計算
+
+	/// <summary>
+	/// 召喚する位置を計算
+	/// </summary>
 	void CalcPos();
-	//死亡後に下に沈ませる
+
+	/// <summary>
+	/// 死亡後に下に沈ませる
+	/// </summary>
 	void SinkIntoGround();
-	//ステート管理
+
+	/// <summary>
+	/// 被弾エフェクトを再生
+	/// </summary>
+	void PlayHitEffect();
+
+	/// <summary>
+	/// 咆哮エフェクトを再生
+	/// </summary>
+	void PlayRoarEffect();
+
+	/// <summary>
+	/// ステート管理
+	/// </summary>	
 	void ManageState();
-	//プレイヤーを探す
+
+	/// <summary>
+	/// プレイヤーを探す
+	/// </summary>
 	void FindPlayer();
-	//行動実行
+
+	/// <summary>
+	/// 行動実行
+	/// </summary>
 	void ExecuteAction();
-	//いろいろ更新
+
+	/// <summary>
+	/// いろいろ更新
+	/// </summary>
 	void VariousUpdate();
-	//クマの向きを更新
+
+	/// <summary>
+	/// クマの向きを更新
+	/// </summary>
 	void DirUpdate();
-	//速度を適応
+
+	/// <summary>
+	/// 速度を適応
+	/// </summary>
 	void ExecuteSpeed();
-	//クマのHPのゲッター
-	float GetBearMAXHP();
-	//拘束攻撃の初期の時間のゲッター
-	float GetCOVER_TIME();
-	//ぶっ飛ばしの距離のゲッター
-	float GetBLOW_POS_DIS();
+
+	/// <summary>
+	/// 描画更新
+	/// </summary>
 	void Render(RenderContext& rc)override;
+
+
+	//定数のゲッター
+
+	/// <summary>
+	/// クマの最大HPのゲッター
+	/// </summary>
+	float GetBearMAXHP();
+
+	/// <summary>
+	/// 拘束攻撃の初期の時間のゲッター
+	/// </summary>
+	float GetCOVER_TIME();
+
+	/// <summary>
+	/// ぶっ飛ばしの距離のゲッター
+	/// </summary>
+	float GetBLOW_POS_DIS();
 
 	//セッター
 	//位置を設定
@@ -109,7 +177,6 @@ public:
 
 private:
 	Character::Player*	m_player			= nullptr;
-	EnemySpawn*			m_enemySpawn		= nullptr;
 	EnemyBase*			m_enemyBase			= nullptr;
 	CollisionObject*	m_stoneCollision	= nullptr;
 	CollisionObject*	m_coverCollision	= nullptr;
@@ -148,10 +215,9 @@ private:
 	float m_flightTime			= 0.0f;		//投石の飛行経過時間
 	float m_coverTime			= 0.0f;		//拘束攻撃の攻撃判定を出す時間
 
-
 	int m_bearState				= 0;		//クマの行動状態
 
-	bool m_isCanStateChange		= true;		//ステート変更を受け付けているか
+	bool m_isCanStateChange		= false;	//ステート変更を受け付けているか
 	bool m_isContact			= false;	//プレイヤーを認識したか
 	bool m_isPlayDeadAnim		= false;	//死亡アニメーションを再生したか
 	bool m_isRemoveController	= false;	//キャラコンを削除したか

@@ -5,7 +5,6 @@
 #include "Enemy/PoisonSnake/PoisonSnake.h"
 #include "WildBoar.h"
 #include "UI.h"
-#include "EnemySpawn.h"
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
@@ -16,7 +15,6 @@
 #include "ProjectileManager.h"
 
 
-
 namespace {
 	const float MAX_BEAR_HP				= 700.0f;		//クマの最大HP
 	const float FIND_RANGE				= 1500.0f;		//プレイヤーを捉える距離
@@ -24,6 +22,12 @@ namespace {
 	const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 	const float CONTACT_TIME			= 4.0f;			//クマ登場のイベント時間
 	const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
+
+	const Vector3 ROAR_EFFECT_POS		= { 0.0f, 180.0f, -200.0f };	//咆哮エフェクトの位置
+	const Vector3 ROAR_EFFECT_SCALE		= { 25.0f, 25.0f, 25.0f };		//咆哮エフェクトのスケール
+	const float HiT_EFFECT_DIS			= 200.0f;		//被弾エフェクトの位置（クマの前方）
+	const float HIT_EFFECT_YPOS			= 150.0f;		//被弾エフェクトの高さ
+	const Vector3 HIT_EFFECT_SCALE		= { 15.0f, 15.0f, 15.0f };	//被弾エフェクトのスケール
 
 	const float ATK_RANGE				= 300.0f;		//近接攻撃：リーチ
 	const float MELEE_ATTACK_DAMAGE		= 20.0f;		//近接攻撃：攻撃力
@@ -40,6 +44,7 @@ namespace {
 	const float BLOW_POS_DIS			= 1000.0f;		//ぶっ飛ばし：ぶっ飛ばす距離
 
 	const float FOLLOW_RANGE			= 5000.0f;		//追従：追従する距離
+	const float FOLLOW_SPEED			= 3.0f;			//追従：追従する速さ
 
 	const float SLOW_RANGE				= 1500.0f;		//投石：投石攻撃ができる距離
 	const float SLOW_COOLTIME			= 3.0f;			//投石：投石のクールタイム
@@ -60,6 +65,9 @@ namespace {
 	const float SUMMON_YPOS				= 20.0f;		//召喚：召喚したときの高さ
 	const float SUMMON_COOLTIME			= 15.0f;		//召喚：クールタイム
 	const int SUMMON_NUM				= 4;			//召喚：雑魚を召喚する数
+
+	const float TAKE_PROJECTILE_DAMAGE	= 1.0f;			//受ける波動ダメージ
+	const float CHIPPING_DAMAGE			= 0.1f;			//受ける持続ダメージ
 
 	const float SINKING_SPEED			= 0.05f;		//死亡：下に沈む速さ
 
@@ -105,7 +113,6 @@ bool Bear::Start()
 
 	//インスタンス探し
 	m_player		= FindGO<Character::Player>("player");
-	m_enemySpawn	= FindGO<EnemySpawn>("enemySpawn");
 	m_gameCamera	= FindGO<GameCamera>("gameCamera");
 
 	//キャラクターコントローラー
@@ -113,6 +120,8 @@ bool Bear::Start()
 
 	//クマのHPをセット
 	m_bearHP = MAX_BEAR_HP;
+	
+	m_isCanStateChange = false;
 
 	return true;
 }
@@ -356,13 +365,56 @@ void Bear::SinkIntoGround()
 }
 
 /// <summary>
+/// 被弾エフェクトを再生
+/// </summary>
+void Bear::PlayHitEffect()
+{
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(EnEffectVar::enEnemyHit);
+
+	//エフェクトをクマの前にセット
+	Vector3 effectPos = m_bearPos;
+	effectPos += (m_bearDir * HiT_EFFECT_DIS);
+	effectPos.y += HIT_EFFECT_YPOS;
+	m_effect->SetPosition(effectPos);
+
+	//回転
+	m_effect->SetRotation(Quaternion::Identity);
+	//大きさ
+	m_effect->SetScale({ HIT_EFFECT_SCALE });
+
+	m_effect->Play();
+}
+
+/// <summary>
+/// 咆哮エフェクトを再生
+/// </summary>
+void Bear::PlayRoarEffect()
+{
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(EnEffectVar::enRoar);
+
+	//エフェクトをクマの前にセット
+	Vector3 effectPos = m_bearPos;
+	effectPos += ROAR_EFFECT_POS;
+	m_effect->SetPosition(effectPos);
+
+	//回転
+	m_effect->SetRotation(Quaternion::Identity);
+	//大きさ
+	m_effect->SetScale({ ROAR_EFFECT_SCALE });
+
+	m_effect->Play();
+}
+
+/// <summary>
 /// ステート管理
 /// </summary>
 void Bear::ManageState()
 {
 	ProjectileManager* projectileManager = FindGO<ProjectileManager>("projectileManager");
 	if (projectileManager->IsChargeHit(&m_bearController)) {
-		m_bearHP -= 0.1;
+		m_bearHP -= CHIPPING_DAMAGE;
 		if (m_bearHP <= 0.0f) {
 			//死亡
 			m_bearState = enBearDeath;
@@ -372,22 +424,15 @@ void Bear::ManageState()
 	}
 	//被弾した
 	if (m_bearState != enBearKnockBack) {
+		//プレイヤーのタオル攻撃に当たった
 		if (m_player->m_collision->IsHit(m_bearController)) {
 
 			//HPを減らす。
 			m_bearHP -= m_player->m_attackPower;
 
-			//被弾エフェクト
-			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-			m_effect->Init(EnEffectVar::enEnemyHit);
-			Vector3 effectPos = m_bearPos;
-			effectPos += (m_bearDir * 200.0f);
-			effectPos.y += 150.0f;
-			m_effect->SetPosition(effectPos);
-			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 15.0f,15.0f,15.0f });
-			m_effect->Play();
-
+			//被弾エフェクトを再生
+			PlayHitEffect();
+			
 			//HPがまだ残っている。
 			if (m_bearHP > 0.0f) {
 				//ノックバック
@@ -405,21 +450,14 @@ void Bear::ManageState()
 			return;
 		}
 
+		//波動に当たった
 		if (projectileManager->IsHit(&m_bearController)) {
 
 			//HPを減らす。
-			m_bearHP -= 1.0f;
+			m_bearHP -= TAKE_PROJECTILE_DAMAGE;
 
-			//被弾エフェクト
-			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-			m_effect->Init(EnEffectVar::enEnemyHit);
-			Vector3 effectPos = m_bearPos;
-			effectPos += (m_bearDir * 200.0f);
-			effectPos.y += 150.0f;
-			m_effect->SetPosition(effectPos);
-			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 15.0f,15.0f,15.0f });
-			m_effect->Play();
+			//被弾エフェクトを再生
+			PlayHitEffect();
 
 			//HPがまだ残っている。
 			if (m_bearHP > 0.0f) {
@@ -499,11 +537,11 @@ void Bear::FindPlayer()
 	//認識済みにする
 	m_isContact = true;
 	//クマを認識状態にする
-	m_bearState = enbearContact;
+	m_bearState = enBearContact;
 	//咆哮の効果音
 	m_soundEffect->Play(enBearRoarSE, false);
 	//接触時のイベントカメラにする
-	m_gameCamera->SetCameraState(EnCameraVar::enBearContact);
+	m_gameCamera->SetCameraState(EnCameraVar::enBearEventCamera);
 	//ステート変更を不可に
 	m_enemyBase->SetChangeFlag(false);		
 }
@@ -527,14 +565,14 @@ void Bear::ExecuteAction()
 	switch (m_bearState) {
 
 		//ノックバック
-	case enBearKnockBack:
+	case EnBearState::enBearKnockBack:
 		m_bearSpeed = m_enemyBase->KnockBack(m_bearDir);
 		//被弾アニメーションを再生
 		m_bearModel.PlayAnimation(enBearAnimClip_Hit, ANIM_INTERPOLATE_TIME);
 		break;
 
 		//死亡
-	case enBearDeath:
+	case EnBearState::enBearDeath:
 		//死亡させる
 		m_enemyBase->Death();
 		//死亡アニメーションを再生（一回だけ）
@@ -553,7 +591,7 @@ void Bear::ExecuteAction()
 		break;
 
 		//召喚
-	case enBearSummonMinion:
+	case EnBearState::enBearSummonMinion:
 
 		//雑魚を召喚する
 		SummonMinions();
@@ -570,7 +608,7 @@ void Bear::ExecuteAction()
 		break;
 
 		//拘束攻撃
-	case enBearCoverAttack:
+	case EnBearState::enBearCoverAttack:
 
 		//覆いかぶさり攻撃のアニメーション
 		m_bearModel.PlayAnimation(enBearAnimClip_Covering, ANIM_INTERPOLATE_TIME);
@@ -630,7 +668,7 @@ void Bear::ExecuteAction()
 		break;
 
 		//プレイヤーぶっ飛ばし攻撃
-	case enBearSlowPlayer:
+	case EnBearState::enBearSlowPlayer:
 
 		//投石と同じアニメーションを再生
 		m_bearModel.PlayAnimation(enBearAnimClip_SlowStone, ANIM_INTERPOLATE_TIME);
@@ -648,7 +686,7 @@ void Bear::ExecuteAction()
 		break;
 
 		//近接攻撃
-	case enBearMeleeAttack:
+	case EnBearState::enBearMeleeAttack:
 		//クールタイムが0だったら
 		if (m_ATKCoolTime <= 0.0f)
 		{
@@ -668,15 +706,15 @@ void Bear::ExecuteAction()
 		break;
 
 		//追従
-	case enBearTrack:
+	case EnBearState::enBearTrack:
 		//追従させる
-		m_bearSpeed = (m_enemyBase->Tracking(m_toPlayer) * 3.0f);
+		m_bearSpeed = (m_enemyBase->Tracking(m_toPlayer) * FOLLOW_SPEED);
 		//歩きアニメーションを再生
 		m_bearModel.PlayAnimation(enBearAnimClip_Run, ANIM_INTERPOLATE_TIME);
 		break;
 
 		//投石攻撃
-	case enBearSlowStone:
+	case EnBearState::enBearSlowStone:
 
 		//クールタイムが終わっていたら
 		if (m_ATKCoolTime <= 0.0f) {
@@ -701,28 +739,18 @@ void Bear::ExecuteAction()
 		break;
 
 		//待機
-	case enBearIdle:
+	case EnBearState::enBearIdle:
 		//待機アニメーションを再生
 		m_bearModel.PlayAnimation(enBearAnimClip_Idle, ANIM_INTERPOLATE_TIME);
 		break;
 
 		//クマ登場のイベント
-	case enbearContact:
+	case EnBearState::enBearContact:
 		if (!m_isPlayRoar) {
 			//咆哮アニメーションを再生
 			m_bearModel.PlayAnimation(enBearAnimClip_Roar, ANIM_INTERPOLATE_TIME);
 
-			//咆哮エフェクト
-			EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
-			m_effect->Init(EnEffectVar::enRoar);
-			//エフェクトをクマの前にセット
-			Vector3 effectPos = m_bearPos;
-			effectPos.z += -200.0f;
-			effectPos.y = 180.0f;
-			m_effect->SetPosition(effectPos);
-			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 25.0f,25.0f,25.0f });
-			m_effect->Play();
+			PlayRoarEffect();
 
 			m_isPlayRoar = true;
 		}		
@@ -732,7 +760,7 @@ void Bear::ExecuteAction()
 		}
 
 		//登場イベントが終わったら
-		if (m_gameCamera->GetCameraState() != EnCameraVar::enBearContact) {
+		if (m_gameCamera->GetCameraState() != EnCameraVar::enBearEventCamera) {
 			//ボスのHPを生成
 			NewGO<BossHPUI>(0, "bossHPUI");
 			//ステート変更を可に

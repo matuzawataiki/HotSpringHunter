@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameOver.cpp" />
@@ -11,12 +9,9 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Towel.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
-    <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\Stage.cpp" />
@@ -49,7 +44,7 @@
     <ClCompile Include="BackGround\HitObject\HItBoxFence.cpp" />
     <ClCompile Include="BackGround\MapObject\Fence.cpp" />
     <ClCompile Include="FenceManager.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\State\PoisonSnakeState.cpp" />
@@ -65,10 +60,9 @@
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Item\PowerUpBox.cpp" />
     <ClCompile Include="ItemExplanation.cpp" />
+    <ClCompile Include="ICharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Bucket.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameOver.h" />
@@ -76,11 +70,8 @@
     <ClInclude Include="Result.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
-    <ClInclude Include="Test.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="Towel.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="Bear.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="SnakeEnemy.h" />
@@ -116,7 +107,7 @@
     <ClInclude Include="BackGround\HitObject\HItBoxFence.h" />
     <ClInclude Include="BackGround\MapObject\Fence.h" />
     <ClInclude Include="FenceManager.h" />
-    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Enemy\State\PoisonSnakeState.h" />
     <ClInclude Include="Enemy\IEnemy.h" />
     <ClInclude Include="EffectHub.h" />
@@ -131,5 +122,6 @@
     <ClInclude Include="SlashAttack.h" />
     <ClInclude Include="Item\PowerUpBox.h" />
     <ClInclude Include="ItemExplanation.h" />
+    <ClInclude Include="ICharacter.h" />
   </ItemGroup>
 </Project>

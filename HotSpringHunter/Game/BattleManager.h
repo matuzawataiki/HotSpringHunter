@@ -28,11 +28,11 @@ class Result;
 class StageManager;
 class SoundEffect;
 
-class SceneManager:public IGameObject
+class BattleManager:public IGameObject
 {
 public:
-	SceneManager();
-	~SceneManager();
+	BattleManager();
+	~BattleManager();
 	bool Start()override;
 	void Update()override;
 	//インゲーム中のゲームシーンを管理

@@ -2,7 +2,6 @@
 #include "GameCamera.h"
 #include "Player.h"
 #include "Bear.h"
-#include "BackGround.h"
 
 namespace {
 	const float		CAMERA_NEAR					= 1.0f;						//カメラ近平面
@@ -97,7 +96,7 @@ void GameCamera::CameraSwitch()
 		break;
 
 		//クマ接触のイベントカメラ
-	case EnCameraVar::enBearContact:
+	case EnCameraVar::enBearEventCamera:
 		BearContactCamera();
 		break;
 
@@ -127,8 +126,6 @@ void GameCamera::FollowCamera()
 /// </summary>
 void GameCamera::LookDownCamera()
 {
-	m_backGround = FindGO<BackGround>("backGround");
-
 	//注視点を該当戦闘エリアの中心に設定(一旦ステージの中心）。
 	m_cameraTarget = m_player->GetPlayerPos();
 	m_cameraTarget.y += 100.0f;

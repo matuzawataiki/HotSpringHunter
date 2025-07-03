@@ -5,7 +5,7 @@ class SnakeEnemy;
 class SoundEffect;
 class EnemyManager;
 class GameCamera;
-class SceneManager;
+class BattleManager;
 class Bear;
 class SoundEffect;
 
@@ -183,7 +183,7 @@ namespace Character {
 		Player*			m_player		= nullptr;
 		SoundEffect*	m_soundEffect	= nullptr;	//サウンドソース。
 		GameCamera*		m_gameCamera	= nullptr;
-		SceneManager*	m_sceneManager	= nullptr;
+		BattleManager*	m_battleManager	= nullptr;
 		Bear*			m_bear			= nullptr;
 
 		float m_weakAtCT = 0.0f;								//弱攻撃クールタイム。
@@ -390,7 +390,7 @@ private:
 		void Exit()override;
 
 	private:
-		SceneManager*	m_sceneManager	= nullptr;
+		BattleManager*	m_battleManager	= nullptr;
 
 		Vector3		m_moveAmount		= Vector3::Zero;		//1フレームで移動する量
 

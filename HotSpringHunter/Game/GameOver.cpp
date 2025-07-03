@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "GameOver.h"
-#include "GameOver.h"
 #include "Title.h"
 #include "Result.h"
 #include "Game.h"
-#include "SceneManager.h"
+#include "BattleManager.h"
 
 GameOver::GameOver()
 {
@@ -20,7 +19,7 @@ bool GameOver::Start()
 {
 	m_overModel.Init("Assets/modelData/image/gameover_2.dds", 1920.0f, 1080.0f);
 
-	m_sceneManager = FindGO<SceneManager>("sceneManager");
+	m_battleManager = FindGO<BattleManager>("battleManager");
 
 	return true;
 }

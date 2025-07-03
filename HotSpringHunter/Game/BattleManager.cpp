@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SceneManager.h"
+#include "BattleManager.h"
 #include "EnemyManager.h"
 #include "EnemySpawner.h"
 #include "GameClear.h"
@@ -17,15 +17,15 @@ namespace
 	const Vector3 TIME_POS = { 740.0f,430.0f,0.0f };
 }
 
-SceneManager::SceneManager()
+BattleManager::BattleManager()
 {
 }
 
-SceneManager::~SceneManager()
+BattleManager::~BattleManager()
 {
 }
 
-bool SceneManager::Start()
+bool BattleManager::Start()
 {
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 	m_soundEffect->Play(enNomalBGM);
@@ -37,7 +37,7 @@ bool SceneManager::Start()
 	return true;
 }
 
-void SceneManager::Update()
+void BattleManager::Update()
 {
 	InGameSceneManage();
 	GameTimeUpdate();
@@ -46,7 +46,7 @@ void SceneManager::Update()
 /// <summary>
 /// ゲーム中のシーンを管理します。
 /// </summary>
-void SceneManager::InGameSceneManage()
+void BattleManager::InGameSceneManage()
 {
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	m_stageManager	= FindGO<StageManager>("stageManager");
@@ -149,7 +149,7 @@ void SceneManager::InGameSceneManage()
 /// <summary>
 /// シーンを切り替える処理を行います。
 /// </summary>
-void SceneManager::SwitchingScenes()
+void BattleManager::SwitchingScenes()
 {
 	GameCamera* gameCamera = FindGO<GameCamera>("gameCamera");
 	m_enemySpawner	= FindGO<EnemySpawner>("enemySpawner");
@@ -233,7 +233,7 @@ void SceneManager::SwitchingScenes()
 
 }
 
-void SceneManager::GameTimeUpdate()
+void BattleManager::GameTimeUpdate()
 {
 	if (m_isTimeOff == true)
 	{

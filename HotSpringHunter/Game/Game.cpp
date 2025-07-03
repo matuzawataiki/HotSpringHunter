@@ -7,7 +7,7 @@
 #include "EnemyHPBar.h"
 #include "UI.h"
 #include "BackGround/StageManager.h";
-#include "SceneManager.h"
+#include "BattleManager.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
 #include "GameOver.h"
@@ -22,7 +22,7 @@ Game::Game()
 Game::~Game()
 {
 	DeleteGO(m_gameCamera);
-	DeleteGO(m_sceneManager);
+	DeleteGO(m_battleManager);
 	DeleteGO(m_stageManager);
 	DeleteGO(m_enemyManager);
 	DeleteGO(m_player);
@@ -40,7 +40,7 @@ bool Game::Start()
 
 	m_gameCamera		= NewGO<GameCamera>(0, "gameCamera");
 	m_player			= NewGO<Character::Player>(0, "player");
-	m_sceneManager		= NewGO<SceneManager>(0, "sceneManager");
+	m_battleManager		= NewGO<BattleManager>(0, "battleManager");
 	m_stageManager		= NewGO<StageManager>(0, "stageManager");
 	m_enemyManager		= NewGO<EnemyManager>(0, "enemyManager");
 	m_projectileManager = NewGO<ProjectileManager>(0, "projectileManager");

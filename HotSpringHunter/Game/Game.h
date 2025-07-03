@@ -15,7 +15,7 @@ class EnemyHPBar;
 class StartWaveCollision;
 class UI;
 class StageManager;
-class SceneManager;
+class BattleManager;
 class GameOver;
 class SoundEffect;
 class EffectHub;
@@ -39,7 +39,7 @@ private:
 	StartWaveCollision* m_waveCollision		= nullptr;
 	UI*					m_ui				= nullptr;
 	StageManager*		m_stageManager		= nullptr;
-	SceneManager*		m_sceneManager		= nullptr;
+	BattleManager*		m_battleManager		= nullptr;
 	SoundEffect*		m_soundEffect		= nullptr;
 	EffectHub*			m_effectHub			= nullptr;
 	GameOver*			m_gameOver			= nullptr;

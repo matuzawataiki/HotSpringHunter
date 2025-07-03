@@ -1,6 +1,6 @@
 #pragma once
 class Title;
-class SceneManager;
+class BattleManager;
 class SoundEffect;
 
 //ゲームクリアリザルト
@@ -21,7 +21,7 @@ public:
 	float m_gameTime = 0.0f;
 	
 private:
-	SceneManager* m_sceneManager = nullptr;
+	BattleManager* m_battleManager = nullptr;
 	Title*        m_title        = nullptr;
 	SoundEffect*  m_clearEffect  = nullptr;
 
@@ -66,7 +66,7 @@ public:
 	float m_gameTime = 0.0f;
 
 private:
-	SceneManager* m_sceneManager = nullptr;
+	BattleManager* m_battleManager = nullptr;
 	Title*        m_title        = nullptr;
 	SoundEffect*  m_overEffect  = nullptr;
 
