@@ -37,6 +37,10 @@ namespace Character {
 		const float CHARGE_POWER			= 2.0f;			//溜め攻撃：攻撃力の倍率。
 		const float CHANGE_WEAK				= 20.0f;		//溜め攻撃：弱攻撃になるチャージ。
 		const float NEW_CHARGE				= 5.0f;			//溜め攻撃：チャージの初期値。
+		const Vector3 CHARGE_EFFECT_SCALE	= { 7.0f,7.0f,7.0f };	//溜め攻撃：チャージエフェクトの大きさ。
+		const Vector3 CHARGE_SLASH_EFFECT_SCA = { 120.0f,120.0f,120.0f };//溜め攻撃：斬撃エフェクトの大きさ。
+		const float CHARGE02_EFFECT_SIZE	= 1.2f;			//溜め攻撃：チャージ2のエフェクトサイズ。
+		const float CHARGE03_EFFECT_SIZE	= 1.4f;			//溜め攻撃：チャージ3のエフェクトサイズ。
 
 		const float GUARD_TOLERANCE			= 1.0f;			//ガード：ガード可能な角度。
 
@@ -113,20 +117,18 @@ namespace Character {
 		m_stateList.clear();
 	}
 
-		bool Player::Start()
-		{
-			//player座標初期化
-			m_playerPos = PLAYER_NEW_POSITION;
-			//playerキャラコン初期化
-			m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
-			//playerのHPをセット
-			m_playerHP = MAX_PLAYER_HP;
-			//ステートマシン生成
-			m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
+	bool Player::Start()
+	{
+		//player座標初期化
+		m_playerPos = PLAYER_NEW_POSITION;
+		//playerキャラコン初期化
+		m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
+		//playerのHPをセット
+		m_playerHP = MAX_PLAYER_HP;
+		//ステートマシン生成
+		m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
 
 		m_soundEffect = FindGO<SoundEffect>("soundEffect");
-
-		g_sceneLight->SetLightPos(m_playerPos);
 
 		AddList();
 		LoadAssets();
@@ -827,6 +829,7 @@ namespace Character {
 	{
 		Vector3 effectPos = m_player->GetPlayerPos();
 		effectPos.y += 100.0f;
+
 		if (m_player->GetCharge() >= 100.0f && m_chargeState != enCharge03) {
 			m_chargeState = enCharge03;
 
@@ -835,11 +838,14 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge03);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 9.0f,9.0f,9.0f });
+			m_effect->SetScale(CHARGE_EFFECT_SCALE * CHARGE03_EFFECT_SIZE);
 			m_effect->Play();
 
 			//se
 			m_soundEffect->Play(enPlayerCharge3SE, false);
+
+			//斬撃のエフェクトサイズを変更
+			m_slashEffectScale = CHARGE_SLASH_EFFECT_SCA * CHARGE03_EFFECT_SIZE;
 
 			return;
 		}
@@ -851,11 +857,14 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge02);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->SetScale(CHARGE_EFFECT_SCALE);
 			m_effect->Play();
 
 			//se
 			m_soundEffect->Play(enPlayerCharge2SE, false);
+
+			//斬撃のエフェクトサイズを変更
+			m_slashEffectScale = CHARGE_SLASH_EFFECT_SCA * CHARGE02_EFFECT_SIZE;
 
 			return;
 		}
@@ -867,11 +876,14 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge01);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 5.0f,5.0f,5.0f });
+			m_effect->SetScale(CHARGE_EFFECT_SCALE);
 			m_effect->Play();
 
 			//se
 			m_soundEffect->Play(enPlayerCharge1SE, false);
+
+			//斬撃のエフェクトサイズを変更
+			m_slashEffectScale = CHARGE_SLASH_EFFECT_SCA;
 
 			return;
 		}
@@ -907,7 +919,7 @@ namespace Character {
 		m_effect->Init(EnEffectVar::enCharge);
 		m_effect->SetPosition(m_player->GetPlayerPos());
 		m_effect->SetRotation(m_player->GetPlayerRot());
-		m_effect->SetScale({ 100.0f,100.0f,100.0f });
+		m_effect->SetScale(m_slashEffectScale);
 		m_effect->Play();
 
 		//SE
