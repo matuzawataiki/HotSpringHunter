@@ -192,6 +192,9 @@ namespace Character {
 		PositionDraw();
 
 		m_damageMemory -= 0.2f;
+		if(m_damageMemory < 0.0f ) {
+			m_damageMemory = 0.0f;
+		}	
 	}
 
 	/// <summary>
