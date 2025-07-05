@@ -60,6 +60,9 @@
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Item\PowerUpBox.cpp" />
     <ClCompile Include="ItemExplanation.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\IScene.cpp" />
+    <ClCompile Include="Scene\TipsScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -121,5 +124,8 @@
     <ClInclude Include="Item\PowerUpBox.h" />
     <ClInclude Include="ItemExplanation.h" />
     <ClInclude Include="SnakeEnemy.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\IScene.h" />
+    <ClInclude Include="Scene\TipsScene.h" />
   </ItemGroup>
 </Project>

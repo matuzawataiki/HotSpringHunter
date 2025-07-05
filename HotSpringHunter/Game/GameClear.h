@@ -1,4 +1,7 @@
 #pragma once
+
+#include "Scene/IScene.h"
+
 class Result;
 class SmokeEmitter;
 
@@ -12,8 +15,11 @@ enum ResultState
 	enResult,
 };
 
-class GameClear:public IGameObject
+class GameClear:public IScene
 {
+
+	appScene(GameClear);
+
 	public:
 	GameClear();
 	~GameClear();

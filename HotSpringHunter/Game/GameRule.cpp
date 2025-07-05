@@ -33,3 +33,8 @@ void GameRule::Render(RenderContext& rc)
 {
 	m_ruleModel.Draw(rc);
 }
+
+bool GameRule::RequestScene(uint32_t& id)
+{
+
+}

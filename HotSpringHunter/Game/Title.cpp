@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Title.h"
-#include "Game.h"
-#include "GameRule.h"
+#include "Scene/TipsScene.h"
 #include "SoundEffect.h"
 
 namespace
@@ -18,7 +17,6 @@ namespace
 
 Title::Title()
 {
-	DeleteGO(m_gameRule);
 }
 
 Title::~Title()
@@ -40,17 +38,9 @@ bool Title::Start()
 
 void Title::Update()
 {
-	SwitchGame();
 	NextButton();
 }
 
-void Title::SwitchGame()
-{
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		m_gameRule = NewGO<GameRule>(0, "GameRule");
-		DeleteGO(this);
-	}
-}
 void Title::NextButton()
 {
 	const float buttonDeltaTime = g_gameTime->GetFrameDeltaTime();
@@ -98,4 +88,13 @@ void Title::Render(RenderContext& rc)
 {
 	m_titleModel.Draw(rc);
 	m_titleNextButtonRen.Draw(rc);
+}
+
+bool Title::RequestScene(uint32_t& id)
+{
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		m_gameRule = NewGO<GameRule>(0, "GameRule");
+		return true;
+	}
+	return false;
 }

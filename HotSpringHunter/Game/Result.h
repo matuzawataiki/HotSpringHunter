@@ -1,11 +1,16 @@
 #pragma once
+
+#include "Scene/IScene.h"
+
 class Title;
 class BattleManager;
 class SoundEffect;
 
 //ゲームクリアリザルト
-class Result :public IGameObject
+class Result :public IScene
 {
+	appScene(Result);
+
 public:
 	Result();
 	~Result();
@@ -48,8 +53,10 @@ private:
 };
 
 //ゲームオーバーリザルト
-class GameOverResult : public IGameObject
+class GameOverResult : public IScene
 {
+	appScene(GameOverResult);
+
 public:
 	GameOverResult();
 	~GameOverResult();

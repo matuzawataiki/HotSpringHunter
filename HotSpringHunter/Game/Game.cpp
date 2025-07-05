@@ -65,3 +65,7 @@ void Game::Render(RenderContext& rc)
 {
 	m_gameUI.Draw(rc);
 }
+
+bool Game::RequestScene(uint32_t& id)
+{
+}
