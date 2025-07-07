@@ -63,7 +63,6 @@ public:
 	//最終スコアを取得
 	inline int GetFinalScore() const { return m_finalScore; };
 
-	float m_gamePlayTime = 0.0f;
 
 private:
 	EnemySpawner*		m_enemySpawner	= nullptr;
@@ -80,6 +79,7 @@ private:
 
 	FontRender          m_timeRender;
 
+	float				m_gamePlayTime = 0.0f;
 	float				m_gameClearTime = 0.0f;		//ゲームのプレイ時間
 	
 	int					m_finalScore	= 0;			//最終スコア

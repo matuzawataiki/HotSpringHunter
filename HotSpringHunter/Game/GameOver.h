@@ -5,7 +5,7 @@ class Title;
 class GameOverResult;
 class BattleManager;
 
-class GameOver :public IScene
+class GameOver :public IGameObject
 {
 	appScene(GameOver);
 
@@ -14,13 +14,9 @@ public:
 	~GameOver();
 	bool Start()override;
 	void Update()override;
-	void SwitchResult();
 	void Render(RenderContext& rc)override;
 
-	/// <summary>
-	/// リザルトの時間を設定
-	/// </summary>
-	inline void SetResultTime(const float time) { m_resultTime = time; }
+	bool CanChangeScene() const { return m_canChangeScene; }
 
 private:
 	GameOverResult* m_overResult   = nullptr;
@@ -28,7 +24,8 @@ private:
 
 	SpriteRender    m_overModel;
 
-	float m_resultTime		= 0.0f; //リザルトタイムの受け皿
 	float m_swtchDeltaTime	= 0.0f;
+
+	bool m_canChangeScene = false;
 };
 

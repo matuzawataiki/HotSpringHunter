@@ -3,13 +3,36 @@
 #include <map>
 #include <functional>
 
-//基底クラス
+/// <summary>
+/// シーン管理を処理するためのゲームオブジェクト
+/// </summary>
+class SceneManagerObject : public IGameObject
+{
+public:
+	SceneManagerObject();
+	~SceneManagerObject();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc);
+};
+
+/// <summary>
+/// シーン管理クラス
+/// シーン遷移だったりは、ここを介して行います
+/// シングルトンの勉強用で実装してみました
+/// </summary>
 class SceneManager
 {
+	// このクラスであればprivateの内容を触っても問題ないためfriendにする
+	// friend class の練習
+	friend class SceneManagerObject;
+
 private:
 	SceneManager();
-	virtual ~SceneManager(); //仮想デストラクタ:派生クラスのデストラクタが呼ばれるようにする
+	~SceneManager(); //仮想デストラクタ:派生クラスのデストラクタが呼ばれるようにする
 
+public:
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -19,16 +42,31 @@ private:
 	/// </summary>
 	void Render(RenderContext& rc);
 
-	//virtual bool Start()   = 0; //純粋仮想関数:派生クラスで実装されてなかったらエラーが出る
-	//virtual void Update() = 0;
-	//virtual void Render(RenderContext& rc) = 0;
+private:
+	/// <summary>
+	/// Scene追加を簡易的にする関数
+	/// </summary>
+	template <typename T>
+	void AddSceneMap()
+	{
+		m_sceneMap.emplace(T::ID(), []()
+			{
+				return new T();
+			});
+	}
+	/// <summary>
+	/// シーン生成ラッパー関数
+	/// </summary>
+	void CreateScene(const uint32_t id);
 
 private:
-	using SceneMap = std::map<uint32_t, std::function<IScene*(uint32_t)>>;
+	using SceneMap = std::map<uint32_t, std::function<IScene*()>>;
 	SceneMap m_sceneMap;		//シーンのマップ
 
 	IScene* m_currentScene;		//現在のシーン
 	
+
+
 
 	/// <summary>
 	/// シングルトン用
@@ -68,4 +106,3 @@ public:
 private:
 	static SceneManager* m_instance; //シングルトンインスタンス
 };
-

@@ -268,6 +268,7 @@
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="BattleManager.cpp" />
+    <ClCompile Include="common\SaveData.cpp" />
     <ClCompile Include="Scene\IScene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="SlashAttack.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="BattleManager.h" />
+    <ClInclude Include="common\SaveData.h" />
     <ClInclude Include="Scene\IScene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="SlashAttack.h" />

@@ -26,22 +26,12 @@ bool GameOver::Start()
 
 void GameOver::Update()
 {
-	SwitchResult();
-}
-
-void GameOver::SwitchResult()
-{
 	//3秒たったら自動的にリザルトに飛ぶ。またはAボタンでリザルトにとぶ
 	const float switchTime = g_gameTime->GetFrameDeltaTime();
 	m_swtchDeltaTime += switchTime;
 	if (m_swtchDeltaTime >= 3.0f || g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_overResult = NewGO<GameOverResult>(0, "GameOverResult");
-		m_overResult->m_gameTime = m_timer;
-		Game* game = FindGO<Game>("game");
-		DeleteGO(this);
-		DeleteGO(game);
-		m_swtchDeltaTime = 0.0f;
+		m_canChangeScene = true;
 	}
 }
 

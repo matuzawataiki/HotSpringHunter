@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Result.h"
+#include "Scene/SceneManager.h"
 #include "Title.h"
 #include "BattleManager.h"
 #include "SoundEffect.h"
+#include "common/SaveData.h"
 
 namespace
 {
@@ -40,7 +42,61 @@ namespace
 
 	// ネクストボタン //
 	const Vector3 NEXT_BUTTON_POS        = Vector3{ -750.0f,-400.0f,0.0f };
+
+	// リザルトに表示するスコアランクアイコン
+	constexpr const char* SCORE_RANK_ICON_PATH[] =
+	{
+		"Assets/modelData/image/scores.dds",
+		"Assets/modelData/image/scorea.dds",
+		"Assets/modelData/image/scoreb.dds",
+		"Assets/modelData/image/scorec.dds",
+	};
 }
+
+/// <summary>
+/// リザルト処理のベースクラス
+/// </summary>
+ResultBase::ResultBase()
+{
+}
+
+ResultBase::~ResultBase()
+{
+}
+
+bool ResultBase::Start()
+{
+	//スコア
+	m_scoreFont.Init("Assets/modelData/image/score.dds", SCORE_WIDTH, SCORE_HEIGHT);
+	m_scoreFont.SetPosition(SCORE_SPRITE_POS);
+	m_scoreFont.Update();
+
+	//クリアタイム
+	m_timeFont.Init("Assets/modelData/image/cleartime.dds", CLEAR_TIME_WIDTH, CLEAR_TIME_HEIGHT);
+	m_timeFont.SetPosition(ECLEAR_TIME_SPRITE_POS);
+	m_timeFont.Update();
+
+	// スコアランク
+	for (int i = 0; i<ARRAYSIZE(SCORE_RANK_ICON_PATH); i++)
+	{
+		//スコアランクS
+		m_rankList[i].Init(SCORE_RANK_ICON_PATH[i], EVALUNATION_WIDTH, EVALUATION_HEIGHT);
+		m_rankList[i].SetPosition(EVALUATION_SPRITE_POS);
+		m_rankList[i].Update();
+	}
+
+	return true;
+}
+
+void ResultBase::Update()
+{
+}
+
+bool ResultBase::RequestScene(uint32_t& id)
+{
+	return true;
+}
+
 
 /// <summary>
 /// ゲームクリアリザルトの表示
@@ -56,38 +112,13 @@ Result::~Result()
 
 bool Result::Start()
 {
+	ResultBase::Start();
+
+	// リザルト表示用に時間を取得
+	m_gameTime = SaveData::GetInstance()->GetResultTime();
+
 	//リザルト
-	m_clearResultModel.Init("Assets/modelData/image/gameclear_result.dds", 1920.0f, 1080.0f);
-
-	//スコア
-	m_scoreFont.Init("Assets/modelData/image/score.dds", SCORE_WIDTH, SCORE_HEIGHT);
-	m_scoreFont.SetPosition(SCORE_SPRITE_POS);
-	m_scoreFont.Update();
-
-	//クリアタイム
-	m_timeFont.Init("Assets/modelData/image/cleartime.dds", CLEAR_TIME_WIDTH, CLEAR_TIME_HEIGHT);
-	m_timeFont.SetPosition(ECLEAR_TIME_SPRITE_POS);
-	m_timeFont.Update();
-
-	//スコアランクS
-	m_rankS.Init("Assets/modelData/image/scores.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankS.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankS.Update();
-
-	//スコアランクA
-	m_rankA.Init("Assets/modelData/image/scorea.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankA.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankA.Update();
-
-	//スコアランクB
-	m_rankB.Init("Assets/modelData/image/scoreb.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankB.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankB.Update();
-
-	//スコアランクC
-	m_rankC.Init("Assets/modelData/image/scorec.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankC.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankC.Update();
+	m_resultModel.Init("Assets/modelData/image/gameclear_result.dds", 1920.0f, 1080.0f);
 
 	m_battleManager = FindGO<BattleManager>("battleManager");
 	m_clearEffect = FindGO<SoundEffect>("soundEffect");
@@ -100,21 +131,18 @@ bool Result::Start()
 
 void Result::Update()
 {
-	//タイトル画面に戻る
-	SwitchTitle();
 	//クリアタイム
 	ClearTime();
 	//「タイトルに戻る」の表示処理
 	NextButton();
 }
 
-//タイトル画面に戻る
-void Result::SwitchTitle()
+bool Result::RequestScene(uint32_t& id)
 {
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_title = NewGO<Title>(0, "title");
-		DeleteGO(this);
+		id = Title::ID();
+		return true;
 	}
 }
 
@@ -175,7 +203,7 @@ void Result::ClearEffect()
 
 void Result::Render(RenderContext& rc)
 {
-	m_clearResultModel.Draw(rc);
+	m_resultModel.Draw(rc);
 
 	m_scoreFont.Draw(rc);
 	m_timeFont.Draw(rc);
@@ -186,19 +214,19 @@ void Result::Render(RenderContext& rc)
 	//ランクの表示
 	if (m_gameTime <= 120.0f)
 	{
-		m_rankS.Draw(rc);
+		m_rankList[enScoreRankType_S].Draw(rc);
 	}
 	else if(m_gameTime <= 150.0f)
 	{
-		m_rankA.Draw(rc);
+		m_rankList[enScoreRankType_A].Draw(rc);
 	}
 	else if (m_gameTime <= 200.0f)
 	{
-		m_rankB.Draw(rc);
+		m_rankList[enScoreRankType_B].Draw(rc);
 	}
 	else
 	{
-		m_rankC.Draw(rc);
+		m_rankList[enScoreRankType_C].Draw(rc);
 	}
 }
 
@@ -216,38 +244,13 @@ GameOverResult::~GameOverResult()
 
 bool GameOverResult::Start()
 {
+	ResultBase::Start();
+
+	// リザルト表示用に時間を取得
+	m_gameTime = SaveData::GetInstance()->GetResultTime();
+
 	//リザルト
-	m_overResultModel.Init("Assets/modelData/image/gameover_risult.dds", 1920.0f, 1080.0f);
-
-	//スコア
-	m_scoreFont.Init("Assets/modelData/image/score.dds", SCORE_WIDTH, SCORE_HEIGHT);
-	m_scoreFont.SetPosition(SCORE_SPRITE_POS);
-	m_scoreFont.Update();
-
-	//クリアタイム
-	m_timeFont.Init("Assets/modelData/image/cleartime.dds", CLEAR_TIME_WIDTH, CLEAR_TIME_HEIGHT);
-	m_timeFont.SetPosition(ECLEAR_TIME_SPRITE_POS);
-	m_timeFont.Update();
-
-	//スコアランクS
-	m_rankS.Init("Assets/modelData/image/scores.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankS.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankS.Update();
-
-	//スコアランクA
-	m_rankA.Init("Assets/modelData/image/scorea.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankA.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankA.Update();
-
-	//スコアランクB
-	m_rankB.Init("Assets/modelData/image/scoreb.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankB.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankB.Update();
-
-	//スコアランクC
-	m_rankC.Init("Assets/modelData/image/scorec.dds", EVALUNATION_WIDTH, EVALUATION_HEIGHT);
-	m_rankC.SetPosition(EVALUATION_SPRITE_POS);
-	m_rankC.Update();
+	m_resultModel.Init("Assets/modelData/image/gameover_risult.dds", 1920.0f, 1080.0f);
 
 	m_battleManager = FindGO<BattleManager>("battleManager");
 	m_overEffect = FindGO<SoundEffect>("soundEffect");
@@ -260,22 +263,20 @@ bool GameOverResult::Start()
 
 void GameOverResult::Update()
 {
-	//タイトル画面に戻る
-	OverSwitchTitle();
 	//ゲームオーバータイム
 	OverTime();
 	//「タイトルに戻る」の表示処理
 	NextButton();
 }
 
-//タイトル画面に戻る
-void GameOverResult::OverSwitchTitle()
+bool GameOverResult::RequestScene(uint32_t& id)
 {
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_title = NewGO<Title>(0, "title");
-		DeleteGO(this);
+		id = Title::ID();
+		return true;
 	}
+	return false;
 }
 
 //ゲームオーバータイム
@@ -284,10 +285,10 @@ void GameOverResult::OverTime()
 	wchar_t time[256];
 	swprintf_s(time, 256, L"%d", int(m_gameTime));
 
-	m_gameOverTimeFontRen.SetText(time);
-	m_gameOverTimeFontRen.SetPosition(CLEAR_TIME_POS);
-	m_gameOverTimeFontRen.SetScale(2.0f);
-	m_gameOverTimeFontRen.SetColor(g_vec4Black);
+	m_gameTimeFontRen.SetText(time);
+	m_gameTimeFontRen.SetPosition(CLEAR_TIME_POS);
+	m_gameTimeFontRen.SetScale(2.0f);
+	m_gameTimeFontRen.SetColor(g_vec4Black);
 }
 
 //「タイトルに戻る」の表示処理
@@ -295,9 +296,9 @@ void GameOverResult::NextButton()
 {
 	const float buttonDeltaTime = g_gameTime->GetFrameDeltaTime();
 
-	m_overNextButtonRen.SetText(L"PLESS A BUTTON");
-	m_overNextButtonRen.SetPosition(NEXT_BUTTON_POS);
-	m_overNextButtonRen.SetScale(1.0f);
+	m_nextButtonRen.SetText(L"PLESS A BUTTON");
+	m_nextButtonRen.SetPosition(NEXT_BUTTON_POS);
+	m_nextButtonRen.SetScale(1.0f);
 
 	//文字の透明度を時間で変える
 	m_nextButtonElapsed += buttonDeltaTime;
@@ -324,7 +325,7 @@ void GameOverResult::NextButton()
 	}
 	//Lerp関数で滑らかに透明度を変化させる
 	m_nextButtonColor.Lerp(m_buttonColor, Vector2(NEXT_BUTTON_COLOR_BASE, 0.0f), Vector2(NEXT_BUTTON_COLOR_MAX, 0.0f));
-	m_overNextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_nextButtonColor.x);
+	m_nextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_nextButtonColor.x);
 }
 
 void GameOverResult::OverEffect()
@@ -334,14 +335,14 @@ void GameOverResult::OverEffect()
 
 void GameOverResult::Render(RenderContext& rc)
 {
-	m_overResultModel.Draw(rc);
+	m_resultModel.Draw(rc);
 
 	m_scoreFont.Draw(rc);
 	m_timeFont.Draw(rc);
 
-	m_gameOverTimeFontRen.Draw(rc);
-	m_overNextButtonRen.Draw(rc);
+	m_gameTimeFontRen.Draw(rc);
+	m_nextButtonRen.Draw(rc);
 
 	//ランクの表示
-	m_rankC.Draw(rc);
+	m_rankList[enScoreRankType_C].Draw(rc);
 }

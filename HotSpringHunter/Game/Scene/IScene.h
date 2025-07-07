@@ -1,7 +1,7 @@
 #pragma once
 #include "Util/CRC32.h"
 
-#define appScene(name)	\
+#define appScene(name)\
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 

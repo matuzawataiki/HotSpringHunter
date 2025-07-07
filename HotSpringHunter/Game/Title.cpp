@@ -93,7 +93,7 @@ void Title::Render(RenderContext& rc)
 bool Title::RequestScene(uint32_t& id)
 {
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		m_gameRule = NewGO<GameRule>(0, "GameRule");
+		id = TipsScene::ID();
 		return true;
 	}
 	return false;

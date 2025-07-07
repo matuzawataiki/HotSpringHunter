@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "GameOver.h"
+#include "GameClear.h"
 #include "GameCamera.h"
 #include "Player.h"
 #include "EnemyBase.h"
@@ -10,8 +12,8 @@
 #include "BattleManager.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
-#include "GameOver.h"
-#include "GameClear.h"
+#include "Result.h"
+#include "Scene/SceneManager.h"
 #include "ItemExplanation.h"
 #include "ProjectileManager.h"
 
@@ -58,7 +60,21 @@ bool Game::Start()
 
 void Game::Update()
 {
-	
+	// オブジェクト量も多くないので毎フレームFindGOでチェック
+	GameOver* gameOver = FindGO<GameOver>("gameOver");
+	if (gameOver) {
+		if (gameOver->CanChangeScene()) {
+			m_resultType = enResultType_Over;
+			DeleteGO(gameOver);
+		}
+	}
+	GameClear* gameClear = FindGO<GameClear>("GameClear");
+	if (gameClear) {
+		if (gameClear->CanChangeScene()) {
+			m_resultType = enResultType_Over;
+			DeleteGO(gameClear);
+		}
+	}
 }
 
 void Game::Render(RenderContext& rc)
@@ -68,4 +84,18 @@ void Game::Render(RenderContext& rc)
 
 bool Game::RequestScene(uint32_t& id)
 {
+	switch (m_resultType)
+	{
+		case Game::enResultType_Clear:
+		{
+			id = Result::ID();
+			return true;
+		}
+		case Game::enResultType_Over:
+		{
+			id = GameOverResult::ID();
+			return true;
+		}
+	}
+	return false;
 }

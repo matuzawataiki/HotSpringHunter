@@ -65,7 +65,7 @@ void TipsScene::Update()
 			m_tipsRender = InializeTipsRender(m_currentTipsId);
 		}
 	}
-	if(m_currentTipsId < enTipsID_Max) {
+	if(m_currentTipsId >= enTipsID_Max) {
 		m_currentTipsId = enTipsID_Max;
 	}
 }
@@ -79,7 +79,7 @@ void TipsScene::Render(RenderContext& rc)
 
 bool TipsScene::RequestScene(uint32_t& id)
 {
-	if (m_currentTipsId == enTipsID_Max) {
+	if (m_currentTipsId >= enTipsID_Max) {
 		id = Game::ID();
 		return true;
 	}

@@ -18,7 +18,6 @@ class StartWaveCollision;
 class UI;
 class StageManager;
 class BattleManager;
-class GameOver;
 class SoundEffect;
 class EffectHub;
 class ItemExplanation;
@@ -28,6 +27,14 @@ class Game : public IScene
 	appScene(Game);
 
 public:
+	enum EnResultType
+	{
+		enResultType_Clear,		// ゲームクリア
+		enResultType_Over,		// ゲームオーバー
+		enResultType_None,		// リザルト設定されていない
+	};
+
+public:
 	Game();
 	~Game();
 	bool Start()override;
@@ -35,13 +42,6 @@ public:
 	void Render(RenderContext& rc)override;
 
 	bool RequestScene(uint32_t& id) override;
-
-	/// <summary>
-	/// リザルトの時間を設定
-	/// リザルト画面で表示するための受け皿
-	/// GameClearやGameOverに渡します
-	/// </summary>
-	inline void SetResultTime(const float time) { m_gameResultTime = time; }
 
 private:
 	GameCamera*			m_gameCamera		= nullptr;
@@ -55,11 +55,10 @@ private:
 	BattleManager*		m_battleManager		= nullptr;
 	SoundEffect*		m_soundEffect		= nullptr;
 	EffectHub*			m_effectHub			= nullptr;
-	GameOver*			m_gameOver			= nullptr;
 	ProjectileManager*	m_projectileManager = nullptr;
 	ItemExplanation*	m_itemExplanation	= nullptr;
 
 	SpriteRender m_gameUI;
 
-	float m_gameResultTime					= 0.0f;
+	EnResultType m_resultType				= EnResultType::enResultType_None;
  };
