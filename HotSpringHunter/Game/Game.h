@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Scene/IScene.h"
+
 namespace Character {
 	class Player;
 }
@@ -16,19 +18,30 @@ class StartWaveCollision;
 class UI;
 class StageManager;
 class BattleManager;
-class GameOver;
 class SoundEffect;
 class EffectHub;
 class ItemExplanation;
 
-class Game : public IGameObject
+class Game : public IScene
 {
+	appScene(Game);
+
+public:
+	enum EnResultType
+	{
+		enResultType_Clear,		// ゲームクリア
+		enResultType_Over,		// ゲームオーバー
+		enResultType_None,		// リザルト設定されていない
+	};
+
 public:
 	Game();
 	~Game();
 	bool Start()override;
 	void Update()override;
 	void Render(RenderContext& rc)override;
+
+	bool RequestScene(uint32_t& id) override;
 
 private:
 	GameCamera*			m_gameCamera		= nullptr;
@@ -42,9 +55,10 @@ private:
 	BattleManager*		m_battleManager		= nullptr;
 	SoundEffect*		m_soundEffect		= nullptr;
 	EffectHub*			m_effectHub			= nullptr;
-	GameOver*			m_gameOver			= nullptr;
 	ProjectileManager*	m_projectileManager = nullptr;
-	ItemExplanation*	m_itemExplanation = nullptr;
+	ItemExplanation*	m_itemExplanation	= nullptr;
 
 	SpriteRender m_gameUI;
-  };
+
+	EnResultType m_resultType				= EnResultType::enResultType_None;
+ };

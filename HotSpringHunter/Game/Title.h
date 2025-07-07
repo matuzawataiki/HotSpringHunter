@@ -1,22 +1,25 @@
 #pragma once
-class Game;
-class GameRule;
+
+#include "Scene/IScene.h" //継承をする時はインクルードする必要がある
+
 class SoundEffect;
 
-class Title :public IGameObject
+class Title :public IScene
 {
+	appScene(Title);
+
 public:
 	Title();
 	~Title();
 	bool Start()override;
-	void Update();
-	void SwitchGame();
+	void Update()override;
 	void NextButton();
 	void PlayEffect();
 	void Render(RenderContext& rc)override;
 
+	bool RequestScene(uint32_t& id) override;
+
 private:
-	GameRule* m_gameRule       = nullptr;
 	SoundEffect* m_soundEffect = nullptr; //BGM
 
 	SpriteRender m_titleModel;

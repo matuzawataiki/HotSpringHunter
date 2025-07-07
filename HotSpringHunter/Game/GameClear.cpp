@@ -100,13 +100,9 @@ void GameClear::Update()
 
 	case enResult:
 		//新しいクリアリザルトの生成
-		m_clearResult = NewGO<Result>(0, "Result");
-		Game* game = FindGO<Game>("game");
-		DeleteGO(this);
-		DeleteGO(game);
+		m_canChangeScene = true;
 		DeleteGO(m_smokeEmitter);
 		delete m_resultModel;
-		m_clearResult-> m_gameTime = m_timer;
 		m_resultModel = nullptr;
 		break;
 	}

@@ -1,4 +1,5 @@
 #pragma once
+
 class Result;
 class SmokeEmitter;
 
@@ -12,16 +13,17 @@ enum ResultState
 	enResult,
 };
 
-class GameClear:public IGameObject
+class GameClear : public IGameObject
 {
-	public:
+public:
 	GameClear();
 	~GameClear();
 
 	bool Start() override;
 	void Update() override;
-	//void SwitchGame() override;
 	void Render(RenderContext&rc) override;
+
+	bool CanChangeScene() const { return m_canChangeScene; }
 
 public:
 	Result*       m_clearResult      = nullptr;
@@ -34,6 +36,7 @@ public:
 
 	int   m_resultState   = enGameClear; //ステート
 	float m_elapsedTime   = 0.0f; //毎フレーム加算
-	float m_timer = 0.0f;
+
+	bool m_canChangeScene = false;
 };
 

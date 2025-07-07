@@ -52,10 +52,6 @@ SoundEffect::~SoundEffect()
 
 bool SoundEffect::Start()
 {
-
-	// @todo for test
-	//Play(enNomalBGM);
-
 	return true;	
 }
 

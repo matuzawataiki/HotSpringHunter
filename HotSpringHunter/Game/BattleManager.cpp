@@ -2,6 +2,7 @@
 #include "BattleManager.h"
 #include "EnemyManager.h"
 #include "EnemySpawner.h"
+#include "Scene/SceneManager.h"
 #include "GameClear.h"
 #include "GameOver.h"
 #include "GameCamera.h"
@@ -10,6 +11,7 @@
 #include "BackGround/StageManager.h"
 #include "Item/PowerUpBox.h"
 #include "SoundEffect.h"
+#include "common/SaveData.h"
 
 namespace
 {
@@ -140,7 +142,8 @@ void BattleManager::InGameSceneManage()
 	  if (m_gameOver == nullptr)
 		{
 			m_gameOver = NewGO<GameOver>(0, "gameOver");
-			m_gameOver->m_timer = m_gamePlayTime;
+			// リザルト用の設定をする
+			SaveData::GetInstance()->SetResultTime(m_gamePlayTime);
 		}
 	}
 	
@@ -221,12 +224,11 @@ void BattleManager::SwitchingScenes()
 		if(m_gameClear == nullptr)
 		{
 			m_gameClear = NewGO<GameClear>(0, "GameClear");
-			m_gameClear->m_timer = m_gamePlayTime;
+			// リザルト用の設定をする
+			SaveData::GetInstance()->SetResultTime(m_gamePlayTime);
 			m_isToGoal = true;
 		}
-				break;
-
-
+		break;
 	default:
 		break;
 	}

@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "system/system.h"
-
-#include "Game.h"
-#include"Title.h"
 #include "SoundEffect.h"
+#include "Scene/SceneManager.h"
+#include "common/SaveData.h"
 
 
 // K2EngineLowのグローバルアクセスポイント。
@@ -22,9 +21,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	skyCube->SetType(enSkyCubeType_SunriseToon);
 	skyCube->SetScale(2000.0f);
 
+	//セーブデータ作成
+	SaveData::CreateInstance();
 
-	//Titleクラスのオブジェクトを作成。
-	NewGO<Title>(0, "title");
+	//シーン管理クラスのオブジェクトを作成。
+	NewGO<SceneManagerObject>(0, "sceneManagerObject");
+
+	// サウンド再生ラッパーを作成。
 	NewGO<SoundEffect>(0, "soundEffect");
 
 	// ここからゲームループ。
@@ -34,6 +37,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 
 	TMEngine::DeleteInstance();
+
+	//セーブデータ削除
+	SaveData::DestroyInstance();
 
 	//delete g_k2EngineLow;
 
