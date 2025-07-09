@@ -19,6 +19,13 @@ namespace Enemy
 		enAnimClip_Num,
 	};
 
+	struct PoisonSnalkStatus : IEnemyStatus
+	{
+		float testA;
+		//
+		PoisonSnalkStatus() : IEnemyStatus(), testA(0.0f) {}
+	};
+
 	class PoisonSnakeStateMachine;
 	class PoisonSnake : public IEnemy
 	{
@@ -30,6 +37,8 @@ namespace Enemy
 		void Update() override;
 		void ActivateStart() override;
 		void Render(RenderContext& rc) override;
+
+		void SetupStatus() override;
 
 		/// <summary>
 		/// 攻撃判定をオフにする

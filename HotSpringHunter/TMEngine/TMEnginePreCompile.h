@@ -20,5 +20,3 @@ using namespace nsK2EngineLow;
 #include "nature/SkyCube.h"
 #include "json/json.hpp"
 #include "json/json.h"
-using json = nlohmann::json;
-

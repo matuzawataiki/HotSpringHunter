@@ -7,19 +7,26 @@
 #include "Enemy/State/PoisonSnakeState.h"
 #include "ProjectileManager.h"
 
-namespace {
-	static const float HP = 100.0f;
-	static const float ATTACK_TIME = 10.0f;
-
-}
-
-
 namespace Enemy
 {
+	void PoisonSnake::SetupStatus()
+	{
+		// デストラクタで消してね
+		m_status = new PoisonSnalkStatus();
+
+		nlohmann::json j = LoadScene("Assets/Json/poisonSnake.json");
+		auto status = j["Status"];
+
+		m_status->m_hp = status["HP"];
+		m_status->m_attackCoolTime = status["AttackCoolTime"];
+	}
+
 	PoisonSnake::PoisonSnake()
 	{
-		m_hp = HP;
-		m_hpMax = HP;
+		SetupStatus();
+
+		m_hp = m_status->m_hp;
+		m_hpMax = m_status->m_hp;
 
 		m_target = FindGO<Character::Player>("player");
 
@@ -34,6 +41,7 @@ namespace Enemy
 			enemyManager->DeleteEnemy(this);
 		}
 		delete m_stateMachine;
+		delete m_status;
 		DeleteGO(m_enemyHPBar);
 	}
 
@@ -54,7 +62,7 @@ namespace Enemy
 		HitCalculation();
 		m_stateMachine->Update();
 
-		m_position = m_characterController.Execute(m_moveSpeed, 1.0f);
+		m_position = m_characterController.Execute(m_moveSpeed, 1.0f/60.0f);
 
 		m_enemyModel.SetPosition(m_position);
 		m_enemyModel.SetRotation(m_rotation);
@@ -75,7 +83,7 @@ namespace Enemy
 	void PoisonSnake::AttackOff()
 	{
 		m_isAttackCooldown = false;
-		m_attackTime = ATTACK_TIME;
+		m_attackTime = m_status->m_attackCoolTime;
 	}
 
 	void PoisonSnake::AttackState()
