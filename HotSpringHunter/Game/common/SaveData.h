@@ -17,11 +17,14 @@ public:
 		return m_resultTime;
 	}
 	//リザルトタイムを設定
-	void SetResultTime(const float time)
+	//デフォルト引数(引数を描かなければここで設定した値が使われる。書けばいつも通りの引数として使用できる)
+	void SetResultTime(const float time, const bool isSave = false)
 	{
 		m_resultTime = time;
-		//結果時間リストに追加
-		m_resultTimeList.push_back(time);
+		if (isSave) {
+			//結果時間リストに追加
+			m_resultTimeList.push_back(time);
+		}
 	}
 
 	// リザルトタイムのリストを取得

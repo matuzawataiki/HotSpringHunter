@@ -73,6 +73,7 @@
     <ClInclude Include="nature\SkyCube.h" />
     <ClInclude Include="Util\CRC32.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="json\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

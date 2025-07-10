@@ -69,6 +69,30 @@ private:
 	SoundEffect*  m_clearEffect  = nullptr;
 };
 
+//リザルトランキングクラス
+class ResultRanking : public ResultBase
+{
+	appScene(ResultRanking);
+
+private:
+	static const int MAX_FONT_NUM = 3; //フォントの最大数
+
+public:
+	ResultRanking();
+	~ResultRanking();
+
+	bool Start() override;
+	void Update() override;
+	bool RequestScene(uint32_t& id) override;
+	void Render(RenderContext& rc) override;
+
+	void NextButton(); //タイトルに戻るためのボタン
+
+private:
+	SpriteRender m_rankingSprite; //ランキングのスプライト
+	FontRender m_rankingFont[MAX_FONT_NUM]; //ランキングのフォントの配列
+};
+
 //ゲームオーバーリザルト
 class GameOverResult : public ResultBase
 {
