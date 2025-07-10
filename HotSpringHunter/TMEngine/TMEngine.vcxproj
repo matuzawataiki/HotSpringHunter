@@ -65,6 +65,7 @@
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="graphics\preRender\ShadowMapRender.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="json\Json.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="level3DRender\LevelRender.h" />

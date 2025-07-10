@@ -225,7 +225,7 @@ void BattleManager::SwitchingScenes()
 		{
 			m_gameClear = NewGO<GameClear>(0, "GameClear");
 			// リザルト用の設定をする
-			SaveData::GetInstance()->SetResultTime(m_gamePlayTime);
+			SaveData::GetInstance()->SetResultTime(m_gamePlayTime, true);
 			m_isToGoal = true;
 		}
 		break;

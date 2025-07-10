@@ -17,6 +17,8 @@ SceneManager::SceneManager()
 	AddSceneMap<Game>();
 	// タイトルシーン追加
 	AddSceneMap<Result>();
+	// ランキング画面追加
+	AddSceneMap<ResultRanking>();
 	// タイトルシーン追加
 	AddSceneMap<GameOverResult>();
 }
