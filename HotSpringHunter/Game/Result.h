@@ -87,11 +87,20 @@ public:
 	void Render(RenderContext& rc) override;
 
 	void NextButton(); //タイトルに戻るためのボタン
+	void UpdateAnimation(); //新記録のアニメーション
+	void SetClearTimeText(FontRender* fontRender, const float rankingTime, const Vector3& position); //クリアタイムのテキスト設定
+	Vector2 ComputeNewRecordPosition(); //新記録の位置計算
 
 private:
 	SpriteRender m_rankingSprite;			  //ランキングのスプライト
 	SpriteRender m_newRecordSprite;           //新記録のスプライト
+
 	FontRender   m_rankingFont[MAX_FONT_NUM]; //ランキングのフォントの配列
+	FontRender   m_myRecordFont;             //自分の記録のフォント
+
+	float m_newRecordElapsed = 0.0f; //新記録のアニメーション用変数
+
+	bool m_isNewRecord = false; //新記録かどうかのフラグ
 };
 
 //ゲームオーバーリザルト
