@@ -39,10 +39,9 @@ namespace Enemy {
 		auto status = j["Status"];
 
 		m_status->m_sphereCollisionSize = status["SphereCollisionSize"];
-		m_status->m_sphereCollisionSize = status["MoveSpeed"];
-		m_status->m_sphereCollisionSize = status["DeleteTime"];
-		m_status->m_sphereCollisionSize = status["Damage"];
-
+		m_status->m_moveSpeed = status["MoveSpeed"];
+		m_status->m_deleteTime = status["DeleteTime"];
+		m_status->m_damage= status["Damage"];
 	}
 
 	void PoisonBall::Update()
@@ -55,8 +54,8 @@ namespace Enemy {
 		m_position += m_moveDirection * m_status->m_moveSpeed;
 
 		m_sphereCollision.SetPosition(m_position);
+		m_sphereCollision.Update();
 		m_sphereModel.SetPosition(m_position);
-
 		m_sphereModel.Update();
 
 		//playerがnullなら実行しない

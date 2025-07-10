@@ -71,7 +71,7 @@ void Game::Update()
 	GameClear* gameClear = FindGO<GameClear>("GameClear");
 	if (gameClear) {
 		if (gameClear->CanChangeScene()) {
-			m_resultType = enResultType_Over;
+			m_resultType = enResultType_Clear;
 			DeleteGO(gameClear);
 		}
 	}

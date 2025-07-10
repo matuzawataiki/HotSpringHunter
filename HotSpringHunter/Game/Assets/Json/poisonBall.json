@@ -1,10 +1,9 @@
 {
   "Commnet": "PoisonBall用のパラメータ",
   "Status": {
-    "SphereCollisionSize": 30,
-    "MoveSpeed": 1500,
+    "SphereCollisionSize": 18,
+    "MoveSpeed": 20,
     "DeleteTime": 4,
-    "Damage": 20,
+    "Damage": 20
   }
- 
 }

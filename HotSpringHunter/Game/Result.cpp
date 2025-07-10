@@ -286,7 +286,7 @@ void ResultRanking::Update()
 	//ラムダ式を呼び出して設定してる
 	//2行目にif文を1行にまとめている
 	for (int i = 0; i < MAX_FONT_NUM; ++i) {
-		const float t = i < rankingData.size() ? rankingData[i] : 0.0f;
+		const float t = i < rankingData.size() ? rankingData[i] : 10000.0f;
 		setRankingText(&m_rankingFont[i], t, Vector3(RANKING_POSX, RANKING_POSY - (i * RANKING_POS_SPACE), 0.0f));
 	}
 
