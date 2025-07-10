@@ -9,7 +9,7 @@ namespace nsTMEngine
     {
         std::ifstream file(filepath);
         if (!file.is_open()) {
-            return false;
+            return nlohmann::json();
         }
 
         nlohmann::json jsonRoot;

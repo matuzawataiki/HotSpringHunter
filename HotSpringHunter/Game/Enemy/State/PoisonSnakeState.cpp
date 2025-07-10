@@ -346,11 +346,6 @@ namespace Enemy {
 	//デスステート
 	//////////////////////////////////////////////////////////////////////////////
 
-	namespace {
-		float DEATH_TIME = 3.0f;
-		float MOVE_OFFSET = 40.0f;
-	}
-
 	void PoisonSnakeDeathState::SetupStatus()
 	{
 		// デストラクタで消してね
@@ -373,15 +368,18 @@ namespace Enemy {
 
 		Vector3 moveSpeed = moveDirection;
 		moveSpeed.y += 0.25f;
-		moveSpeed *= MOVE_OFFSET;
+		moveSpeed *= m_status->m_moveSpeed;
 		m_owner->SetOwnerMoveSpeed(moveSpeed);
 
-		m_lifeTime = DEATH_TIME;
+		m_lifeTime = m_status->m_deathTime;
 	}
 
 	void PoisonSnakeDeathState::Update()
 	{
 		m_lifeTime -= g_gameTime->GetFrameDeltaTime();
+		if (m_lifeTime < 0.0f) {
+			m_owner->Deash();
+		}
 	}
 
 	void PoisonSnakeDeathState::Exit()
@@ -391,9 +389,6 @@ namespace Enemy {
 
 	bool PoisonSnakeDeathState::RequestState(uint32_t& request)
 	{
-		if (m_lifeTime < 0.0f) {
-			m_owner->Deash();
-		}
 		return false;
 	}
 }
