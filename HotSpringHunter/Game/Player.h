@@ -293,6 +293,7 @@ namespace Character {
 		CollisionObject* m_chargeCollision = nullptr;	//チャージ攻撃中のコリジョン
 		
 		Vector3		m_RStickOld		= Vector3::Zero;	//Rスティックの入力量（変更前）。
+		Vector3		m_slashEffectScale = Vector3::Zero;			//スラッシュエフェクトのスケール
 		float		m_collisionSize = 0.0f;				//コリジョンサイズ
 		int			m_chargeState	= enNone;			//チャージ状態。
 		int			m_chargeOldState = enNone;			//チャージ状態（変更前）。

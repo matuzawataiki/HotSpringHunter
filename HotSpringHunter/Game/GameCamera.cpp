@@ -14,7 +14,7 @@ namespace {
 	const float		CAMERA_RIGHT_LIMIT_BOSSBATTLE = 2200.0f;				//ボス：右方向の限界値
 
 	const float		CAMERA_TARGET_HEIGHT		= 100.0f;					//追従カメラ：注視点を高くする量
-	const Vector3	FOLLOW_CAMERA_POS			= { 0.0f,175.0f,-300.0f };	//追従カメラ：カメラ座標
+	const Vector3	FOLLOW_CAMERA_POS			= { 0.0f,190.0f,-350.0f };	//追従カメラ：カメラ座標
 
 	const float		CONTACT_EVENT_TIME			= 4.0f;						//クマ接触イベントカメラ：時間
 	const Vector3	CONTACT_BASE_CAMERA_POS		= { 0.0f,200.0f,-400.0f };	//クマ接触イベントカメラ：基点のカメラ座標
@@ -72,6 +72,11 @@ void GameCamera::Update()
 /// </summary>
 void GameCamera::CameraSwitch()
 {
+	m_player = FindGO<Character::Player>("player");
+	m_bear = FindGO<Bear>("bear");
+
+	Vector3 LightPos = Vector3::Zero;
+
 	////Bボタンでカメラ切り替え(仮）。
 	//if (g_pad[0]->IsTrigger(enButtonB)) {
 	//	if (m_cameraState == EnCameraVar::follow) {
@@ -93,14 +98,17 @@ void GameCamera::CameraSwitch()
 		//追従カメラ。
 	case EnCameraVar::enFollow:
 		FollowCamera();
+
+		LightPos = m_player->GetPlayerPos();
+		g_sceneLight->SetLightPos(LightPos);
 		break;
 
 		//クマ接触のイベントカメラ
 	case EnCameraVar::enBearEventCamera:
 		BearContactCamera();
-		break;
 
-	default:
+		LightPos = m_bear->GetBearPos();
+		g_sceneLight->SetLightPos(LightPos);
 		break;
 	}
 }
