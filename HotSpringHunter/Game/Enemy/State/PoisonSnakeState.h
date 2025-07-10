@@ -175,44 +175,38 @@ namespace Enemy {
 	};
 
 	//////////////////////////////////////////////////////////////////////////////
-	// スポーンステート
-	//////////////////////////////////////////////////////////////////////////////
-
-	class PoisonSnakeSpawnState : public IState
-	{
-		appState(PoisonSnakeSpawnState);
-	public:
-		PoisonSnakeSpawnState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeSpawnState() {}
-
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
-
-		virtual bool RequestState(uint32_t& request) override;
-	private:
-		PoisonSnakeStateMachine* m_owner = nullptr;
-
-	};
-
-	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
+
+	struct IdelStatus
+	{
+		float m_IdelMoveSpeed;
+		float m_IdelRangeFar;
+		float m_IdelRangeNiar;
+
+		IdelStatus()
+			:m_IdelMoveSpeed(0.0f)
+			,m_IdelRangeFar(0.0f)
+			,m_IdelRangeNiar(0.0f)
+		{}
+	};
 
 	class PoisonSnakeIdleState : public IState
 	{
 		appState(PoisonSnakeIdleState);
 	public:
-		PoisonSnakeIdleState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeIdleState() {}
+		PoisonSnakeIdleState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) { SetupStatus(); }
+		~PoisonSnakeIdleState() { delete m_status; }
+		void SetupStatus();
 
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
+		void Enter() override;
+		void Update() override;
+		void Exit() override;
 
-		virtual bool RequestState(uint32_t& request) override;
+		bool RequestState(uint32_t& request) override;
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
+		IdelStatus* m_status = nullptr;
 
 		float m_sideDirection = 1.0f;		//移動方向
 		float m_moveTime = 0.0f;			//移動時間
@@ -233,13 +227,13 @@ namespace Enemy {
 		appState(PoisonSnakeAtkState);
 	public:
 		PoisonSnakeAtkState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeAtkState() {}
+		~PoisonSnakeAtkState() {}
 
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
+		void Enter() override;
+		void Update() override;
+		void Exit() override;
 
-		virtual bool RequestState(uint32_t& request) override;
+		bool RequestState(uint32_t& request) override;
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
 
@@ -251,20 +245,35 @@ namespace Enemy {
 	// 追従ステート
 	//////////////////////////////////////////////////////////////////////////////
 
+	struct TrackStatus
+	{
+		float m_movePointFar;
+		float m_movePointNiar;
+		float m_moveSpeed;
+
+		TrackStatus()
+			:m_movePointFar(0.0f)
+			,m_movePointNiar(0.0f)
+			,m_moveSpeed(0.0f)
+		{}
+	};
+
 	class PoisonSnakeTrackState : public IState
 	{
 		appState(PoisonSnakeTrackState);
 	public:
-		PoisonSnakeTrackState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeTrackState() {}
+		PoisonSnakeTrackState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) { SetupStatus(); }
+		~PoisonSnakeTrackState() { delete m_status; }
+		void SetupStatus();
 
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
+		void Enter() override;
+		void Update() override;
+		void Exit() override;
 
-		virtual bool RequestState(uint32_t& request) override;
+		bool RequestState(uint32_t& request) override;
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
+		TrackStatus* m_status = nullptr;
 
 		float m_isMove = 1.0f; //手前と奥どちらのポイントに移動するか
 
@@ -274,20 +283,33 @@ namespace Enemy {
 	// ノックバックステート
 	//////////////////////////////////////////////////////////////////////////////
 
+	struct KnockBackStatus
+	{
+		float m_knockBackSpeed;
+		float m_knockBackDecrease;
+
+		KnockBackStatus()
+			:m_knockBackSpeed(0.0f)
+			, m_knockBackDecrease(0.0f)
+		{}
+	};
+
 	class PoisonSnakeKnockBackState : public IState
 	{
 		appState(PoisonSnakeKnockBackState);
 	public:
-		PoisonSnakeKnockBackState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeKnockBackState() {}
+		PoisonSnakeKnockBackState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) { SetupStatus(); }
+		~PoisonSnakeKnockBackState() { delete m_status; }
+		void SetupStatus();
 
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
+		void Enter() override;
+		void Update() override;
+		void Exit() override;
 
-		virtual bool RequestState(uint32_t& request) override;
+		bool RequestState(uint32_t& request) override;
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
+		KnockBackStatus* m_status = nullptr;
 
 		Vector3	m_moveSpeed = Vector3::Zero;	//移動速度
 
@@ -297,21 +319,34 @@ namespace Enemy {
 	//////////////////////////////////////////////////////////////////////////////
 	//デスステート
 	//////////////////////////////////////////////////////////////////////////////
+	struct DeathStatus
+	{
+		float m_deathTime;
+		float m_moveSpeed;
+
+		DeathStatus()
+			:m_deathTime(0.0f)
+			, m_moveSpeed(0.0f)
+		{}
+	};
+
 
 	class PoisonSnakeDeathState : public IState
 	{
 		appState(PoisonSnakeDeathState);
 	public:
-		PoisonSnakeDeathState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) {}
-		virtual ~PoisonSnakeDeathState() {}
+		PoisonSnakeDeathState(PoisonSnakeStateMachine* owner) : IState(), m_owner(owner) { SetupStatus(); }
+		~PoisonSnakeDeathState() { delete m_status; }
+		void SetupStatus();
 
-		virtual void Enter() override;
-		virtual void Update() override;
-		virtual void Exit() override;
+		void Enter() override;
+		void Update() override;
+		void Exit() override;
 
-		virtual bool RequestState(uint32_t& request) override;
+		bool RequestState(uint32_t& request) override;
 	private:
 		PoisonSnakeStateMachine* m_owner = nullptr;
+		DeathStatus* m_status = nullptr;
 
 		float m_lifeTime = 0.0f;
 	};

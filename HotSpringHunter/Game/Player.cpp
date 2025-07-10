@@ -15,19 +15,20 @@ namespace Character {
 
 		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,50.0f,0.0f };	//player初期位置。
 
-		const float MAX_PLAYER_HP			= 1000.0f;		//最大HP。
+		const float MAX_PLAYER_HP			= 2000.0f;		//最大HP。
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
-		const float MOVE_AMOUNT				= 1700.0f;		//移動：移動量。
+		const float MOVE_AMOUNT				= 800.0f;		//移動：移動量。
 		const float GRAVITY_AMOUNT			= 30.0f;		//移動：重力量。
 
-		const float WEAK_COLLISION_DIS		= 100.0f;		//弱攻撃：コリジョン位置。
-		const float WEAK_COLLISION_SIZE		= 150.0f;		//弱攻撃：コリジョンサイズ。
+		const float WEAK_COLLISION_DIS		= 200.0f;		//弱攻撃：コリジョン位置。
+		const float WEAK_COLLISION_SIZE		= 250.0f;		//弱攻撃：コリジョンサイズ。
 		const float WEAK_ATTACK_POWER		= 50.0f;		//弱攻撃：攻撃力。
-		const float SUCTION_CONDITION_DIS	= 500.0f;		//弱攻撃：吸いつきを行う条件の距離
+		const float SUCTION_CONDITION_DIS	= 400.0f;		//弱攻撃：吸いつきを行う条件の距離
 		const float SUCTION_TARGET_POS_DIS	= 10.0f;		//弱攻撃：攻撃吸いつきの位置の距離
 		const float SUCTION_TIME			= 1.0f;			//弱攻撃：吸いつきを行う時間
+		const float NOT_SUCTION_DIR			= 5.0f;			//弱攻撃：吸いつきを行わない距離
 
 		const float CHARGE_DECREASE			= 0.5f;			//溜め攻撃：チャージ減少量。
 		const float CHARGE_ADD_VALUE		= 1.5f;			//溜め攻撃：チャージ増加量（倍率）。
@@ -37,11 +38,17 @@ namespace Character {
 		const float CHARGE_POWER			= 2.0f;			//溜め攻撃：攻撃力の倍率。
 		const float CHANGE_WEAK				= 20.0f;		//溜め攻撃：弱攻撃になるチャージ。
 		const float NEW_CHARGE				= 5.0f;			//溜め攻撃：チャージの初期値。
+		const Vector3 CHARGE_EFFECT_SCALE	= { 7.0f,7.0f,7.0f };	//溜め攻撃：チャージエフェクトの大きさ。
+		const float CHARGE02_EFFECT_SIZE	= 1.2f;			//溜め攻撃：チャージ2のエフェクトサイズ。
+		const float CHARGE03_EFFECT_SIZE	= 1.4f;			//溜め攻撃：チャージ3のエフェクトサイズ。
+		const float CHARGE_EFFECT_YPOS		= 100.0f;		//溜め攻撃：チャージエフェクトのY座標位置。
+		const Vector3 CHARGE_SLASH_EFFECT_SCA = { 120.0f,120.0f,120.0f };//溜め攻撃：斬撃エフェクトの大きさ。		
 
 		const float GUARD_TOLERANCE			= 1.0f;			//ガード：ガード可能な角度。
 
 		const float HIT_RIGIDITY_TiME		= 0.5f;			//被弾：硬直時間。
 		const float DAMAGE_ENDUCE			= 40.0f;		//被弾：ダメージリアクションを耐えられる量。
+		const float DAMAGE_MEMORY_REDUCE	= 0.2f;			//被弾：ダメージ記録の減少量。
 
 		const float DEATH_MOTION_TIME		= 3.0f;			//死亡：ゲームオーバーに移行するまでの時間。
 
@@ -49,6 +56,7 @@ namespace Character {
 		const float BLOW_TIME				= 1.5f;			//拘束：ぶっ飛ばしの滞空時間
 		const float BLOW_HIGHT				= 700.0f;		//拘束：ぶっ飛ばしの高さ
 		const float BLOW_SPEED				= 1000.0f;		//拘束：ぶっ飛ばしの速度
+		const float LANDING_JUDG_YPOS		= 20.0f;		//拘束：着地判定のY座標位置
 		const float POWER_REDUCE_AMONT		= 5.0f;			//拘束：レバガチャのパワーを減らす量	
 
 		const float TO_GOAL_TIME			= 4.0f;			//ゴール地点に到達するまでの時間
@@ -113,20 +121,18 @@ namespace Character {
 		m_stateList.clear();
 	}
 
-		bool Player::Start()
-		{
-			//player座標初期化
-			m_playerPos = PLAYER_NEW_POSITION;
-			//playerキャラコン初期化
-			m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
-			//playerのHPをセット
-			m_playerHP = MAX_PLAYER_HP;
-			//ステートマシン生成
-			m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
+	bool Player::Start()
+	{
+		//player座標初期化
+		m_playerPos = PLAYER_NEW_POSITION;
+		//playerキャラコン初期化
+		m_playerCharaCon.Init(25.0f, 75.0f, m_playerPos);
+		//playerのHPをセット
+		m_playerHP = MAX_PLAYER_HP;
+		//ステートマシン生成
+		m_stateMachine = NewGO<StateMachine>(0, "stateMachine");
 
 		m_soundEffect = FindGO<SoundEffect>("soundEffect");
-
-		g_sceneLight->SetLightPos(m_playerPos);
 
 		AddList();
 		LoadAssets();
@@ -191,7 +197,10 @@ namespace Character {
 		DisplayCharge();
 		PositionDraw();
 
-		m_damageMemory -= 0.2f;
+		m_damageMemory -= DAMAGE_MEMORY_REDUCE;
+		if(m_damageMemory < 0.0f ) {
+			m_damageMemory = 0.0f;
+		}	
 	}
 
 	/// <summary>
@@ -248,23 +257,23 @@ namespace Character {
 		}
 	}
 
-		/// <summary>
-		/// 被弾。
-		/// </summary>
-		/// <param name="reduce">体力減少量</param>
-		void Player::Hit(float reduce)
-		{
-			//被弾SE
-			m_soundEffect->Play(enPlayerHitSE, false);
-			//ガードができていないなら。
-			if (m_guardFlag == true) {
-				return;
-			}
+	/// <summary>
+	/// 被弾。
+	/// </summary>
+	/// <param name="reduce">体力減少量</param>
+	void Player::Hit(float reduce)
+	{
+		//被弾SE
+		m_soundEffect->Play(enPlayerHitSE, false);
+		//ガードができていないなら。
+		if (m_guardFlag == true) {
+			return;
+		}
 
-			//ダメージリアクション中は無敵時間とする
-			if(m_hitFlag) {
-				return;
-			}
+		//ダメージリアクション中は無敵時間とする
+		if (m_hitFlag) {
+			return;
+		}
 
 		//HPを減らす。
 		m_playerHP -= reduce;
@@ -280,7 +289,7 @@ namespace Character {
 		}
 
 		//HPが0以下になったら死亡フラグを立てる。
-		if(m_playerHP <= 0.0f) {
+		if (m_playerHP <= 0.0f) {
 			m_isDead = true;
 		}
 
@@ -292,7 +301,7 @@ namespace Character {
 			m_hitFlag = true;
 			//ダメージ記録をリセット。
 			m_damageMemory = 0.0f;
-		}
+		}		
 	}
 
 	/// <summary>
@@ -608,12 +617,12 @@ namespace Character {
 	void PlayerWeakAttack::LockOnEnemy()
 	{
 		//最寄りの敵への方向を計算
-		Vector3 nearEnemyPos = m_enemyManager->CalcToNearestEnemyVec(m_player->m_playerPos);
-		//ゼロベクトルが帰っているなら実行しない（仮）
-		if (nearEnemyPos.Length() <= 5.0f) {
+		Vector3 nearEnemyDis = m_enemyManager->CalcToNearestEnemyVec(m_player->m_playerPos);
+		//近すぎるならなら実行しない
+		if (nearEnemyDis.Length() <= NOT_SUCTION_DIR) {
 			return;
 		}
-		Vector3 toNearEnemy = nearEnemyPos - m_player->m_playerPos;
+		Vector3 toNearEnemy = nearEnemyDis - m_player->m_playerPos;
 		toNearEnemy.y = 0.0f;
 
 		//敵との距離が離れすぎていたら実行しない
@@ -626,7 +635,7 @@ namespace Character {
 
 		//敵への吸いつきを行うかを判断
 		//敵への方向の一定距離に吸いつきの目標位置を設定
-		Vector3 targetPos = nearEnemyPos + (toNearEnemy * -1 * SUCTION_TARGET_POS_DIS);
+		Vector3 targetPos = nearEnemyDis + (toNearEnemy * -1 * SUCTION_TARGET_POS_DIS);
 		targetPos.y = 0.0f;
 		//目標位置への方向と敵への方向が一緒なら
 		//（目標位置よりも近い場所にいるなら方向は違うはず）
@@ -823,7 +832,8 @@ namespace Character {
 	void PlayerChargeAttack::ChangeChargeState()
 	{
 		Vector3 effectPos = m_player->GetPlayerPos();
-		effectPos.y += 100.0f;
+		effectPos.y += CHARGE_EFFECT_YPOS;
+
 		if (m_player->GetCharge() >= 100.0f && m_chargeState != enCharge03) {
 			m_chargeState = enCharge03;
 
@@ -832,11 +842,14 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge03);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 9.0f,9.0f,9.0f });
+			m_effect->SetScale(CHARGE_EFFECT_SCALE * CHARGE03_EFFECT_SIZE);
 			m_effect->Play();
 
 			//se
 			m_soundEffect->Play(enPlayerCharge3SE, false);
+
+			//斬撃のエフェクトサイズを変更
+			m_slashEffectScale = CHARGE_SLASH_EFFECT_SCA * CHARGE03_EFFECT_SIZE;
 
 			return;
 		}
@@ -848,11 +861,14 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge02);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 7.0f,7.0f,7.0f });
+			m_effect->SetScale(CHARGE_EFFECT_SCALE);
 			m_effect->Play();
 
 			//se
 			m_soundEffect->Play(enPlayerCharge2SE, false);
+
+			//斬撃のエフェクトサイズを変更
+			m_slashEffectScale = CHARGE_SLASH_EFFECT_SCA * CHARGE02_EFFECT_SIZE;
 
 			return;
 		}
@@ -864,11 +880,14 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge01);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
-			m_effect->SetScale({ 5.0f,5.0f,5.0f });
+			m_effect->SetScale(CHARGE_EFFECT_SCALE);
 			m_effect->Play();
 
 			//se
 			m_soundEffect->Play(enPlayerCharge1SE, false);
+
+			//斬撃のエフェクトサイズを変更
+			m_slashEffectScale = CHARGE_SLASH_EFFECT_SCA;
 
 			return;
 		}
@@ -904,7 +923,7 @@ namespace Character {
 		m_effect->Init(EnEffectVar::enCharge);
 		m_effect->SetPosition(m_player->GetPlayerPos());
 		m_effect->SetRotation(m_player->GetPlayerRot());
-		m_effect->SetScale({ 100.0f,100.0f,100.0f });
+		m_effect->SetScale(m_slashEffectScale);
 		m_effect->Play();
 
 		//SE
@@ -952,8 +971,6 @@ namespace Character {
 			//攻撃力を設定。
 			m_player->m_attackPower = m_player->m_charge * CHARGE_POWER;
 		}
-		
-
 	}
 
 	/// <summary>
@@ -1219,7 +1236,7 @@ namespace Character {
 			timeRatio / BLOW_TIME;
 
 			//ぶっ飛ばし時間が完了したら
-			if ((m_elapsedTime >= BLOW_TIME / 2.0f) && (m_player->GetPlayerPos().y <= 20.0f)) {
+			if ((m_elapsedTime >= BLOW_TIME / 2.0f) && (m_player->GetPlayerPos().y <= LANDING_JUDG_YPOS)) {
 				m_bear->SetIsCovering(false);
 				//一応プレイヤーを着地させる
 				m_player->SetPlayerPos({ m_player->GetPlayerPos().x, 0.0f, m_player->GetPlayerPos().z });

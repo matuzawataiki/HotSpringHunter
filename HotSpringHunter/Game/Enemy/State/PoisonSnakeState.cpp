@@ -30,38 +30,19 @@ namespace Enemy {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	// スポーンステート
-	//////////////////////////////////////////////////////////////////////////////
-
-	void PoisonSnakeSpawnState::Enter()
-	{
-
-	}
-
-	void PoisonSnakeSpawnState::Update()
-	{
-
-	}
-
-	void PoisonSnakeSpawnState::Exit()
-	{
-
-	}
-
-	bool PoisonSnakeSpawnState::RequestState(uint32_t& request)
-	{
-		return false;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////
 	// 待機ステート
 	//////////////////////////////////////////////////////////////////////////////
 
-	namespace {
-		static const float MOVE_SPEED_OFFSET = 1.0f;
-		static const float IDEL_RANGE_FAR = 800.0f;
-		static const float IDEL_RANGE_NIAR = 400.0f;
+	void PoisonSnakeIdleState::SetupStatus()
+	{
+		// デストラクタで消してね
+		m_status = new IdelStatus();
 
+		nlohmann::json j = LoadScene("Assets/Json/poisonSnake.json");
+		auto status = j["IdelStatus"];
+		m_status->m_IdelMoveSpeed = status["IdelMoveSpeed"];
+		m_status->m_IdelRangeFar = status["IdelRangeFar"];
+		m_status->m_IdelRangeNiar = status["IdelRangeNiar"];
 	}
 
 	void PoisonSnakeIdleState::Enter()
@@ -116,18 +97,12 @@ namespace Enemy {
 			if (m_isMoveAnim) {
 				m_owner->GetModelRender()->PlayAnimation(enAnimClip_Idle);
 			}
-			//移動方向の設定
-			/*Vector3 moveDirection = Vector3::AxisZ;
-			float direction = 90.0f * m_sideDirection;
-			enemyDirection.AddRotationDegY(direction);
-			enemyDirection.Apply(moveDirection);
-			moveDirection *= MOVE_SPEED_OFFSET;*/
 
 			Vector3 direction = m_owner->GetTarget()->GetPlayerPos() - m_owner->GetPosition();
 			direction.y = 0.0f;
 			direction = { -direction.z, 0.0f, direction.x };
 			direction.Normalize();
-			direction *= MOVE_SPEED_OFFSET * m_sideDirection;
+			direction *= m_status->m_IdelMoveSpeed * m_sideDirection;
 
 			m_owner->SetOwnerMoveSpeed(direction);
 
@@ -164,7 +139,7 @@ namespace Enemy {
 		Vector3 enemyToPlayer = m_owner->GetTarget()->GetPlayerPos() - m_owner->GetPosition();
 		float length = enemyToPlayer.Length();
 
-		if (length > IDEL_RANGE_FAR || IDEL_RANGE_NIAR > length) {
+		if (length > m_status->m_IdelRangeFar || m_status->m_IdelRangeNiar > length) {
 			request = PoisonSnakeTrackState::ID();
 			return true;
 		}
@@ -224,10 +199,18 @@ namespace Enemy {
 	//////////////////////////////////////////////////////////////////////////////
 	// 追従ステート
 	//////////////////////////////////////////////////////////////////////////////
-	namespace {
-		const float MOVEPOINT_FAR = 700.0f;
-		const float MOVEPOINT_NIAR = 500.0f;
-		const float MOVE_SPEED = 3.0f;
+
+	void PoisonSnakeTrackState::SetupStatus()
+	{
+		// デストラクタで消してね
+		m_status = new TrackStatus();
+
+		nlohmann::json j = LoadScene("Assets/Json/poisonSnake.json");
+		auto status = j["TrackStatus"];
+
+		m_status->m_movePointFar = status["MovePointFar"];
+		m_status->m_movePointNiar = status["MovePointNiar"];
+		m_status->m_moveSpeed = status["TrackMoveSpeed"];
 	}
 
 	void PoisonSnakeTrackState::Enter()
@@ -239,7 +222,7 @@ namespace Enemy {
 		float length = moveDirection.Length();
 		moveDirection.Normalize();
 
-		if (length >= MOVEPOINT_FAR) {
+		if (length >= m_status->m_movePointFar) {
 			m_isMove = -1.0f;
 		}
 		else
@@ -262,7 +245,7 @@ namespace Enemy {
 		enemyDirection.SetRotationYFromDirectionXZ((moveDirection * m_isMove));
 		m_owner->SetOwnerRotetion(enemyDirection);
 
-		Vector3 moveSpeed = moveDirection * MOVE_SPEED * m_isMove;
+		Vector3 moveSpeed = moveDirection * m_status->m_moveSpeed * m_isMove;
 		m_owner->SetOwnerMoveSpeed(moveSpeed);
 	}
 
@@ -287,13 +270,13 @@ namespace Enemy {
 		float	lenghth = toEnemyPlayer.Length();
 
 		if (m_isMove == -1.0f) {
-			if (MOVEPOINT_FAR > lenghth) {
+			if (m_status->m_movePointFar > lenghth) {
 				request = PoisonSnakeIdleState::ID();
 				return true;
 			}
 		}
 		else {
-			if (MOVEPOINT_NIAR < lenghth) {
+			if (m_status->m_movePointNiar < lenghth) {
 				request = PoisonSnakeIdleState::ID();
 				return true;
 			}
@@ -306,9 +289,16 @@ namespace Enemy {
 	// ノックバックステート
 	//////////////////////////////////////////////////////////////////////////////
 
-	namespace {
-		const float KNOCK_BACK_SPEED = 60.0f;
-		const float KNOCK_BACK_DECREASE = 0.027;
+	void PoisonSnakeKnockBackState::SetupStatus()
+	{
+		// デストラクタで消してね
+		m_status = new KnockBackStatus();
+
+		nlohmann::json j = LoadScene("Assets/Json/poisonSnake.json");
+		auto status = j["KnockBackStatus"];
+
+		m_status->m_knockBackSpeed = status["KnockBackSpeed"];
+		m_status->m_knockBackDecrease = status["KnockBackDecrease"];
 	}
 
 	void PoisonSnakeKnockBackState::Enter()
@@ -319,13 +309,13 @@ namespace Enemy {
 
 		m_moveSpeed = m_owner->GetPosition() - m_owner->GetTarget()->GetPlayerPos();
 		m_moveSpeed.Normalize();
-		m_moveSpeed *= KNOCK_BACK_SPEED;
+		m_moveSpeed *= m_status->m_knockBackSpeed;
 		m_owner->SetOwnerMoveSpeed(m_moveSpeed);
 	}
 
 	void PoisonSnakeKnockBackState::Update()
 	{
-		m_knockDecreased -= KNOCK_BACK_DECREASE;
+		m_knockDecreased -= m_status->m_knockBackDecrease;
 		m_moveSpeed *= m_knockDecreased;
 
 		m_owner->SetOwnerMoveSpeed(m_moveSpeed);
@@ -359,6 +349,18 @@ namespace Enemy {
 	namespace {
 		float DEATH_TIME = 3.0f;
 		float MOVE_OFFSET = 40.0f;
+	}
+
+	void PoisonSnakeDeathState::SetupStatus()
+	{
+		// デストラクタで消してね
+		m_status = new DeathStatus();
+
+		nlohmann::json j = LoadScene("Assets/Json/poisonSnake.json");
+		auto status = j["DeathStatus"];
+
+		m_status->m_deathTime = status["DeathTime"];
+		m_status->m_moveSpeed = status["DeathMoveSpeed"];
 	}
 
 	void PoisonSnakeDeathState::Enter()

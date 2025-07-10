@@ -2,6 +2,7 @@
 #include "IEnemy.h"
 #include "Player.h"
 namespace Enemy {
+
 	IEnemy::IEnemy()
 	{
 		m_moveSpeed = Vector3::Zero;
