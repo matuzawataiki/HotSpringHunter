@@ -255,7 +255,16 @@ ResultRanking::~ResultRanking()
 
 bool ResultRanking::Start()
 {
+	//ランキングリザルト
 	m_rankingSprite.Init("Assets/modelData/image/ranking.dds",1920.0f,1080.0f);
+
+	//新記録
+	m_newRecordSprite.Init("Assets/modelData/image/newrecord.dds", 205.0f, 85.0f);
+	m_newRecordSprite.SetPosition(Vector2{ -200.0f,250.0f });
+	Quaternion rot;
+	rot.SetRotationZ(nsK2EngineLow::Math::DegToRad(-10.0f));
+	m_newRecordSprite.SetRotation(rot);
+	m_newRecordSprite.Update();
 
 	return true;
 }
@@ -344,6 +353,7 @@ void ResultRanking::NextButton()
 void ResultRanking::Render(RenderContext& rc)
 {
 	m_rankingSprite.Draw(rc);
+	m_newRecordSprite.Draw(rc);
 
 	m_nextButtonRen.Draw(rc);
 

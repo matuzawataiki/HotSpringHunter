@@ -89,8 +89,9 @@ public:
 	void NextButton(); //タイトルに戻るためのボタン
 
 private:
-	SpriteRender m_rankingSprite; //ランキングのスプライト
-	FontRender m_rankingFont[MAX_FONT_NUM]; //ランキングのフォントの配列
+	SpriteRender m_rankingSprite;			  //ランキングのスプライト
+	SpriteRender m_newRecordSprite;           //新記録のスプライト
+	FontRender   m_rankingFont[MAX_FONT_NUM]; //ランキングのフォントの配列
 };
 
 //ゲームオーバーリザルト
