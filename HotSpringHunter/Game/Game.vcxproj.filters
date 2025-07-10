@@ -35,7 +35,6 @@
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="SmokeEmitter.cpp" />
     <ClCompile Include="SnakeEnemy.cpp" />
-    <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\State\IState.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonSnake.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
@@ -84,9 +83,7 @@
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
     <ClInclude Include="EnemyHPBar.h" />
     <ClInclude Include="EnemyManager.h" />
-    <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\State\IState.h" />
-    <ClInclude Include="Enemy\State\Util\CRC32.h" />
     <ClInclude Include="BackGround\ObjectBase.h" />
     <ClInclude Include="BackGround\MapObject\GroundGool.h" />
     <ClInclude Include="BackGround\HitObject\HitBoxBattle.h" />

@@ -3,16 +3,11 @@
 #include "Player.h"
 #include "collision/CollisionObject.h"
 
-namespace {
-	static const float SPHERE_COLLISION_SIZE = 18.0f;
-	static const float MOVE_SPEED_OFFSET = 20.0f;
-	static const float DELETE_TIME = 4.0f;
-	static const float DAMAGE = 20.0F;
-}
-
 namespace Enemy {
 	PoisonBall::PoisonBall(const Vector3& position, const Vector3& targetPosition, Character::Player& target)
 	{
+		SetupStatus();
+
 		m_position = position;
 		m_targetPosition = targetPosition;
 		m_sphereModel.Init("Assets/modelData/snake/poisonSnake/poisonBall.tkm");
@@ -23,8 +18,8 @@ namespace Enemy {
 		m_moveDirection.y = 0.0f;
 		m_position += m_moveDirection * 30.0f;
 
-		m_sphereCollision.CreateSphere(m_position, Quaternion::Identity, SPHERE_COLLISION_SIZE);
-		m_sphereCollision.SetTimeLimit(DELETE_TIME);
+		m_sphereCollision.CreateSphere(m_position, Quaternion::Identity, m_status->m_sphereCollisionSize);
+		m_sphereCollision.SetTimeLimit(m_status->m_deleteTime);
 		m_sphereCollision.SetPosition(m_position);
 
 		m_sphereModel.SetPosition(m_position);
@@ -36,6 +31,20 @@ namespace Enemy {
 	{
 	}
 
+	void PoisonBall::SetupStatus()
+	{
+		m_status = new PoisonBallStatus;
+
+		nlohmann::json j = LoadScene("Assets/Json/poisonBall.json");
+		auto status = j["Status"];
+
+		m_status->m_sphereCollisionSize = status["SphereCollisionSize"];
+		m_status->m_sphereCollisionSize = status["MoveSpeed"];
+		m_status->m_sphereCollisionSize = status["DeleteTime"];
+		m_status->m_sphereCollisionSize = status["Damage"];
+
+	}
+
 	void PoisonBall::Update()
 	{
 		if (m_sphereCollision.IsDead()) {
@@ -43,7 +52,7 @@ namespace Enemy {
 			return;
 		}
 
-		m_position += m_moveDirection * MOVE_SPEED_OFFSET;
+		m_position += m_moveDirection * m_status->m_moveSpeed;
 
 		m_sphereCollision.SetPosition(m_position);
 		m_sphereModel.SetPosition(m_position);
@@ -56,7 +65,7 @@ namespace Enemy {
 			return;
 		}
 		if (m_sphereCollision.IsHit(m_target->m_playerCharaCon)) {
-			m_target->Hit(DAMAGE);
+			m_target->Hit(m_status->m_damage);
 			DeleteGO(this);
 		}
 	}

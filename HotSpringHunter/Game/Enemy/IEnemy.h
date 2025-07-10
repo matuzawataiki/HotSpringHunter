@@ -5,6 +5,20 @@ namespace Character {
 
 namespace Enemy
 {
+	// 基底となるステータス
+	// 各Enemyで必要なものが増えたら継承して使ってください。
+	struct IEnemyStatus
+	{
+		float m_hp;
+		float m_attackCoolTime;
+		//
+		IEnemyStatus()
+			: m_hp(0.0f)
+			, m_attackCoolTime(0.0f)
+		{
+		}
+	};
+
 	class IEnemy : public IGameObject
 	{
 	public:
@@ -13,6 +27,8 @@ namespace Enemy
 		bool Start() override;
 		void Update() override;
 		void Render(RenderContext& rc) override;
+
+		virtual void SetupStatus() = 0;
 
 		//////////////////////////////////////////////////////////////////////////////
 
@@ -154,6 +170,8 @@ namespace Enemy
 		ModelRender		m_enemyModel;	//モデル描画用
 
 		CharacterController m_characterController;
+
+		IEnemyStatus* m_status;
 
 		float m_hp		= 1.0f;				//体力
 		float m_hpMax	= 1.0f;				//最大体力

@@ -1,0 +1,25 @@
+{
+  "Comment": "PoisonSnake用のパラメータ",
+  "Status": {
+    "HP": 100,
+    "AttackCoolTime": 10
+  },
+  "IdelStatus": {
+    "IdelMoveSpeed": 80,
+    "IdelRangeFar": 800,
+    "IdelRangeNiar": 400
+  },
+  "TrackStatus": {
+    "MovePointFar": 700,
+    "MovePointNiar": 500,
+    "TrackMoveSpeed": 200
+  },
+  "KnockBackStatus": {
+    "KnockBackSpeed": 60,
+    "KnockBackDecrease": 0.027
+  },
+  "DeathStatus": {
+    "DeathTime": 3,
+    "DeathMoveSpeed": 3000
+  }
+}
