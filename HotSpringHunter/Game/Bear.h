@@ -214,6 +214,7 @@ private:
 	float m_setStoneTime		= 0.0f;		//投石攻撃の準備時間
 	float m_flightTime			= 0.0f;		//投石の飛行経過時間
 	float m_coverTime			= 0.0f;		//拘束攻撃の攻撃判定を出す時間
+	float m_damageMemory		= 0.0f;		//被ダメージ量を記憶する
 
 	int m_bearState				= 0;		//クマの行動状態
 

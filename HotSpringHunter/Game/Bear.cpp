@@ -64,10 +64,11 @@ namespace {
 	const float RADIUS					= 300.0f;		//召喚：召喚する円の半径
 	const float SUMMON_YPOS				= 20.0f;		//召喚：召喚したときの高さ
 	const float SUMMON_COOLTIME			= 15.0f;		//召喚：クールタイム
-	const int SUMMON_NUM				= 4;			//召喚：雑魚を召喚する数
+	const int	SUMMON_NUM				= 4;			//召喚：雑魚を召喚する数
 
 	const float TAKE_PROJECTILE_DAMAGE	= 1.0f;			//受ける波動ダメージ
 	const float CHIPPING_DAMAGE			= 0.1f;			//受ける持続ダメージ
+	const float HIT_REACTION_DAMAGE_RETIO = 0.4f;		//被弾リアクションを行うHP割合
 
 	const float SINKING_SPEED			= 0.05f;		//死亡：下に沈む速さ
 
@@ -429,16 +430,22 @@ void Bear::ManageState()
 
 			//HPを減らす。
 			m_bearHP -= m_player->m_attackPower;
+			m_damageMemory += m_player->m_attackPower;
 
 			//被弾エフェクトを再生
 			PlayHitEffect();
 			
 			//HPがまだ残っている。
 			if (m_bearHP > 0.0f) {
-				//ノックバック
-				m_bearState = enBearKnockBack;
-				//被弾の効果音
-				m_soundEffect->Play(enBearHitSE, false);
+				//ダメージリアクションを行うHP割合なら
+				if (m_damageMemory >= MAX_BEAR_HP * HIT_REACTION_DAMAGE_RETIO) {
+					//ノックバック
+					m_bearState = enBearKnockBack;
+					//被弾の効果音
+					m_soundEffect->Play(enBearHitSE, false);
+					//ダメージ記録をリセット
+					m_damageMemory = 0.0f;
+				}
 			}
 			//HPがなくなった
 			else {
@@ -455,16 +462,22 @@ void Bear::ManageState()
 
 			//HPを減らす。
 			m_bearHP -= TAKE_PROJECTILE_DAMAGE;
+			m_damageMemory += m_player->m_attackPower;
+
 
 			//被弾エフェクトを再生
 			PlayHitEffect();
 
 			//HPがまだ残っている。
 			if (m_bearHP > 0.0f) {
-				//ノックバック
-				m_bearState = enBearKnockBack;
-				//被弾の効果音
-				m_soundEffect->Play(enBearHitSE, false);
+				if (m_damageMemory >= MAX_BEAR_HP * HIT_REACTION_DAMAGE_RETIO) {
+					//ノックバック
+					m_bearState = enBearKnockBack;
+					//被弾の効果音
+					m_soundEffect->Play(enBearHitSE, false);
+					//ダメージ記録をリセット
+					m_damageMemory = 0.0f;
+				}
 			}
 			//HPがなくなった
 			else {
