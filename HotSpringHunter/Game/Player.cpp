@@ -42,7 +42,8 @@ namespace Character {
 		const float CHARGE02_EFFECT_SIZE	= 1.2f;			//溜め攻撃：チャージ2のエフェクトサイズ。
 		const float CHARGE03_EFFECT_SIZE	= 1.4f;			//溜め攻撃：チャージ3のエフェクトサイズ。
 		const float CHARGE_EFFECT_YPOS		= 100.0f;		//溜め攻撃：チャージエフェクトのY座標位置。
-		const Vector3 CHARGE_SLASH_EFFECT_SCA = { 120.0f,120.0f,120.0f };//溜め攻撃：斬撃エフェクトの大きさ。		
+		const Vector3 CHARGE_SLASH_EFFECT_SCA = { 120.0f,120.0f,120.0f };//溜め攻撃：斬撃エフェクトの大きさ。
+		const float EXPAND_CHARGE_COLLISION = 1.5f;			//溜め攻撃：アイテム取得時のコリジョン拡大率
 
 		const float GUARD_TOLERANCE			= 1.0f;			//ガード：ガード可能な角度。
 
@@ -880,6 +881,7 @@ namespace Character {
 			m_effect->Init(EnEffectVar::enCharge01);
 			m_effect->SetPosition(effectPos);
 			m_effect->SetRotation(Quaternion::Identity);
+
 			m_effect->SetScale(CHARGE_EFFECT_SCALE);
 			m_effect->Play();
 
@@ -944,7 +946,7 @@ namespace Character {
 			m_player->m_collision = NewGO<CollisionObject>(0, "chargeAttack");
 			Vector3 collisionPosition = m_player->m_playerPos;
 			if(m_player->GetUpgradeSelect() == 1){
-				m_collisionSize = (CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST) * 1.5f;
+				m_collisionSize = (CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST) * EXPAND_CHARGE_COLLISION;
 			}
 			else {
 				m_collisionSize = CHARGE_COLLISION_SIZE * m_player->m_charge + COLLISION_SIZE_LOWEST;
