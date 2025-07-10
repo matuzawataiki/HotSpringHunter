@@ -84,13 +84,6 @@ void Game::Render(RenderContext& rc)
 
 bool Game::RequestScene(uint32_t& id)
 {
-	// @todo for test
-	if (g_pad[0]->IsTrigger(enButtonA))
-	{
-		id = Result::ID();
-		return true;
-	}
-
 	switch (m_resultType)
 	{
 		case Game::enResultType_Clear:
