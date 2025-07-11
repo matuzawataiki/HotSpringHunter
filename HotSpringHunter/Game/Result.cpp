@@ -53,6 +53,14 @@ namespace
 	//フォントレンダーの文字間隔
 	const float RANKING_POS_SPACE         = 240.0f;
 
+	//　新記録　//
+	//新記録のmaxsize
+	const float NEWRECORD_MAX_SCALE = 5.0f;
+	//新記録のminsize
+	const float NEWRECORD_MIN_SCALE = 1.0f;
+	//新記録のタイム
+	const float NEWRECORD_TIME = 1.5f;
+
 
 	// リザルトに表示するスコアランクアイコン
 	constexpr const char* SCORE_RANK_ICON_PATH[] =
@@ -260,31 +268,22 @@ bool ResultRanking::Start()
 
 	//新記録
 	m_newRecordSprite.Init("Assets/modelData/image/newrecord.dds", 205.0f, 85.0f);
-	m_newRecordSprite.SetPosition(Vector2{ -200.0f,250.0f });
+	Vector2 newRecordPosition = ComputeNewRecordPosition();
+	m_newRecordSprite.SetPosition(newRecordPosition);
+	m_isNewRecord = newRecordPosition.x != 0.0f;
 	Quaternion rot;
 	rot.SetRotationZ(nsK2EngineLow::Math::DegToRad(-10.0f));
 	m_newRecordSprite.SetRotation(rot);
 	m_newRecordSprite.Update();
+
+	//自分の記録
+	SetClearTimeText(&m_myRecordFont, SaveData::GetInstance()->GetResultTime(), Vector3{ 420.0f,300.0f,0.0f });
 
 	return true;
 }
 
 void ResultRanking::Update()
 {
-	//フォントレンダーに指定した時間を設定する
-	//ついでにpositionも設定する
-	//ラムダ式を使ってみた(無名関数->汎用性を高める時に使う)
-	auto setRankingText = [](FontRender* fontRender, const float rankingTime, const Vector3& position)
-		{
-			wchar_t time[256];
-			swprintf_s(time, 256, L"%.03f", rankingTime);
-
-			fontRender->SetText(time);
-			fontRender->SetPosition(position);
-			fontRender->SetScale(2.0f);
-			fontRender->SetColor(g_vec4Black);
-		};
-
 	//ソートを使ってランキングの入れ替え(今回は時間が速いほうが1位になる)
 	std::vector<float> rankingData = SaveData::GetInstance()->GetResultTimeList();
 	std::sort(rankingData.begin(), rankingData.end(), [](int a, int b)
@@ -292,15 +291,17 @@ void ResultRanking::Update()
 			return a < b;
 		});
 
-	//ラムダ式を呼び出して設定してる
+	//関数を呼び出して設定してる
 	//2行目にif文を1行にまとめている
 	for (int i = 0; i < MAX_FONT_NUM; ++i) {
 		const float t = i < rankingData.size() ? rankingData[i] : 10000.0f;
-		setRankingText(&m_rankingFont[i], t, Vector3(RANKING_POSX, RANKING_POSY - (i * RANKING_POS_SPACE), 0.0f));
+		SetClearTimeText(&m_rankingFont[i], t, Vector3(RANKING_POSX, RANKING_POSY - (i * RANKING_POS_SPACE), 0.0f));
 	}
 
 	//タイトルにもどるボタンの表示処理
 	NextButton();
+	//新記録のアニメーション
+	UpdateAnimation();
 }
 
 bool ResultRanking::RequestScene(uint32_t& id)
@@ -350,12 +351,75 @@ void ResultRanking::NextButton()
 	m_nextButtonRen.SetColor(0.0f, 0.0f, 0.0f, m_nextButtonColor.x);
 }
 
+void ResultRanking::UpdateAnimation()
+{
+	//時間を定数にいれている
+	const float newRecordDeltaTime = g_gameTime->GetFrameDeltaTime();
+
+	m_newRecordElapsed += newRecordDeltaTime;
+
+	//新記録の時間のパーセント
+	float newRecordParcent = 1.0f - (m_newRecordElapsed / NEWRECORD_TIME);
+	if(newRecordParcent < 0.0f)
+	{ 
+		newRecordParcent = 0.0f;
+	}
+	
+	//新記録のスケールを変化させる
+	Vector2 newRecordScale = { 0.0f,0.0f };
+	newRecordScale.Lerp(newRecordParcent, Vector2(NEWRECORD_MIN_SCALE, NEWRECORD_MIN_SCALE), Vector2(NEWRECORD_MAX_SCALE, NEWRECORD_MAX_SCALE));
+	m_newRecordSprite.SetScale(newRecordScale);
+	m_newRecordSprite.Update();
+}
+
+void ResultRanking::SetClearTimeText(FontRender* fontRender, const float rankingTime, const Vector3& position)
+{
+	wchar_t time[256];
+	swprintf_s(time, 256, L"%.03f", rankingTime);
+
+	fontRender->SetText(time);
+	fontRender->SetPosition(position);
+	fontRender->SetScale(2.0f);
+	fontRender->SetColor(g_vec4Black);
+}
+
+Vector2 ResultRanking::ComputeNewRecordPosition()
+{
+	std::vector<float> rankingData = SaveData::GetInstance()->GetResultTimeList();
+	std::sort(rankingData.begin(), rankingData.end(), [](int a, int b)
+		{
+			return a < b;
+		});
+	for (int i = 0; i < rankingData.size(); i++)
+	{
+		const float resultTime = SaveData::GetInstance()->GetResultTime();
+		const float recordTime = rankingData[i] + FLT_EPSILON;
+		if (resultTime <= recordTime)
+		{
+			if (i < MAX_FONT_NUM)
+			{
+				Vector2 newRecordPositionList[] = {
+					Vector2{ -200.0f,260.0f },
+					Vector2{ -200.0f,15.0f },
+					Vector2{ -200.0f,-225.0f }
+				};
+				return newRecordPositionList[i];
+			}
+		}
+	}
+	
+	return Vector2(0.0f,0.0f);
+}
+
 void ResultRanking::Render(RenderContext& rc)
 {
 	m_rankingSprite.Draw(rc);
-	m_newRecordSprite.Draw(rc);
-
+	if (m_isNewRecord) 
+	{
+		m_newRecordSprite.Draw(rc);
+	}
 	m_nextButtonRen.Draw(rc);
+	m_myRecordFont.Draw(rc);
 
 	for (int i = 0; i < MAX_FONT_NUM; ++i) {
 		m_rankingFont[i].Draw(rc);
