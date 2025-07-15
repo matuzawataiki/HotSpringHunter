@@ -7,8 +7,9 @@
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "EnemyHPBar.h"
-#include "UI.h"
-#include "BackGround/StageManager.h";
+#include "UI/UI.h"
+#include "UI/UIManager.h"
+#include "BackGround/StageManager.h"
 #include "BattleManager.h"
 #include "SoundEffect.h"
 #include "EffectHub.h"
@@ -27,6 +28,7 @@ Game::~Game()
 	DeleteGO(m_battleManager);
 	DeleteGO(m_stageManager);
 	DeleteGO(m_enemyManager);
+	DeleteGO(m_uiManager);
 	DeleteGO(m_player);
 	DeleteGO(m_ui);
 	//DeleteGO(m_soundEffect);
@@ -45,6 +47,7 @@ bool Game::Start()
 	m_battleManager		= NewGO<BattleManager>(0, "battleManager");
 	m_stageManager		= NewGO<StageManager>(0, "stageManager");
 	m_enemyManager		= NewGO<EnemyManager>(0, "enemyManager");
+	m_uiManager			= NewGO<UIManager>(0, "uiManager");
 	m_projectileManager = NewGO<ProjectileManager>(0, "projectileManager");
 	m_ui				= NewGO<UI>(0, "ui");
 

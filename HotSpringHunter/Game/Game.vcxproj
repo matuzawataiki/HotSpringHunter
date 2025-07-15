@@ -283,7 +283,10 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Scene\TipsScene.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UI\EnemyDetectionUI.cpp" />
+    <ClCompile Include="UI\UI.cpp" />
+    <ClCompile Include="UI\UIBase.cpp" />
+    <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\MapObject\Tree.cpp" />
   </ItemGroup>
@@ -342,7 +345,10 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Scene\TipsScene.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI\EnemyDetectionUI.h" />
+    <ClInclude Include="UI\UI.h" />
+    <ClInclude Include="UI\UIBase.h" />
+    <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="WildBoar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

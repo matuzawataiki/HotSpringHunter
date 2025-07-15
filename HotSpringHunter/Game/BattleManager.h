@@ -26,6 +26,7 @@ class GameCamera;
 class Bear; 
 class Result;
 class StageManager;
+class UIManager;
 class SoundEffect;
 
 class BattleManager:public IGameObject
@@ -73,6 +74,7 @@ private:
 	Bear*				m_bear			= nullptr;
 	Result*             m_result        = nullptr;
 	StageManager*		m_stageManager  = nullptr;
+	UIManager*			m_uiManager		= nullptr;	
 	SoundEffect*        m_soundEffect   = nullptr;
 
 	EnGameScene			m_sceneState = EnGameScene::enStartArea;	//シーン状態

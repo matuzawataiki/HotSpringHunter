@@ -12,7 +12,6 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Bear.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
-    <ClCompile Include="UI.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\Stage.cpp" />
     <ClCompile Include="BackGround\MapObject\Tree.cpp" />
@@ -60,6 +59,10 @@
     <ClCompile Include="Scene\IScene.cpp" />
     <ClCompile Include="Scene\TipsScene.cpp" />
     <ClCompile Include="common\SaveData.cpp" />
+    <ClCompile Include="UI\UI.cpp" />
+    <ClCompile Include="UI\UIBase.cpp" />
+    <ClCompile Include="UI\EnemyDetectionUI.cpp" />
+    <ClCompile Include="UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -95,7 +98,6 @@
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />
     <ClInclude Include="BackGround\Stage.h" />
     <ClInclude Include="BackGround\MapObject\GroundStart.h" />
-    <ClInclude Include="UI.h" />
     <ClInclude Include="WildBoar.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="GameClear.h" />
@@ -120,5 +122,9 @@
     <ClInclude Include="Scene\IScene.h" />
     <ClInclude Include="Scene\TipsScene.h" />
     <ClInclude Include="common\SaveData.h" />
+    <ClInclude Include="UI\UI.h" />
+    <ClInclude Include="UI\UIBase.h" />
+    <ClInclude Include="UI\EnemyDetectionUI.h" />
+    <ClInclude Include="UI\UIManager.h" />
   </ItemGroup>
 </Project>
