@@ -217,7 +217,7 @@ void Bear::StoneThrow()
 		m_stonePos = CalcStoneVec(m_newStonePos, m_toSlowPos, elapsedTime);
 
 		//5°ずつ回転させる
-		m_stoneRot.AddRotationDegX(STONE_ROT_AMOUNT);
+		m_stoneRot.AddRotationDegX(-STONE_ROT_AMOUNT);
 
 		//コリジョンの位置を更新する
 		m_stoneCollision->SetPosition(m_stonePos);
