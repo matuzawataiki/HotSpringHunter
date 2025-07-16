@@ -44,7 +44,7 @@ void EnemySpawner::TriggerEnemySpawn(EnGameScene scene)
 
 	switch (scene) {
 	case EnGameScene::enBattleArea1:
-		for (int i = 0;i < 10;i++) {
+		for (int i = 0;i < 20;i++) {
 			int random = rand() % 3;
 			switch (random)
 			{

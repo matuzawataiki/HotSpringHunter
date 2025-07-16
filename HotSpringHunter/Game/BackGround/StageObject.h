@@ -39,7 +39,7 @@ struct StageObject
 	HItBoxFence* hitBoxFence[2] = { nullptr,nullptr };
 	Fence* fence[2] = { nullptr,nullptr };
 
-	Vector3 enemyPos[10];
-	Vector3 enemyTargetPos[10];
+	Vector3 enemyPos[20];
+	Vector3 enemyTargetPos[20];
 	Vector3 bossPos;
 };
