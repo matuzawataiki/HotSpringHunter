@@ -462,8 +462,8 @@ namespace Character {
 		}
 
 		//弱攻撃。
-		//Yボタンが押されたら。
-		if ((g_pad[0]->IsTrigger(enButtonY)) || (g_pad[0]->IsTrigger(enButtonB)) || (m_player->m_weakAtFlag)) {
+		//攻撃ボタンが押されたら。
+		if ((g_pad[0]->IsTrigger(enButtonX)) || (g_pad[0]->IsTrigger(enButtonY)) || (m_player->m_weakAtFlag)) {
 			m_player->m_requestState = enPlayerWeakAttack;
 			return;
 		}
@@ -476,8 +476,8 @@ namespace Character {
 		}
 
 		//ガード。
-		//Xボタンが入力されているなら。
-		if ((g_pad[0]->IsPress(enButtonX)) || (g_pad[0]->IsPress(enButtonA))) {
+		//ガードボタンが入力されているなら。
+		if ((g_pad[0]->IsPress(enButtonA)) || (g_pad[0]->IsPress(enButtonB))) {
 			m_player->m_requestState = enPlayerGuard;
 			return;
 		}
