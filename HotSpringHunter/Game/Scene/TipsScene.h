@@ -7,7 +7,7 @@ class TipsScene : public IScene
 
 public:
 	TipsScene() {}
-	~TipsScene() {}
+	~TipsScene();
 
 	bool Start() override;
 	void Update() override;

@@ -99,16 +99,14 @@ void GameCamera::CameraSwitch()
 	case EnCameraVar::enFollow:
 		FollowCamera();
 
-		LightPos = m_player->GetPlayerPos();
-		g_sceneLight->SetLightPos(LightPos);
+		g_sceneLight->SetLightPos(m_player->GetPlayerPos());
 		break;
 
 		//クマ接触のイベントカメラ
 	case EnCameraVar::enBearEventCamera:
 		BearContactCamera();
 
-		LightPos = m_bear->GetBearPos();
-		g_sceneLight->SetLightPos(LightPos);
+		g_sceneLight->SetLightPos(m_bear->GetBearPos());
 		break;
 	}
 }

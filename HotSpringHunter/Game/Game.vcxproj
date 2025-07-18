@@ -257,6 +257,7 @@
     <ClCompile Include="ItemExplanation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="BackGround\ObjectBase.cpp" />
+    <ClCompile Include="NowLoading.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonSnake.cpp" />
     <ClCompile Include="Enemy\PoisonSnake\PoisonBall.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="BackGround\HitObject\InOutHitBox.h" />
     <ClInclude Include="BackGround\MapObject\HotSpring.h" />
     <ClInclude Include="ItemExplanation.h" />
+    <ClInclude Include="NowLoading.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonSnake.h" />
     <ClInclude Include="Enemy\PoisonSnake\PoisonBall.h" />

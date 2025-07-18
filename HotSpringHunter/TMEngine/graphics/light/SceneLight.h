@@ -299,20 +299,15 @@ namespace nsTMEngine {
 		/// ディレクションライトの位置の登録
 		/// </summary>
 		/// <param name="pos">ディクションライトの位置</param>
-		void SetLightPos(Vector3& pos) {
-			m_lightPos = &pos;
+		void SetLightPos(const Vector3& pos) {
+			m_lightPos = pos;
 		}
 		/// <summary>
 		/// ディレクションライトの位置の削除
 		/// </summary>
 		/// <param name="pos">ディクションライトの位置</param>
 		void RemoveLightPos() {
-			m_lightPos = &m_defaultLightPos;
-		}
-
-		// TODO
-		void ClearLightPos() {
-			m_lightPos = &m_defaultLightPos;
+			m_lightPos = Vector3::Zero;
 		}
 
 		/// <summary>
@@ -359,8 +354,7 @@ namespace nsTMEngine {
 
 		Light m_light;	//シーンライト
 	private:
-		Vector3 m_defaultLightPos = Vector3::Zero;
-		Vector3* m_lightPos = &m_defaultLightPos;					//ディレクションライトの位置
+		Vector3 m_lightPos = Vector3::Zero;					//ディレクションライトの位置
 
 		std::deque< SPointLight* > m_unusePointLightQueue;       // 未使用のポイントライトのキュー。
 		std::deque< SSpotLight* > m_unuseSpotLightQueue;         // 未使用のスポットライトのキュー。。
