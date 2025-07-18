@@ -12,7 +12,7 @@ namespace
 	const float NEXT_BUTTON_COLOR_TIME = 1.5f;
 
 	//文字position
-	const Vector3 NEXT_BUTTON_POS      = Vector3{ -280.0,-300.0f,0.0f };
+	const Vector3 NEXT_BUTTON_POS      = Vector3{ -220.0,-300.0f,0.0f };
 }
 
 Title::Title()
@@ -45,7 +45,7 @@ void Title::NextButton()
 {
 	const float buttonDeltaTime = g_gameTime->GetFrameDeltaTime();
 
-	m_titleNextButtonRen.SetText(L"PLESS A BUTTON");
+	m_titleNextButtonRen.SetText(L"PRESS A BUTTON");
 	m_titleNextButtonRen.SetPosition(NEXT_BUTTON_POS);
 	m_titleNextButtonRen.SetScale(1.5f);
 

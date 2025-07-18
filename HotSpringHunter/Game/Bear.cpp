@@ -4,7 +4,7 @@
 #include "SnakeEnemy.h"
 #include "Enemy/PoisonSnake/PoisonSnake.h"
 #include "WildBoar.h"
-#include "UI.h"
+#include "UI/UI.h"
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"
@@ -13,6 +13,7 @@
 #include "SoundEffect.h"
 #include "EffectHub.h"
 #include "ProjectileManager.h"
+#include "BreakedRock.h"
 
 
 namespace {
@@ -241,6 +242,17 @@ void Bear::StoneThrow()
 			m_setStoneTime = 0.0f;
 			//経過時間をリセット
 			m_flightTime = 0.0f;
+
+			// 画ブレをする
+			m_gameCamera->PlayShake(ShakeStrength::Medium, 1.5f, 7.0f);
+
+			// 岩の破片を作る
+			{
+				for (int i = 0; i < BreakedRock::MAX_CREATE_NUM; ++i) {
+					BreakedRock* rock = NewGO<BreakedRock>(0);
+					rock->SetPosition(m_stonePos);
+				}
+			}
 		}
 	}
 	
