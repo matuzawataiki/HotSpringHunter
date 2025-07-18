@@ -12,6 +12,7 @@
 #include "Item/PowerUpBox.h"
 #include "SoundEffect.h"
 #include "common/SaveData.h"
+#include "UI/UIManager.h"
 
 namespace
 {
@@ -29,6 +30,7 @@ BattleManager::~BattleManager()
 
 bool BattleManager::Start()
 {
+	m_uiManager = FindGO<UIManager>("uiManager");
 	m_soundEffect = FindGO<SoundEffect>("soundEffect");
 	m_soundEffect->Play(enNomalBGM);
 
@@ -41,8 +43,30 @@ bool BattleManager::Start()
 
 void BattleManager::Update()
 {
+	WarningSignal();
 	InGameSceneManage();
 	GameTimeUpdate();
+}
+
+/// <summary>
+/// 警告シグナルを出す
+/// </summary>
+void BattleManager::WarningSignal()
+{
+	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
+	enemyManager->ForEachEnemy([&](IGameObject* enemy, const Vector3& position)
+		{
+			if (m_uiManager->FindEnemyInformation(enemy) == nullptr) {
+				m_uiManager->AddEnemyInformation(enemy, position);
+				return;
+			}
+			m_uiManager->SetEnemyInformation(enemy, position);
+			m_uiManager->RequestDelete(enemy);
+		});
+	Character::Player* player = FindGO<Character::Player>("player");
+	if (player) {
+		m_uiManager->SetPlayerPosition(player->GetPlayerPos());
+	}
 }
 
 /// <summary>
@@ -255,3 +279,5 @@ void BattleManager::GameTimeUpdate()
 		m_isTimeOff = false;
 	}
 }
+
+

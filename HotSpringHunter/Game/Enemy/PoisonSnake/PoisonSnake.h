@@ -52,6 +52,12 @@ namespace Enemy
 			DeleteGO(this);
 		}
 
+		//死亡状態を判定
+		bool CheckDeath()
+		{
+			return m_hp <= 0.0f;
+		}
+
 	private:
 		/// <summary>
 		/// 攻撃の状態の管理

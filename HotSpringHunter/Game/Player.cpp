@@ -103,9 +103,6 @@ namespace Character {
 		DeleteList();
 		g_sceneLight->RemoveLightPos();
 		DeleteGO(m_stateMachine);
-
-		// 
-		g_sceneLight->ClearLightPos();
 	}
 
 	/// <summary>
@@ -1168,9 +1165,7 @@ namespace Character {
 		//向きを設定する
 		Vector3 nowDir = m_moveAmount;
 		nowDir.Normalize();
-		m_player->SetPlayerDir(nowDir);
-
-		
+		m_player->SetPlayerDir(nowDir);		
 	}
 
 	void PlayerToGoal::Exit()

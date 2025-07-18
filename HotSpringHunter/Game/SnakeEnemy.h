@@ -54,6 +54,12 @@ public:
 
 	//ヘビの移動速度を取得
 	float GetSnakeSpeed()const;
+
+	//死亡状態を判定
+	bool CheckDeath() 
+	{
+		return m_snakeHP <= 0.0f;
+	}
   
 	//セッター
 	//座標を設定

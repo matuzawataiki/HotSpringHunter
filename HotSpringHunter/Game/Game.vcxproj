@@ -231,6 +231,7 @@
     <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
     <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
+    <ClCompile Include="common\ParameterManager.cpp" />
     <ClCompile Include="EffectHub.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyHPBar.cpp" />
@@ -284,7 +285,10 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Scene\TipsScene.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UI\EnemyDetectionUI.cpp" />
+    <ClCompile Include="UI\UI.cpp" />
+    <ClCompile Include="UI\UIBase.cpp" />
+    <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="WildBoar.cpp" />
     <ClCompile Include="BackGround\MapObject\Tree.cpp" />
   </ItemGroup>
@@ -296,6 +300,7 @@
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
+    <ClInclude Include="common\ParameterManager.h" />
     <ClInclude Include="EffectHub.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyHPBar.h" />
@@ -344,7 +349,10 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Scene\TipsScene.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI\EnemyDetectionUI.h" />
+    <ClInclude Include="UI\UI.h" />
+    <ClInclude Include="UI\UIBase.h" />
+    <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="WildBoar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

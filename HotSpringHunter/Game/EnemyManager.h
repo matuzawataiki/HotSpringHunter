@@ -108,6 +108,12 @@ public:
 	}
 
 	/// <summary>
+	/// エネミーの情報を参照するためのForEach
+	/// </summary>
+	using ForEachEnemyFunc = std::function<void(IGameObject* enemy, const Vector3& position)>;
+	void ForEachEnemy(const ForEachEnemyFunc& func);
+
+	/// <summary>
 	/// ボスを登録
 	/// </summary>
 	/// <param name="bear"></param>

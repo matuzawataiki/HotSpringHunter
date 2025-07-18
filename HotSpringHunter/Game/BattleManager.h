@@ -26,6 +26,7 @@ class GameCamera;
 class Bear; 
 class Result;
 class StageManager;
+class UIManager;
 class SoundEffect;
 
 class BattleManager:public IGameObject
@@ -43,6 +44,8 @@ public:
 	void AddDefeatedEnemyCount() { m_defeatedEnemyes++; };
 	//ゲームタイム
 	void GameTimeUpdate();
+	//警告シグナルを出す
+	void WarningSignal();
 	//
 	void Render(RenderContext& rc)
 	{
@@ -73,6 +76,7 @@ private:
 	Bear*				m_bear			= nullptr;
 	Result*             m_result        = nullptr;
 	StageManager*		m_stageManager  = nullptr;
+	UIManager*			m_uiManager		= nullptr;	
 	SoundEffect*        m_soundEffect   = nullptr;
 
 	EnGameScene			m_sceneState = EnGameScene::enStartArea;	//シーン状態

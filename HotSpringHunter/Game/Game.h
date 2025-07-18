@@ -18,6 +18,7 @@ class StartWaveCollision;
 class UI;
 class StageManager;
 class BattleManager;
+class UIManager;
 class SoundEffect;
 class EffectHub;
 class ItemExplanation;
@@ -53,6 +54,7 @@ private:
 	UI*					m_ui				= nullptr;
 	StageManager*		m_stageManager		= nullptr;
 	BattleManager*		m_battleManager		= nullptr;
+	UIManager*			m_uiManager			= nullptr;
 	SoundEffect*		m_soundEffect		= nullptr;
 	EffectHub*			m_effectHub			= nullptr;
 	ProjectileManager*	m_projectileManager = nullptr;

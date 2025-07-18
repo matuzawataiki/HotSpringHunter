@@ -169,6 +169,31 @@ void EnemyManager::EnemyFormation()
 	}
 }
 
+void EnemyManager::ForEachEnemy(const ForEachEnemyFunc& func)
+{
+	for (auto& enemy : m_snakes) {
+		if (enemy->CheckDeath())
+		{
+			continue;
+		}
+		func(enemy, enemy->GetSnakePos());
+	}
+	for (auto& enemy : m_poisonSnake) {
+		if (enemy->CheckDeath())
+		{
+			continue;
+		}
+		func(enemy, enemy->GetPosition());
+	}
+	for (auto& enemy : m_wildBoars) {
+		if (enemy->CheckDeath())
+		{
+			continue;
+		}
+		func(enemy, enemy->GetWildBoarPos());
+	}	
+}
+
 void EnemyManager::DeleteBoss()
 {
 	DeleteGO(m_bear);
