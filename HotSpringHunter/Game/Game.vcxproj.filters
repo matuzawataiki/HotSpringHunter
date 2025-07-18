@@ -60,6 +60,7 @@
     <ClCompile Include="Scene\IScene.cpp" />
     <ClCompile Include="Scene\TipsScene.cpp" />
     <ClCompile Include="common\SaveData.cpp" />
+    <ClCompile Include="NowLoading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -120,5 +121,6 @@
     <ClInclude Include="Scene\IScene.h" />
     <ClInclude Include="Scene\TipsScene.h" />
     <ClInclude Include="common\SaveData.h" />
+    <ClInclude Include="NowLoading.h" />
   </ItemGroup>
 </Project>
