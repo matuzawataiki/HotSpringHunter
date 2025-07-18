@@ -147,6 +147,12 @@ public:
 	/// </summary>
 	float GetBLOW_POS_DIS();
 
+	//死亡状態を判定
+	bool CheckDeath()
+	{
+		return m_bearHP <= 0.0f;
+	}
+
 	//セッター
 	//位置を設定
 	inline void SetBearPos(const Vector3& pos) { m_bearPos = pos; };

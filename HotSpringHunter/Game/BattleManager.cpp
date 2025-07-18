@@ -47,17 +47,18 @@ void BattleManager::Update()
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	enemyManager->ForEachEnemy([&](IGameObject* enemy, const Vector3& position)
 		{
-			if(m_uiManager->FindEnemyInfomation(enemy) == nullptr) {
+			if(m_uiManager->FindEnemyInformation(enemy) == nullptr) {
 				m_uiManager->AddEnemyInformation(enemy, position);
 				return;
 			}
-			m_uiManager->SetEnemyInformatino(enemy, position);
+			m_uiManager->SetEnemyInformation(enemy, position);
+			m_uiManager->RequestDelete(enemy);
 		});
 	Character::Player* player = FindGO<Character::Player>("player");
 	if (player) {
 		m_uiManager->SetPlayerPosition(player->GetPlayerPos());
 	}
-	// TODO: UIの削除をしよう
+
 
 	InGameSceneManage();
 	GameTimeUpdate();

@@ -72,6 +72,12 @@ public:
 	//移動速度を取得
 	float GetWildBoarSpeed()const;
 
+	//死亡状態を判定
+	bool CheckDeath()
+	{
+		return m_wildBoarHP <= 0.0f;
+	}
+
 	//セッター
 	//位置を設定
 	inline void SetWildBoarPos(const Vector3& pos) { m_wildBoarPos = pos; };

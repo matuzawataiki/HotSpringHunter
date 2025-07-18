@@ -4,7 +4,7 @@
 
 UIManager::UIManager()
 {
-	m_enemyInfomationList.clear();
+	m_enemyInformationList.clear();
 }
 
 UIManager::~UIManager()
@@ -18,10 +18,10 @@ bool UIManager::Start()
 
 void UIManager::Update()
 {
-	// 警告シグナルの生成と更新
-	UpdateTriangle();
 	// 警告シグナルの破棄
 	DeleteTriangle();
+	// 警告シグナルの生成と更新
+	UpdateTriangle();
 }
 
 void UIManager::Render(RenderContext& rc)
@@ -31,27 +31,28 @@ void UIManager::Render(RenderContext& rc)
 void UIManager::UpdateTriangle()
 {
 	// 生成の処理
-	for (EnemyInfomation& infomation : m_enemyInfomationList) {
-		if (!infomation.m_isCreated) {
+	for (EnemyInformation& information : m_enemyInformationList) {
+		if (!information.m_isCreated) {
 			// UIの生成
-			infomation.m_ui = NewGO<EnemyDetectionUI>(1);
-			infomation.m_isCreated = true;
+			information.m_ui = NewGO<EnemyDetectionUI>(1);
+			information.m_isCreated = true;
 		}
-		infomation.m_ui->SetTargetPosition(infomation.m_position);
-		infomation.m_ui->SetBasePosition(m_playerPosition);
+		information.m_ui->SetTargetPosition(information.m_position);
+		information.m_ui->SetBasePosition(m_playerPosition);
+		information.m_isUpdate = false;
 	}
 }
 
 void UIManager::DeleteTriangle()
 {
 	// 削除の処理
-	for (auto it = m_enemyInfomationList.begin(); it != m_enemyInfomationList.end();) {
-		if (it->m_requestDelete) {
+	for (auto it = m_enemyInformationList.begin(); it != m_enemyInformationList.end();) {
+		if (!it->m_isUpdate) {
 			if (it->m_ui) {
 				DeleteGO(it->m_ui);
 				it->m_ui = nullptr;
 			}
-			it = m_enemyInfomationList.erase(it);
+			it = m_enemyInformationList.erase(it);
 		}
 		else {
 			++it;

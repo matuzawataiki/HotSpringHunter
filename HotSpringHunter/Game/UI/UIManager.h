@@ -5,15 +5,15 @@ class EnemyDetectionUI;
 class UIManager : public IGameObject
 {
 public:
-	struct EnemyInfomation
+	struct EnemyInformation
 	{
 		IGameObject* m_enemyOwner = nullptr;
 		EnemyDetectionUI* m_ui = nullptr;
 		Vector3 m_position = Vector3::Zero;
-		bool m_isCreated = false;
-		bool m_requestDelete = false;
+		bool m_isCreated = false;				//警告シグナルを作ったか
+		bool m_isUpdate = true;			//
 		// 
-		EnemyInfomation(IGameObject* enemyOwner, const Vector3& position)
+		EnemyInformation(IGameObject* enemyOwner, const Vector3& position)
 			: m_enemyOwner(enemyOwner)
 			,m_position(position)
 		{
@@ -43,15 +43,16 @@ public:
 	/// </summary>
 	void AddEnemyInformation(IGameObject* enemyOwner, const Vector3& position)
 	{
-		m_enemyInfomationList.push_back(EnemyInfomation(enemyOwner, position));
+		m_enemyInformationList.push_back(EnemyInformation(enemyOwner, position));
 	}
 	/// <summary>
 	/// 敵の情報を設定
 	/// </summary>
-	void SetEnemyInformatino(IGameObject* enemyOwner, const Vector3& position)
+	void SetEnemyInformation(IGameObject* enemyOwner, const Vector3& position)
 	{
-		EnemyInfomation* information = FindEnemyInfomation(enemyOwner);
+		EnemyInformation* information = FindEnemyInformation(enemyOwner);
 		information->m_position = position;
+		information->m_isUpdate = true;
 	}
 	/// <summary>
 	/// 敵の情報を削除
@@ -59,11 +60,11 @@ public:
 	/// <param name="enemyOwner"></param>
 	void RequestDelete(IGameObject* enemyOwner)
 	{
-		for (EnemyInfomation& information : m_enemyInfomationList)
+		for (EnemyInformation& information : m_enemyInformationList)
 		{
 			if (information.m_enemyOwner == enemyOwner)
 			{
-				information.m_requestDelete = true;
+				information.m_isUpdate = true;
 				break;
 			}
 		}
@@ -71,9 +72,9 @@ public:
 	/// <summary>
 	/// 既に存在する敵の情報を探して取得
 	/// </summary>
-	EnemyInfomation* FindEnemyInfomation(IGameObject* enemyOwner)
+	EnemyInformation* FindEnemyInformation(IGameObject* enemyOwner)
 	{
-		for(EnemyInfomation& information : m_enemyInfomationList)
+		for(EnemyInformation& information : m_enemyInformationList)
 		{
 			if(information.m_enemyOwner == enemyOwner)
 			{
@@ -89,6 +90,6 @@ public:
 	}
 
 private:
-	Vector3 m_playerPosition = Vector3::Zero;				// プレイヤーの座標
-	std::vector<EnemyInfomation> m_enemyInfomationList;		// 敵の情報リスト(座標とUIを生成したか)
+	Vector3 m_playerPosition = Vector3::Zero;					// プレイヤーの座標
+	std::vector<EnemyInformation> m_enemyInformationList;		// 敵の情報リスト(座標とUIを生成したか)
 };

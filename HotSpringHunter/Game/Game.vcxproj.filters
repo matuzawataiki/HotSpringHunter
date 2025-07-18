@@ -63,6 +63,7 @@
     <ClCompile Include="UI\UIBase.cpp" />
     <ClCompile Include="UI\EnemyDetectionUI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="common\ParameterManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -126,5 +127,6 @@
     <ClInclude Include="UI\UIBase.h" />
     <ClInclude Include="UI\EnemyDetectionUI.h" />
     <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="common\ParameterManager.h" />
   </ItemGroup>
 </Project>
