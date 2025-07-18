@@ -44,6 +44,8 @@ public:
 	void AddDefeatedEnemyCount() { m_defeatedEnemyes++; };
 	//ゲームタイム
 	void GameTimeUpdate();
+	//警告シグナルを出す
+	void WarningSignal();
 	//
 	void Render(RenderContext& rc)
 	{

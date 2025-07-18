@@ -43,11 +43,20 @@ bool BattleManager::Start()
 
 void BattleManager::Update()
 {
-	// TODO: あとで関数にしようね
+	WarningSignal();
+	InGameSceneManage();
+	GameTimeUpdate();
+}
+
+/// <summary>
+/// 警告シグナルを出す
+/// </summary>
+void BattleManager::WarningSignal()
+{
 	EnemyManager* enemyManager = FindGO<EnemyManager>("enemyManager");
 	enemyManager->ForEachEnemy([&](IGameObject* enemy, const Vector3& position)
 		{
-			if(m_uiManager->FindEnemyInformation(enemy) == nullptr) {
+			if (m_uiManager->FindEnemyInformation(enemy) == nullptr) {
 				m_uiManager->AddEnemyInformation(enemy, position);
 				return;
 			}
@@ -58,10 +67,6 @@ void BattleManager::Update()
 	if (player) {
 		m_uiManager->SetPlayerPosition(player->GetPlayerPos());
 	}
-
-
-	InGameSceneManage();
-	GameTimeUpdate();
 }
 
 /// <summary>
@@ -274,3 +279,5 @@ void BattleManager::GameTimeUpdate()
 		m_isTimeOff = false;
 	}
 }
+
+
