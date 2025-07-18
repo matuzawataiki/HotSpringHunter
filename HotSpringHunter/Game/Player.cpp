@@ -23,7 +23,7 @@ namespace Character {
 		const float GRAVITY_AMOUNT			= 30.0f;		//移動：重力量。
 
 		const float WEAK_COLLISION_DIS		= 200.0f;		//弱攻撃：コリジョン位置。
-		const float WEAK_COLLISION_SIZE		= 25000.0f;		//弱攻撃：コリジョンサイズ。
+		const float WEAK_COLLISION_SIZE		= 250.0f;		//弱攻撃：コリジョンサイズ。
 		const float WEAK_ATTACK_POWER		= 50.0f;		//弱攻撃：攻撃力。
 		const float SUCTION_CONDITION_DIS	= 400.0f;		//弱攻撃：吸いつきを行う条件の距離
 		const float SUCTION_TARGET_POS_DIS	= 10.0f;		//弱攻撃：攻撃吸いつきの位置の距離
