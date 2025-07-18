@@ -76,7 +76,7 @@ namespace nsTMEngine
 		Vector3 upAxis = { 0.0f,1.0f,0.0f };
 		// ライトをカメラと見立てたビュー行列を計算する
 		Matrix viewMatrix;
-		Vector3 lightPos = *m_lightPos;
+		Vector3 lightPos = m_lightPos;
 		Vector3 lightTarget = m_light.m_drectionLight.m_direction + lightPos;
 		viewMatrix.MakeLookAt(lightPos, lightTarget, upAxis);
 		// プロジェクション行列を計算する

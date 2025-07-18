@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TipsScene.h"
 #include "Game.h"
+#include "NowLoading.h"
 
 namespace
 {
@@ -51,8 +52,17 @@ namespace
 	}
 }
 
+TipsScene::~TipsScene()
+{
+	auto* nowLoading = FindGO<NowLoading>("nowloading");
+	DeleteGO(nowLoading);
+}
+
 bool TipsScene::Start()
 {
+	// Loadingの文字を表示する
+	NewGO<NowLoading>(0, "nowloading");
+
 	m_tipsRender = InializeTipsRender(m_currentTipsId);
 	return true;
 }
