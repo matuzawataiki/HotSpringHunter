@@ -4,7 +4,7 @@
 #include "SnakeEnemy.h"
 #include "Enemy/PoisonSnake/PoisonSnake.h"
 #include "WildBoar.h"
-#include "UI.h"
+#include "UI/UI.h"
 #include "EnemyBase.h"
 #include "EnemyManager.h"
 #include "GameCamera.h"

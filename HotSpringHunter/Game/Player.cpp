@@ -15,7 +15,7 @@ namespace Character {
 
 		const Vector3 PLAYER_NEW_POSITION	= { 0.0f,50.0f,0.0f };	//player初期位置。
 
-		const float MAX_PLAYER_HP			= 2000.0f;		//最大HP。
+		const float MAX_PLAYER_HP			= 1500.0f;		//最大HP。
 		const float ANIM_INTERPOLATE_TIME	= 0.2f;			//アニメーションの補間時間
 		const float DELTA_TIME				= 1.0f / 60.0f;	//フレームレート
 
@@ -23,7 +23,7 @@ namespace Character {
 		const float GRAVITY_AMOUNT			= 30.0f;		//移動：重力量。
 
 		const float WEAK_COLLISION_DIS		= 200.0f;		//弱攻撃：コリジョン位置。
-		const float WEAK_COLLISION_SIZE		= 250.0f;		//弱攻撃：コリジョンサイズ。
+		const float WEAK_COLLISION_SIZE		= 25000.0f;		//弱攻撃：コリジョンサイズ。
 		const float WEAK_ATTACK_POWER		= 50.0f;		//弱攻撃：攻撃力。
 		const float SUCTION_CONDITION_DIS	= 400.0f;		//弱攻撃：吸いつきを行う条件の距離
 		const float SUCTION_TARGET_POS_DIS	= 10.0f;		//弱攻撃：攻撃吸いつきの位置の距離
@@ -361,6 +361,25 @@ namespace Character {
 	float Player::GetPlayerMAXHP()
 	{
 		return MAX_PLAYER_HP;
+	}
+
+	/// <summary>
+	/// プレイヤーのHPを回復。
+	/// </summary>
+	/// <param name="heal">回復量</param>
+	void Player::HealPlayerHP(const float heal)
+	{
+		m_playerHP += heal;
+		if (m_playerHP > MAX_PLAYER_HP) {
+			m_playerHP = MAX_PLAYER_HP;
+		}
+		//エフェクト
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(EnEffectVar::enHeal);
+		m_effect->SetPosition(m_playerPos);
+		m_effect->SetRotation(Quaternion::Identity);
+		m_effect->SetScale(Vector3{50.0f,50.0f,50.0f});
+		m_effect->Play();
 	}
 
 	void Player::GetPowerUp(PowerUpBox::EnPowerUp powerUp)

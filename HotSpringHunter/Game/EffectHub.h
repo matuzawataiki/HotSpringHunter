@@ -3,6 +3,7 @@ enum EnEffectVar {
 	enImpact,
 	enEnemyHit,
 	enRoar,
+	enHeal,
 	enCharge,
 	enCharge01,
 	enCharge02,
