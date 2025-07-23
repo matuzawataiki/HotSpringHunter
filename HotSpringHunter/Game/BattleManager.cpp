@@ -18,6 +18,7 @@ namespace
 {
 	//タイムの位置
 	const Vector3 TIME_POS = { 740.0f,430.0f,0.0f };
+	const float HEAL_AMOUNT = 500.0f;
 }
 
 BattleManager::BattleManager()
@@ -35,7 +36,6 @@ bool BattleManager::Start()
 	m_soundEffect->Play(enNomalBGM);
 
 	//最初のシーン状態
-	m_sceneState = EnGameScene::enStartArea;
 	m_sceneState = EnGameScene::enStartArea;
 
 	return true;
@@ -170,7 +170,6 @@ void BattleManager::InGameSceneManage()
 			SaveData::GetInstance()->SetResultTime(m_gamePlayTime);
 		}
 	}
-	
 }
 
 /// <summary>
@@ -205,6 +204,7 @@ void BattleManager::SwitchingScenes()
 		powerUpBox = NewGO<PowerUpBox>(0, "powerUpBox");
 		powerUpBox->InitBox(PowerUpBox::enSlash);
 		m_stageManager->DeleteFence(StageManager::enBattleStage1);
+		m_player->HealPlayerHP(HEAL_AMOUNT);
 		break;
 
 	case enBattleArea2Start:
@@ -231,6 +231,7 @@ void BattleManager::SwitchingScenes()
 			powerUpBox->InitBox(PowerUpBox::enRangeAttack3);
 		}
 		m_stageManager->DeleteFence(StageManager::enBattleStage2);
+		m_player->HealPlayerHP(HEAL_AMOUNT);
 		break;
 
 	case enBossArea:

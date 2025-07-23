@@ -79,6 +79,8 @@ namespace Character {
 		void Render(RenderContext& rc)override;
 		//プレイヤーの最大HPを取得。
 		float GetPlayerMAXHP();
+		//プレイヤーのHPを回復
+		void HealPlayerHP(const float heal);
 		void GetPowerUp(PowerUpBox::EnPowerUp powerUp);
 		const int GetPowerUpSelect() { return m_mainPowerUp; }
 		const int GetUpgradeSelect() { return m_subPowerUp; }
