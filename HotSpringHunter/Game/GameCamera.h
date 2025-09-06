@@ -1,4 +1,5 @@
 #pragma once
+#include "CameraShake.h"
 
 namespace Character {
 	class Player;
@@ -46,9 +47,14 @@ public:
 	//カメラ状態を取得
 	inline int GetCameraState() const { return m_cameraState; };
 
+	//画ブレを再生
+	void PlayShake(const ShakeStrength strength, const float durationTime, const float intensity, const float frequency = 5.0f);
+
 private:
 	Character::Player*m_player				= nullptr;
 	Bear*			m_bear					= nullptr;
+
+	CameraShake		m_cameraShake;			//カメラを揺らす機能	
 
 	Vector3			m_cameraPos				= Vector3::Zero;		//カメラ座標
 	Vector3			m_cameraTarget			= Vector3::Zero;		//カメラ注視点

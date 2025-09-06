@@ -208,6 +208,10 @@ void GameCamera::CameraUpdate()
 	m_cameraPos.x = Clamp(m_cameraPos.x, m_cameraLeftLimitPos, m_cameraRightLimitPos);
 	m_cameraTarget.x = Clamp(m_cameraTarget.x, m_cameraLeftLimitPos, m_cameraRightLimitPos);
 
+	// 画ブレの更新
+	// 更新後にカメラの位置を設定させる
+	const float deltaTime = g_gameTime->GetFrameDeltaTime();
+	m_cameraShake.Update(deltaTime, m_cameraPos, m_cameraTarget);
 
 	//カメラに視点と注視点を設定
 	g_camera3D->SetPosition(m_cameraPos);
@@ -215,4 +219,9 @@ void GameCamera::CameraUpdate()
 
 	//カメラ更新
 	g_camera3D->Update();
+}
+
+void GameCamera::PlayShake(const ShakeStrength strength, const float durationTime, const float intensity, const float frequency)
+{
+	m_cameraShake.StartShake(strength, durationTime, intensity, frequency);
 }

@@ -64,6 +64,11 @@ bool TipsScene::Start()
 	NewGO<NowLoading>(0, "nowloading");
 
 	m_tipsRender = InializeTipsRender(m_currentTipsId);
+
+	m_pressButtonRender.Init("Assets/modelData/image/pressA.dds", 148.0f, 168.0f);
+	m_pressButtonRender.SetPivot(Vector2(1.0f, 1.0f));
+	m_pressButtonRender.SetPosition(Vector2(930.0f, -345.0f));
+	m_pressButtonRender.Update();
 	return true;
 }
 
@@ -85,6 +90,7 @@ void TipsScene::Render(RenderContext& rc)
 	if (m_tipsRender) {
 		m_tipsRender->Draw(rc);
 	}
+	m_pressButtonRender.Draw(rc);
 }
 
 bool TipsScene::RequestScene(uint32_t& id)

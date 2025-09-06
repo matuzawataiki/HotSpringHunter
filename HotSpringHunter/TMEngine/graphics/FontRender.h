@@ -74,7 +74,7 @@ namespace nsTMEngine
 		/// x = 1.0, y = 1.0で画像の右上。
 		/// UnityのuGUIに準拠。
 		/// </param>
-		void SetPivost(Vector2& piv)
+		void SetPivost(const Vector2& piv)
 		{
 			m_piv = piv;
 		}

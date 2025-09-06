@@ -231,6 +231,7 @@
     <ClCompile Include="BackGround\MapObject\GroundBossBattle.cpp" />
     <ClCompile Include="BackGround\MapObject\BushBig.cpp" />
     <ClCompile Include="BackGround\MapObject\BushSmall.cpp" />
+    <ClCompile Include="BreakedRock.cpp" />
     <ClCompile Include="common\ParameterManager.cpp" />
     <ClCompile Include="EffectHub.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
@@ -269,6 +270,7 @@
     <ClCompile Include="common\SaveData.cpp" />
     <ClCompile Include="Scene\IScene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="CameraShake.cpp" />
     <ClCompile Include="SlashAttack.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="SmokeEmitter.cpp" />
@@ -300,6 +302,7 @@
     <ClInclude Include="BackGround\MapObject\GroundBossBattle.h" />
     <ClInclude Include="BackGround\MapObject\BushBig.h" />
     <ClInclude Include="BackGround\MapObject\BushSmall.h" />
+    <ClInclude Include="BreakedRock.h" />
     <ClInclude Include="common\ParameterManager.h" />
     <ClInclude Include="EffectHub.h" />
     <ClInclude Include="EnemyBase.h" />
@@ -337,6 +340,7 @@
     <ClInclude Include="common\SaveData.h" />
     <ClInclude Include="Scene\IScene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="CameraShake.h" />
     <ClInclude Include="SlashAttack.h" />
     <ClInclude Include="Smoke.h" />
     <ClInclude Include="SmokeEmitter.h" />

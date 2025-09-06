@@ -17,6 +17,7 @@ public:
 
 private:
 	SpriteRender* m_tipsRender = nullptr;
+	SpriteRender m_pressButtonRender;
 
 	int m_currentTipsId = 0;
 };
